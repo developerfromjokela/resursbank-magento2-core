@@ -25,6 +25,10 @@
                     <fieldset_css>complex resursbank-section</fieldset_css>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                     <label>Payments</label>
+                    <field id="version" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Version</label>
+                        <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Version</frontend_model>
+                    </field>
                     <group id="api" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Resurs Bank API</label>
                     </group>
