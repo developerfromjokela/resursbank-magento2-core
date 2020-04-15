@@ -52,7 +52,7 @@ class Environment implements OptionSourceInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'test' => __('Test'),
