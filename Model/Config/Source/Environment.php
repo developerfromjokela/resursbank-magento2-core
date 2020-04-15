@@ -22,13 +22,12 @@ namespace Resursbank\Core\Model\Config\Source;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Options for flow selection on configuration page.
+ * Class Environment
  *
  * @package Resursbank\Core\Model\Config\Source
  */
-class Flow implements OptionSourceInterface
+class Environment implements OptionSourceInterface
 {
-
     /**
      * Options getter.
      *
@@ -36,7 +35,16 @@ class Flow implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        return [];
+        return [
+            [
+                'value' => 'test',
+                'label' => __('Test')
+            ],
+            [
+                'value' => 'production',
+                'label' => __('Production')
+            ]
+        ];
     }
 
     /**
@@ -46,6 +54,9 @@ class Flow implements OptionSourceInterface
      */
     public function toArray(): array
     {
-        return [];
+        return [
+            'test' => __('Test'),
+            'production' => __('Production')
+        ];
     }
 }

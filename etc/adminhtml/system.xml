@@ -33,14 +33,18 @@
 
                     <group id="api" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Resurs Bank API</label>
-                        <field id="debug" translate="label, comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Debug enabled</label>
-                            <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        </field>
                         <field id="flow" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Checkout type</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Flow</source_model>
+                        </field>
+                        <field id="environment" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Environment</label>
+                            <source_model>Resursbank\Core\Model\Config\Source\Environment</source_model>
+                        </field>
+                        <field id="debug" translate="label, comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Debug enabled</label>
+                            <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
                     </group>
                 </group>

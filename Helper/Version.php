@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace Resursbank\Core\Helper;
 
 use \Exception;
@@ -48,11 +50,6 @@ class Version extends AbstractHelper
     private $readFactory;
 
     /**
-     * @var Log
-     */
-    private $log;
-
-    /**
      * @param ComponentRegistrarInterface $componentRegistrar
      * @param ReadFactory $readFactory
      * @param Context $context
@@ -73,7 +70,7 @@ class Version extends AbstractHelper
      *
      * @return string
      */
-    public function getComposerVersion()
+    public function getComposerVersion(): string
     {
         $result = 'unknown';
 
@@ -88,7 +85,7 @@ class Version extends AbstractHelper
                 $result = (string) $data['version'];
             }
         } catch (Exception $e) {
-            $this->log->error($e);
+            // $this->log->error($e);
         }
 
         return $result;
@@ -100,7 +97,7 @@ class Version extends AbstractHelper
      * @return array
      * @throws FileSystemException
      */
-    private function getComposerData()
+    private function getComposerData(): array
     {
         $baseDirectory = $this->componentRegistrar->getPath(
             ComponentRegistrar::MODULE,
