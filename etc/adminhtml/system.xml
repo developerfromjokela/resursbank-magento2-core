@@ -41,7 +41,30 @@
                             <label>Environment</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Environment</source_model>
                         </field>
-                        <field id="debug" translate="label, comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="username_test" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Username</label>
+                            <depends><field id="payment/resursbank_section/resursbank/api/environment">test</field></depends>
+                        </field>
+                        <field id="password_test" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Password</label>
+                            <depends><field id="payment/resursbank_section/resursbank/api/environment">test</field></depends>
+                        </field>
+                        <field id="username_production" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Username</label>
+                            <depends><field id="payment/resursbank_section/resursbank/api/environment">production</field></depends>
+                        </field>
+                        <field id="password_production" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Password</label>
+                            <depends><field id="payment/resursbank_section/resursbank/api/environment">production</field></depends>
+                        </field>
+                        <field id="country" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Country</label>
+                            <source_model>Resursbank\Core\Model\Config\Source\Country</source_model>
+                        </field>
+                        <field id="unit_measure" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Unit Measure</label>
+                        </field>
+                        <field id="debug" translate="label, comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Debug enabled</label>
                             <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
