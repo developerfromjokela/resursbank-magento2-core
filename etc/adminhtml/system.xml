@@ -31,7 +31,7 @@
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Version</frontend_model>
                     </field>
 
-                    <group id="api" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <group id="api" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Resurs Bank API</label>
                         <field id="flow" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Checkout type</label>
@@ -70,6 +70,12 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
                     </group>
+
+                    <group id="methods" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Methods</label>
+
+                    </group>
+
                 </group>
             </group>
         </section>
