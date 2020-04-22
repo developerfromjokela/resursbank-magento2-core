@@ -26,7 +26,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  *
  * @package Resursbank\Core\Model\Config\Source
  */
-class Country implements OptionSourceInterface
+class Country extends Options implements OptionSourceInterface
 {
     /**
      * @var string
@@ -44,32 +44,7 @@ class Country implements OptionSourceInterface
     const FINLAND = 'FI';
 
     /**
-     * Options getter.
-     *
-     * @return array
-     */
-    public function toOptionArray(): array
-    {
-        return [
-            [
-                'value' => self::SWEDEN,
-                'label' => __('Sweden')
-            ],
-            [
-                'value' => self::NORWAY,
-                'label' => __('Norway')
-            ],
-            [
-                'value' => self::FINLAND,
-                'label' => __('Finland')
-            ]
-        ];
-    }
-
-    /**
-     * Get options in "key-value" format.
-     *
-     * @return array
+     * @inheritDoc
      */
     public function toArray(): array
     {
