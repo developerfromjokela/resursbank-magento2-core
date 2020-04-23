@@ -24,7 +24,7 @@ use Resursbank\Core\Model\Config\Source\Environment;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases designed for environment options collection.
+ * Test cases designed for environment options.
  *
  * @package Resursbank\Core\Test\Model\Config\Source
  */
@@ -51,7 +51,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * Assert environment option collection includes a "test" key.
+     * Assert that environment options include "test".
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * Assert environment option collection includes a "test" key.
+     * Assert that environment options include "production".
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * Assert environment has two options.
+     * Assert that environment has exactly two options.
      *
      * @return void
      */

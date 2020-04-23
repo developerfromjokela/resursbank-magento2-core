@@ -25,7 +25,7 @@ use Resursbank\Core\Model\Config\Source\Options;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases designed for generic options collection class.
+ * Test cases designed for generic options class.
  *
  * @package Resursbank\Core\Test\Model\Config\Source
  */
@@ -74,7 +74,7 @@ class OptionsTest extends TestCase
     }
 
     /**
-     * AsserttoOptionArray output format. This should fit the expected structure
+     * Assert that toOptionArray output format will fit the expected structure
      * for select elements in the configuration.
      *
      * @return void
