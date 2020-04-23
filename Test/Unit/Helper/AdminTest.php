@@ -29,7 +29,7 @@ use Resursbank\Core\Helper\Admin;
 /**
  * Test cases designed for Resursbank\Core\Helper\Admin
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Helper
  */
 class AdminTest extends TestCase
 {
@@ -85,7 +85,7 @@ class AdminTest extends TestCase
         $user = $this->objectManager->getObject(User::class);
         $user->setUserName('Lebowski');
 
-        // Modify the output of getUser method on Session mock.
+        // Modify the output of getUser method in Session mock.
         $this->session->expects(self::any())
             ->method('getUser')
             ->will(self::returnValue($user));
