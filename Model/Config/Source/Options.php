@@ -22,20 +22,40 @@ namespace Resursbank\Core\Model\Config\Source;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * Compile list of API environment alternatives.
+ * Generic methods for option collections mainly utilised for select elements
+ * within the configuration.
  *
  * @package Resursbank\Core\Model\Config\Source
  */
-class Environment extends Options implements OptionSourceInterface
+abstract class Options implements OptionSourceInterface
 {
     /**
-     * @inheritDoc
+     * Returns a list of options formatted to function with select elements in
+     * the admin configuration.
+     *
+     * @return array
+     */
+    public function toOptionArray(): array
+    {
+        $result = [];
+
+        foreach ($this->toArray() as $value => $label) {
+            $result[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns an associative array of options formatted as 'value' => 'label'.
+     *
+     * @return array
      */
     public function toArray(): array
     {
-        return [
-            'test' => __('Test'),
-            'production' => __('Production')
-        ];
+        return [];
     }
 }
