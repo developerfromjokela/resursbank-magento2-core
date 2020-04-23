@@ -54,7 +54,7 @@ class Admin extends AbstractHelper
      *
      * @return string
      */
-    public function getUsername(): string
+    public function getUserName(): string
     {
         $result = 'Anonymous';
 

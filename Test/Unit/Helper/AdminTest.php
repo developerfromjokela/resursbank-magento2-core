@@ -70,7 +70,7 @@ class AdminTest extends TestCase
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
-        self::assertEquals('Anonymous', $admin->getUsername());
+        self::assertEquals('Anonymous', $admin->getUserName());
     }
 
     /**
@@ -94,6 +94,6 @@ class AdminTest extends TestCase
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
-        self::assertEquals('Lebowski', $admin->getUsername());
+        self::assertEquals('Lebowski', $admin->getUserName());
     }
 }
