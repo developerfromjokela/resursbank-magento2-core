@@ -74,8 +74,8 @@ class AdminTest extends TestCase
     }
 
     /**
-     * Assert that the getUser method will return the name of the user in
-     * the session.
+     * Assert that the getUser method will return the corresponding username
+     * when there is a user in our session.
      *
      * @return void
      */
