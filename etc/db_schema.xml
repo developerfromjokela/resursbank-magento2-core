@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-  <table name="resursbank_core_account" resource="default" engine="innodb" comment="Resurs Bank API Account Table" onCreate="migrateDataFromAnotherTable(resursbank_checkout_account)">
+  <table name="resursbank_checkout_account" resource="default" engine="innodb" comment="Resurs Bank API Account Table">
     <column xsi:type="smallint" name="account_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
     <column xsi:type="varchar" name="username" nullable="false" length="255" comment="API Account Username"/>
     <column xsi:type="varchar" name="environment" nullable="false" length="255" comment="API Account Environment"/>
@@ -10,12 +10,12 @@
     <constraint xsi:type="primary" referenceId="PRIMARY">
         <column name="account_id"/>
     </constraint>
-    <constraint xsi:type="unique" referenceId="RESURSBANK_CORE_ACCOUNT_USERNAME_ENVIRONMENT">
+    <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT">
         <column name="username"/>
         <column name="environment"/>
     </constraint>
   </table>
-  <table name="resursbank_core_payment_methods" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
+  <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
     <column xsi:type="smallint" name="method_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
     <column xsi:type="smallint" name="account_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Account ID"/>
     <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Raw Method ID"/>
@@ -32,11 +32,11 @@
     <constraint xsi:type="primary" referenceId="PRIMARY">
       <column name="method_id"/>
     </constraint>
-    <constraint xsi:type="foreign" referenceId="FK_99E4EF33EDA1CA5EEC19A493575FCFB7" table="resursbank_core_payment_methods" column="account_id" referenceTable="resursbank_core_account" referenceColumn="account_id" onDelete="CASCADE"/>
-    <constraint xsi:type="unique" referenceId="RESURSBANK_CORE_PAYMENT_METHODS_CODE">
+    <constraint xsi:type="foreign" referenceId="FK_99E4EF33EDA1CA5EEC19A493575FCFB7" table="resursbank_checkout_account_method" column="account_id" referenceTable="resursbank_checkout_account" referenceColumn="account_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE">
       <column name="code"/>
     </constraint>
-    <index referenceId="RESURSBANK_CORE_PAYMENT_METHODS_ACCOUNT_ID" indexType="btree">
+    <index referenceId="RESURSBANK_CHECKOUT_ACCOUNT_METHOD_ACCOUNT_ID" indexType="btree">
       <column name="account_id"/>
     </index>
   </table>
