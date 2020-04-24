@@ -24,10 +24,10 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Model\Order;
 
 /**
- * Convert Resurs Bank API data of a payment method to an actual payment method
- * object which can be interpreted by Magento.
+ * Convert payment method data from the Resurs Bank API to data which can be
+ * interpreted by our Magento module.
  *
- * @package Resursbank\Core\Helper
+ * @package Resursbank\Core\Helper\Method
  */
 class Converter extends AbstractHelper
 {

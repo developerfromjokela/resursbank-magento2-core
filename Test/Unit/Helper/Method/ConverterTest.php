@@ -19,16 +19,15 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper\Method;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Method\Converter;
-use Magento\Framework\Exception\ValidatorException;
 
 /**
- * Convert Resurs Bank API data of a payment method to an actual payment method
- * object which can be interpreted by Magento.
+ * Tests designed for payment method data conversion.
  *
- * @package Resursbank\Core\Helper
+ * @package Resursbank\Core\Test\Unit\Helper\Method
  */
 class ConverterTest extends TestCase
 {
@@ -74,7 +73,7 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getIdentifier will return value when value is included.
+     * Assert that getIdentifier will return value when it's included.
      *
      * @return void
      */
@@ -126,7 +125,7 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getDescription will return value when value is included.
+     * Assert that getDescription will return value when it's included.
      *
      * @return void
      */
@@ -189,7 +188,8 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getMinLimit will return value when value is included.
+     * Assert that getMinLimit will return value cast as float when value is
+     * included.
      *
      * @return void
      */
@@ -236,7 +236,8 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getMinLimit will return value when it's numeric.
+     * Assert that getMinLimit will return value cast as float when it's
+     * numeric.
      *
      * @return void
      */
@@ -252,7 +253,7 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getMaxLimit will return value when value is included.
+     * Assert that getMaxLimit will return value when it's included.
      *
      * @return void
      */
@@ -299,7 +300,8 @@ class ConverterTest extends TestCase
     }
 
     /**
-     * Assert that getMaxLimit will return value when it's numeric.
+     * Assert that getMaxLimit will return value cast as float when it's
+     * numeric.
      *
      * @return void
      */
@@ -315,6 +317,9 @@ class ConverterTest extends TestCase
     }
 
     /**
+     * Assert that the convert method casts a ValidatorException instance when
+     * validation fails prior to conversion.
+     *
      * @throws ValidatorException
      */
     public function testConvertThrowsValidatorExceptionWithFaultyData(): void
@@ -328,6 +333,9 @@ class ConverterTest extends TestCase
     }
 
     /**
+     * Assert that the convert method works (ie. that it converts data from the
+     * API as expected).
+     *
      * @throws ValidatorException
      */
     public function testConvert(): void
