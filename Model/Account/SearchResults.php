@@ -17,11 +17,14 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Checkout\Model\Account;
+namespace Resursbank\Core\Model\Account;
 
 use Magento\Framework\Api\SearchResults as FrameworkSearchResults;
-use Resursbank\Checkout\Api\Data\AccountSearchResultsInterface;
+use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
 
+/**
+ * @package Resursbank\Core\Model\Account
+ */
 class SearchResults extends FrameworkSearchResults implements AccountSearchResultsInterface
 {
     /**

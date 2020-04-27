@@ -15,13 +15,20 @@
  * limitations under the License.
  */
 
-namespace Resursbank\Checkout\Model\Api;
+namespace Resursbank\Core\Model\Api;
 
-use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
+// See to-do: 2020-04-27
+// use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
- * Class Credentials
- * @package Resursbank\Checkout\Api
+ * @todo 2020-04-27 - In the middle of module separation. Can't use
+ *       Ecom constants until a later date because Ecom would become a
+ *       dependency that we cannot have during this stage in
+ *       development. Will use static values instead.
+ */
+
+/**
+ * @package Resursbank\Core\Api
  */
 class Credentials
 {
@@ -107,8 +114,10 @@ class Credentials
     {
         if (is_string($environment)) {
             $this->environment = $environment === 'test' ?
-                RESURS_ENVIRONMENTS::ENVIRONMENT_TEST :
-                RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION;
+                1 : 0;
+        // See to-do: 2020-04-27
+        // RESURS_ENVIRONMENTS::ENVIRONMENT_TEST :
+        // RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION;
         } else {
             $this->environment = (int) $environment;
         }
@@ -164,9 +173,14 @@ class Credentials
      */
     public function getEnvironmentCode(): string
     {
-        return $this->getEnvironment() === RESURS_ENVIRONMENTS::ENVIRONMENT_TEST ?
+        return $this->getEnvironment() === 1 ?
             self::ENVIRONMENT_CODE_TEST :
             self::ENVIRONMENT_CODE_PROD;
+
+        // See to-do: 2020-04-27
+//        return $this->getEnvironment() === RESURS_ENVIRONMENTS::ENVIRONMENT_TEST ?
+//            self::ENVIRONMENT_CODE_TEST :
+//            self::ENVIRONMENT_CODE_PROD;
     }
 
     /**

@@ -18,7 +18,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Account interfaces. -->
-    <preference for="Resursbank\Checkout\Api\AccountRepositoryInterface" type="Resursbank\Checkout\Model\AccountRepository" />
-    <preference for="Resursbank\Checkout\Api\Data\AccountInterface" type="Resursbank\Checkout\Model\Account" />
-    <preference for="Resursbank\Checkout\Api\Data\AccountSearchResultsInterface" type="Resursbank\Checkout\Model\Account\SearchResults" />
+    <preference for="Resursbank\Core\Api\AccountRepositoryInterface" type="Resursbank\Core\Model\AccountRepository" />
+    <preference for="Resursbank\Core\Api\Data\AccountInterface" type="Resursbank\Core\Model\Account" />
+    <preference for="Resursbank\Core\Api\Data\AccountSearchResultsInterface" type="Resursbank\Core\Model\Account\SearchResults" />
+    <preference for="Resursbank\Core\Api\Data\AccountCollectionInterface" type="Resursbank\Core\Model\ResourceModel\Account\Collection" />
 </config>

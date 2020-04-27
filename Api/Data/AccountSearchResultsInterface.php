@@ -17,14 +17,13 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Checkout\Api\Data;
+namespace Resursbank\Core\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
-use Resursbank\Checkout\Api\Data\AccountInterface;
+use Resursbank\Core\Api\Data\AccountInterface;
 
 /**
- * Describes properties and methods associated with search result sets of
- * account entries.
+ * @package Resursbank\Core\Api\Data
  */
 interface AccountSearchResultsInterface extends SearchResultsInterface
 {

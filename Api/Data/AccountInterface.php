@@ -17,21 +17,19 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Checkout\Api\Data;
+namespace Resursbank\Core\Api\Data;
 
 /**
- * Describes properties and methods related to account entries.
+ * @package Resursbank\Core\Api\Data
  */
 interface AccountInterface
 {
     /**
      * @var string
      */
-    public const ACCOUNT_ID = 'id';
+    public const ACCOUNT_ID = 'account_id';
 
     /**
-     * Relationship to Magento\Sales\Model\Order\Payment entity.
-     *
      * @var string
      */
     public const USERNAME = 'username';
@@ -69,9 +67,9 @@ interface AccountInterface
      * Set ID.
      *
      * @param int $id
-     * @return $this
+     * @return self
      */
-    public function setAccountId(int $id): AccountInterface;
+    public function setAccountId(int $id): self;
 
     /**
      * Get username.
@@ -85,10 +83,10 @@ interface AccountInterface
     /**
      * Set username.
      *
-     * @param string $id
-     * @return $this
+     * @param string $username
+     * @return self
      */
-    public function setUsername(string $id): AccountInterface;
+    public function setUsername(string $username): self;
 
     /**
      * Get environment.
@@ -103,9 +101,9 @@ interface AccountInterface
      * Set environment.
      *
      * @param string $environment
-     * @return $this
+     * @return self
      */
-    public function setEnvironment(string $environment): AccountInterface;
+    public function setEnvironment(string $environment): self;
 
     /**
      * Get the salt.
@@ -120,9 +118,9 @@ interface AccountInterface
      * Set the salt.
      *
      * @param string $salt
-     * @return $this
+     * @return self
      */
-    public function setSalt(string $salt): AccountInterface;
+    public function setSalt(string $salt): self;
 
     /**
      * Get the time when the event was created.
@@ -137,9 +135,9 @@ interface AccountInterface
      * Set the time when the event entry was created.
      *
      * @param string $timestamp - Must be a MySQL valid timestamp.
-     * @return $this
+     * @return self
      */
-    public function setCreatedAt(string $timestamp): AccountInterface;
+    public function setCreatedAt(string $timestamp): self;
 
     /**
      * Get the time when the event was updated.
@@ -154,7 +152,7 @@ interface AccountInterface
      * Set the time when the event entry was updated.
      *
      * @param string $timestamp - Must be a MySQL valid timestamp.
-     * @return $this
+     * @return self
      */
-    public function setUpdatedAt(string $timestamp): AccountInterface;
+    public function setUpdatedAt(string $timestamp): self;
 }

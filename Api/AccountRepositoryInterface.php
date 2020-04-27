@@ -17,20 +17,18 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Checkout\Api;
+namespace Resursbank\Core\Api;
 
 use Exception;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Resursbank\Checkout\Api\Data\AccountInterface;
-use Resursbank\Checkout\Api\Data\AccountSearchResultsInterface;
+use Resursbank\Core\Api\Data\AccountInterface;
+use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
+use Resursbank\Core\Model\Api\Credentials;
 
 /**
- * Payment history CRUD interface.
- *
- * This interface specifies rules to manipulate / retrieve payment history
- * event entries.
+ * @package Resursbank\Core\Api
  */
 interface AccountRepositoryInterface
 {
@@ -42,9 +40,7 @@ interface AccountRepositoryInterface
      * @throws Exception
      * @throws AlreadyExistsException
      */
-    public function save(
-        AccountInterface $entry
-    ): AccountInterface;
+    public function save(AccountInterface $entry): AccountInterface;
 
     /**
      * Get entry by ID.
@@ -83,4 +79,15 @@ interface AccountRepositoryInterface
      * @throws LocalizedException
      */
     public function deleteById(int $id): bool;
+
+    /**
+     * Get an account entry by its credentials.
+     *
+     * @param Credentials $credentials
+     * @return AccountInterface|null - Returns null if an entry couldn't be
+     * found.
+     */
+    public function getByCredentials(
+        Credentials $credentials
+    ): ?AccountInterface;
 }

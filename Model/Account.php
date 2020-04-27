@@ -15,53 +15,141 @@
  * limitations under the License.
  */
 
-namespace Resursbank\Checkout\Model;
+namespace Resursbank\Core\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Resursbank\Checkout\Model\Api\Credentials;
-use Resursbank\Checkout\Model\ResourceModel\Account as Resource;
-use Resursbank\Checkout\Model\ResourceModel\Account\Collection;
-use Resursbank\Checkout\Model\ResourceModel\Account\CollectionFactory;
+use Resursbank\Core\Api\Data\AccountInterface;
+use Resursbank\Core\Model\ResourceModel\Account as Resource;
 
 /**
- * API account.
- *
- * @package Resursbank\Checkout\Model
+ * @package Resursbank\Core\Model
  */
-class Account extends AbstractModel
+class Account extends AbstractModel implements AccountInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
     /**
      * Initialize model.
      */
-    protected function _construct(
-        CollectionFactory $collectionFactory
-    ) {
+    protected function _construct()
+    {
         $this->_init(Resource::class);
-
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
-     * Load by Credentials instance.
-     *
-     * @param Credentials $credentials
-     * @return self
+     * @inheritDoc
      */
-    public function loadByCredentials(Credentials $credentials): self
+    public function getAccountId(?int $default = null): ?int
     {
-        /** @var Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('username', $credentials->getUsername())
-            ->addFieldToFilter('environment', $credentials->getEnvironment());
+        $result = $this->getData(self::ACCOUNT_ID);
 
-        if (count($collection) > 0) {
-            $this->load($collection->getLastItem()->getId());
-        }
+        return $result === null ? $default : (int)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAccountId(int $id): AccountInterface
+    {
+        $this->setData(self::ACCOUNT_ID, $id);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername(?string $default = null): ?string
+    {
+        $result = $this->getData(self::USERNAME);
+
+        return $result === null ? $default : (string)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUsername(string $username): AccountInterface
+    {
+        $this->setData(self::USERNAME, $username);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEnvironment(?string $default = null): ?string
+    {
+        $result = $this->getData(self::ENVIRONMENT);
+
+        return $result === null ? $default : (string)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setEnvironment(string $environment): AccountInterface
+    {
+        $this->setData(self::ENVIRONMENT, $environment);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt(?string $default = null): ?string
+    {
+        $result = $this->getData(self::SALT);
+
+        return $result === null ? $default : (string)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSalt(string $salt): AccountInterface
+    {
+        $this->setData(self::SALT, $salt);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCreatedAt(?string $default = null): ?string
+    {
+        $result = $this->getData(self::CREATED_AT);
+
+        return $result === null ? $default : (string)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCreatedAt(string $timestamp): AccountInterface
+    {
+        $this->setData(self::CREATED_AT, $timestamp);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUpdatedAt(?string $default = null): ?string
+    {
+        $result = $this->getData(self::UPDATED_AT);
+
+        return $result === null ? $default : (string)$result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUpdatedAt(string $timestamp): AccountInterface
+    {
+        $this->setData(self::UPDATED_AT, $timestamp);
 
         return $this;
     }

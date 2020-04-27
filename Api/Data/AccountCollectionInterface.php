@@ -17,22 +17,17 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Model\ResourceModel;
-
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+namespace Resursbank\Core\Api\Data;
 
 /**
- * @package Resursbank\Core\Model\ResourceModel
+ * @package Resursbank\Core\Api\Data
  */
-class Account extends AbstractDb
+interface AccountCollectionInterface
 {
     /**
-     * Initialize resource model.
+     * Returns a list of database entries.
      *
-     * @return void
+     * @return AccountInterface[]
      */
-    protected function _construct(): void
-    {
-        $this->_init('resursbank_checkout_account', 'account_id');
-    }
+    public function getItems(): array;
 }

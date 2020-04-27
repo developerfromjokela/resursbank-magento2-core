@@ -15,18 +15,19 @@
  * limitations under the License.
  */
 
-namespace Resursbank\Checkout\Model\ResourceModel\Account;
+namespace Resursbank\Core\Model\ResourceModel\Account;
 
-use Resursbank\Checkout\Model\Account as Model;
-use Resursbank\Checkout\Model\ResourceModel\Account as Resource;
+use Resursbank\Core\Api\Data\AccountCollectionInterface;
+use Resursbank\Core\Model\Account as Model;
+use Resursbank\Core\Model\ResourceModel\Account as Resource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * API account resource collection.
  *
- * @package Resursbank\Checkout\Model\ResourceModel\Account
+ * @package Resursbank\Core\Model\ResourceModel\Account
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements AccountCollectionInterface
 {
     /**
      * Initialize collection model.
@@ -34,5 +35,13 @@ class Collection extends AbstractCollection
     protected function _construct(): void
     {
         $this->_init(Model::class, Resource::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getItems(): array
+    {
+        return parent::getItems();
     }
 }

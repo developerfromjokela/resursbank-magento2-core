@@ -17,31 +17,33 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Checkout\Model;
+namespace Resursbank\Core\Model;
 
 use Exception;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Resursbank\Checkout\Api\Data\AccountInterface;
-use Resursbank\Checkout\Api\Data\AccountSearchResultsInterface;
-use Resursbank\Checkout\Api\Data\AccountSearchResultsInterfaceFactory;
-use Resursbank\Checkout\Api\AccountRepositoryInterface;
-use Resursbank\Checkout\Model\AccountFactory;
-use Resursbank\Checkout\Model\ResourceModel\Account as ResourceModel;
-use Resursbank\Checkout\Model\ResourceModel\Account\CollectionFactory;
+use Resursbank\Core\Api\AccountRepositoryInterface;
+use Resursbank\Core\Api\Data\AccountCollectionInterfaceFactory;
+use Resursbank\Core\Api\Data\AccountInterface;
+use Resursbank\Core\Api\Data\AccountInterfaceFactory;
+use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
+use Resursbank\Core\Api\Data\AccountSearchResultsInterfaceFactory;
+use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\Core\Model\ResourceModel\Account as ResourceModel;
+use Resursbank\Core\Model\ResourceModel\Account\Collection;
 
 /**
- * Repository for payment history event entries.
- *
- * @package Resursbank\Checkout\Model
+ * @package Resursbank\Core\Model
  */
 class AccountRepository implements AccountRepositoryInterface
 {
     /**
-     * @var AccountFactory
+     * @var AccountInterfaceFactory
      */
     protected $accountFactory;
 
@@ -56,7 +58,7 @@ class AccountRepository implements AccountRepositoryInterface
     protected $resourceModel;
 
     /**
-     * @var CollectionFactory
+     * @var AccountCollectionInterfaceFactory
      */
     private $collectionFactory;
 
@@ -66,24 +68,40 @@ class AccountRepository implements AccountRepositoryInterface
     private $filterProcessor;
 
     /**
-     * @param ResourceModel $resourceModel
-     * @param AccountFactory $accountFactory
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param ResourceModel                        $resourceModel
+     * @param AccountInterfaceFactory              $accountFactory
      * @param AccountSearchResultsInterfaceFactory $searchResultsFactory
-     * @param CollectionFactory $collectionFactory
-     * @param FilterProcessor $filterProcessor
+     * @param AccountCollectionInterfaceFactory    $collectionFactory
+     * @param FilterProcessor                      $filterProcessor
+     * @param FilterBuilder                        $filterBuilder
+     * @param SearchCriteriaBuilder                $searchCriteriaBuilder
      */
     public function __construct(
         ResourceModel $resourceModel,
-        AccountFactory $accountFactory,
+        AccountInterfaceFactory $accountFactory,
         AccountSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionFactory $collectionFactory,
-        FilterProcessor $filterProcessor
+        AccountCollectionInterfaceFactory $collectionFactory,
+        FilterProcessor $filterProcessor,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->resourceModel = $resourceModel;
         $this->accountFactory = $accountFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionFactory = $collectionFactory;
         $this->filterProcessor = $filterProcessor;
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -91,9 +109,9 @@ class AccountRepository implements AccountRepositoryInterface
      * @throws AlreadyExistsException
      * @throws Exception
      */
-    public function save(
-        AccountInterface $entry
-    ): AccountInterface {
+    public function save(AccountInterface $entry): AccountInterface
+    {
+        /** @var Account $entry */
         $this->resourceModel->save($entry);
 
         return $entry;
@@ -105,6 +123,7 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function delete(AccountInterface $entry): bool
     {
+        /** @var Account $entry */
         $this->resourceModel->delete($entry);
 
         return true;
@@ -112,12 +131,12 @@ class AccountRepository implements AccountRepositoryInterface
 
     /**
      * @inheritDoc
-     * @throws NoSuchEntityException
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function deleteById(int $Id): bool
+    public function deleteById(int $id): bool
     {
-        return $this->delete($this->get($Id));
+        return $this->delete($this->get($id));
     }
 
     /**
@@ -126,16 +145,18 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function get(int $id): AccountInterface
     {
-        $history = $this->accountFactory->create();
-        $history->getResource()->load($history, $id);
+        /** @var Account $result */
+        $result = $this->accountFactory->create();
 
-        if (!$history->getId()) {
+        $this->resourceModel->load($result, $id);
+
+        if (!$result->getId()) {
             throw new NoSuchEntityException(
                 __('Unable to find payment history entry with ID %1', $id)
             );
         }
 
-        return $history;
+        return $result;
     }
 
     /**
@@ -144,6 +165,7 @@ class AccountRepository implements AccountRepositoryInterface
     public function getList(
         SearchCriteriaInterface $searchCriteria
     ): AccountSearchResultsInterface {
+        /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
 
         $this->filterProcessor->process($searchCriteria, $collection);
@@ -154,5 +176,36 @@ class AccountRepository implements AccountRepositoryInterface
             ->setSearchCriteria($searchCriteria)
             ->setItems($collection->getItems())
             ->setTotalCount($collection->getSize());
+    }
+
+    /**
+     * @inheritDoc
+     * @throws LocalizedException
+     */
+    public function getByCredentials(Credentials $credentials): ?AccountInterface
+    {
+        $account = null;
+        $filterUsername = $this->filterBuilder
+            ->setField('username')
+            ->setValue($credentials->getUsername())
+            ->create();
+
+        $filterEnvironment= $this->filterBuilder
+            ->setField('environment')
+            ->setValue($credentials->getEnvironment())
+            ->create();
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilters([$filterUsername, $filterEnvironment])
+            ->create();
+
+        $result = $this->getList($searchCriteria);
+
+        if ($result->getTotalCount() > 0) {
+            $items = $result->getItems();
+            $account = end($items);
+        }
+
+        return $account;
     }
 }
