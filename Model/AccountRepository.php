@@ -17,7 +17,6 @@ use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Resursbank\Core\Api\AccountRepositoryInterface;
-use Resursbank\Core\Api\Data\AccountCollectionInterfaceFactory;
 use Resursbank\Core\Api\Data\AccountInterface;
 use Resursbank\Core\Api\Data\AccountInterfaceFactory;
 use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
@@ -25,6 +24,7 @@ use Resursbank\Core\Api\Data\AccountSearchResultsInterfaceFactory;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\Core\Model\ResourceModel\Account as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\Account\Collection;
+use Resursbank\Core\Model\ResourceModel\Account\CollectionFactory as CollectionFactory;
 
 /**
  * @package Resursbank\Core\Model
@@ -51,7 +51,7 @@ class AccountRepository implements AccountRepositoryInterface
 
     /**
      * @noinspection PhpUndefinedClassInspection
-     * @var AccountCollectionInterfaceFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
 
@@ -75,7 +75,7 @@ class AccountRepository implements AccountRepositoryInterface
      * @param ResourceModel $resourceModel
      * @param AccountInterfaceFactory $accountFactory
      * @param AccountSearchResultsInterfaceFactory $searchResultsFactory
-     * @param AccountCollectionInterfaceFactory $collectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param FilterProcessor $filterProcessor
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchBuilder
@@ -84,7 +84,7 @@ class AccountRepository implements AccountRepositoryInterface
         ResourceModel $resourceModel,
         AccountInterfaceFactory $accountFactory,
         AccountSearchResultsInterfaceFactory $searchResultsFactory,
-        AccountCollectionInterfaceFactory $collectionFactory,
+        CollectionFactory $collectionFactory,
         FilterProcessor $filterProcessor,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchBuilder
@@ -127,19 +127,17 @@ class AccountRepository implements AccountRepositoryInterface
      * @inheritDoc
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function deleteById(int $id): bool
+    public function deleteById(int $accountId): bool
     {
-        return $this->delete($this->get($id));
+        return $this->delete($this->get($accountId));
     }
 
     /**
      * @inheritDoc
      * @throws NoSuchEntityException
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function get(int $id): AccountInterface
+    public function get(int $accountId): AccountInterface
     {
         /**
          * @var Account $result
@@ -147,11 +145,11 @@ class AccountRepository implements AccountRepositoryInterface
          */
         $result = $this->accountFactory->create();
 
-        $this->resourceModel->load($result, $id);
+        $this->resourceModel->load($result, $accountId);
 
         if (!$result->getId()) {
             throw new NoSuchEntityException(
-                __('Unable to find account with ID %1', $id)
+                __('Unable to find account with ID %1', $accountId)
             );
         }
 

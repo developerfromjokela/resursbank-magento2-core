@@ -34,12 +34,11 @@ interface AccountRepositoryInterface
     /**
      * Get entry by ID.
      *
-     * @param int $id
+     * @param int $accountId
      * @return AccountInterface
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function get(int $id): AccountInterface;
+    public function get(int $accountId): AccountInterface;
 
     /**
      * Retrieve entries matching the specified criteria.
@@ -64,12 +63,11 @@ interface AccountRepositoryInterface
     /**
      * Delete entry by ID.
      *
-     * @param int $id
+     * @param int $accountId
      * @return bool
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function deleteById(int $id): bool;
+    public function deleteById(int $accountId): bool;
 
     /**
      * Get an account entry by its credentials.

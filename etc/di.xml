@@ -21,5 +21,4 @@
     <preference for="Resursbank\Core\Api\AccountRepositoryInterface" type="Resursbank\Core\Model\AccountRepository" />
     <preference for="Resursbank\Core\Api\Data\AccountInterface" type="Resursbank\Core\Model\Account" />
     <preference for="Resursbank\Core\Api\Data\AccountSearchResultsInterface" type="Resursbank\Core\Model\Account\SearchResults" />
-    <preference for="Resursbank\Core\Api\Data\AccountCollectionInterface" type="Resursbank\Core\Model\ResourceModel\Account\Collection" />
 </config>

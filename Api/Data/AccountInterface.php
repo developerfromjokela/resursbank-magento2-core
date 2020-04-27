@@ -55,11 +55,10 @@ interface AccountInterface
     /**
      * Set ID.
      *
-     * @param int $id
+     * @param int $accountId
      * @return self
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function setAccountId(int $id): self;
+    public function setAccountId(int $accountId): self;
 
     /**
      * Get username.

@@ -4,6 +4,8 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Resursbank\Core\Model;
 
 use Magento\Framework\Model\AbstractModel;
@@ -37,11 +39,10 @@ class Account extends AbstractModel implements AccountInterface
 
     /**
      * @inheritDoc
-     * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function setAccountId(int $id): AccountInterface
+    public function setAccountId(int $accountId): AccountInterface
     {
-        $this->setData(self::ACCOUNT_ID, $id);
+        $this->setData(self::ACCOUNT_ID, $accountId);
 
         return $this;
     }
