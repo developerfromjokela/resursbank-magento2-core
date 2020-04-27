@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Api;
 
-use Exception;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\LocalizedException;
 use Resursbank\Core\Api\Data\AccountInterface;
 use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
 use Resursbank\Core\Model\Api\Credentials;
@@ -26,8 +23,6 @@ interface AccountRepositoryInterface
      *
      * @param AccountInterface $entry
      * @return AccountInterface
-     * @throws Exception
-     * @throws AlreadyExistsException
      */
     public function save(AccountInterface $entry): AccountInterface;
 
@@ -36,7 +31,6 @@ interface AccountRepositoryInterface
      *
      * @param int $accountId
      * @return AccountInterface
-     * @throws LocalizedException
      */
     public function get(int $accountId): AccountInterface;
 
@@ -45,7 +39,6 @@ interface AccountRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return AccountSearchResultsInterface
-     * @throws LocalizedException
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria
@@ -56,7 +49,6 @@ interface AccountRepositoryInterface
      *
      * @param AccountInterface $entry
      * @return bool
-     * @throws LocalizedException
      */
     public function delete(AccountInterface $entry): bool;
 
@@ -65,7 +57,6 @@ interface AccountRepositoryInterface
      *
      * @param int $accountId
      * @return bool
-     * @throws LocalizedException
      */
     public function deleteById(int $accountId): bool;
 

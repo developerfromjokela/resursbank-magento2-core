@@ -125,6 +125,7 @@ class AccountRepository implements AccountRepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
@@ -181,7 +182,6 @@ class AccountRepository implements AccountRepositoryInterface
 
     /**
      * @inheritDoc
-     * @throws LocalizedException
      */
     public function getByCredentials(Credentials $credentials): ?AccountInterface
     {
