@@ -1,21 +1,12 @@
 <?php
 /**
- * Copyright 2016 Resurs Bank AB
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
  */
 
 namespace Resursbank\Core\Model\Api;
+
+use Magento\Framework\Exception\ValidatorException;
 
 // See to-do: 2020-04-27
 // use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
@@ -107,20 +98,27 @@ class Credentials
     }
 
     /**
-     * @param string|int $environment (test|production, 1|0)
+     * @param int $environment
      * @return self
+     * @throws ValidatorException
      */
-    public function setEnvironment($environment): self
+    public function setEnvironment(int $environment): self
     {
-        if (is_string($environment)) {
-            $this->environment = $environment === 'test' ?
-                1 : 0;
         // See to-do: 2020-04-27
         // RESURS_ENVIRONMENTS::ENVIRONMENT_TEST :
         // RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION;
-        } else {
-            $this->environment = (int) $environment;
+
+        if ($environment < 0 || $environment > 2) {
+            throw new ValidatorException(
+                __(
+                    'Invalid environment value %1. ' .
+                    '0 = prod, 1 = test, 2 = unspecified.',
+                    $environment
+                )
+            );
         }
+
+        $this->environment = $environment;
 
         return $this;
     }
@@ -131,26 +129,6 @@ class Credentials
     public function getEnvironment(): int
     {
         return (int) $this->environment;
-    }
-
-    /**
-     * Set multiple values at the same time.
-     *
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        if (isset($data['username'])) {
-            $this->setUsername($data['username']);
-        }
-
-        if (isset($data['environment'])) {
-            $this->setEnvironment($data['environment']);
-        }
-
-        if (isset($data['password'])) {
-            $this->setPassword($data['password']);
-        }
     }
 
     /**

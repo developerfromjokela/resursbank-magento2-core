@@ -1,18 +1,7 @@
 <?php
 /**
- * Copyright 2016 Resurs Bank AB
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
  */
 
 declare(strict_types=1);
@@ -39,15 +28,18 @@ use Resursbank\Core\Model\ResourceModel\Account\Collection;
 
 /**
  * @package Resursbank\Core\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountRepository implements AccountRepositoryInterface
 {
     /**
+     * @noinspection PhpUndefinedClassInspection
      * @var AccountInterfaceFactory
      */
     protected $accountFactory;
 
     /**
+     * @noinspection PhpUndefinedClassInspection
      * @var AccountSearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
@@ -58,6 +50,7 @@ class AccountRepository implements AccountRepositoryInterface
     protected $resourceModel;
 
     /**
+     * @noinspection PhpUndefinedClassInspection
      * @var AccountCollectionInterfaceFactory
      */
     private $collectionFactory;
@@ -75,16 +68,17 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $searchBuilder;
 
     /**
-     * @param ResourceModel                        $resourceModel
-     * @param AccountInterfaceFactory              $accountFactory
+     * @noinspection PhpUndefinedClassInspection
+     * @param ResourceModel $resourceModel
+     * @param AccountInterfaceFactory $accountFactory
      * @param AccountSearchResultsInterfaceFactory $searchResultsFactory
-     * @param AccountCollectionInterfaceFactory    $collectionFactory
-     * @param FilterProcessor                      $filterProcessor
-     * @param FilterBuilder                        $filterBuilder
-     * @param SearchCriteriaBuilder                $searchCriteriaBuilder
+     * @param AccountCollectionInterfaceFactory $collectionFactory
+     * @param FilterProcessor $filterProcessor
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchBuilder
      */
     public function __construct(
         ResourceModel $resourceModel,
@@ -93,7 +87,7 @@ class AccountRepository implements AccountRepositoryInterface
         AccountCollectionInterfaceFactory $collectionFactory,
         FilterProcessor $filterProcessor,
         FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchBuilder
     ) {
         $this->resourceModel = $resourceModel;
         $this->accountFactory = $accountFactory;
@@ -101,7 +95,7 @@ class AccountRepository implements AccountRepositoryInterface
         $this->collectionFactory = $collectionFactory;
         $this->filterProcessor = $filterProcessor;
         $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->searchBuilder = $searchBuilder;
     }
 
     /**
@@ -133,6 +127,7 @@ class AccountRepository implements AccountRepositoryInterface
      * @inheritDoc
      * @throws LocalizedException
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function deleteById(int $id): bool
     {
@@ -142,17 +137,21 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * @inheritDoc
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function get(int $id): AccountInterface
     {
-        /** @var Account $result */
+        /**
+         * @var Account $result
+         * @noinspection PhpUndefinedMethodInspection
+         */
         $result = $this->accountFactory->create();
 
         $this->resourceModel->load($result, $id);
 
         if (!$result->getId()) {
             throw new NoSuchEntityException(
-                __('Unable to find payment history entry with ID %1', $id)
+                __('Unable to find account with ID %1', $id)
             );
         }
 
@@ -165,13 +164,17 @@ class AccountRepository implements AccountRepositoryInterface
     public function getList(
         SearchCriteriaInterface $searchCriteria
     ): AccountSearchResultsInterface {
-        /** @var Collection $collection */
+        /**
+         * @var Collection $collection
+         * @noinspection PhpUndefinedMethodInspection
+         */
         $collection = $this->collectionFactory->create();
 
         $this->filterProcessor->process($searchCriteria, $collection);
 
         $collection->load();
 
+        /** @noinspection PhpUndefinedMethodInspection */
         return $this->searchResultsFactory->create()
             ->setSearchCriteria($searchCriteria)
             ->setItems($collection->getItems())
@@ -195,7 +198,7 @@ class AccountRepository implements AccountRepositoryInterface
             ->setValue($credentials->getEnvironment())
             ->create();
 
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $this->searchBuilder
             ->addFilters([$filterUsername, $filterEnvironment])
             ->create();
 

@@ -17,7 +17,6 @@
 
 namespace Resursbank\Core\Model\ResourceModel\Account;
 
-use Resursbank\Core\Api\Data\AccountCollectionInterface;
 use Resursbank\Core\Model\Account as Model;
 use Resursbank\Core\Model\ResourceModel\Account as Resource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -27,21 +26,16 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  *
  * @package Resursbank\Core\Model\ResourceModel\Account
  */
-class Collection extends AbstractCollection implements AccountCollectionInterface
+class Collection extends AbstractCollection
 {
     /**
      * Initialize collection model.
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct(): void
     {
         $this->_init(Model::class, Resource::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getItems(): array
-    {
-        return parent::getItems();
     }
 }
