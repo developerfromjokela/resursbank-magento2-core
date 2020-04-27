@@ -16,14 +16,14 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface AccountSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Get payment history list.
+     * Returns a list of database entries as a result of a database search.
      *
      * @return AccountInterface[]
      */
     public function getItems(): array;
 
     /**
-     * Set payment history list.
+     * Set list of items to search through.
      *
      * @param AccountInterface[] $items
      * @return $this
