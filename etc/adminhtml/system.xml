@@ -25,38 +25,47 @@
                         <field id="flow" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Checkout type</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Flow</source_model>
+                            <config_path>resursbank/api/flow</config_path>
                         </field>
                         <field id="environment" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Environment</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Environment</source_model>
+                            <config_path>resursbank/api/environment</config_path>
                         </field>
                         <field id="username_test" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Username</label>
                             <depends><field id="environment">test</field></depends>
+                            <config_path>resursbank/api/username_test</config_path>
                         </field>
                         <field id="password_test" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Password</label>
                             <depends><field id="environment">test</field></depends>
+                            <config_path>resursbank/api/password_test</config_path>
                         </field>
                         <field id="username_production" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Username</label>
                             <depends><field id="environment">production</field></depends>
+                            <config_path>resursbank/api/username_production</config_path>
                         </field>
                         <field id="password_production" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Password</label>
                             <depends><field id="environment">production</field></depends>
+                            <config_path>resursbank/api/password_production</config_path>
                         </field>
                         <field id="country" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Country</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Country</source_model>
+                            <config_path>resursbank/api/country</config_path>
                         </field>
                         <field id="unit_measure" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Unit Measure</label>
+                            <config_path>resursbank/api/unit_measure</config_path>
                         </field>
                         <field id="debug" translate="label, comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Debug enabled</label>
                             <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>resursbank/api/debug</config_path>
                         </field>
                     </group>
 
@@ -64,6 +73,7 @@
                         <label>Payment Methods</label>
                         <field id="sync" translate="label" type="button" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                             <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
+                            <config_path>resursbank/methods/sync</config_path>
                         </field>
                     </group>
 
