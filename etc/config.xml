@@ -9,6 +9,7 @@
     <default>
         <resursbank>
             <api>
+                <environment>test</environment>
                 <debug>0</debug>
             </api>
         </resursbank>
