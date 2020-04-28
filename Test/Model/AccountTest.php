@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Model;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Resursbank\Core\Model\Account;
 use PHPUnit\Framework\TestCase;
@@ -63,12 +64,27 @@ class AccountTest extends TestCase
     /**
      * Assert the value resulting from the getUsername method matches the value
      * supplied to the setUsername method.
+     *
+     * @throws ValidatorException
      */
     public function testUsername()
     {
         $this->account->setUsername('Jeff');
 
         self::assertSame('Jeff', $this->account->getUsername());
+    }
+
+    /**
+     * Assert the setUsername methods throws a ValidatorException when provided
+     * and empty value.
+     *
+     * @throws ValidatorException
+     */
+    public function testSetUsernameThrowsExceptionWithEmptyValue()
+    {
+        $this->expectException(ValidatorException::class);
+
+        $this->account->setUsername('');
     }
 
     /**
@@ -99,6 +115,8 @@ class AccountTest extends TestCase
     /**
      * Assert the value resulting from the getCreatedAt method matches the
      * value supplied to the setCreatedAt method.
+     *
+     * @throws ValidatorException
      */
     public function testCreatedAt()
     {
@@ -110,8 +128,21 @@ class AccountTest extends TestCase
     }
 
     /**
+     * Assert that the method setCreatedAt will throw an instance of
+     * ValidatorException if provided a value which isn't numeric.
+     */
+    public function testCreatedAtMustBeNumeric()
+    {
+        $this->expectException(ValidatorException::class);
+
+        $this->account->setCreatedAt('testing');
+    }
+
+    /**
      * Assert the value resulting from the getUpdatedAt method matches the
      * value supplied to the setUpdatedAt method.
+     *
+     * @throws ValidatorException
      */
     public function testUpdatedAt()
     {
@@ -120,5 +151,16 @@ class AccountTest extends TestCase
         $this->account->setUpdatedAt($time);
 
         self::assertSame($time, $this->account->getUpdatedAt());
+    }
+
+    /**
+     * Assert that the method setUpdatedAt will throw an instance of
+     * ValidatorException if provided a value which isn't numeric.
+     */
+    public function testUpdatedAtMustBeNumeric()
+    {
+        $this->expectException(ValidatorException::class);
+
+        $this->account->setUpdatedAt('womba');
     }
 }
