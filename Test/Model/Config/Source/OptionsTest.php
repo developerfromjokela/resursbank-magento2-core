@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use Resursbank\Core\Model\Config\Source\Options;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +36,7 @@ class OptionsTest extends TestCase
     private $objectManager;
 
     /**
-     * @var MockObject
+     * @var Options
      */
     private $options;
 
@@ -55,9 +54,9 @@ class OptionsTest extends TestCase
             ->getMockForAbstractClass();
 
         // Mock return value of toArray method, implemented by subclasses.
-        $this->options->expects($this->once())
+        $this->options->expects(self::once())
             ->method('toArray')
-            ->will($this->returnValue([
+            ->will(self::returnValue([
                 'test' => 'Test',
                 'production' => 'Production'
             ]));
@@ -70,7 +69,7 @@ class OptionsTest extends TestCase
      */
     public function testHasSameNumberOfOptionsAsToArray(): void
     {
-        $this->assertCount(2, $this->options->toOptionArray());
+        self::assertCount(2, $this->options->toOptionArray());
     }
 
     /**
@@ -81,7 +80,7 @@ class OptionsTest extends TestCase
      */
     public function testValueConversionFromToOptionArray(): void
     {
-        $this->assertEquals([
+        self::assertSame([
             [
                 'value' => 'test',
                 'label' => 'Test'
