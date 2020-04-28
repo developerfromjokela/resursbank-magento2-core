@@ -21,20 +21,10 @@ use Magento\Framework\Exception\ValidatorException;
  */
 
 /**
- * @package Resursbank\Core\Api
+ * @package Resursbank\Core\Model\Api
  */
 class Credentials
 {
-    /**
-     * @var string
-     */
-    public const ENVIRONMENT_CODE_TEST = 'test';
-
-    /**
-     * @var string
-     */
-    public const ENVIRONMENT_CODE_PROD = 'prod';
-
     /**
      * @var string
      */
@@ -51,52 +41,55 @@ class Credentials
     private $environment;
 
     /**
-     * @return bool
-     */
-    public function hasCredentials(): bool
-    {
-        return (
-            $this->getUsername() !== '' &&
-            $this->getPassword() !== ''
-        );
-    }
-
-    /**
      * @param string $username
      * @return self
+     * @throws ValidatorException
      */
-    public function setUsername($username): self
+    public function setUsername(string $username): self
     {
-        $this->username = (string) $username;
+        if ($username === '') {
+            throw new ValidatorException(
+                __('Username cannot be empty.')
+            );
+        }
+
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     /**
      * @param string $password
      * @return self
+     * @throws ValidatorException
      */
-    public function setPassword($password): self
+    public function setPassword(string $password): self
     {
-        $this->password = (string) $password;
+        if ($password === '') {
+            throw new ValidatorException(
+                __('Password cannot be empty.')
+            );
+        }
+
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     /**
@@ -110,11 +103,10 @@ class Credentials
         // RESURS_ENVIRONMENTS::ENVIRONMENT_TEST :
         // RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION;
 
-        if ($environment < 0 || $environment > 2) {
+        if ($environment !== 0 && $environment !== 1) {
             throw new ValidatorException(
                 __(
-                    'Invalid environment value %1. ' .
-                    '0 = prod, 1 = test, 2 = unspecified.',
+                    'Invalid environment value %1. 0 = prod, 1 = test.',
                     $environment
                 )
             );
@@ -126,52 +118,10 @@ class Credentials
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getEnvironment(): int
+    public function getEnvironment(): ?int
     {
-        return (int) $this->environment;
-    }
-
-    /**
-     * Retrieve hash value based on credentials.
-     *
-     * @return string
-     */
-    public function getHash(): string
-    {
-        return sha1(
-            $this->getUsername() .
-            $this->getEnvironment()
-        );
-    }
-
-    /**
-     * Retrieve readable environment code.
-     *
-     * @return string
-     */
-    public function getEnvironmentCode(): string
-    {
-        return $this->getEnvironment() === 1 ?
-            self::ENVIRONMENT_CODE_TEST :
-            self::ENVIRONMENT_CODE_PROD;
-
-        // See to-do: 2020-04-27
-//        return $this->getEnvironment() === RESURS_ENVIRONMENTS::ENVIRONMENT_TEST ?
-//            self::ENVIRONMENT_CODE_TEST :
-//            self::ENVIRONMENT_CODE_PROD;
-    }
-
-    /**
-     * Retrieve readable unique method code suffix.
-     *
-     * @return string - Returns a lowercased string.
-     */
-    public function getMethodSuffix(): string
-    {
-        return strtolower(
-            $this->getUsername() . '_' . $this->getEnvironmentCode()
-        );
+        return $this->environment;
     }
 }
