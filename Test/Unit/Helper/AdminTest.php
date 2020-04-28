@@ -22,7 +22,6 @@ namespace Resursbank\Core\Test\Helper;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\User;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Admin;
 
@@ -39,7 +38,7 @@ class AdminTest extends TestCase
     private $objectManager;
 
     /**
-     * @var MockObject
+     * @var Session
      */
     private $session;
 

@@ -46,7 +46,7 @@ class EnvironmentTest extends TestCase
      */
     public function testHasTestOption(): void
     {
-        $this->assertArrayHasKey('test', $this->environment->toArray());
+        self::assertArrayHasKey('test', $this->environment->toArray());
     }
 
     /**
@@ -56,7 +56,7 @@ class EnvironmentTest extends TestCase
      */
     public function testHasProductionOption(): void
     {
-        $this->assertArrayHasKey('production', $this->environment->toArray());
+        self::assertArrayHasKey('production', $this->environment->toArray());
     }
 
     /**
@@ -66,6 +66,6 @@ class EnvironmentTest extends TestCase
      */
     public function testHasTwoOptions(): void
     {
-        $this->assertCount(2, $this->environment->toArray());
+        self::assertCount(2, $this->environment->toArray());
     }
 }
