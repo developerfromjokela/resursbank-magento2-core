@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Model\Config\Source;
+namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Resursbank\Core\Model\Config\Source\Environment;
