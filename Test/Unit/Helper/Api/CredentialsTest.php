@@ -10,11 +10,10 @@ namespace Resursbank\Core\Test\Unit\Helper\Api;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Exception\MissingDataException;
-use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\Core\Helper\Api\Credentials as Helper;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases designed for Credentials data model.
@@ -127,7 +126,8 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that the getHash method return the expected result.
+     * Assert that the getHash method returns the expected result when username
+     * and environment are applied on the supplied Credentials model instance.
      *
      * @return void
      * @throws MissingDataException
@@ -232,8 +232,7 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that the getMethodSuffix method will result in the expected value
-     * getting method suffix for a Credentials model instance with the
-     * corresponding values applied.
+     * for a Credentials model instance with the corresponding values applied.
      *
      * @return void
      * @throws MissingDataException
@@ -246,7 +245,7 @@ class CredentialsTest extends TestCase
             ->setEnvironment(0);
 
         self::assertSame(
-            'walter_' . Credentials::ENVIRONMENT_CODE_PROD,
+            'walter_' . Helper::ENVIRONMENT_CODE_PROD,
             $this->helper->getMethodSuffix($this->model)
         );
     }
@@ -266,7 +265,7 @@ class CredentialsTest extends TestCase
             ->setEnvironment(1);
 
         self::assertSame(
-            'bunny_' . Credentials::ENVIRONMENT_CODE_TEST,
+            'bunny_' . Helper::ENVIRONMENT_CODE_TEST,
             $this->helper->getMethodSuffix($this->model)
         );
     }

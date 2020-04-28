@@ -16,7 +16,7 @@ use Resursbank\Core\Model\Api\Credentials;
 /**
  * Test cases designed for Credentials data model.
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Unit\Model\Api
  */
 class CredentialsTest extends TestCase
 {
@@ -42,7 +42,7 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that we get an instance of ValidatorException when we attempt to
-     * assign an empty string as username value on our Credentials model
+     * assign an empty string as username value on the Credentials model
      * instance.
      *
      * @return void
@@ -56,7 +56,7 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that we get an instance of ValidatorException when we attempt to
-     * assign an empty string as password value on our Credentials model
+     * assign an empty string as password value on the Credentials model
      * instance.
      *
      * @return void
@@ -69,8 +69,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that "0" is a valid environment to apply to the Credentials model
-     * instance.
+     * Assert that "0" is a valid environment value.
      *
      * @return void
      * @throws ValidatorException
@@ -84,8 +83,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that "1" is a valid environment to apply to the Credentials model
-     * instance.
+     * Assert that "1" is a valid environment value.
      *
      * @return void
      * @throws ValidatorException
@@ -112,7 +110,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that applying an environment value of more than "2" results in an
+     * Assert that applying an environment value of more than "1" results in an
      * instance of ValidatorException.
      *
      * @return void
