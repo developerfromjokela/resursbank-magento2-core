@@ -53,6 +53,12 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/api/debug</config_path>
                         </field>
+                        <field id="round_tax_percentage" translate="label, comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Round Item Tax</label>
+                            <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>resursbank/api/round_tax_percentage</config_path>
+                        </field>
                     </group>
 
                     <group id="methods" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
