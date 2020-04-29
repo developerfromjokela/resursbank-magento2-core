@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Model;
+namespace Resursbank\Core\Test\Unit\Model;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
