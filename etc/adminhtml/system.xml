@@ -61,6 +61,10 @@
                             <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
                             <config_path>resursbank/methods/sync</config_path>
                         </field>
+                        <field id="auto_sync_method" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Automatically sync payment methods</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
                     </group>
 
                 </group>
