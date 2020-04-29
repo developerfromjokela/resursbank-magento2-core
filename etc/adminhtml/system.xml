@@ -47,11 +47,7 @@
                             <depends><field id="environment">production</field></depends>
                             <config_path>resursbank/api/password_production</config_path>
                         </field>
-                        <field id="unit_measure" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Unit Measure</label>
-                            <config_path>resursbank/api/unit_measure</config_path>
-                        </field>
-                        <field id="debug" translate="label, comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="debug" translate="label, comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Debug enabled</label>
                             <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
