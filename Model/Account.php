@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\AbstractModel;
 use Resursbank\Core\Api\Data\AccountInterface;
 use Resursbank\Core\Model\ResourceModel\Account as Resource;
@@ -59,9 +60,16 @@ class Account extends AbstractModel implements AccountInterface
 
     /**
      * @inheritDoc
+     * @throws ValidatorException
      */
     public function setUsername(string $username): AccountInterface
     {
+        if ($username === '') {
+            throw new ValidatorException(
+                __('Username cannot be empty.')
+            );
+        }
+
         $this->setData(self::USERNAME, $username);
 
         return $this;
@@ -119,9 +127,16 @@ class Account extends AbstractModel implements AccountInterface
 
     /**
      * @inheritDoc
+     * @throws ValidatorException
      */
     public function setCreatedAt(string $timestamp): AccountInterface
     {
+        if (!is_numeric($timestamp)) {
+            throw new ValidatorException(
+                __('Created at must be numeric.')
+            );
+        }
+
         $this->setData(self::CREATED_AT, $timestamp);
 
         return $this;
@@ -139,9 +154,16 @@ class Account extends AbstractModel implements AccountInterface
 
     /**
      * @inheritDoc
+     * @throws ValidatorException
      */
     public function setUpdatedAt(string $timestamp): AccountInterface
     {
+        if (!is_numeric($timestamp)) {
+            throw new ValidatorException(
+                __('updated at must be numeric.')
+            );
+        }
+
         $this->setData(self::UPDATED_AT, $timestamp);
 
         return $this;
