@@ -45,13 +45,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetAccountId(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::ACCOUNT_ID)
         );
 
         $this->method->setAccountId(123);
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->method->getData(PaymentMethod::ACCOUNT_ID)
         );
@@ -62,7 +62,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetAccountIdReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setAccountId(123)
         );
@@ -104,20 +104,20 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMethodId(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::METHOD_ID)
         );
 
         $this->method->setMethodId(123);
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->method->getData(PaymentMethod::METHOD_ID)
         );
 
         $this->method->setMethodId(null);
 
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::METHOD_ID)
         );
     }
@@ -127,7 +127,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMethodIdReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setMethodId(123)
         );
@@ -139,7 +139,7 @@ class PaymentMethodTest extends TestCase
     public function testGetMethodIdTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::METHOD_ID, 'Test');
-        $this->assertSame(0, $this->method->getMethodId());
+        self::assertSame(0, $this->method->getMethodId());
     }
 
     /**
@@ -149,8 +149,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMethodIdDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::METHOD_ID, null);
-        $this->assertSame(321, $this->method->getMethodId(321));
-        $this->assertNull($this->method->getMethodId());
+        self::assertSame(321, $this->method->getMethodId(321));
+        self::assertNull($this->method->getMethodId());
     }
 
     /**
@@ -159,8 +159,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMethodIdExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::METHOD_ID, 123);
-        $this->assertSame(123, $this->method->getMethodId(321));
-        $this->assertSame(123, $this->method->getMethodId());
+        self::assertSame(123, $this->method->getMethodId(321));
+        self::assertSame(123, $this->method->getMethodId());
     }
 
     /**
@@ -168,13 +168,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetIdentifier(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::IDENTIFIER)
         );
 
         $this->method->setIdentifier('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::IDENTIFIER)
         );
@@ -185,7 +185,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetIdentifierReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setIdentifier('')
         );
@@ -197,7 +197,7 @@ class PaymentMethodTest extends TestCase
     public function testIdentifierTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER, 123);
-        $this->assertSame('123', $this->method->getIdentifier());
+        self::assertSame('123', $this->method->getIdentifier());
     }
 
     /**
@@ -207,8 +207,8 @@ class PaymentMethodTest extends TestCase
     public function testIdentifierDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER, null);
-        $this->assertSame('321', $this->method->getIdentifier('321'));
-        $this->assertNull($this->method->getIdentifier());
+        self::assertSame('321', $this->method->getIdentifier('321'));
+        self::assertNull($this->method->getIdentifier());
     }
 
     /**
@@ -217,8 +217,8 @@ class PaymentMethodTest extends TestCase
     public function testIdentifierExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER, '123');
-        $this->assertSame('123', $this->method->getIdentifier('321'));
-        $this->assertSame('123', $this->method->getIdentifier());
+        self::assertSame('123', $this->method->getIdentifier('321'));
+        self::assertSame('123', $this->method->getIdentifier());
     }
 
     /**
@@ -226,13 +226,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetCode(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::CODE)
         );
 
         $this->method->setCode('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::CODE)
         );
@@ -243,7 +243,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetCodeReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setCode('')
         );
@@ -255,7 +255,7 @@ class PaymentMethodTest extends TestCase
     public function testCodeTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE, 123);
-        $this->assertSame('123', $this->method->getCode());
+        self::assertSame('123', $this->method->getCode());
     }
 
     /**
@@ -265,8 +265,8 @@ class PaymentMethodTest extends TestCase
     public function testCodeDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE, null);
-        $this->assertSame('321', $this->method->getCode('321'));
-        $this->assertNull($this->method->getCode());
+        self::assertSame('321', $this->method->getCode('321'));
+        self::assertNull($this->method->getCode());
     }
 
     /**
@@ -275,8 +275,8 @@ class PaymentMethodTest extends TestCase
     public function testCodeExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE, '123');
-        $this->assertSame('123', $this->method->getCode('321'));
-        $this->assertSame('123', $this->method->getCode());
+        self::assertSame('123', $this->method->getCode('321'));
+        self::assertSame('123', $this->method->getCode());
     }
 
     /**
@@ -284,13 +284,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetActive(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::ACTIVE)
         );
 
         $this->method->setActive(true);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->method->getData(PaymentMethod::ACTIVE)
         );
     }
@@ -300,7 +300,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetActiveReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setActive(true)
         );
@@ -312,7 +312,7 @@ class PaymentMethodTest extends TestCase
     public function testActiveTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, 123);
-        $this->assertTrue($this->method->getActive());
+        self::assertTrue($this->method->getActive());
     }
 
     /**
@@ -322,8 +322,8 @@ class PaymentMethodTest extends TestCase
     public function testActiveDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, null);
-        $this->assertTrue($this->method->getActive(true));
-        $this->assertNull($this->method->getActive());
+        self::assertTrue($this->method->getActive(true));
+        self::assertNull($this->method->getActive());
     }
 
     /**
@@ -332,8 +332,8 @@ class PaymentMethodTest extends TestCase
     public function testActiveExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, true);
-        $this->assertTrue($this->method->getActive(false));
-        $this->assertTrue($this->method->getActive());
+        self::assertTrue($this->method->getActive(false));
+        self::assertTrue($this->method->getActive());
     }
 
     /**
@@ -341,13 +341,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetTitle(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::TITLE)
         );
 
         $this->method->setTitle('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::TITLE)
         );
@@ -358,7 +358,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetTitleReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setTitle('')
         );
@@ -370,7 +370,7 @@ class PaymentMethodTest extends TestCase
     public function testTitleTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::TITLE, 123);
-        $this->assertSame('123', $this->method->getTitle());
+        self::assertSame('123', $this->method->getTitle());
     }
 
     /**
@@ -380,8 +380,8 @@ class PaymentMethodTest extends TestCase
     public function testTitleDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::TITLE, null);
-        $this->assertSame('321', $this->method->getTitle('321'));
-        $this->assertNull($this->method->getTitle());
+        self::assertSame('321', $this->method->getTitle('321'));
+        self::assertNull($this->method->getTitle());
     }
 
     /**
@@ -390,8 +390,8 @@ class PaymentMethodTest extends TestCase
     public function testTitleExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::TITLE, '123');
-        $this->assertSame('123', $this->method->getTitle('321'));
-        $this->assertSame('123', $this->method->getTitle());
+        self::assertSame('123', $this->method->getTitle('321'));
+        self::assertSame('123', $this->method->getTitle());
     }
 
     /**
@@ -399,13 +399,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMinOrderTotal(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::MIN_ORDER_TOTAL)
         );
 
         $this->method->setMinOrderTotal(123.123);
 
-        $this->assertSame(
+        self::assertSame(
             123.123,
             $this->method->getData(PaymentMethod::MIN_ORDER_TOTAL)
         );
@@ -416,7 +416,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMinOrderTotalReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setMinOrderTotal(123.123)
         );
@@ -457,13 +457,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMaxOrderTotal(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::MAX_ORDER_TOTAL)
         );
 
         $this->method->setMaxOrderTotal(123.123);
 
-        $this->assertSame(
+        self::assertSame(
             123.123,
             $this->method->getData(PaymentMethod::MAX_ORDER_TOTAL)
         );
@@ -474,7 +474,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetMaxOrderTotalReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setMaxOrderTotal(123.123)
         );
@@ -515,13 +515,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetOrderStatus(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::ORDER_STATUS)
         );
 
         $this->method->setOrderStatus('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::ORDER_STATUS)
         );
@@ -532,7 +532,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetOrderStatusReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setOrderStatus('')
         );
@@ -544,7 +544,7 @@ class PaymentMethodTest extends TestCase
     public function testOrderStatusTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::ORDER_STATUS, 123);
-        $this->assertSame('123', $this->method->getOrderStatus());
+        self::assertSame('123', $this->method->getOrderStatus());
     }
 
     /**
@@ -554,8 +554,8 @@ class PaymentMethodTest extends TestCase
     public function testOrderStatusDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::ORDER_STATUS, null);
-        $this->assertSame('321', $this->method->getOrderStatus('321'));
-        $this->assertNull($this->method->getOrderStatus());
+        self::assertSame('321', $this->method->getOrderStatus('321'));
+        self::assertNull($this->method->getOrderStatus());
     }
 
     /**
@@ -564,8 +564,8 @@ class PaymentMethodTest extends TestCase
     public function testOrderStatusExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::ORDER_STATUS, '123');
-        $this->assertSame('123', $this->method->getOrderStatus('321'));
-        $this->assertSame('123', $this->method->getOrderStatus());
+        self::assertSame('123', $this->method->getOrderStatus('321'));
+        self::assertSame('123', $this->method->getOrderStatus());
     }
 
     /**
@@ -573,13 +573,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetRaw(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::RAW)
         );
 
         $this->method->setRaw('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::RAW)
         );
@@ -590,7 +590,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetRawReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setRaw('')
         );
@@ -602,7 +602,7 @@ class PaymentMethodTest extends TestCase
     public function testRawTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::RAW, 123);
-        $this->assertSame('123', $this->method->getRaw());
+        self::assertSame('123', $this->method->getRaw());
     }
 
     /**
@@ -612,8 +612,8 @@ class PaymentMethodTest extends TestCase
     public function testRawDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::RAW, null);
-        $this->assertSame('321', $this->method->getRaw('321'));
-        $this->assertNull($this->method->getRaw());
+        self::assertSame('321', $this->method->getRaw('321'));
+        self::assertNull($this->method->getRaw());
     }
 
     /**
@@ -622,8 +622,8 @@ class PaymentMethodTest extends TestCase
     public function testRawExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::RAW, '123');
-        $this->assertSame('123', $this->method->getRaw('321'));
-        $this->assertSame('123', $this->method->getRaw());
+        self::assertSame('123', $this->method->getRaw('321'));
+        self::assertSame('123', $this->method->getRaw());
     }
 
     /**
@@ -631,13 +631,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetSpecificCountry(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::SPECIFIC_COUNTRY)
         );
 
         $this->method->setSpecificCountry('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::SPECIFIC_COUNTRY)
         );
@@ -648,7 +648,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetSpecificCountryReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setSpecificCountry('')
         );
@@ -660,7 +660,7 @@ class PaymentMethodTest extends TestCase
     public function testSpecificCountryTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, 123);
-        $this->assertSame('123', $this->method->getSpecificCountry());
+        self::assertSame('123', $this->method->getSpecificCountry());
     }
 
     /**
@@ -670,8 +670,8 @@ class PaymentMethodTest extends TestCase
     public function testSpecificCountryDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, null);
-        $this->assertSame('321', $this->method->getSpecificCountry('321'));
-        $this->assertNull($this->method->getSpecificCountry());
+        self::assertSame('321', $this->method->getSpecificCountry('321'));
+        self::assertNull($this->method->getSpecificCountry());
     }
 
     /**
@@ -680,8 +680,8 @@ class PaymentMethodTest extends TestCase
     public function testSpecificCountryExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, '123');
-        $this->assertSame('123', $this->method->getSpecificCountry('321'));
-        $this->assertSame('123', $this->method->getSpecificCountry());
+        self::assertSame('123', $this->method->getSpecificCountry('321'));
+        self::assertSame('123', $this->method->getSpecificCountry());
     }
 
     /**
@@ -689,13 +689,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetCreatedAt(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::CREATED_AT)
         );
 
         $this->method->setCreatedAt('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::CREATED_AT)
         );
@@ -706,7 +706,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetCreatedAtReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setCreatedAt('')
         );
@@ -718,7 +718,7 @@ class PaymentMethodTest extends TestCase
     public function testCreatedAtTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::CREATED_AT, 123);
-        $this->assertSame('123', $this->method->getCreatedAt());
+        self::assertSame('123', $this->method->getCreatedAt());
     }
 
     /**
@@ -728,8 +728,8 @@ class PaymentMethodTest extends TestCase
     public function testCreatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CREATED_AT, null);
-        $this->assertSame('321', $this->method->getCreatedAt('321'));
-        $this->assertNull($this->method->getCreatedAt());
+        self::assertSame('321', $this->method->getCreatedAt('321'));
+        self::assertNull($this->method->getCreatedAt());
     }
 
     /**
@@ -738,8 +738,8 @@ class PaymentMethodTest extends TestCase
     public function testCreatedAtExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::CREATED_AT, '123');
-        $this->assertSame('123', $this->method->getCreatedAt('321'));
-        $this->assertSame('123', $this->method->getCreatedAt());
+        self::assertSame('123', $this->method->getCreatedAt('321'));
+        self::assertSame('123', $this->method->getCreatedAt());
     }
 
     /**
@@ -747,13 +747,13 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetUpdatedAt(): void
     {
-        $this->assertNull(
+        self::assertNull(
             $this->method->getData(PaymentMethod::UPDATED_AT)
         );
 
         $this->method->setUpdatedAt('Test');
 
-        $this->assertSame(
+        self::assertSame(
             'Test',
             $this->method->getData(PaymentMethod::UPDATED_AT)
         );
@@ -764,7 +764,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetUpdatedAtReturnSelf(): void
     {
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             PaymentMethod::class,
             $this->method->setUpdatedAt('')
         );
@@ -776,7 +776,7 @@ class PaymentMethodTest extends TestCase
     public function testUpdatedAtTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::UPDATED_AT, 123);
-        $this->assertSame('123', $this->method->getUpdatedAt());
+        self::assertSame('123', $this->method->getUpdatedAt());
     }
 
     /**
@@ -786,8 +786,8 @@ class PaymentMethodTest extends TestCase
     public function testUpdatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::UPDATED_AT, null);
-        $this->assertSame('321', $this->method->getUpdatedAt('321'));
-        $this->assertNull($this->method->getUpdatedAt());
+        self::assertSame('321', $this->method->getUpdatedAt('321'));
+        self::assertNull($this->method->getUpdatedAt());
     }
 
     /**
@@ -796,7 +796,7 @@ class PaymentMethodTest extends TestCase
     public function testUpdatedAtExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::UPDATED_AT, '123');
-        $this->assertSame('123', $this->method->getUpdatedAt('321'));
-        $this->assertSame('123', $this->method->getUpdatedAt());
+        self::assertSame('123', $this->method->getUpdatedAt('321'));
+        self::assertSame('123', $this->method->getUpdatedAt());
     }
 }
