@@ -10,13 +10,15 @@ namespace Resursbank\Core\Test\Unit\Model;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Resursbank\Core\Model\Account;
 use PHPUnit\Framework\TestCase;
+use Resursbank\Core\Model\Account;
 
 /**
  * Test cases designed for Account data model.
  *
  * @package Resursbank\Core\Test\Model
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class AccountTest extends TestCase
 {
@@ -40,7 +42,10 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that we can set an account id.
+     * Assert that the setAccountId method will assign a value to the accountId
+     * property.
+     *
+     * @return void
      */
     public function testSetAccountId(): void
     {
@@ -48,57 +53,75 @@ class AccountTest extends TestCase
             $this->account->getData(Account::ACCOUNT_ID)
         );
 
-        $this->account->setAccountId(123);
+        $this->account->setAccountId(44);
 
         self::assertSame(
-            123,
+            44,
             $this->account->getData(Account::ACCOUNT_ID)
         );
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setAccountId will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetAccountIdReturnSelf(): void
     {
         self::assertInstanceOf(
             Account::class,
-            $this->account->setAccountId(123)
+            $this->account->setAccountId(6)
         );
     }
 
     /**
-     * Assert that the return value is converted to an int.
+     * Assert that the method getAccountId will convert its return value to an
+     * int.
+     *
+     * @return void
      */
     public function testGetAccountIdTypeConversionReturn(): void
     {
-        $this->account->setData(Account::ACCOUNT_ID, 'Test');
-        self::assertSame(0, $this->account->getAccountId());
+        $this->account->setData(
+            Account::ACCOUNT_ID,
+            ['robo', 'default', 'test']
+        );
+
+        self::assertSame(1, $this->account->getAccountId());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getAccountId method will return default value when no
+     * value has been assigned to the accountId property.
+     *
+     * @return void
      */
     public function testGetAccountIdDefaultReturn(): void
     {
         $this->account->setData(Account::ACCOUNT_ID, null);
-        self::assertSame(321, $this->account->getAccountId(321));
+        self::assertSame(9999, $this->account->getAccountId(9999));
         self::assertNull($this->account->getAccountId());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getAccountId method will return the value assigned to the
+     * accountId property.
+     *
+     * @return void
      */
     public function testGetAccountIdExpectedReturn(): void
     {
-        $this->account->setData(Account::ACCOUNT_ID, 123);
-        self::assertSame(123, $this->account->getAccountId(321));
-        self::assertSame(123, $this->account->getAccountId());
+        $this->account->setData(Account::ACCOUNT_ID, 672);
+        self::assertSame(672, $this->account->getAccountId(55));
+        self::assertSame(672, $this->account->getAccountId());
     }
 
     /**
-     * Assert that we can set a username.
+     * Assert that the setUsername method will assign a value to the username
+     * property.
+     *
+     * @return void
      */
     public function testSetUsername(): void
     {
@@ -107,34 +130,40 @@ class AccountTest extends TestCase
         );
 
         try {
-            $this->account->setUsername('Test');
+            $this->account->setUsername('Crono');
         } catch (ValidatorException $e) {
-            self::fail('Could not set username "Test"');
+            self::fail('Could not set username "Crono"');
         }
 
         self::assertSame(
-            'Test',
+            'Crono',
             $this->account->getData(Account::USERNAME)
         );
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setUsername will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetUsernameReturnSelf(): void
     {
         try {
             self::assertInstanceOf(
                 Account::class,
-                $this->account->setUsername('Test')
+                $this->account->setUsername('Sylvando')
             );
         } catch (ValidatorException $e) {
-            self::fail('Could not set username "Test"');
+            self::fail('Could not set username "Sylvando"');
         }
     }
 
     /**
-     * Assert that an exception is thrown if an empty username is given.
+     * Assert that an instance of ValidatorException exception is thrown if
+     * the setUsername method is provided an empty string.
+     *
+     * @return void
      */
     public function testSetUsernameThrowsOnEmptyUsername(): void
     {
@@ -144,37 +173,48 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getUsername will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testGetUsernameTypeConversionReturn(): void
     {
-        $this->account->setData(Account::USERNAME, 123);
-        self::assertSame('123', $this->account->getUsername());
+        $this->account->setData(Account::USERNAME, 55.1);
+        self::assertSame('55.1', $this->account->getUsername());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getUsername method will return default value when no
+     * value has been assigned to the username property.
+     *
+     * @return void
      */
     public function testGetUsernameDefaultReturn(): void
     {
         $this->account->setData(Account::USERNAME, null);
-        self::assertSame('321', $this->account->getUsername('321'));
+        self::assertSame('Skywalker', $this->account->getUsername('Skywalker'));
         self::assertNull($this->account->getUsername());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getUsername method will return the value assigned to the
+     * username property.
+     *
+     * @return void
      */
     public function testGetUsernameExpectedReturn(): void
     {
-        $this->account->setData(Account::USERNAME, '123');
-        self::assertSame('123', $this->account->getUsername('321'));
-        self::assertSame('123', $this->account->getUsername());
+        $this->account->setData(Account::USERNAME, 'Sora');
+        self::assertSame('Sora', $this->account->getUsername('Sonic'));
+        self::assertSame('Sora', $this->account->getUsername());
     }
 
     /**
-     * Assert that we can set the environment.
+     * Assert that the setEnvironment method will assign a value to the
+     * environment property.
+     *
+     * @return void
      */
     public function testSetEnvironment(): void
     {
@@ -182,57 +222,70 @@ class AccountTest extends TestCase
             $this->account->getData(Account::ENVIRONMENT)
         );
 
-        $this->account->setEnvironment('Test');
+        $this->account->setEnvironment('test');
 
         self::assertSame(
-            'Test',
+            'test',
             $this->account->getData(Account::ENVIRONMENT)
         );
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setEnvironment will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetEnvironmentReturnSelf(): void
     {
         self::assertInstanceOf(
             Account::class,
-            $this->account->setEnvironment('Test')
+            $this->account->setEnvironment('prod')
         );
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getEnvironment will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testGetEnvironmentTypeConversionReturn(): void
     {
-        $this->account->setData(Account::ENVIRONMENT, 123);
-        self::assertSame('123', $this->account->getEnvironment());
+        $this->account->setData(Account::ENVIRONMENT, 4);
+        self::assertSame('4', $this->account->getEnvironment());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getEnvironment method will return default value when no
+     * value has been assigned to the environment property.
+     *
+     * @return void
      */
     public function testGetEnvironmentDefaultReturn(): void
     {
         $this->account->setData(Account::ENVIRONMENT, null);
-        self::assertSame('321', $this->account->getEnvironment('321'));
+        self::assertSame('prod', $this->account->getEnvironment('prod'));
         self::assertNull($this->account->getEnvironment());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getEnvironment method will return the value assigned to
+     * the environment property.
+     *
+     * @return void
      */
     public function testGetEnvironmentExpectedReturn(): void
     {
-        $this->account->setData(Account::ENVIRONMENT, '123');
-        self::assertSame('123', $this->account->getEnvironment('321'));
-        self::assertSame('123', $this->account->getEnvironment());
+        $this->account->setData(Account::ENVIRONMENT, 'test');
+        self::assertSame('test', $this->account->getEnvironment('prod'));
+        self::assertSame('test', $this->account->getEnvironment());
     }
 
     /**
-     * Assert that we can set a salt.
+     * Assert that the setSalt method will assign a value to the salt property.
+     *
+     * @return void
      */
     public function testSetSalt(): void
     {
@@ -240,57 +293,76 @@ class AccountTest extends TestCase
             $this->account->getData(Account::SALT)
         );
 
-        $this->account->setSalt('Test');
+        $this->account->setSalt('Df5erfg4rfgDFGDFgfghcvdfgh4345wdfWDwrt2fedfg');
 
         self::assertSame(
-            'Test',
+            'Df5erfg4rfgDFGDFgfghcvdfgh4345wdfWDwrt2fedfg',
             $this->account->getData(Account::SALT)
         );
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setSalt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetSaltReturnSelf(): void
     {
         self::assertInstanceOf(
             Account::class,
-            $this->account->setSalt('Test')
+            $this->account->setSalt('Df445th5hRFg45thrgh44rgf4grghy4Fhrfh343r')
         );
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getSalt will convert its return value to a string.
+     *
+     * @return void
      */
     public function testGetSaltTypeConversionReturn(): void
     {
-        $this->account->setData(Account::SALT, 123);
-        self::assertSame('123', $this->account->getSalt());
+        $this->account->setData(Account::SALT, 4455677);
+        self::assertSame('4455677', $this->account->getSalt());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getSalt method will return default value when no value
+     * has been assigned to the salt property.
+     *
+     * @return void
      */
     public function testGetSaltDefaultReturn(): void
     {
         $this->account->setData(Account::SALT, null);
-        self::assertSame('321', $this->account->getSalt('321'));
+        self::assertSame(
+            'fgdhh5yhrh567Rhrh45r3gf',
+            $this->account->getSalt('fgdhh5yhrh567Rhrh45r3gf')
+        );
         self::assertNull($this->account->getSalt());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getSalt method will return the value assigned to the salt
+     * property.
+     *
+     * @return void
      */
     public function testGetSaltExpectedReturn(): void
     {
-        $this->account->setData(Account::SALT, '123');
-        self::assertSame('123', $this->account->getSalt('321'));
-        self::assertSame('123', $this->account->getSalt());
+        $this->account->setData(Account::SALT, 'mnFHg4rtKLoa45623D');
+        self::assertSame(
+            'mnFHg4rtKLoa45623D',
+            $this->account->getSalt('76FHh4rhr')
+        );
+        self::assertSame('mnFHg4rtKLoa45623D', $this->account->getSalt());
     }
 
     /**
-     * Assert that we can set a timestamp.
+     * Assert that the setCreatedAt method will assign a value to the createdAt
+     * property.
+     *
+     * @return void
      */
     public function testSetCreatedAt(): void
     {
@@ -313,7 +385,10 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setCreatedAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetCreatedAtReturnSelf(): void
     {
@@ -330,7 +405,10 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown if a faulty timestamp is given.
+     * Assert that the setCreatedAt method throws an instance of
+     * ValidatorException if a none numeric value is provided.
+     *
+     * @return void
      */
     public function testSetCreatedAtThrowsOnNoNNumericValue(): void
     {
@@ -340,37 +418,48 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getCreatedAt will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testGetCreatedAtTypeConversionReturn(): void
     {
-        $this->account->setData(Account::CREATED_AT, 123);
-        self::assertSame('123', $this->account->getCreatedAt());
+        $this->account->setData(Account::CREATED_AT, 87);
+        self::assertSame('87', $this->account->getCreatedAt());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getCreatedAt method will return default value when no
+     * value has been assigned to the createdAt property.
+     *
+     * @return void
      */
     public function testGetCreatedAtDefaultReturn(): void
     {
         $this->account->setData(Account::CREATED_AT, null);
-        self::assertSame('321', $this->account->getCreatedAt('321'));
+        self::assertSame('1123543', $this->account->getCreatedAt('1123543'));
         self::assertNull($this->account->getCreatedAt());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getCreatedAt method will return the value assigned to the
+     * createdAt property.
+     *
+     * @return void
      */
     public function testGetCreatedAtExpectedReturn(): void
     {
-        $this->account->setData(Account::CREATED_AT, '123');
-        self::assertSame('123', $this->account->getCreatedAt('321'));
-        self::assertSame('123', $this->account->getCreatedAt());
+        $this->account->setData(Account::CREATED_AT, '989898');
+        self::assertSame('989898', $this->account->getCreatedAt('555'));
+        self::assertSame('989898', $this->account->getCreatedAt());
     }
 
     /**
-     * Assert that we can set a timestamp.
+     * Assert that the setUpdatedAt method will assign a value to the updatedAt
+     * property.
+     *
+     * @return void
      */
     public function testSetUpdatedAt(): void
     {
@@ -393,7 +482,10 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setUpdatedAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetUpdatedAtReturnSelf(): void
     {
@@ -410,7 +502,10 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown if a faulty timestamp is given.
+     * Assert that the setUpdatedAt method throws an instance of
+     * ValidatorException if a none numeric value is provided.
+     *
+     * @return void
      */
     public function testSetUpdatedAtThrowsOnNoNNumericValue(): void
     {
@@ -420,32 +515,43 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getUpdatedAt will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testGetUpdatedAtTypeConversionReturn(): void
     {
-        $this->account->setData(Account::UPDATED_AT, 123);
-        self::assertSame('123', $this->account->getUpdatedAt());
+        $this->account->setData(Account::UPDATED_AT, 1234.23);
+        self::assertSame('1234.23', $this->account->getUpdatedAt());
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getUpdatedAt method will return default value when no
+     * value has been assigned to the updatedAt property.
+     *
+     * @return void
      */
     public function testGetUpdatedAtDefaultReturn(): void
     {
         $this->account->setData(Account::UPDATED_AT, null);
-        self::assertSame('321', $this->account->getUpdatedAt('321'));
+        self::assertSame(
+            'This is my default',
+            $this->account->getUpdatedAt('This is my default')
+        );
         self::assertNull($this->account->getUpdatedAt());
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getUpdatedAt method will return the value assigned to the
+     * updatedAt property.
+     *
+     * @return void
      */
     public function testGetUpdatedAtExpectedReturn(): void
     {
-        $this->account->setData(Account::UPDATED_AT, '123');
-        self::assertSame('123', $this->account->getUpdatedAt('321'));
-        self::assertSame('123', $this->account->getUpdatedAt());
+        $this->account->setData(Account::UPDATED_AT, 'Expected');
+        self::assertSame('Expected', $this->account->getUpdatedAt('Def'));
+        self::assertSame('Expected', $this->account->getUpdatedAt());
     }
 }
