@@ -23,7 +23,7 @@ class Account extends AbstractModel implements AccountInterface
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(Resource::class);
     }
@@ -41,7 +41,7 @@ class Account extends AbstractModel implements AccountInterface
     /**
      * @inheritDoc
      */
-    public function setAccountId(int $accountId): AccountInterface
+    public function setAccountId(?int $accountId): AccountInterface
     {
         $this->setData(self::ACCOUNT_ID, $accountId);
 
@@ -160,7 +160,7 @@ class Account extends AbstractModel implements AccountInterface
     {
         if (!is_numeric($timestamp)) {
             throw new ValidatorException(
-                __('updated at must be numeric.')
+                __('Updated at must be numeric.')
             );
         }
 

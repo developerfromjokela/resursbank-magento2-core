@@ -26,9 +26,7 @@ interface AccountSearchResultsInterface extends SearchResultsInterface
      * Set list of items to search through.
      *
      * @param AccountInterface[] $items
-     * @return $this
+     * @return self
      */
-    public function setItems(
-        array $items
-    ): self;
+    public function setItems(array $items): self;
 }
