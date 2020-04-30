@@ -81,7 +81,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function save(PaymentMethodInterface $entry): PaymentMethodInterface
     {
-        /** @var Account $entry */
+        /** @var PaymentMethod $entry */
         $this->resourceModel->save($entry);
 
         return $entry;
@@ -93,7 +93,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function delete(PaymentMethodInterface $entry): bool
     {
-        /** @var Account $entry */
+        /** @var PaymentMethod $entry */
         $this->resourceModel->delete($entry);
 
         return true;

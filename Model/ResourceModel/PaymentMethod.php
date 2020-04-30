@@ -16,8 +16,6 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class PaymentMethod extends AbstractDb
 {
     /**
-     * Initialize resource model.
-     *
      * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */

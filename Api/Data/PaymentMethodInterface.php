@@ -107,7 +107,7 @@ interface PaymentMethodInterface
     /**
      * Set ID of payment method.
      *
-     * @param int|null $methodId - Give null to create a new entry.
+     * @param int|null $methodId - Use null to create a new entry.
      * @return self
      */
     public function setMethodId(?int $methodId): self;
@@ -147,7 +147,7 @@ interface PaymentMethodInterface
     public function setCode(string $code): self;
 
     /**
-     * Get the active state of a payment method.
+     * Whether or not the payment method is active.
      *
      * @param bool|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -156,7 +156,7 @@ interface PaymentMethodInterface
     public function getActive(?bool $default = null): ?bool;
 
     /**
-     * Set the active state of a payment method.
+     * Set whether or not payment method is active.
      *
      * @param bool $state
      * @return self
@@ -164,7 +164,7 @@ interface PaymentMethodInterface
     public function setActive(bool $state): self;
 
     /**
-     * Get the title of a payment method.
+     * Get payment method title.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -173,7 +173,7 @@ interface PaymentMethodInterface
     public function getTitle(?string $default = null): ?string;
 
     /**
-     * Set title of a payment method.
+     * Set payment method title.
      *
      * @param string $title
      * @return self
@@ -181,7 +181,8 @@ interface PaymentMethodInterface
     public function setTitle(string $title): self;
 
     /**
-     * Get the minimum order total for a payment method.
+     * Get payment method minimum order total (cart total required to make the
+     * payment method available at checkout).
      *
      * @param float|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -190,7 +191,8 @@ interface PaymentMethodInterface
     public function getMinOrderTotal(?float $default = null): ?float;
 
     /**
-     * Set the minimum order total for a payment method.
+     * Set payment method minimum order total (cart total required to make
+     * payment method available at checkout).
      *
      * @param float $total
      * @return self
@@ -198,7 +200,8 @@ interface PaymentMethodInterface
     public function setMinOrderTotal(float $total): self;
 
     /**
-     * Get the maximum order total for a payment method.
+     * Get payment method maximum order total (cart total limit to make payment
+     * method available at checkout).
      *
      * @param float|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -207,7 +210,8 @@ interface PaymentMethodInterface
     public function getMaxOrderTotal(?float $default = null): ?float;
 
     /**
-     * Set the maximum order total for a payment method.
+     * Set payment method maximum order total (cart total limit to make payment
+     * method available at checkout).
      *
      * @param float $total
      * @return self
@@ -215,7 +219,7 @@ interface PaymentMethodInterface
     public function setMaxOrderTotal(float $total): self;
 
     /**
-     * Get order status for a payment method.
+     * Get payment method default order status.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -224,7 +228,7 @@ interface PaymentMethodInterface
     public function getOrderStatus(?string $default = null): ?string;
 
     /**
-     * Set order status for a payment method.
+     * Set payment method default order status.
      *
      * @param string $status
      * @return self
@@ -232,7 +236,7 @@ interface PaymentMethodInterface
     public function setOrderStatus(string $status): self;
 
     /**
-     * Get the raw value of a payment method.
+     * Get complete raw API data defining the method at Resurs Bank.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -241,7 +245,7 @@ interface PaymentMethodInterface
     public function getRaw(?string $default = null): ?string;
 
     /**
-     * Set the raw value of a payment method.
+     * Set complete raw API data defining the method at Resurs Bank.
      *
      * @param string $value
      * @return self
@@ -249,7 +253,7 @@ interface PaymentMethodInterface
     public function setRaw(string $value): self;
 
     /**
-     * Get the country the payment method can be used with.
+     * Get payment method country restriction.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -258,7 +262,7 @@ interface PaymentMethodInterface
     public function getSpecificCountry(?string $default = null): ?string;
 
     /**
-     * Set the country the payment method can be used with.
+     * Set payment method country restriction.
      *
      * @param string $countryIso
      * @return self
@@ -266,7 +270,7 @@ interface PaymentMethodInterface
     public function setSpecificCountry(string $countryIso): self;
 
     /**
-     * Get the time when the event was created.
+     * Get entry creation time.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -275,7 +279,7 @@ interface PaymentMethodInterface
     public function getCreatedAt(?string $default = null): ?string;
 
     /**
-     * Set the time when the event entry was created.
+     * Set entry creation time.
      *
      * @param string $timestamp - Must be a valid MySQL timestamp.
      * @return self
@@ -283,7 +287,7 @@ interface PaymentMethodInterface
     public function setCreatedAt(string $timestamp): self;
 
     /**
-     * Get the time when the event was updated.
+     * Get entry update time.
      *
      * @param string|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
@@ -292,7 +296,7 @@ interface PaymentMethodInterface
     public function getUpdatedAt(?string $default = null): ?string;
 
     /**
-     * Set the time when the event entry was updated.
+     * Set entry update time.
      *
      * @param string $timestamp - Must be a valid MySQL timestamp.
      * @return self

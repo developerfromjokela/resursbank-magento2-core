@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Model;
 
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Model\PaymentMethod;
@@ -41,7 +40,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set an account id.
+     * Assert that the setAccountId method will assign a value to the
+     * accountId property.
+     *
+     * @return void
      */
     public function testSetAccountId(): void
     {
@@ -58,7 +60,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setAccountId will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetAccountIdReturnSelf(): void
     {
@@ -69,7 +74,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to an int.
+     * Assert that the method getAccountId will convert its return value to an
+     * int.
+     *
+     * @return void
      */
     public function testGetAccountIdTypeConversionReturn(): void
     {
@@ -78,8 +86,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getAccountId method will return default value when no
+     * value has been assigned to the accountId property.
+     *
+     * @return void
      */
     public function testGetAccountIdDefaultReturn(): void
     {
@@ -89,7 +99,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getAccountId method will return the value assigned to the
+     * accountId property.
+     *
+     * @return void
      */
     public function testGetAccountIdExpectedReturn(): void
     {
@@ -99,8 +112,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a proper method id to later update a database
-     * entry, and remove it so that new entries can be created.
+     * Assert that the setMethodId method will assign a value to the
+     * methodId property.
+     *
+     * @return void
      */
     public function testSetMethodId(): void
     {
@@ -123,7 +138,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setMethodId will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetMethodIdReturnSelf(): void
     {
@@ -134,7 +152,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to an int.
+     * Assert that the method getMethodId will convert its return value to an
+     * int.
+     *
+     * @return void
      */
     public function testGetMethodIdTypeConversionReturn(): void
     {
@@ -143,8 +164,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getMethodId method will return default value when no
+     * value has been assigned to the methodId property.
+     *
+     * @return void
      */
     public function testGetMethodIdDefaultReturn(): void
     {
@@ -154,7 +177,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getMethodId method will return the value assigned to the
+     * methodId property.
+     *
+     * @return void
      */
     public function testGetMethodIdExpectedReturn(): void
     {
@@ -164,7 +190,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set an identifier.
+     * Assert that the method setIdentifier can assign a value to the identifier
+     * property.
+     *
+     * @return void
      */
     public function testSetIdentifier(): void
     {
@@ -181,7 +210,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the setIdentifier method will return an instance of
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetIdentifierReturnSelf(): void
     {
@@ -192,7 +224,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the getIdentifier method will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testIdentifierTypeConversionReturn(): void
     {
@@ -201,8 +236,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getIdentifier method will return default value when no
+     * value has been assigned to the identifier property.
+     *
+     * @return void
      */
     public function testIdentifierDefaultReturn(): void
     {
@@ -212,7 +249,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getIdentifier method will return the value assigned to
+     * the identifier property.
+     *
+     * @return void
      */
     public function testIdentifierExpectedReturn(): void
     {
@@ -222,7 +262,9 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method code.
+     * Assert that the setCode method will assign a value to the code property.
+     *
+     * @return void
      */
     public function testSetCode(): void
     {
@@ -239,7 +281,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setCode will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetCodeReturnSelf(): void
     {
@@ -250,7 +295,9 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getCode will convert its return value to a string.
+     *
+     * @return void
      */
     public function testCodeTypeConversionReturn(): void
     {
@@ -259,8 +306,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getCode method will return default value when no value
+     * has been assigned to the code property.
+     *
+     * @return void
      */
     public function testCodeDefaultReturn(): void
     {
@@ -270,7 +319,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getCode method will return the value assigned to the
+     * code property.
+     *
+     * @return void
      */
     public function testCodeExpectedReturn(): void
     {
@@ -280,7 +332,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set the active state of a payment method.
+     * Assert that the setActive method will assign a value to the active
+     * property.
+     *
+     * @return void
      */
     public function testSetActive(): void
     {
@@ -296,7 +351,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setActive will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetActiveReturnSelf(): void
     {
@@ -307,7 +365,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getActive will convert its return value to a
+     * bool.
+     *
+     * @return void
      */
     public function testActiveTypeConversionReturn(): void
     {
@@ -316,8 +377,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getActive method will return default value when no value
+     * has been assigned to the active property.
+     *
+     * @return void
      */
     public function testActiveDefaultReturn(): void
     {
@@ -327,7 +390,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getActive method will return the value assigned to the
+     * active property.
+     *
+     * @return void
      */
     public function testActiveExpectedReturn(): void
     {
@@ -337,7 +403,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method title.
+     * Assert that the setTitle method will assign a value to the title
+     * property.
+     *
+     * @return void
      */
     public function testSetTitle(): void
     {
@@ -354,7 +423,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setTitle will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetTitleReturnSelf(): void
     {
@@ -365,7 +437,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getTitle will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testTitleTypeConversionReturn(): void
     {
@@ -374,8 +449,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getTitle method will return default value when no value
+     * has been assigned to the title property.
+     *
+     * @return void
      */
     public function testTitleDefaultReturn(): void
     {
@@ -385,7 +462,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getTitle method will return the value assigned to the
+     * title property.
+     *
+     * @return void
      */
     public function testTitleExpectedReturn(): void
     {
@@ -395,7 +475,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method minimum order total.
+     * Assert that the setMinOrderTotal method will assign a value to the
+     * minOrderTotal property.
+     *
+     * @return void
      */
     public function testSetMinOrderTotal(): void
     {
@@ -412,7 +495,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setMinOrderTotal will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetMinOrderTotalReturnSelf(): void
     {
@@ -423,7 +509,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to an int.
+     * Assert that the method getMinOrderTotal will convert its return value to
+     * a float.
+     *
+     * @return void
      */
     public function testGetMinOrderTotalTypeConversionReturn(): void
     {
@@ -432,8 +521,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getMinOrderTotal method will return default value when no
+     * value has been assigned to the minOrderTotal property.
+     *
+     * @return void
      */
     public function testGetMinOrderTotalDefaultReturn(): void
     {
@@ -443,7 +534,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getMinOrderTotal method will return the value assigned
+     * to the minOrderTotal property.
+     *
+     * @return void
      */
     public function testGetMinOrderTotalExpectedReturn(): void
     {
@@ -453,7 +547,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method maximum order total.
+     * Assert that the setMaxOrderTotal method will assign a value to the
+     * maxOrderTotal property.
+     *
+     * @return void
      */
     public function testSetMaxOrderTotal(): void
     {
@@ -470,7 +567,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setMaxOrderTotal will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetMaxOrderTotalReturnSelf(): void
     {
@@ -481,7 +581,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to an int.
+     * Assert that the method getMaxOrderTotal will convert its return value to
+     * a float.
+     *
+     * @return void
      */
     public function testGetMaxOrderTotalTypeConversionReturn(): void
     {
@@ -490,8 +593,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getMaxOrderTotal method will return default value when no
+     * value has been assigned to the maxOrderTotal property.
+     *
+     * @return void
      */
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
@@ -501,7 +606,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getMaxOrderTotal method will return the value assigned to
+     * the maxOrderTotal property.
+     *
+     * @return void
      */
     public function testGetMaxOrderTotalExpectedReturn(): void
     {
@@ -511,7 +619,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method's order status.
+     * Assert that the setOrderStatus method will assign a value to the
+     * orderStatus property.
+     *
+     * @return void
      */
     public function testSetOrderStatus(): void
     {
@@ -528,7 +639,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setOrderStatus will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetOrderStatusReturnSelf(): void
     {
@@ -539,7 +653,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getOrderStatus will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testOrderStatusTypeConversionReturn(): void
     {
@@ -548,8 +665,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getOrderStatus method will return default value when no
+     * value has been assigned to the orderStatus property.
+     *
+     * @return void
      */
     public function testOrderStatusDefaultReturn(): void
     {
@@ -559,7 +678,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getOrderStatus method will return the value assigned to
+     * the orderStatus property.
+     *
+     * @return void
      */
     public function testOrderStatusExpectedReturn(): void
     {
@@ -569,7 +691,9 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method's raw value.
+     * Assert that the setRaw method will assign a value to the raw property.
+     *
+     * @return void
      */
     public function testSetRaw(): void
     {
@@ -586,7 +710,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setRaw will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetRawReturnSelf(): void
     {
@@ -597,7 +724,9 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getRaw will convert its return value to a string.
+     *
+     * @return void
      */
     public function testRawTypeConversionReturn(): void
     {
@@ -606,8 +735,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getRaw method will return default value when no value has
+     * been assigned to the raw property.
+     *
+     * @return void
      */
     public function testRawDefaultReturn(): void
     {
@@ -617,7 +748,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getRaw method will return the value assigned to the raw
+     * property.
+     *
+     * @return void
      */
     public function testRawExpectedReturn(): void
     {
@@ -627,7 +761,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method's associated country.
+     * Assert that the setSpecificCountry method will assign a value to the
+     * specificCountry property.
+     *
+     * @return void
      */
     public function testSetSpecificCountry(): void
     {
@@ -644,7 +781,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setSpecificCountry will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetSpecificCountryReturnSelf(): void
     {
@@ -655,7 +795,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method setSpecificCountry will convert its return value
+     * to a string.
+     *
+     * @return void
      */
     public function testSpecificCountryTypeConversionReturn(): void
     {
@@ -664,8 +807,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getSpecificCountry method will return default value when
+     * no value has been assigned to the specificCountry property.
+     *
+     * @return void
      */
     public function testSpecificCountryDefaultReturn(): void
     {
@@ -675,7 +820,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getSpecificCountry method will return the value assigned
+     * to the specificCountry property.
+     *
+     * @return void
      */
     public function testSpecificCountryExpectedReturn(): void
     {
@@ -685,7 +833,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method's created at timestamp.
+     * Assert that the setCreatedAt method will assign a value to the
+     * createdAt property.
+     *
+     * @return void
      */
     public function testSetCreatedAt(): void
     {
@@ -702,7 +853,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setCreatedAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetCreatedAtReturnSelf(): void
     {
@@ -713,7 +867,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getCreatedAt will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testCreatedAtTypeConversionReturn(): void
     {
@@ -722,8 +879,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getCreatedAt method will return default value when no
+     * value has been assigned to the createdAt property.
+     *
+     * @return void
      */
     public function testCreatedAtDefaultReturn(): void
     {
@@ -733,7 +892,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getCreatedAt method will return the value assigned to the
+     * createdAt property.
+     *
+     * @return void
      */
     public function testCreatedAtExpectedReturn(): void
     {
@@ -743,7 +905,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that we can set a payment method's created at timestamp.
+     * Assert that the setUpdateAt method will assign a value to the updateAt
+     * property.
+     *
+     * @return void
      */
     public function testSetUpdatedAt(): void
     {
@@ -760,7 +925,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is the instance itself.
+     * Assert that the method setUpdateAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
      */
     public function testSetUpdatedAtReturnSelf(): void
     {
@@ -771,7 +939,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the return value is converted to a string.
+     * Assert that the method getUpdateAt will convert its return value to a
+     * string.
+     *
+     * @return void
      */
     public function testUpdatedAtTypeConversionReturn(): void
     {
@@ -780,8 +951,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the we can specify and return a default value in the case
-     * where a value hasn't been set.
+     * Assert that the getUpdateAt method will return default value when no
+     * value has been assigned to the updateAt property.
+     *
+     * @return void
      */
     public function testUpdatedAtDefaultReturn(): void
     {
@@ -791,7 +964,10 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that if a value has been set, we get back the expected value.
+     * Assert that the getUpdateAt method will return the value assigned to the
+     * updateAt property.
+     *
+     * @return void
      */
     public function testUpdatedAtExpectedReturn(): void
     {

@@ -34,7 +34,7 @@ interface PaymentMethodRepositoryInterface
     public function get(int $methodId): PaymentMethodInterface;
 
     /**
-     * Retrieve entries matching the specified criteria.
+     * Retrieve entries matching the specified search criteria.
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return PaymentMethodSearchResultsInterface
