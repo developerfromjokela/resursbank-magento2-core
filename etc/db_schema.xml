@@ -3,7 +3,7 @@
   <table name="resursbank_checkout_account" resource="default" engine="innodb" comment="Resurs Bank API Account Table">
     <column xsi:type="smallint" name="account_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
     <column xsi:type="varchar" name="username" nullable="false" length="255" comment="API Account Username"/>
-    <column xsi:type="varchar" name="environment" nullable="false" length="255" comment="API Account Environment"/>
+    <column xsi:type="boolean" name="is_test" default="true" onCreate="migrateDataFrom(environment)" comment="If API Account uses the test environment or not"/>
     <column xsi:type="varchar" name="salt" nullable="true" length="255" comment="Callback SALT"/>
     <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
     <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
@@ -12,7 +12,7 @@
     </constraint>
     <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT">
         <column name="username"/>
-        <column name="environment"/>
+        <column name="is_test"/>
     </constraint>
   </table>
   <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
