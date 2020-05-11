@@ -21,4 +21,9 @@
     <preference for="Resursbank\Core\Api\AccountRepositoryInterface" type="Resursbank\Core\Model\AccountRepository" />
     <preference for="Resursbank\Core\Api\Data\AccountInterface" type="Resursbank\Core\Model\Account" />
     <preference for="Resursbank\Core\Api\Data\AccountSearchResultsInterface" type="Resursbank\Core\Model\Account\SearchResults" />
+
+    <!-- Payment Method interfaces. -->
+    <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
+    <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
+    <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
 </config>
