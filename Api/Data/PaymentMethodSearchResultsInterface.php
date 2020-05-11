@@ -13,19 +13,19 @@ use Magento\Framework\Api\SearchResultsInterface;
 /**
  * @package Resursbank\Core\Api\Data
  */
-interface AccountSearchResultsInterface extends SearchResultsInterface
+interface PaymentMethodSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Returns a list of database entries as a result of a database search.
      *
-     * @return AccountInterface[]
+     * @return PaymentMethodInterface[]
      */
     public function getItems(): array;
 
     /**
      * Set list of items to search through.
      *
-     * @param AccountInterface[] $items
+     * @param PaymentMethodInterface[] $items
      * @return self
      */
     public function setItems(array $items): self;

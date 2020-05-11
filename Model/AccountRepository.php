@@ -24,7 +24,7 @@ use Resursbank\Core\Api\Data\AccountSearchResultsInterfaceFactory;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\Core\Model\ResourceModel\Account as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\Account\Collection;
-use Resursbank\Core\Model\ResourceModel\Account\CollectionFactory as CollectionFactory;
+use Resursbank\Core\Model\ResourceModel\Account\CollectionFactory;
 
 /**
  * @package Resursbank\Core\Model
