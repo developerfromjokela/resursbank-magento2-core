@@ -57,15 +57,15 @@ abstract class AbstractConfig extends AbstractHelper
      *
      * @param string $group
      * @param string $key
-     * @param string $scopeType
      * @param null|string $scopeCode
+     * @param string $scopeType
      * @return string
      */
     public function get(
         string $group,
         string $key,
-        string $scopeType = ScopeInterface::SCOPE_STORE,
-        ?string $scopeCode = null
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
     ) {
         return $this->reader->getValue(
             $this->getPath($group, $key),
@@ -78,16 +78,16 @@ abstract class AbstractConfig extends AbstractHelper
      * @param string $group
      * @param string $key
      * @param string $value
-     * @param string $scopeType
      * @param int $scopeId
+     * @param string $scopeType
      * @return void
      */
     public function set(
         string $group,
         string $key,
         string $value,
-        string $scopeType = ScopeInterface::SCOPE_STORE,
-        int $scopeId = 0
+        int $scopeId = 0,
+        string $scopeType = ScopeInterface::SCOPE_STORE
     ): void {
         $this->writer->save(
             $this->getPath($group, $key),

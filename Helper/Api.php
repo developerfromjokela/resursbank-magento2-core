@@ -19,10 +19,13 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Exception;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Provides business logic to handle API calls through the EComPHP library.
@@ -31,8 +34,18 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Api extends AbstractHelper
 {
-    public function getConnection()
-    {
-
+    /**
+     * @param Credentials $credentials
+     * @return ResursBank
+     * @throws Exception
+     */
+    public function getConnection(
+        Credentials $credentials
+    ) {
+        return new ResursBank(
+            $credentials->getUsername(),
+            $credentials->getPassword(),
+            $credentials->getEnvironment()
+        );
     }
 }

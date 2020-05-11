@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Unit\Helper\Method;
+namespace Resursbank\Core\Test\Unit\Helper\PaymentMethods;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -27,7 +27,7 @@ use Resursbank\Core\Helper\Method\Converter;
 /**
  * Tests designed for payment method data conversion.
  *
- * @package Resursbank\Core\Test\Unit\Helper\Method
+ * @package Resursbank\Core\Test\Unit\Helper\PaymentMethods
  */
 class ConverterTest extends TestCase
 {

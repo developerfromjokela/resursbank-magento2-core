@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Helper;
+namespace Resursbank\Core\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
