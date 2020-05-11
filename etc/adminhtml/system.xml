@@ -67,6 +67,11 @@
                             <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
                             <config_path>resursbank/methods/sync</config_path>
                         </field>
+                        <field id="auto_sync_method" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Automatically sync payment methods</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>resursbank/methods/auto_sync_method</config_path>
+                        </field>
                         <group id="tax" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                              <label>Fee Tax Settings</label>
                              <field id="class" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

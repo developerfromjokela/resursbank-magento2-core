@@ -6,16 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Model\Account;
+namespace Resursbank\Core\Model\PaymentMethod;
 
 use Magento\Framework\Api\SearchResults as FrameworkSearchResults;
-use Resursbank\Core\Api\Data\AccountSearchResultsInterface;
-use Resursbank\Core\Api\Data\AccountInterface;
+use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 
 /**
  * @package Resursbank\Core\Model\Account
  */
-class SearchResults extends FrameworkSearchResults implements AccountSearchResultsInterface
+class SearchResults extends FrameworkSearchResults implements PaymentMethodSearchResultsInterface
 {
     /**
      * Returns a list of database entries as a result of a database search.
@@ -24,13 +24,13 @@ class SearchResults extends FrameworkSearchResults implements AccountSearchResul
      * debugging information during development. Without it, an array of
      * Magento\Framework\Api\AbstractExtensibleObject[] will be returned which
      * is not helpful when all we want to retrieve are entries that adhere to
-     * the AccountInterface.
+     * the PaymentMethodInterface.
      *
      * @inheritDoc
      */
     public function getItems(): array
     {
-        /** @var AccountInterface[] $result */
+        /** @var PaymentMethodInterface[] $result */
         $result = parent::getItems();
 
         return is_array($result) ? $result : [];
@@ -39,8 +39,9 @@ class SearchResults extends FrameworkSearchResults implements AccountSearchResul
     /**
      * @inheritDoc
      */
-    public function setItems(array $items): AccountSearchResultsInterface
-    {
+    public function setItems(
+        array $items
+    ): PaymentMethodSearchResultsInterface {
         parent::setItems($items);
 
         return $this;

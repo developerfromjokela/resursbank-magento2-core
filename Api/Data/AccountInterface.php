@@ -55,10 +55,10 @@ interface AccountInterface
     /**
      * Set ID.
      *
-     * @param int $accountId
+     * @param int|null $accountId - Give null to create a new entry.
      * @return self
      */
-    public function setAccountId(int $accountId): self;
+    public function setAccountId(?int $accountId): self;
 
     /**
      * Get username.
@@ -140,7 +140,7 @@ interface AccountInterface
     /**
      * Set entry update time.
      *
-     * @param string $timestamp - Must be a MySQL valid timestamp.
+     * @param string $timestamp - Must be a valid MySQL timestamp.
      * @return self
      */
     public function setUpdatedAt(string $timestamp): self;
