@@ -6,11 +6,13 @@
             "environment": true,
             "salt": true,
             "created_at": true,
-            "updated_at": true
+            "updated_at": true,
+            "is_test": true
         },
         "constraint": {
             "PRIMARY": true,
-            "RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT": true
+            "RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT": true,
+            "RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_IS_TEST": true
         }
     },
     "resursbank_checkout_account_method": {
