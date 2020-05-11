@@ -39,9 +39,8 @@ class SearchResults extends FrameworkSearchResults implements AccountSearchResul
     /**
      * @inheritDoc
      */
-    public function setItems(
-        array $items
-    ): AccountSearchResultsInterface {
+    public function setItems(array $items): AccountSearchResultsInterface
+    {
         parent::setItems($items);
 
         return $this;
