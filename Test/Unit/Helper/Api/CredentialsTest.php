@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\Core\Helper\Api\Credentials as Helper;
+use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
  * Test cases designed for Credentials data model.
@@ -146,69 +147,15 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that the getEnvironmentCode method will result in
-     * Helper::ENVIRONMENT_CODE_TEST with environment "1" applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     * @throws ValidatorException
-     */
-    public function testGetEnvironmentCodeForTest(): void
-    {
-        $this->model->setEnvironment(1);
-
-        self::assertSame(
-            Helper::ENVIRONMENT_CODE_TEST,
-            $this->helper->getEnvironmentCode($this->model)
-        );
-    }
-
-    /**
-     * Assert that the getEnvironmentCode method will result in
-     * Helper::ENVIRONMENT_CODE_PROD with environment "0" applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     * @throws ValidatorException
-     */
-    public function testGetEnvironmentCodeForProd(): void
-    {
-        $this->model->setEnvironment(0);
-
-        self::assertSame(
-            Helper::ENVIRONMENT_CODE_PROD,
-            $this->helper->getEnvironmentCode($this->model)
-        );
-    }
-
-    /**
-     * Assert that the getEnvironmentCode method will result in an instance of
-     * MissingDataException when attempting to resolve code value from an
-     * instance of the Credentials model with no environment applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     */
-    public function testExceptionThrownWithoutEnvironmentWhenGettingCode(): void
-    {
-        $this->expectException(MissingDataException::class);
-
-        $this->helper->getEnvironmentCode($this->model);
-    }
-
-    /**
      * Assert that the getMethodSuffix method will result in an instance of
      * MissingDataException when attempting to resolve a value from an instance
      * of the Credentials model with no environment applied.
      *
      * @return void
-     * @throws ValidatorException
      */
     public function testExceptionThrownWithoutEnvWhenGettingSuffix(): void
     {
         $this->expectException(MissingDataException::class);
-
-        $this->model->setUsername('donny');
 
         $this->helper->getMethodSuffix($this->model);
     }
@@ -245,7 +192,7 @@ class CredentialsTest extends TestCase
             ->setEnvironment(0);
 
         self::assertSame(
-            'walter_' . Helper::ENVIRONMENT_CODE_PROD,
+            'walter_' . RESURS_ENVIRONMENTS::PRODUCTION,
             $this->helper->getMethodSuffix($this->model)
         );
     }
@@ -265,7 +212,7 @@ class CredentialsTest extends TestCase
             ->setEnvironment(1);
 
         self::assertSame(
-            'bunny_' . Helper::ENVIRONMENT_CODE_TEST,
+            'bunny_' . RESURS_ENVIRONMENTS::TEST,
             $this->helper->getMethodSuffix($this->model)
         );
     }
