@@ -211,75 +211,74 @@ class AccountTest extends TestCase
     }
 
     /**
-     * Assert that the setEnvironment method will assign a value to the
+     * Assert that the setIsTest method will assign a value to the
      * environment property.
      *
      * @return void
      */
-    public function testSetEnvironment(): void
+    public function testSetIsTest(): void
     {
         self::assertNull(
-            $this->account->getData(Account::ENVIRONMENT)
+            $this->account->getData(Account::IS_TEST)
         );
 
-        $this->account->setEnvironment('test');
+        $this->account->setIsTest(false);
 
-        self::assertSame(
-            'test',
-            $this->account->getData(Account::ENVIRONMENT)
+        self::assertFalse(
+            $this->account->getData(Account::IS_TEST)
         );
     }
 
     /**
-     * Assert that the method setEnvironment will return an instance of the
+     * Assert that the method setIsTest will return an instance of the
      * PaymentMethod data model.
      *
      * @return void
      */
-    public function testSetEnvironmentReturnSelf(): void
+    public function testSetIsTestReturnSelf(): void
     {
         self::assertInstanceOf(
             Account::class,
-            $this->account->setEnvironment('prod')
+            $this->account->setIsTest(true)
         );
     }
 
     /**
-     * Assert that the method getEnvironment will convert its return value to a
+     * Assert that the method getIsTest will convert its return value to a
      * string.
      *
      * @return void
      */
-    public function testGetEnvironmentTypeConversionReturn(): void
+    public function testGetIsTestTypeConversionReturn(): void
     {
-        $this->account->setData(Account::ENVIRONMENT, 4);
-        self::assertSame('4', $this->account->getEnvironment());
+        $this->account->setData(Account::IS_TEST, 1);
+        self::assertTrue($this->account->getIsTest());
     }
 
     /**
-     * Assert that the getEnvironment method will return default value when no
+     * Assert that the getIsTest method will return default value when no
      * value has been assigned to the environment property.
      *
      * @return void
      */
-    public function testGetEnvironmentDefaultReturn(): void
+    public function testGetIsTestDefaultReturn(): void
     {
-        $this->account->setData(Account::ENVIRONMENT, null);
-        self::assertSame('prod', $this->account->getEnvironment('prod'));
-        self::assertNull($this->account->getEnvironment());
+        $this->account->setData(Account::IS_TEST, null);
+        self::assertTrue($this->account->getIsTest(true));
+        self::assertNull($this->account->getIsTest());
     }
 
     /**
-     * Assert that the getEnvironment method will return the value assigned to
+     * Assert that the getIsTest method will return the value assigned to
      * the environment property.
      *
      * @return void
      */
-    public function testGetEnvironmentExpectedReturn(): void
+    public function testGetIsTestExpectedReturn(): void
     {
-        $this->account->setData(Account::ENVIRONMENT, 'test');
-        self::assertSame('test', $this->account->getEnvironment('prod'));
-        self::assertSame('test', $this->account->getEnvironment());
+        $this->account->setData(Account::IS_TEST, true);
+        self::assertTrue($this->account->getIsTest(false));
+        self::assertTrue($this->account->getIsTest());
     }
 
     /**
