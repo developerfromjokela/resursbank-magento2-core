@@ -20,7 +20,7 @@ use Resursbank\RBEcomPHP\ResursBank;
 /**
  * Test cases designed for Resursbank\Core\Helper\PaymentMethods
  *
- * @package Resursbank\Core\Test\Helper
+ * @package Resursbank\Core\Test\Unit\Helper
  */
 class PaymentMethodsTest extends TestCase
 {

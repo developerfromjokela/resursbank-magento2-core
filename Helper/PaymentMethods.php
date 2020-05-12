@@ -31,7 +31,6 @@ class PaymentMethods extends AbstractHelper
     private $methodFactory;
 
     /**
-     * PaymentMethods constructor.
      * @param Context $context
      * @param Api $api
      * @param PaymentMethodFactory $methodFactory

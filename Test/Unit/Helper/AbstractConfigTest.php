@@ -18,7 +18,7 @@ use Resursbank\Core\Helper\AbstractConfig;
 /**
  * Test cases designed for Resursbank\Core\Helper\AbstractConfig
  *
- * @package Resursbank\Core\Test\Helper
+ * @package Resursbank\Core\Test\Unit\Helper
  */
 class AbstractConfigTest extends TestCase
 {

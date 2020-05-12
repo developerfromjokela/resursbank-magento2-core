@@ -11,11 +11,12 @@ namespace Resursbank\Core\Helper\Api;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
-use Magento\Framework\ObjectManagerInterface;
+use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * @todo 2020-04-27 - In the middle of module separation. Can't use
@@ -152,6 +153,8 @@ class Credentials extends AbstractHelper
     }
 
     /**
+     * Resolve Credentials model instance from config values.
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return CredentialsModel
@@ -160,14 +163,12 @@ class Credentials extends AbstractHelper
     public function resolveFromConfig(
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORE
-    ) {
+    ): CredentialsModel {
         /** @var CredentialsModel $credentials */
         $credentials = $this->objectManager->get(CredentialsModel::class);
 
-        $environment = $this->config->getEnvironment($scopeCode, $scopeType) === 'test' ? 1 : 0;
-
         return $credentials->setEnvironment(
-            $environment
+            $this->config->getEnvironment($scopeCode, $scopeType)
         )->setUsername(
             $this->config->getUsername($scopeCode, $scopeType)
         )->setPassword(

@@ -17,7 +17,7 @@ use Resursbank\Core\Helper\Admin;
 /**
  * Test cases designed for Resursbank\Core\Helper\Admin
  *
- * @package Resursbank\Core\Test\Helper
+ * @package Resursbank\Core\Test\Unit\Helper
  */
 class AdminTest extends TestCase
 {

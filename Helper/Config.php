@@ -23,13 +23,13 @@ class Config extends AbstractConfig
     /**
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return string
+     * @return int
      */
     public function getEnvironment(
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORE
-    ): string {
-        return (string) $this->get(
+    ): int {
+        return (int) $this->get(
             self::GROUP,
             'environment',
             $scopeCode,

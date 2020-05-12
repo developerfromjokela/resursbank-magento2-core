@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Compile list of API environment alternatives.
@@ -23,8 +24,8 @@ class Environment extends Options implements OptionSourceInterface
     public function toArray(): array
     {
         return [
-            'test' => __('Test'),
-            'production' => __('Production')
+            ResursBank::ENVIRONMENT_TEST => __('Test'),
+            ResursBank::ENVIRONMENT_PRODUCTION => __('Production')
         ];
     }
 }

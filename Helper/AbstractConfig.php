@@ -15,7 +15,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Provides methods to simplify config handling.
+ * Provides basic methods to simplify configuration read/write.
  *
  * @package Resursbank\Core\Helper
  */
@@ -32,8 +32,6 @@ abstract class AbstractConfig extends AbstractHelper
     private $writer;
 
     /**
-     * Config constructor.
-     *
      * @param ScopeConfigInterface $reader
      * @param WriterInterface $writer
      * @param Context $context
@@ -52,7 +50,7 @@ abstract class AbstractConfig extends AbstractHelper
     /**
      * NOTE: While scopeId can be provided instead of scopeCode the code is more
      * accurate to use here since Magento will anyways resolve the code from the
-     * provided id. This is because the value is read from the compiled cached
+     * provided id. This is because the value is read from the compiled, cached,
      * array, not directly from the database table.
      *
      * @param string $group
@@ -75,6 +73,10 @@ abstract class AbstractConfig extends AbstractHelper
     }
 
     /**
+     * NOTE: Unlike the reader (see the get() method above), the writer expects
+     * you to provide an id of the intended resource (website/store/view) rather
+     * than a code.
+     *
      * @param string $group
      * @param string $key
      * @param string $value
@@ -98,6 +100,8 @@ abstract class AbstractConfig extends AbstractHelper
     }
 
     /**
+     * Retrieved path to one of our settings based on provided group / key.
+     *
      * @param string $group
      * @param string $key
      * @return string
