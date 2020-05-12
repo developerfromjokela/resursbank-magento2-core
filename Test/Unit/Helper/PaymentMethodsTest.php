@@ -98,7 +98,7 @@ class PaymentMethodsTest extends TestCase
     }
 
     /**
-     * Assert that the fetch method throws an instance of IntegrationExceptio
+     * Assert that the fetch method throws an instance of IntegrationException
      * when ECom relies anything that isn't an array from an API call to fetch a
      * list of available payment methods.
      *
@@ -173,7 +173,7 @@ class PaymentMethodsTest extends TestCase
             // the API adapter.
             self::assertSame($methodsData, $methods->fetch($this->credentials));
         } catch (IntegrationException $e) {
-            self::fail('Failed asserting return value of fetch method.');
+            self::fail('Failed asserting return value of the fetch method.');
         }
     }
 }
