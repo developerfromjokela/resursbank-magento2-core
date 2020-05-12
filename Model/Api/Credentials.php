@@ -90,8 +90,8 @@ class Credentials
      */
     public function setEnvironment(int $environment): self
     {
-        if ($environment !== RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION &&
-            $environment !== RESURS_ENVIRONMENTS::ENVIRONMENT_TEST
+        if ($environment !== RESURS_ENVIRONMENTS::PRODUCTION &&
+            $environment !== RESURS_ENVIRONMENTS::TEST
         ) {
             throw new ValidatorException(
                 __(
