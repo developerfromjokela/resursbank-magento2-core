@@ -26,7 +26,7 @@ interface AccountInterface
     /**
      * @var string
      */
-    public const ENVIRONMENT = 'environment';
+    public const IS_TEST = 'is_test';
 
     /**
      * @var string
@@ -78,21 +78,21 @@ interface AccountInterface
     public function setUsername(string $username): self;
 
     /**
-     * Get environment.
+     * Get whether the account is put in the test environment.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param bool|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
-     * @return string|null
+     * @return bool|null
      */
-    public function getEnvironment(?string $default = null): ?string;
+    public function getIsTest(?bool $default = null): ?bool;
 
     /**
-     * Set environment.
+     * Set whether the account is in the test environment.
      *
-     * @param string $environment
+     * @param bool $environment
      * @return self
      */
-    public function setEnvironment(string $environment): self;
+    public function setIsTest(bool $environment): self;
 
     /**
      * Get callback salt.

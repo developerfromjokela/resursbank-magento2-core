@@ -78,19 +78,19 @@ class Account extends AbstractModel implements AccountInterface
     /**
      * @inheritDoc
      */
-    public function getEnvironment(?string $default = null): ?string
+    public function getIsTest(?bool $default = null): ?bool
     {
-        $result = $this->getData(self::ENVIRONMENT);
+        $result = $this->getData(self::IS_TEST);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? $default : (bool)$result;
     }
 
     /**
      * @inheritDoc
      */
-    public function setEnvironment(string $environment): AccountInterface
+    public function setIsTest(bool $environment): AccountInterface
     {
-        $this->setData(self::ENVIRONMENT, $environment);
+        $this->setData(self::IS_TEST, $environment);
 
         return $this;
     }
