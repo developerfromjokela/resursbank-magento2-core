@@ -9,16 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api;
 
 use Magento\Framework\Exception\ValidatorException;
-
-// See to-do: 2020-04-27
-// use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
-
-/**
- * @todo 2020-04-27 - In the middle of module separation. Can't use
- *       Ecom constants until a later date because Ecom would become a
- *       dependency that we cannot have during this stage in
- *       development. Will use static values instead.
- */
+use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
  * @package Resursbank\Core\Model\Api
@@ -99,11 +90,9 @@ class Credentials
      */
     public function setEnvironment(int $environment): self
     {
-        // See to-do: 2020-04-27
-        // RESURS_ENVIRONMENTS::ENVIRONMENT_TEST :
-        // RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION;
-
-        if ($environment !== 0 && $environment !== 1) {
+        if ($environment !== RESURS_ENVIRONMENTS::ENVIRONMENT_PRODUCTION &&
+            $environment !== RESURS_ENVIRONMENTS::ENVIRONMENT_TEST
+        ) {
             throw new ValidatorException(
                 __(
                     'Invalid environment value %1. 0 = prod, 1 = test.',

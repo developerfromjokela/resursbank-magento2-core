@@ -191,8 +191,8 @@ class AccountRepository implements AccountRepositoryInterface
             ->setValue($credentials->getUsername())
             ->create();
 
-        $filterEnvironment= $this->filterBuilder
-            ->setField('environment')
+        $filterEnvironment = $this->filterBuilder
+            ->setField('is_test')
             ->setValue($credentials->getEnvironment())
             ->create();
 
