@@ -26,8 +26,4 @@
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
-
-    <type name="Magento\Config\Model\Config\Structure\Converter">
-        <plugin name="resursbank_core_config_structure_converter" type="Resursbank\Core\Plugin\Config\Structure\Converter" />
-    </type>
 </config>
