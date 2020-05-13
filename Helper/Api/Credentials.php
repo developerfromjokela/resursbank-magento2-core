@@ -8,7 +8,13 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper\Api;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\MissingDataException;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 
 /**
@@ -16,8 +22,34 @@ use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
  *
  * @package Resursbank\Core\Helper\Api
  */
-class Credentials
+class Credentials extends AbstractHelper
 {
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @param Context $context
+     * @param Config $config
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(
+        Context $context,
+        Config $config,
+        ObjectManagerInterface $objectManager
+    ) {
+        $this->config = $config;
+        $this->objectManager = $objectManager;
+
+        parent::__construct($context);
+    }
+
     /**
      * @param CredentialsModel $model
      * @return bool
@@ -74,6 +106,30 @@ class Credentials
 
         return strtolower(
             $model->getUsername() . '_' . $model->getEnvironment()
+        );
+    }
+
+    /**
+     * Resolve Credentials model instance from config values.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return CredentialsModel
+     * @throws ValidatorException
+     */
+    public function resolveFromConfig(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): CredentialsModel {
+        /** @var CredentialsModel $credentials */
+        $credentials = $this->objectManager->get(CredentialsModel::class);
+
+        return $credentials->setEnvironment(
+            $this->config->getEnvironment($scopeCode, $scopeType)
+        )->setUsername(
+            $this->config->getUsername($scopeCode, $scopeType)
+        )->setPassword(
+            $this->config->getPassword($scopeCode, $scopeType)
         );
     }
 }

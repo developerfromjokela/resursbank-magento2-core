@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test cases designed for generic options class.
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Unit\Model\Config\Source
  */
 class OptionsTest extends TestCase
 {

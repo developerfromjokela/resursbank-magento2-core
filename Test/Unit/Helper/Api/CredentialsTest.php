@@ -19,7 +19,7 @@ use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 /**
  * Test cases designed for Credentials data model.
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Unit\Helper\Api
  */
 class CredentialsTest extends TestCase
 {

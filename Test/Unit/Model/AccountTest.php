@@ -16,7 +16,7 @@ use Resursbank\Core\Model\Account;
 /**
  * Test cases designed for Account data model.
  *
- * @package Resursbank\Core\Test\Model
+ * @package Resursbank\Core\Test\Unit\Model
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
