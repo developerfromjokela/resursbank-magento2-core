@@ -17,17 +17,17 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Unit\Helper\Method;
+namespace Resursbank\Core\Test\Unit\Helper\PaymentMethods;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Helper\Method\Converter;
+use Resursbank\Core\Helper\PaymentMethods\Converter;
 
 /**
  * Tests designed for payment method data conversion.
  *
- * @package Resursbank\Core\Test\Unit\Helper\Method
+ * @package Resursbank\Core\Test\Unit\Helper\PaymentMethods
  */
 class ConverterTest extends TestCase
 {
@@ -340,7 +340,7 @@ class ConverterTest extends TestCase
      */
     public function testConvert(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $this->modelData,
             $this->converter->convert($this->apiData)
         );

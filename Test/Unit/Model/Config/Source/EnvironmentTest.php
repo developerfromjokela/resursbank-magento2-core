@@ -10,12 +10,13 @@ namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Resursbank\Core\Model\Config\Source\Environment;
+use Resursbank\RBEcomPHP\ResursBank;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases designed for environment options.
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Unit\Model\Config\Source
  */
 class EnvironmentTest extends TestCase
 {
@@ -46,7 +47,10 @@ class EnvironmentTest extends TestCase
      */
     public function testHasTestOption(): void
     {
-        self::assertArrayHasKey('test', $this->environment->toArray());
+        self::assertArrayHasKey(
+            ResursBank::ENVIRONMENT_TEST,
+            $this->environment->toArray()
+        );
     }
 
     /**
@@ -56,7 +60,10 @@ class EnvironmentTest extends TestCase
      */
     public function testHasProductionOption(): void
     {
-        self::assertArrayHasKey('production', $this->environment->toArray());
+        self::assertArrayHasKey(
+            ResursBank::ENVIRONMENT_PRODUCTION,
+            $this->environment->toArray()
+        );
     }
 
     /**
