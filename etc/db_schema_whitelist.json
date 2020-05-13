@@ -37,7 +37,8 @@
         "constraint": {
             "PRIMARY": true,
             "FK_99E4EF33EDA1CA5EEC19A493575FCFB7": true,
-            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE": true
+            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE": true,
+            "FK_9D924882EF1EBEBF337C1582CFD81DE1": true
         }
     },
     "sales_order": {
