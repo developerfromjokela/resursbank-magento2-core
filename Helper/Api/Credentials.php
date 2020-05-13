@@ -16,14 +16,6 @@ use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
-use Resursbank\RBEcomPHP\ResursBank;
-
-/**
- * @todo 2020-04-27 - In the middle of module separation. Can't use
- *       Ecom constants until a later date because Ecom would become a
- *       dependency that we cannot have during this stage in
- *       development. Will use static values instead.
- */
 
 /**
  * Business logic for corresponding data model Model\Api\Credentials.
@@ -32,16 +24,6 @@ use Resursbank\RBEcomPHP\ResursBank;
  */
 class Credentials extends AbstractHelper
 {
-    /**
-     * @var string
-     */
-    public const ENVIRONMENT_CODE_TEST = 'test';
-
-    /**
-     * @var string
-     */
-    public const ENVIRONMENT_CODE_PROD = 'prod';
-
     /**
      * @var Config
      */
@@ -108,31 +90,6 @@ class Credentials extends AbstractHelper
     }
 
     /**
-     * Retrieve readable environment code.
-     *
-     * @param CredentialsModel $model
-     * @return string
-     * @throws MissingDataException
-     */
-    public function getEnvironmentCode(CredentialsModel $model): string
-    {
-        if ($model->getEnvironment() === null) {
-            throw new MissingDataException(
-                __('Failed to resolve code for environment NULL.')
-            );
-        }
-
-        return $model->getEnvironment() === 1 ?
-            self::ENVIRONMENT_CODE_TEST :
-            self::ENVIRONMENT_CODE_PROD;
-
-        // See to-do: 2020-04-27
-//        return $this->getEnvironment() === RESURS_ENVIRONMENTS::ENVIRONMENT_TEST ?
-//            self::ENVIRONMENT_CODE_TEST :
-//            self::ENVIRONMENT_CODE_PROD;
-    }
-
-    /**
      * Retrieve readable unique method code suffix.
      *
      * @param CredentialsModel $model
@@ -148,7 +105,7 @@ class Credentials extends AbstractHelper
         }
 
         return strtolower(
-            $model->getUsername() . '_' . $this->getEnvironmentCode($model)
+            $model->getUsername() . '_' . $model->getEnvironment()
         );
     }
 
