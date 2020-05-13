@@ -86,6 +86,12 @@
                                  <config_path>resursbank/api/fee_tax_display</config_path>
                              </field>
                          </group>
+                         <group id="collection" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Methods</label>
+                            <attribute type="expanded">1</attribute>
+                            <fieldset_css>resursbank-methods-top-section payments-other-header</fieldset_css>
+                            <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        </group>
                     </group>
                 </group>
             </group>
