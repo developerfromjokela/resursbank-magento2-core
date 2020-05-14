@@ -18,7 +18,7 @@ class Config extends AbstractConfig
     /**
      * @var string
      */
-    const GROUP = 'api';
+    public const GROUP = 'api';
 
     /**
      * @param string|null $scopeCode
@@ -66,6 +66,23 @@ class Config extends AbstractConfig
         return (string) $this->get(
             self::GROUP,
             'password_' . $this->getEnvironment($scopeCode, $scopeType),
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isDebugEnabled(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): bool {
+        return (bool) $this->get(
+            self::GROUP,
+            'debug',
             $scopeCode,
             $scopeType
         );

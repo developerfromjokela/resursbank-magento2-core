@@ -11,8 +11,9 @@ namespace Resursbank\Core\Controller\Adminhtml\Methods;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Helper\PaymentMethods;
 
 /**
  * This controller executes the process which synchronizes all available payment
@@ -33,23 +34,33 @@ class Sync extends Action
     private $credentials;
 
     /**
+     * @var Log
+     */
+    private $log;
+
+    /**
      * @param Context $context
      * @param PaymentMethods $paymentMethods
      * @param Credentials $credentials
+     * @param Log $log
      */
     public function __construct(
         Context $context,
         PaymentMethods $paymentMethods,
-        Credentials $credentials
+        Credentials $credentials,
+        Log $log
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->credentials = $credentials;
+        $this->log = $log;
 
         parent::__construct($context);
     }
 
     /**
      * Synchronize payment methods.
+     *
+     * @throws Exception
      */
     public function execute()
     {
@@ -63,6 +74,10 @@ class Sync extends Action
                 'Successfully synchronized payment methods.'
             );
         } catch (Exception $e) {
+            if ($this->log->isEnabled()) {
+                $this->log->error($e);
+            }
+
             // Add error message.
             $this->getMessageManager()->addErrorMessage(
                 'Failed to synchronize payment methods.'
