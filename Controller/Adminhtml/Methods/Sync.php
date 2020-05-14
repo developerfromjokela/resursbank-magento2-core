@@ -63,6 +63,7 @@ class Sync extends Action
     public function execute()
     {
         try {
+            throw new Exception('yada bada');
             $this->paymentMethods->sync(
                 $this->credentials->resolveFromConfig()
             );

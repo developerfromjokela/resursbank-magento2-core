@@ -14,6 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -28,16 +29,16 @@ abstract class AbstractLog extends AbstractHelper
     protected $log;
 
     /**
+     * @var DirectoryList
+     */
+    protected $directories;
+
+    /**
      * Channel name for the Logger.
      *
      * @var string
      */
     protected $loggerName = '';
-
-    /**
-     * @var DirectoryList
-     */
-    protected $directories;
 
     /**
      * Filename where entries are stored.
@@ -52,6 +53,7 @@ abstract class AbstractLog extends AbstractHelper
      * @throws FileSystemException
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws ValidatorException
      */
     public function __construct(
         DirectoryList $directories,
@@ -123,9 +125,22 @@ abstract class AbstractLog extends AbstractHelper
      * @throws FileSystemException
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws ValidatorException
      */
     private function initLog()
     {
+        if (!is_string($this->loggerName) || $this->loggerName === '') {
+            throw new ValidatorException(__(
+                'Cannot proceed without logger name.'
+            ));
+        }
+
+        if (!is_string($this->file) || $this->file === '') {
+            throw new ValidatorException(__(
+                'Cannot proceed without logfile.'
+            ));
+        }
+
         $this->log = new Logger($this->loggerName);
         $this->log->pushHandler(new StreamHandler(
             $this->directories->getPath('var') . "/log/{$this->file}.log",
