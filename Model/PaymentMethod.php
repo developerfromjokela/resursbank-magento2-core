@@ -15,6 +15,7 @@ use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
 
 /**
  * @package Resursbank\Core\Model
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 {
