@@ -79,7 +79,7 @@ class ConverterTest extends TestCase
      */
     public function testGetIdentifierReturnsValueWithData(): void
     {
-        self::assertSame(
+        static::assertSame(
             $this->apiData[Converter::KEY_ID],
             $this->converter->getIdentifier($this->apiData)
         );
@@ -95,7 +95,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         unset($data[Converter::KEY_ID]);
 
-        self::assertNull($this->converter->getIdentifier($data));
+        static::assertNull($this->converter->getIdentifier($data));
     }
 
     /**
@@ -108,7 +108,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_ID] = 55.0;
 
-        self::assertNull($this->converter->getIdentifier($data));
+        static::assertNull($this->converter->getIdentifier($data));
     }
 
     /**
@@ -121,7 +121,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_ID] = '';
 
-        self::assertNull($this->converter->getIdentifier($data));
+        static::assertNull($this->converter->getIdentifier($data));
     }
 
     /**
@@ -131,7 +131,7 @@ class ConverterTest extends TestCase
      */
     public function testGetDescriptionReturnsValueWithData(): void
     {
-        self::assertSame(
+        static::assertSame(
             $this->apiData[Converter::KEY_DESCRIPTION],
             $this->converter->getDescription($this->apiData)
         );
@@ -148,7 +148,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         unset($data[Converter::KEY_DESCRIPTION]);
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_DESCRIPTION,
             $this->converter->getDescription($data)
         );
@@ -165,7 +165,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_DESCRIPTION] = true;
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_DESCRIPTION,
             $this->converter->getDescription($data)
         );
@@ -181,7 +181,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_DESCRIPTION] = '';
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_DESCRIPTION,
             $this->converter->getDescription($data)
         );
@@ -195,7 +195,7 @@ class ConverterTest extends TestCase
      */
     public function testGetMinLimitReturnsValueWithData(): void
     {
-        self::assertSame(
+        static::assertSame(
             (float) $this->apiData[Converter::KEY_MIN_LIMIT],
             $this->converter->getMinLimit($this->apiData)
         );
@@ -212,7 +212,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         unset($data[Converter::KEY_MIN_LIMIT]);
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_MIN_LIMIT,
             $this->converter->getMinLimit($data)
         );
@@ -229,7 +229,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_MIN_LIMIT] = false;
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_MIN_LIMIT,
             $this->converter->getMinLimit($data)
         );
@@ -246,7 +246,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_MIN_LIMIT] = '4.56';
 
-        self::assertSame(
+        static::assertSame(
             4.56,
             $this->converter->getMinLimit($data)
         );
@@ -259,7 +259,7 @@ class ConverterTest extends TestCase
      */
     public function testGetMaxLimitReturnsValueWithData(): void
     {
-        self::assertSame(
+        static::assertSame(
             (float) $this->apiData[Converter::KEY_MAX_LIMIT],
             $this->converter->getMaxLimit($this->apiData)
         );
@@ -276,7 +276,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         unset($data[Converter::KEY_MAX_LIMIT]);
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_MAX_LIMIT,
             $this->converter->getMaxLimit($data)
         );
@@ -293,7 +293,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_MAX_LIMIT] = 'yada';
 
-        self::assertSame(
+        static::assertSame(
             Converter::DEFAULT_MAX_LIMIT,
             $this->converter->getMaxLimit($data)
         );
@@ -310,7 +310,7 @@ class ConverterTest extends TestCase
         $data = $this->apiData;
         $data[Converter::KEY_MAX_LIMIT] = '10.12';
 
-        self::assertSame(
+        static::assertSame(
             10.12,
             $this->converter->getMaxLimit($data)
         );
@@ -340,7 +340,7 @@ class ConverterTest extends TestCase
      */
     public function testConvert(): void
     {
-        self::assertEquals(
+        static::assertEquals(
             $this->modelData,
             $this->converter->convert($this->apiData)
         );
