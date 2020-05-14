@@ -140,7 +140,7 @@ abstract class AbstractLog extends AbstractHelper
      * @throws InvalidArgumentException
      * @throws ValidatorException
      */
-    private function initLog()
+    private function initLog(): void
     {
         if (!is_string($this->loggerName) || $this->loggerName === '') {
             throw new ValidatorException(__(
