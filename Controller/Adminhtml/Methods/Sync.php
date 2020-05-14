@@ -63,7 +63,6 @@ class Sync extends Action
     public function execute()
     {
         try {
-            throw new Exception('yada bada');
             $this->paymentMethods->sync(
                 $this->credentials->resolveFromConfig()
             );
@@ -80,5 +79,7 @@ class Sync extends Action
                 'Failed to synchronize payment methods.'
             );
         }
+
+        $this->_redirect($this->_redirect->getRefererUrl());
     }
 }
