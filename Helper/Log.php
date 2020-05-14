@@ -19,6 +19,12 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Exception;
+use InvalidArgumentException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\FileSystemException;
+
 /**
  * Class Log
  *
@@ -39,4 +45,35 @@ class Log extends AbstractLog
      * @var string
      */
     protected $file = 'resursbank_core';
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @param DirectoryList $directories
+     * @param Context $context
+     * @param Config $config
+     * @throws FileSystemException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function __construct(
+        DirectoryList $directories,
+        Context $context,
+        Config $config
+    ) {
+        $this->config = $config;
+
+        parent::__construct($directories, $context);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->config->isDebugEnabled();
+    }
 }

@@ -1,18 +1,7 @@
 <?php
 /**
- * Copyright 2016 Resurs Bank AB
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
  */
 
 declare(strict_types=1);
@@ -20,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -28,8 +18,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 /**
- * Class Log
- *
  * @package Resursbank\Checkout\Helper
  */
 abstract class AbstractLog extends AbstractHelper
@@ -59,101 +47,90 @@ abstract class AbstractLog extends AbstractHelper
     protected $file = '';
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @param DirectoryList $directories
      * @param Context $context
-     * @param Config $config
      * @throws FileSystemException
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function __construct(
         DirectoryList $directories,
-        Context $context,
-        Config $config
+        Context $context
     ) {
         $this->directories = $directories;
-        $this->config = $config;
 
+        $this->initLog();
+
+        parent::__construct($context);
+    }
+
+    /**
+     * @param string $text
+     * @param bool $force
+     * @return self
+     */
+    public function info(string $text, bool $force = false): self
+    {
+        if ($force || $this->isEnabled()) {
+            $this->log->info($text);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array|string|Exception $text
+     * @param bool $force
+     * @return self
+     */
+    public function error(string $text, $force = false): self
+    {
+        if ($force || $this->isEnabled()) {
+            $this->log->error($text);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Exception $error
+     * @param bool $force
+     * @return self
+     */
+    public function exception(Exception $error, $force = false): self
+    {
+        if ($force || $this->isEnabled()) {
+            $this->log->error(
+                $error->getFile() . ' :: ' . $error->getLine() . '   -   '
+                . $error->getMessage() . '   |   ' . $error->getTraceAsString()
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Initialize log handler.
+     *
+     * @throws FileSystemException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    private function initLog()
+    {
         $this->log = new Logger($this->loggerName);
         $this->log->pushHandler(new StreamHandler(
             $this->directories->getPath('var') . "/log/{$this->file}.log",
             Logger::INFO,
             false
         ));
-
-        parent::__construct($context);
-    }
-
-    /**
-     * Log info message.
-     *
-     * @param array|string|Exception $text
-     * @param bool                   $force
-     * @return self
-     * @throws Exception
-     */
-    public function info($text, bool $force = false): self
-    {
-        if ($force || $this->isEnabled()) {
-            $this->log->info($this->prepareMessage($text));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Log error message.
-     *
-     * @param array|string|Exception $text
-     * @param bool                   $force
-     * @return self
-     * @throws Exception
-     */
-    public function error($text, $force = false): self
-    {
-        if ($force || $this->isEnabled()) {
-            $this->log->error($this->prepareMessage($text));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Prepare message before adding it to a log file.
-     *
-     * @param array|string|Exception $text
-     * @return string
-     */
-    public function prepareMessage($text): string
-    {
-        $result = '';
-
-        if (is_array($text)) {
-            $result = json_encode($text);
-        } elseif ($text instanceof Exception) {
-            $result = $text->getFile()
-                . ' :: '
-                . $text->getLine()
-                . '   -   '
-                . $text->getMessage()
-                . '   -   '
-                . $text->getTraceAsString();
-        }
-
-        return (string) $result;
-    }
-
-    /**
-     * Check if debugging is enabled.
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function isEnabled(): bool
-    {
-        return $this->config->isDebugEnabled();
     }
 }

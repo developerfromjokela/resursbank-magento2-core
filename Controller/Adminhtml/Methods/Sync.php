@@ -59,8 +59,6 @@ class Sync extends Action
 
     /**
      * Synchronize payment methods.
-     *
-     * @throws Exception
      */
     public function execute()
     {
@@ -74,9 +72,7 @@ class Sync extends Action
                 'Successfully synchronized payment methods.'
             );
         } catch (Exception $e) {
-            if ($this->log->isEnabled()) {
-                $this->log->error($e);
-            }
+            $this->log->exception($e);
 
             // Add error message.
             $this->getMessageManager()->addErrorMessage(
