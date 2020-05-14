@@ -26,7 +26,7 @@ abstract class AbstractLog extends AbstractHelper
     /**
      * @var Logger
      */
-    protected $log;
+    protected $logger;
 
     /**
      * @var DirectoryList
@@ -67,14 +67,27 @@ abstract class AbstractLog extends AbstractHelper
     }
 
     /**
+     * @param Logger $logger
+     * @return $this
+     */
+    public function setLogger(Logger $logger): self
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
      * @param string $text
      * @param bool $force
      * @return self
      */
-    public function info(string $text, bool $force = false): self
-    {
+    public function info(
+        string $text,
+        bool $force = false
+    ): self {
         if ($force || $this->isEnabled()) {
-            $this->log->info($text);
+            $this->logger->info($text);
         }
 
         return $this;
@@ -88,7 +101,7 @@ abstract class AbstractLog extends AbstractHelper
     public function error(string $text, $force = false): self
     {
         if ($force || $this->isEnabled()) {
-            $this->log->error($text);
+            $this->logger->error($text);
         }
 
         return $this;
@@ -102,7 +115,7 @@ abstract class AbstractLog extends AbstractHelper
     public function exception(Exception $error, $force = false): self
     {
         if ($force || $this->isEnabled()) {
-            $this->log->error(
+            $this->logger->error(
                 $error->getFile() . ' :: ' . $error->getLine() . '   -   '
                 . $error->getMessage() . '   |   ' . $error->getTraceAsString()
             );
@@ -141,11 +154,13 @@ abstract class AbstractLog extends AbstractHelper
             ));
         }
 
-        $this->log = new Logger($this->loggerName);
-        $this->log->pushHandler(new StreamHandler(
+        $logger = new Logger($this->loggerName);
+        $logger->pushHandler(new StreamHandler(
             $this->directories->getPath('var') . "/log/{$this->file}.log",
             Logger::INFO,
             false
         ));
+
+        $this->setLogger($logger);
     }
 }
