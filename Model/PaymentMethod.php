@@ -102,7 +102,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($identifier === '') {
             throw new ValidatorException(
-                __('A Payment Method identifier cannot be an empty string.')
+                __('Identifier cannot be an empty string.')
             );
         }
 
@@ -129,7 +129,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($code === '') {
             throw new ValidatorException(
-                __('A Payment Method code cannot be an empty string.')
+                __('Code cannot be an empty string.')
             );
         }
 
@@ -270,8 +270,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if (json_decode($value) === null) {
             throw new ValidatorException(__(
-                'A Payment Method\'s Raw value must be a valid JSON ' .
-                'formatted string.'
+                'Raw API value must be a valid JSON formatted string.'
             ));
         }
 
@@ -300,7 +299,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
         if (!preg_match('/\A[a-z]{2}\z/i', $countryIso)) {
             throw new ValidatorException(__(
                 'Country ISO must be 2 characters long in the following ' .
-                'format: [a-zA-Z]'
+                'format: [a-zA-Z]. Lowercase chars will be cast to uppercase.'
             ));
         }
 

@@ -250,7 +250,7 @@ class PaymentMethodTest extends TestCase
     {
         self::assertInstanceOf(
             PaymentMethod::class,
-            $this->method->setIdentifier('&#000')
+            $this->method->setIdentifier('INVOICE')
         );
     }
 
@@ -287,7 +287,7 @@ class PaymentMethodTest extends TestCase
     public function testGetIdentifierDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER, null);
-        self::assertSame('&#001;', $this->method->getIdentifier('&#001;'));
+        self::assertSame('PARTPAY', $this->method->getIdentifier('PARTPAY'));
         self::assertNull($this->method->getIdentifier());
     }
 
@@ -358,8 +358,8 @@ class PaymentMethodTest extends TestCase
      */
     public function testCodeTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethod::CODE, '(=)""#');
-        self::assertSame('(=)""#', $this->method->getCode());
+        $this->method->setData(PaymentMethod::CODE, 'kalle_prod_part');
+        self::assertSame('kalle_prod_part', $this->method->getCode());
     }
 
     /**
@@ -371,7 +371,10 @@ class PaymentMethodTest extends TestCase
     public function testCodeDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE, null);
-        self::assertSame('``_:M,.m', $this->method->getCode('``_:M,.m'));
+        self::assertSame(
+            'lars_test_invoice',
+            $this->method->getCode('lars_test_invoice')
+        );
         self::assertNull($this->method->getCode());
     }
 
@@ -673,8 +676,8 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMaxOrderTotalTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, '-0.123');
-        self::assertSame(-0.123, $this->method->getMaxOrderTotal());
+        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, '12.14');
+        self::assertSame(12.14, $this->method->getMaxOrderTotal());
     }
 
     /**
@@ -686,7 +689,7 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, null);
-        self::assertSame(-321.321, $this->method->getMaxOrderTotal(-321.321));
+        self::assertSame(4476.321, $this->method->getMaxOrderTotal(4476.321));
         self::assertNull($this->method->getMaxOrderTotal());
     }
 
@@ -770,9 +773,12 @@ class PaymentMethodTest extends TestCase
      */
     public function testOrderStatusExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethod::ORDER_STATUS, '?=)( ');
-        self::assertSame('?=)( ', $this->method->getOrderStatus('321'));
-        self::assertSame('?=)( ', $this->method->getOrderStatus());
+        $this->method->setData(PaymentMethod::ORDER_STATUS, 'pending_payment');
+        self::assertSame(
+            'pending_payment',
+            $this->method->getOrderStatus('cancelled')
+        );
+        self::assertSame('pending_payment', $this->method->getOrderStatus());
     }
 
     /**
@@ -935,7 +941,7 @@ class PaymentMethodTest extends TestCase
     public function testSetSpecificCountryThrowsOnInvalidCharacters(): void
     {
         $this->expectException(ValidatorException::class);
-        $this->method->setSpecificCountry('_!');
+        $this->method->setSpecificCountry('S!');
     }
 
     /**
@@ -1106,7 +1112,7 @@ class PaymentMethodTest extends TestCase
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
-     * setCreatedAt method is provided with an invalid timestamp.
+     * setUpdatedAt method is provided with an invalid timestamp.
      *
      * @return void
      */
@@ -1149,10 +1155,10 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtExpectedReturn(): void
     {
-        $stamp = (string) time();
+        $timestamp = (string) time();
 
-        $this->method->setData(PaymentMethod::UPDATED_AT, $stamp);
-        self::assertSame($stamp, $this->method->getUpdatedAt('321'));
-        self::assertSame($stamp, $this->method->getUpdatedAt());
+        $this->method->setData(PaymentMethod::UPDATED_AT, $timestamp);
+        self::assertSame($timestamp, $this->method->getUpdatedAt('321'));
+        self::assertSame($timestamp, $this->method->getUpdatedAt());
     }
 }
