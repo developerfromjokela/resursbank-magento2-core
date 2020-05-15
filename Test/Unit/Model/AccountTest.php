@@ -49,13 +49,13 @@ class AccountTest extends TestCase
      */
     public function testSetAccountId(): void
     {
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::ACCOUNT_ID)
         );
 
         $this->account->setAccountId(44);
 
-        self::assertSame(
+        static::assertSame(
             44,
             $this->account->getData(Account::ACCOUNT_ID)
         );
@@ -69,7 +69,7 @@ class AccountTest extends TestCase
      */
     public function testSetAccountIdReturnSelf(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             Account::class,
             $this->account->setAccountId(6)
         );
@@ -88,7 +88,7 @@ class AccountTest extends TestCase
             ['robo', 'default', 'test']
         );
 
-        self::assertSame(1, $this->account->getAccountId());
+        static::assertSame(1, $this->account->getAccountId());
     }
 
     /**
@@ -100,8 +100,8 @@ class AccountTest extends TestCase
     public function testGetAccountIdDefaultReturn(): void
     {
         $this->account->setData(Account::ACCOUNT_ID, null);
-        self::assertSame(9999, $this->account->getAccountId(9999));
-        self::assertNull($this->account->getAccountId());
+        static::assertSame(9999, $this->account->getAccountId(9999));
+        static::assertNull($this->account->getAccountId());
     }
 
     /**
@@ -113,8 +113,8 @@ class AccountTest extends TestCase
     public function testGetAccountIdExpectedReturn(): void
     {
         $this->account->setData(Account::ACCOUNT_ID, 672);
-        self::assertSame(672, $this->account->getAccountId(55));
-        self::assertSame(672, $this->account->getAccountId());
+        static::assertSame(672, $this->account->getAccountId(55));
+        static::assertSame(672, $this->account->getAccountId());
     }
 
     /**
@@ -125,17 +125,17 @@ class AccountTest extends TestCase
      */
     public function testSetUsername(): void
     {
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::USERNAME)
         );
 
         try {
             $this->account->setUsername('Crono');
         } catch (ValidatorException $e) {
-            self::fail('Could not set username "Crono"');
+            static::fail('Could not set username "Crono"');
         }
 
-        self::assertSame(
+        static::assertSame(
             'Crono',
             $this->account->getData(Account::USERNAME)
         );
@@ -150,12 +150,12 @@ class AccountTest extends TestCase
     public function testSetUsernameReturnSelf(): void
     {
         try {
-            self::assertInstanceOf(
+            static::assertInstanceOf(
                 Account::class,
                 $this->account->setUsername('Sylvando')
             );
         } catch (ValidatorException $e) {
-            self::fail('Could not set username "Sylvando"');
+            static::fail('Could not set username "Sylvando"');
         }
     }
 
@@ -181,7 +181,7 @@ class AccountTest extends TestCase
     public function testGetUsernameTypeConversionReturn(): void
     {
         $this->account->setData(Account::USERNAME, 55.1);
-        self::assertSame('55.1', $this->account->getUsername());
+        static::assertSame('55.1', $this->account->getUsername());
     }
 
     /**
@@ -193,8 +193,8 @@ class AccountTest extends TestCase
     public function testGetUsernameDefaultReturn(): void
     {
         $this->account->setData(Account::USERNAME, null);
-        self::assertSame('Skywalker', $this->account->getUsername('Skywalker'));
-        self::assertNull($this->account->getUsername());
+        static::assertSame('Skywalker', $this->account->getUsername('Skywalker'));
+        static::assertNull($this->account->getUsername());
     }
 
     /**
@@ -206,8 +206,8 @@ class AccountTest extends TestCase
     public function testGetUsernameExpectedReturn(): void
     {
         $this->account->setData(Account::USERNAME, 'Sora');
-        self::assertSame('Sora', $this->account->getUsername('Sonic'));
-        self::assertSame('Sora', $this->account->getUsername());
+        static::assertSame('Sora', $this->account->getUsername('Sonic'));
+        static::assertSame('Sora', $this->account->getUsername());
     }
 
     /**
@@ -218,13 +218,13 @@ class AccountTest extends TestCase
      */
     public function testSetIsTest(): void
     {
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::IS_TEST)
         );
 
         $this->account->setIsTest(false);
 
-        self::assertFalse(
+        static::assertFalse(
             $this->account->getData(Account::IS_TEST)
         );
     }
@@ -237,7 +237,7 @@ class AccountTest extends TestCase
      */
     public function testSetIsTestReturnSelf(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             Account::class,
             $this->account->setIsTest(true)
         );
@@ -252,7 +252,7 @@ class AccountTest extends TestCase
     public function testGetIsTestTypeConversionReturn(): void
     {
         $this->account->setData(Account::IS_TEST, 1);
-        self::assertTrue($this->account->getIsTest());
+        static::assertTrue($this->account->getIsTest());
     }
 
     /**
@@ -264,8 +264,8 @@ class AccountTest extends TestCase
     public function testGetIsTestDefaultReturn(): void
     {
         $this->account->setData(Account::IS_TEST, null);
-        self::assertTrue($this->account->getIsTest(true));
-        self::assertNull($this->account->getIsTest());
+        static::assertTrue($this->account->getIsTest(true));
+        static::assertNull($this->account->getIsTest());
     }
 
     /**
@@ -277,8 +277,8 @@ class AccountTest extends TestCase
     public function testGetIsTestExpectedReturn(): void
     {
         $this->account->setData(Account::IS_TEST, true);
-        self::assertTrue($this->account->getIsTest(false));
-        self::assertTrue($this->account->getIsTest());
+        static::assertTrue($this->account->getIsTest(false));
+        static::assertTrue($this->account->getIsTest());
     }
 
     /**
@@ -288,13 +288,13 @@ class AccountTest extends TestCase
      */
     public function testSetSalt(): void
     {
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::SALT)
         );
 
         $this->account->setSalt('Df5erfg4rfgDFGDFgfghcvdfgh4345wdfWDwrt2fedfg');
 
-        self::assertSame(
+        static::assertSame(
             'Df5erfg4rfgDFGDFgfghcvdfgh4345wdfWDwrt2fedfg',
             $this->account->getData(Account::SALT)
         );
@@ -308,7 +308,7 @@ class AccountTest extends TestCase
      */
     public function testSetSaltReturnSelf(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             Account::class,
             $this->account->setSalt('Df445th5hRFg45thrgh44rgf4grghy4Fhrfh343r')
         );
@@ -322,7 +322,7 @@ class AccountTest extends TestCase
     public function testGetSaltTypeConversionReturn(): void
     {
         $this->account->setData(Account::SALT, 4455677);
-        self::assertSame('4455677', $this->account->getSalt());
+        static::assertSame('4455677', $this->account->getSalt());
     }
 
     /**
@@ -334,11 +334,11 @@ class AccountTest extends TestCase
     public function testGetSaltDefaultReturn(): void
     {
         $this->account->setData(Account::SALT, null);
-        self::assertSame(
+        static::assertSame(
             'fgdhh5yhrh567Rhrh45r3gf',
             $this->account->getSalt('fgdhh5yhrh567Rhrh45r3gf')
         );
-        self::assertNull($this->account->getSalt());
+        static::assertNull($this->account->getSalt());
     }
 
     /**
@@ -350,11 +350,11 @@ class AccountTest extends TestCase
     public function testGetSaltExpectedReturn(): void
     {
         $this->account->setData(Account::SALT, 'mnFHg4rtKLoa45623D');
-        self::assertSame(
+        static::assertSame(
             'mnFHg4rtKLoa45623D',
             $this->account->getSalt('76FHh4rhr')
         );
-        self::assertSame('mnFHg4rtKLoa45623D', $this->account->getSalt());
+        static::assertSame('mnFHg4rtKLoa45623D', $this->account->getSalt());
     }
 
     /**
@@ -367,17 +367,17 @@ class AccountTest extends TestCase
     {
         $time = (string) time();
 
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::CREATED_AT)
         );
 
         try {
             $this->account->setCreatedAt($time);
         } catch (ValidatorException $e) {
-            self::fail('Could not set created_at timestamp "' . $time . '"');
+            static::fail('Could not set created_at timestamp "' . $time . '"');
         }
 
-        self::assertSame(
+        static::assertSame(
             $time,
             $this->account->getData(Account::CREATED_AT)
         );
@@ -394,12 +394,12 @@ class AccountTest extends TestCase
         $time = (string) time();
 
         try {
-            self::assertInstanceOf(
+            static::assertInstanceOf(
                 Account::class,
                 $this->account->setCreatedAt($time)
             );
         } catch (ValidatorException $e) {
-            self::fail('Could not set created_at timestamp "' . $time . '"');
+            static::fail('Could not set created_at timestamp "' . $time . '"');
         }
     }
 
@@ -425,7 +425,7 @@ class AccountTest extends TestCase
     public function testGetCreatedAtTypeConversionReturn(): void
     {
         $this->account->setData(Account::CREATED_AT, 87);
-        self::assertSame('87', $this->account->getCreatedAt());
+        static::assertSame('87', $this->account->getCreatedAt());
     }
 
     /**
@@ -437,8 +437,8 @@ class AccountTest extends TestCase
     public function testGetCreatedAtDefaultReturn(): void
     {
         $this->account->setData(Account::CREATED_AT, null);
-        self::assertSame('1123543', $this->account->getCreatedAt('1123543'));
-        self::assertNull($this->account->getCreatedAt());
+        static::assertSame('1123543', $this->account->getCreatedAt('1123543'));
+        static::assertNull($this->account->getCreatedAt());
     }
 
     /**
@@ -450,8 +450,8 @@ class AccountTest extends TestCase
     public function testGetCreatedAtExpectedReturn(): void
     {
         $this->account->setData(Account::CREATED_AT, '989898');
-        self::assertSame('989898', $this->account->getCreatedAt('555'));
-        self::assertSame('989898', $this->account->getCreatedAt());
+        static::assertSame('989898', $this->account->getCreatedAt('555'));
+        static::assertSame('989898', $this->account->getCreatedAt());
     }
 
     /**
@@ -464,17 +464,17 @@ class AccountTest extends TestCase
     {
         $time = (string) time();
 
-        self::assertNull(
+        static::assertNull(
             $this->account->getData(Account::UPDATED_AT)
         );
 
         try {
             $this->account->setUpdatedAt($time);
         } catch (ValidatorException $e) {
-            self::fail('Could not set update_at timestamp "' . $time . '"');
+            static::fail('Could not set update_at timestamp "' . $time . '"');
         }
 
-        self::assertSame(
+        static::assertSame(
             $time,
             $this->account->getData(Account::UPDATED_AT)
         );
@@ -491,12 +491,12 @@ class AccountTest extends TestCase
         $time = (string) time();
 
         try {
-            self::assertInstanceOf(
+            static::assertInstanceOf(
                 Account::class,
                 $this->account->setUpdatedAt($time)
             );
         } catch (ValidatorException $e) {
-            self::fail('Could not set update_at timestamp "' . $time . '"');
+            static::fail('Could not set update_at timestamp "' . $time . '"');
         }
     }
 
@@ -522,7 +522,7 @@ class AccountTest extends TestCase
     public function testGetUpdatedAtTypeConversionReturn(): void
     {
         $this->account->setData(Account::UPDATED_AT, 1234.23);
-        self::assertSame('1234.23', $this->account->getUpdatedAt());
+        static::assertSame('1234.23', $this->account->getUpdatedAt());
     }
 
     /**
@@ -534,11 +534,11 @@ class AccountTest extends TestCase
     public function testGetUpdatedAtDefaultReturn(): void
     {
         $this->account->setData(Account::UPDATED_AT, null);
-        self::assertSame(
+        static::assertSame(
             'This is my default',
             $this->account->getUpdatedAt('This is my default')
         );
-        self::assertNull($this->account->getUpdatedAt());
+        static::assertNull($this->account->getUpdatedAt());
     }
 
     /**
@@ -550,7 +550,7 @@ class AccountTest extends TestCase
     public function testGetUpdatedAtExpectedReturn(): void
     {
         $this->account->setData(Account::UPDATED_AT, 'Expected');
-        self::assertSame('Expected', $this->account->getUpdatedAt('Def'));
-        self::assertSame('Expected', $this->account->getUpdatedAt());
+        static::assertSame('Expected', $this->account->getUpdatedAt('Def'));
+        static::assertSame('Expected', $this->account->getUpdatedAt());
     }
 }

@@ -63,7 +63,7 @@ class CredentialsTest extends TestCase
             ->setUsername('testing')
             ->setPassword('secret');
 
-        self::assertTrue($this->helper->hasCredentials($this->model));
+        static::assertTrue($this->helper->hasCredentials($this->model));
     }
 
     /**
@@ -77,7 +77,7 @@ class CredentialsTest extends TestCase
     {
         $this->model->setPassword('secret');
 
-        self::assertFalse($this->helper->hasCredentials($this->model));
+        static::assertFalse($this->helper->hasCredentials($this->model));
     }
 
     /**
@@ -91,7 +91,7 @@ class CredentialsTest extends TestCase
     {
         $this->model->setUsername('lebowski');
 
-        self::assertFalse($this->helper->hasCredentials($this->model));
+        static::assertFalse($this->helper->hasCredentials($this->model));
     }
 
     /**
@@ -140,7 +140,7 @@ class CredentialsTest extends TestCase
             ->setUsername('testaccount')
             ->setEnvironment(1);
 
-        self::assertSame(
+        static::assertSame(
             'a8c850514b63b1c6513ddd19599e9235c93ccd0b',
             $this->helper->getHash($this->model)
         );
@@ -191,7 +191,7 @@ class CredentialsTest extends TestCase
             ->setUsername('walter')
             ->setEnvironment(0);
 
-        self::assertSame(
+        static::assertSame(
             'walter_' . RESURS_ENVIRONMENTS::PRODUCTION,
             $this->helper->getMethodSuffix($this->model)
         );
@@ -211,7 +211,7 @@ class CredentialsTest extends TestCase
             ->setUsername('BuNNy')
             ->setEnvironment(1);
 
-        self::assertSame(
+        static::assertSame(
             'bunny_' . RESURS_ENVIRONMENTS::TEST,
             $this->helper->getMethodSuffix($this->model)
         );
