@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Resursbank\Core\Controller\Adminhtml\Methods;
+
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\Helper\Api\Credentials;
+
+/**
+ * This controller executes the process which synchronizes all available payment
+ * methods from Resurs Bank to the corresponding table in the database.
+ *
+ * @package Resursbank\Checkout\Controller\Adminhtml\Method
+ */
+class Sync extends Action
+{
+    /**
+     * @var PaymentMethods
+     */
+    private $paymentMethods;
+
+    /**
+     * @var Credentials
+     */
+    private $credentials;
+
+    /**
+     * @param Context $context
+     * @param PaymentMethods $paymentMethods
+     * @param Credentials $credentials
+     */
+    public function __construct(
+        Context $context,
+        PaymentMethods $paymentMethods,
+        Credentials $credentials
+    ) {
+        $this->paymentMethods = $paymentMethods;
+        $this->credentials = $credentials;
+
+        parent::__construct($context);
+    }
+
+    /**
+     * Synchronize payment methods.
+     */
+    public function execute()
+    {
+        try {
+            $this->paymentMethods->sync(
+                $this->credentials->resolveFromConfig()
+            );
+
+            // Add success message.
+            $this->getMessageManager()->addSuccessMessage(
+                'Successfully synchronized payment methods.'
+            );
+        } catch (Exception $e) {
+            // Add error message.
+            $this->getMessageManager()->addErrorMessage(
+                'Failed to synchronize payment methods.'
+            );
+        }
+    }
+}

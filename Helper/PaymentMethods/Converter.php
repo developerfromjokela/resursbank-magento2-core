@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Helper\Method;
+namespace Resursbank\Core\Helper\PaymentMethods;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Exception\ValidatorException;
@@ -27,7 +27,7 @@ use Magento\Sales\Model\Order;
  * Convert payment method data from the Resurs Bank API to data which can be
  * interpreted by our Magento module.
  *
- * @package Resursbank\Core\Helper\Method
+ * @package Resursbank\Core\Helper\PaymentMethods
  */
 class Converter extends AbstractHelper
 {
