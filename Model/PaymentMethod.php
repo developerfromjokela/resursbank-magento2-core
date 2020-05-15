@@ -251,17 +251,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getCreatedAt(?string $default = null): ?string
+    public function getCreatedAt(?int $default = null): ?int
     {
         $result = $this->getData(self::CREATED_AT);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? $default : (int)$result;
     }
 
     /**
      * @inheritDoc
      */
-    public function setCreatedAt(string $timestamp): PaymentMethodInterface
+    public function setCreatedAt(int $timestamp): PaymentMethodInterface
     {
         $this->setData(self::CREATED_AT, $timestamp);
 
@@ -271,17 +271,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getUpdatedAt(?string $default = null): ?string
+    public function getUpdatedAt(?int $default = null): ?int
     {
         $result = $this->getData(self::UPDATED_AT);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? $default : (int)$result;
     }
 
     /**
      * @inheritDoc
      */
-    public function setUpdatedAt(string $timestamp): PaymentMethodInterface
+    public function setUpdatedAt(int $timestamp): PaymentMethodInterface
     {
         $this->setData(self::UPDATED_AT, $timestamp);
 
