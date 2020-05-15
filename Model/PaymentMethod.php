@@ -32,34 +32,6 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getAccountId(?int $default = null): ?int
-    {
-        $result = $this->getData(self::ACCOUNT_ID);
-
-        return $result === null ? $default : (int)$result;
-    }
-
-    /**
-     * @throws ValidatorException
-     * @inheritDoc
-     */
-    public function setAccountId(?int $accountId): PaymentMethodInterface
-    {
-        if (is_int($accountId) && $accountId < 0) {
-            throw new ValidatorException(__(
-                'Account ID must be be an integer that\'s more or equal ' .
-                'to 0, or null. Use null to create a new database entry.'
-            ));
-        }
-
-        $this->setData(self::ACCOUNT_ID, $accountId);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getMethodId(?int $default = null): ?int
     {
         $result = $this->getData(self::METHOD_ID);
