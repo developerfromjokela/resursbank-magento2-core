@@ -986,7 +986,6 @@ class PaymentMethodTest extends TestCase
      * Assert that the setCreatedAt method will assign a value to the
      * createdAt property.
      *
-     * @throws ValidatorException
      * @return void
      */
     public function testSetCreatedAt(): void
@@ -995,7 +994,7 @@ class PaymentMethodTest extends TestCase
             $this->method->getData(PaymentMethod::CREATED_AT)
         );
 
-        $timestamp = (string) time();
+        $timestamp = time();
 
         $this->method->setCreatedAt($timestamp);
 
@@ -1016,20 +1015,8 @@ class PaymentMethodTest extends TestCase
     {
         static::assertInstanceOf(
             PaymentMethod::class,
-            $this->method->setCreatedAt((string) time())
+            $this->method->setCreatedAt(time())
         );
-    }
-
-    /**
-     * Assert that an instance of ValidatorException is thrown if the
-     * setCreatedAt method is provided with an invalid timestamp.
-     *
-     * @return void
-     */
-    public function testSetCreatedAtThrowsOnInvalidTimestamp(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->method->setCreatedAt(time() . '(/\\!');
     }
 
     /**
@@ -1040,8 +1027,8 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetCreatedAtTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethod::CREATED_AT, 123.123);
-        self::assertSame('123.123', $this->method->getCreatedAt());
+        $this->method->setData(PaymentMethod::CREATED_AT, '66543');
+        self::assertSame(66543, $this->method->getCreatedAt());
     }
 
     /**
@@ -1053,7 +1040,7 @@ class PaymentMethodTest extends TestCase
     public function testGetCreatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CREATED_AT, null);
-        self::assertSame('!#%&', $this->method->getCreatedAt('!#%&'));
+        self::assertSame(7769943, $this->method->getCreatedAt(7769943));
         self::assertNull($this->method->getCreatedAt());
     }
 
@@ -1065,10 +1052,10 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetCreatedAtExpectedReturn(): void
     {
-        $timestamp = (string) time();
+        $timestamp = time();
 
         $this->method->setData(PaymentMethod::CREATED_AT, $timestamp);
-        self::assertSame($timestamp, $this->method->getCreatedAt('321'));
+        self::assertSame($timestamp, $this->method->getCreatedAt(6563544564));
         self::assertSame($timestamp, $this->method->getCreatedAt());
     }
 
@@ -1076,7 +1063,6 @@ class PaymentMethodTest extends TestCase
      * Assert that the setUpdateAt method will assign a value to the updateAt
      * property.
      *
-     * @throws ValidatorException
      * @return void
      */
     public function testSetUpdatedAt(): void
@@ -1085,7 +1071,7 @@ class PaymentMethodTest extends TestCase
             $this->method->getData(PaymentMethod::UPDATED_AT)
         );
 
-        $timestamp = (string) time();
+        $timestamp = time();
 
         $this->method->setUpdatedAt($timestamp);
 
@@ -1099,27 +1085,14 @@ class PaymentMethodTest extends TestCase
      * Assert that the method setUpdateAt will return an instance of the
      * PaymentMethod data model.
      *
-     * @throws ValidatorException
      * @return void
      */
     public function testSetUpdatedAtReturnSelf(): void
     {
         static::assertInstanceOf(
             PaymentMethod::class,
-            $this->method->setUpdatedAt((string) time())
+            $this->method->setUpdatedAt(time())
         );
-    }
-
-    /**
-     * Assert that an instance of ValidatorException is thrown if the
-     * setUpdatedAt method is provided with an invalid timestamp.
-     *
-     * @return void
-     */
-    public function testSetUpdatedAtThrowsOnInvalidTimestamp(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->method->setUpdatedAt('(/\\123');
     }
 
     /**
@@ -1130,8 +1103,8 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethod::UPDATED_AT, 1234567);
-        self::assertSame('1234567', $this->method->getUpdatedAt());
+        $this->method->setData(PaymentMethod::UPDATED_AT, '1234567');
+        self::assertSame(1234567, $this->method->getUpdatedAt());
     }
 
     /**
@@ -1143,7 +1116,7 @@ class PaymentMethodTest extends TestCase
     public function testGetUpdatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::UPDATED_AT, null);
-        self::assertSame('testing', $this->method->getUpdatedAt('testing'));
+        self::assertSame(4345, $this->method->getUpdatedAt(4345));
         self::assertNull($this->method->getUpdatedAt());
     }
 
@@ -1155,10 +1128,10 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtExpectedReturn(): void
     {
-        $timestamp = (string) time();
+        $timestamp = time();
 
         $this->method->setData(PaymentMethod::UPDATED_AT, $timestamp);
-        self::assertSame($timestamp, $this->method->getUpdatedAt('321'));
+        self::assertSame($timestamp, $this->method->getUpdatedAt(6657));
         self::assertSame($timestamp, $this->method->getUpdatedAt());
     }
 }

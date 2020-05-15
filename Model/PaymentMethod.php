@@ -320,17 +320,10 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
      */
     public function setCreatedAt(int $timestamp): PaymentMethodInterface
     {
-        if (!is_numeric($timestamp)) {
-            throw new ValidatorException(
-                __('Created at is a timestamp and must be a numeric value.')
-            );
-        }
-
         $this->setData(self::CREATED_AT, $timestamp);
 
         return $this;
@@ -347,17 +340,10 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
      */
     public function setUpdatedAt(int $timestamp): PaymentMethodInterface
     {
-        if (!is_numeric($timestamp)) {
-            throw new ValidatorException(
-                __('Updated at is a timestamp and must be a numeric value.')
-            );
-        }
-
         $this->setData(self::UPDATED_AT, $timestamp);
 
         return $this;
