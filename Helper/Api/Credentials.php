@@ -13,7 +13,6 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
-use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 
@@ -67,18 +66,18 @@ class Credentials extends AbstractHelper
      *
      * @param CredentialsModel $model
      * @return string
-     * @throws MissingDataException
+     * @throws ValidatorException
      */
     public function getHash(CredentialsModel $model): string
     {
         if ($model->getUsername() === null) {
-            throw new MissingDataException(
+            throw new ValidatorException(
                 __('Unable to generate hash. Missing username.')
             );
         }
 
         if ($model->getEnvironment() === null) {
-            throw new MissingDataException(
+            throw new ValidatorException(
                 __('Unable to generate hash. Missing environment.')
             );
         }
@@ -94,12 +93,12 @@ class Credentials extends AbstractHelper
      *
      * @param CredentialsModel $model
      * @return string - Returns a lowercase string.
-     * @throws MissingDataException
+     * @throws ValidatorException
      */
     public function getMethodSuffix(CredentialsModel $model): string
     {
         if ($model->getUsername() === null) {
-            throw new MissingDataException(
+            throw new ValidatorException(
                 __('Failed to resolve method suffix. Missing username.')
             );
         }
