@@ -43,35 +43,7 @@
     },
     "sales_order": {
         "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true,
             "resursbank_environment": true
-        }
-    },
-    "quote_address": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
-        }
-    },
-    "sales_invoice": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
-        }
-    },
-    "sales_creditmemo": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
         }
     }
 }

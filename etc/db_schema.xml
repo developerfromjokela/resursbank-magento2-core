@@ -41,28 +41,6 @@
     </index>
   </table>
   <table name="sales_order" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
     <column xsi:type="varchar" name="resursbank_environment" nullable="false" length="255" comment="The selected environment in Resurs Bank config."/>
-  </table>
-  <table name="quote_address" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
-  </table>
-  <table name="sales_invoice" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
-  </table>
-  <table name="sales_creditmemo" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
   </table>
 </schema>

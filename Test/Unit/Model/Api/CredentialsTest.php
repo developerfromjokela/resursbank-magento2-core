@@ -76,7 +76,7 @@ class CredentialsTest extends TestCase
      */
     public function testCanSetEnvironment0(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             Credentials::class,
             $this->credentials->setEnvironment(0)
         );
@@ -90,7 +90,7 @@ class CredentialsTest extends TestCase
      */
     public function testCanSetEnvironment1(): void
     {
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             Credentials::class,
             $this->credentials->setEnvironment(1)
         );

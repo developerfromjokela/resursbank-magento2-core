@@ -84,9 +84,9 @@ class PaymentMethodsTest extends TestCase
         $this->expectExceptionMessage('Some connection error.');
 
         // Make the getConnection method on our API adapter toss an Exception.
-        $this->api->expects(self::once())
+        $this->api->expects(static::once())
             ->method('getConnection')
-            ->will(self::throwException(
+            ->will(static::throwException(
                 new Exception('Some connection error.')
             ));
 
@@ -112,12 +112,12 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Modify return value of getPaymentMethods method from the API class.
-        $this->connection->expects(self::any())
+        $this->connection->expects(static::any())
             ->method('getPaymentMethods')
             ->willReturn('This is not an array.');
 
         // Make sure our API adapter returns our mocked API class instance.
-        $this->api->expects(self::once())
+        $this->api->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connection);
 
@@ -153,14 +153,14 @@ class PaymentMethodsTest extends TestCase
         ];
 
         // Modify return value of getPaymentMethods method from the API class.
-        $this->connection->expects(self::any())
+        $this->connection->expects(static::any())
             ->method('getPaymentMethods')
             ->willReturn(
                 $methodsData
             );
 
         // Make sure our API adapter returns our mocked API class instance.
-        $this->api->expects(self::once())
+        $this->api->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connection);
 
@@ -171,9 +171,9 @@ class PaymentMethodsTest extends TestCase
         try {
             // Assert our fetch method does not alter the data retrieved through
             // the API adapter.
-            self::assertSame($methodsData, $methods->fetch($this->credentials));
+            static::assertSame($methodsData, $methods->fetch($this->credentials));
         } catch (IntegrationException $e) {
-            self::fail('Failed asserting return value of the fetch method.');
+            static::fail('Failed asserting return value of the fetch method.');
         }
     }
 }
