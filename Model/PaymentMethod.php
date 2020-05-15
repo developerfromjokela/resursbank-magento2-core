@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\AbstractModel;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
 
 /**
  * @package Resursbank\Core\Model
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 {
@@ -38,10 +40,18 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setMethodId(?int $methodId): PaymentMethodInterface
     {
+        if (is_int($methodId) && $methodId < 0) {
+            throw new ValidatorException(__(
+                'Method ID must be be an integer that\'s more or equal ' .
+                'to 0, or null. Use null to create a new database entry.'
+            ));
+        }
+
         $this->setData(self::METHOD_ID, $methodId);
 
         return $this;
@@ -58,10 +68,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setIdentifier(string $identifier): PaymentMethodInterface
     {
+        if ($identifier === '') {
+            throw new ValidatorException(
+                __('Identifier cannot be an empty string.')
+            );
+        }
+
         $this->setData(self::IDENTIFIER, $identifier);
 
         return $this;
@@ -78,10 +95,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setCode(string $code): PaymentMethodInterface
     {
+        if ($code === '') {
+            throw new ValidatorException(
+                __('Code cannot be an empty string.')
+            );
+        }
+
         $this->setData(self::CODE, $code);
 
         return $this;
@@ -138,10 +162,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setMinOrderTotal(float $total): PaymentMethodInterface
     {
+        if ($total < 0.0) {
+            throw new ValidatorException(
+                __('Minimum order total cannot be lower than 0.')
+            );
+        }
+
         $this->setData(self::MIN_ORDER_TOTAL, $total);
 
         return $this;
@@ -158,10 +189,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setMaxOrderTotal(float $total): PaymentMethodInterface
     {
+        if ($total < 0.0) {
+            throw new ValidatorException(
+                __('Maximum order total cannot be lower than 0.')
+            );
+        }
+
         $this->setData(self::MAX_ORDER_TOTAL, $total);
 
         return $this;
@@ -198,10 +236,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setRaw(string $value): PaymentMethodInterface
     {
+        if (json_decode($value) === null) {
+            throw new ValidatorException(__(
+                'Raw API value must be a valid JSON formatted string.'
+            ));
+        }
+
         $this->setData(self::RAW, $value);
 
         return $this;
@@ -218,12 +263,20 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setSpecificCountry(
         string $countryIso
     ): PaymentMethodInterface {
-        $this->setData(self::SPECIFIC_COUNTRY, $countryIso);
+        if (!preg_match('/\A[a-z]{2}\z/i', $countryIso)) {
+            throw new ValidatorException(__(
+                'Country ISO must be 2 characters long in the following ' .
+                'format: [a-zA-Z]. Lowercase chars will be cast to uppercase.'
+            ));
+        }
+
+        $this->setData(self::SPECIFIC_COUNTRY, strtoupper($countryIso));
 
         return $this;
     }
@@ -239,10 +292,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setCreatedAt(string $timestamp): PaymentMethodInterface
     {
+        if (!is_numeric($timestamp)) {
+            throw new ValidatorException(
+                __('Created at is a timestamp and must be a numeric value.')
+            );
+        }
+
         $this->setData(self::CREATED_AT, $timestamp);
 
         return $this;
@@ -259,10 +319,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws ValidatorException
      * @inheritDoc
      */
     public function setUpdatedAt(string $timestamp): PaymentMethodInterface
     {
+        if (!is_numeric($timestamp)) {
+            throw new ValidatorException(
+                __('Updated at is a timestamp and must be a numeric value.')
+            );
+        }
+
         $this->setData(self::UPDATED_AT, $timestamp);
 
         return $this;

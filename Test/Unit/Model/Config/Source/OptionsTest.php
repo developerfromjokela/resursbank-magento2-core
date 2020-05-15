@@ -43,9 +43,9 @@ class OptionsTest extends TestCase
             ->getMockForAbstractClass();
 
         // Mock return value of toArray method, implemented by subclasses.
-        $this->options->expects(self::once())
+        $this->options->expects(static::once())
             ->method('toArray')
-            ->will(self::returnValue([
+            ->will(static::returnValue([
                 'test' => 'Test',
                 'production' => 'Production'
             ]));
@@ -58,7 +58,7 @@ class OptionsTest extends TestCase
      */
     public function testHasSameNumberOfOptionsAsToArray(): void
     {
-        self::assertCount(2, $this->options->toOptionArray());
+        static::assertCount(2, $this->options->toOptionArray());
     }
 
     /**
@@ -69,7 +69,7 @@ class OptionsTest extends TestCase
      */
     public function testValueConversionFromToOptionArray(): void
     {
-        self::assertSame([
+        static::assertSame([
             [
                 'value' => 'test',
                 'label' => 'Test'
