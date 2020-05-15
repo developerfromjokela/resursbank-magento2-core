@@ -22,6 +22,7 @@ namespace Resursbank\Core\Test\Unit\Helper\PaymentMethods;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
 
 /**
@@ -65,10 +66,10 @@ class ConverterTest extends TestCase
             Converter::KEY_MAX_LIMIT => '160.50'
         ];
         $this->modelData = [
-            Converter::MODEL_KEY_IDENTIFIER => $this->apiData[Converter::KEY_ID],
-            Converter::MODEL_KEY_TITLE => $this->apiData[Converter::KEY_DESCRIPTION],
-            Converter::MODEL_KEY_MIN_ORDER_TOTAL => $this->apiData[Converter::KEY_MIN_LIMIT],
-            Converter::MODEL_KEY_MAX_ORDER_TOTAL => $this->apiData[Converter::KEY_MAX_LIMIT]
+            PaymentMethodInterface::IDENTIFIER => $this->apiData[Converter::KEY_ID],
+            PaymentMethodInterface::TITLE => $this->apiData[Converter::KEY_DESCRIPTION],
+            PaymentMethodInterface::MIN_ORDER_TOTAL => $this->apiData[Converter::KEY_MIN_LIMIT],
+            PaymentMethodInterface::MAX_ORDER_TOTAL => $this->apiData[Converter::KEY_MAX_LIMIT]
         ];
     }
 
