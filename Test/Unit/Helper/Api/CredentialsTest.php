@@ -11,7 +11,6 @@ namespace Resursbank\Core\Test\Unit\Helper\Api;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\Core\Helper\Api\Credentials as Helper;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
@@ -96,14 +95,14 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that attempting to generate a hash without a username results in
-     * an instance of MissingDataException.
+     * an instance of ValidatorException.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testExceptionThrownWhenGeneratingHashWithoutUsername(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setEnvironment(1);
 
@@ -112,14 +111,14 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that attempting to generate a hash without an environment results
-     * in an instance of MissingDataException.
+     * in an instance of ValidatorException.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testExceptionThrownWhenGeneratingHashWithoutEnv(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setUsername('testing');
 
@@ -131,7 +130,6 @@ class CredentialsTest extends TestCase
      * and environment are applied on the supplied Credentials model instance.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testHashValue(): void
@@ -148,21 +146,21 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that the getMethodSuffix method will result in an instance of
-     * MissingDataException when attempting to resolve a value from an instance
+     * ValidatorException when attempting to resolve a value from an instance
      * of the Credentials model with no environment applied.
      *
      * @return void
      */
     public function testExceptionThrownWithoutEnvWhenGettingSuffix(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->helper->getMethodSuffix($this->model);
     }
 
     /**
      * Assert that the getMethodSuffix method will result in an instance of
-     * MissingDataException when attempting to resolve a value from an instance
+     * ValidatorException when attempting to resolve a value from an instance
      * of the Credentials model with no username applied.
      *
      * @return void
@@ -170,7 +168,7 @@ class CredentialsTest extends TestCase
      */
     public function testExceptionThrownWithoutUsernameWhenGettingSuffix(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setEnvironment(1);
 
@@ -182,7 +180,6 @@ class CredentialsTest extends TestCase
      * for a Credentials model instance with the corresponding values applied.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testMethodSuffixResult(): void
@@ -202,7 +199,6 @@ class CredentialsTest extends TestCase
      * value.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testMethodSuffixResultIsLowerCase(): void
