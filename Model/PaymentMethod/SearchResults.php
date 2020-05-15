@@ -13,7 +13,7 @@ use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 
 /**
- * @package Resursbank\Core\Model\Account
+ * @package Resursbank\Core\Model\PaymentMethod
  */
 class SearchResults extends FrameworkSearchResults implements PaymentMethodSearchResultsInterface
 {

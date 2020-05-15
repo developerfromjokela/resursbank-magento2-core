@@ -30,26 +30,6 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getAccountId(?int $default = null): ?int
-    {
-        $result = $this->getData(self::ACCOUNT_ID);
-
-        return $result === null ? $default : (int)$result;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setAccountId(int $accountId): PaymentMethodInterface
-    {
-        $this->setData(self::ACCOUNT_ID, $accountId);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getMethodId(?int $default = null): ?int
     {
         $result = $this->getData(self::METHOD_ID);
