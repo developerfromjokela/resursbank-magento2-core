@@ -94,7 +94,8 @@ class Converter extends AbstractHelper
             PaymentMethodInterface::IDENTIFIER => $this->getIdentifier($data),
             PaymentMethodInterface::MIN_ORDER_TOTAL => $this->getMinLimit($data),
             PaymentMethodInterface::MAX_ORDER_TOTAL => $this->getMaxLimit($data),
-            PaymentMethodInterface::TITLE => $this->getDescription($data)
+            PaymentMethodInterface::TITLE => $this->getDescription($data),
+            PaymentMethodInterface::RAW => json_encode($data)
         ];
     }
 

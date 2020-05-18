@@ -2,7 +2,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
   <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
     <column xsi:type="smallint" name="method_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
-    <column xsi:type="varchar" name="account" nullable="false" length="255" comment="Account association"/>
     <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Raw Method ID"/>
     <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Method Code"/>
     <column xsi:type="boolean" name="active" nullable="false" comment="Active"/>
