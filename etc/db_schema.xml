@@ -1,23 +1,7 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-  <table name="resursbank_checkout_account" resource="default" engine="innodb" comment="Resurs Bank API Account Table">
-    <column xsi:type="smallint" name="account_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
-    <column xsi:type="varchar" name="username" nullable="false" length="255" comment="API Account Username"/>
-    <column xsi:type="boolean" name="is_test" default="true" onCreate="migrateDataFrom(environment)" comment="If API Account uses the test environment or not"/>
-    <column xsi:type="varchar" name="salt" nullable="true" length="255" comment="Callback SALT"/>
-    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
-    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
-    <constraint xsi:type="primary" referenceId="PRIMARY">
-        <column name="account_id"/>
-    </constraint>
-    <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT">
-        <column name="username"/>
-        <column name="is_test"/>
-    </constraint>
-  </table>
   <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
     <column xsi:type="smallint" name="method_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
-    <column xsi:type="smallint" name="account_id" padding="5" unsigned="true" nullable="true" identity="false" comment="Account ID"/>
     <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Raw Method ID"/>
     <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Method Code"/>
     <column xsi:type="boolean" name="active" nullable="false" comment="Active"/>
@@ -32,37 +16,11 @@
     <constraint xsi:type="primary" referenceId="PRIMARY">
       <column name="method_id"/>
     </constraint>
-    <constraint xsi:type="foreign" referenceId="FK_99E4EF33EDA1CA5EEC19A493575FCFB7" table="resursbank_checkout_account_method" column="account_id" referenceTable="resursbank_checkout_account" referenceColumn="account_id" onDelete="CASCADE"/>
     <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE">
       <column name="code"/>
     </constraint>
-    <index referenceId="RESURSBANK_CHECKOUT_ACCOUNT_METHOD_ACCOUNT_ID" indexType="btree">
-      <column name="account_id"/>
-    </index>
   </table>
   <table name="sales_order" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
     <column xsi:type="varchar" name="resursbank_environment" nullable="false" length="255" comment="The selected environment in Resurs Bank config."/>
-  </table>
-  <table name="quote_address" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
-  </table>
-  <table name="sales_invoice" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
-  </table>
-  <table name="sales_creditmemo" resource="default">
-    <column xsi:type="decimal" name="resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee."/>
-    <column xsi:type="decimal" name="resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Currency converted Resurs Bank payment method fee tax."/>
-    <column xsi:type="decimal" name="base_resursbank_payment_fee_tax_amount" scale="4" precision="12" unsigned="false" nullable="true" comment="Resurs Bank payment method fee tax."/>
   </table>
 </schema>

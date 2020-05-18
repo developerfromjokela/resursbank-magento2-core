@@ -11,9 +11,9 @@ namespace Resursbank\Core\Test\Unit\Helper\Api;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Exception\MissingDataException;
 use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\Core\Helper\Api\Credentials as Helper;
+use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
  * Test cases designed for Credentials data model.
@@ -62,7 +62,7 @@ class CredentialsTest extends TestCase
             ->setUsername('testing')
             ->setPassword('secret');
 
-        self::assertTrue($this->helper->hasCredentials($this->model));
+        static::assertTrue($this->helper->hasCredentials($this->model));
     }
 
     /**
@@ -76,7 +76,7 @@ class CredentialsTest extends TestCase
     {
         $this->model->setPassword('secret');
 
-        self::assertFalse($this->helper->hasCredentials($this->model));
+        static::assertFalse($this->helper->hasCredentials($this->model));
     }
 
     /**
@@ -90,19 +90,19 @@ class CredentialsTest extends TestCase
     {
         $this->model->setUsername('lebowski');
 
-        self::assertFalse($this->helper->hasCredentials($this->model));
+        static::assertFalse($this->helper->hasCredentials($this->model));
     }
 
     /**
      * Assert that attempting to generate a hash without a username results in
-     * an instance of MissingDataException.
+     * an instance of ValidatorException.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testExceptionThrownWhenGeneratingHashWithoutUsername(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setEnvironment(1);
 
@@ -111,14 +111,14 @@ class CredentialsTest extends TestCase
 
     /**
      * Assert that attempting to generate a hash without an environment results
-     * in an instance of MissingDataException.
+     * in an instance of ValidatorException.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testExceptionThrownWhenGeneratingHashWithoutEnv(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setUsername('testing');
 
@@ -130,7 +130,6 @@ class CredentialsTest extends TestCase
      * and environment are applied on the supplied Credentials model instance.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testHashValue(): void
@@ -139,83 +138,29 @@ class CredentialsTest extends TestCase
             ->setUsername('testaccount')
             ->setEnvironment(1);
 
-        self::assertSame(
+        static::assertSame(
             'a8c850514b63b1c6513ddd19599e9235c93ccd0b',
             $this->helper->getHash($this->model)
         );
     }
 
     /**
-     * Assert that the getEnvironmentCode method will result in
-     * Helper::ENVIRONMENT_CODE_TEST with environment "1" applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     * @throws ValidatorException
-     */
-    public function testGetEnvironmentCodeForTest(): void
-    {
-        $this->model->setEnvironment(1);
-
-        self::assertSame(
-            Helper::ENVIRONMENT_CODE_TEST,
-            $this->helper->getEnvironmentCode($this->model)
-        );
-    }
-
-    /**
-     * Assert that the getEnvironmentCode method will result in
-     * Helper::ENVIRONMENT_CODE_PROD with environment "0" applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     * @throws ValidatorException
-     */
-    public function testGetEnvironmentCodeForProd(): void
-    {
-        $this->model->setEnvironment(0);
-
-        self::assertSame(
-            Helper::ENVIRONMENT_CODE_PROD,
-            $this->helper->getEnvironmentCode($this->model)
-        );
-    }
-
-    /**
-     * Assert that the getEnvironmentCode method will result in an instance of
-     * MissingDataException when attempting to resolve code value from an
-     * instance of the Credentials model with no environment applied.
-     *
-     * @return void
-     * @throws MissingDataException
-     */
-    public function testExceptionThrownWithoutEnvironmentWhenGettingCode(): void
-    {
-        $this->expectException(MissingDataException::class);
-
-        $this->helper->getEnvironmentCode($this->model);
-    }
-
-    /**
      * Assert that the getMethodSuffix method will result in an instance of
-     * MissingDataException when attempting to resolve a value from an instance
+     * ValidatorException when attempting to resolve a value from an instance
      * of the Credentials model with no environment applied.
      *
      * @return void
-     * @throws ValidatorException
      */
     public function testExceptionThrownWithoutEnvWhenGettingSuffix(): void
     {
-        $this->expectException(MissingDataException::class);
-
-        $this->model->setUsername('donny');
+        $this->expectException(ValidatorException::class);
 
         $this->helper->getMethodSuffix($this->model);
     }
 
     /**
      * Assert that the getMethodSuffix method will result in an instance of
-     * MissingDataException when attempting to resolve a value from an instance
+     * ValidatorException when attempting to resolve a value from an instance
      * of the Credentials model with no username applied.
      *
      * @return void
@@ -223,7 +168,7 @@ class CredentialsTest extends TestCase
      */
     public function testExceptionThrownWithoutUsernameWhenGettingSuffix(): void
     {
-        $this->expectException(MissingDataException::class);
+        $this->expectException(ValidatorException::class);
 
         $this->model->setEnvironment(1);
 
@@ -235,7 +180,6 @@ class CredentialsTest extends TestCase
      * for a Credentials model instance with the corresponding values applied.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testMethodSuffixResult(): void
@@ -244,8 +188,8 @@ class CredentialsTest extends TestCase
             ->setUsername('walter')
             ->setEnvironment(0);
 
-        self::assertSame(
-            'walter_' . Helper::ENVIRONMENT_CODE_PROD,
+        static::assertSame(
+            'walter_' . RESURS_ENVIRONMENTS::PRODUCTION,
             $this->helper->getMethodSuffix($this->model)
         );
     }
@@ -255,7 +199,6 @@ class CredentialsTest extends TestCase
      * value.
      *
      * @return void
-     * @throws MissingDataException
      * @throws ValidatorException
      */
     public function testMethodSuffixResultIsLowerCase(): void
@@ -264,8 +207,8 @@ class CredentialsTest extends TestCase
             ->setUsername('BuNNy')
             ->setEnvironment(1);
 
-        self::assertSame(
-            'bunny_' . Helper::ENVIRONMENT_CODE_TEST,
+        static::assertSame(
+            'bunny_' . RESURS_ENVIRONMENTS::TEST,
             $this->helper->getMethodSuffix($this->model)
         );
     }

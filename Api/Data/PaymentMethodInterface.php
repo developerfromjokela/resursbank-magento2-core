@@ -21,11 +21,6 @@ interface PaymentMethodInterface
     /**
      * @var string
      */
-    public const ACCOUNT_ID = 'account_id';
-
-    /**
-     * @var string
-     */
     public const IDENTIFIER = 'identifier';
 
     /**
@@ -77,23 +72,6 @@ interface PaymentMethodInterface
      * @var string
      */
     public const UPDATED_AT = 'updated_at';
-
-    /**
-     * Get account ID the payment method is linked to.
-     *
-     * @param int|null $default - Value to be returned in the event that
-     * a value couldn't be retrieved from the database.
-     * @return int|null
-     */
-    public function getAccountId(?int $default = null): ?int;
-
-    /**
-     * Set account ID the payment method is linked to.
-     *
-     * @param int $accountId
-     * @return self
-     */
-    public function setAccountId(int $accountId): self;
 
     /**
      * Get ID of payment method.
@@ -272,34 +250,34 @@ interface PaymentMethodInterface
     /**
      * Get entry creation time.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
-     * @return string|null
+     * @return int|null
      */
-    public function getCreatedAt(?string $default = null): ?string;
+    public function getCreatedAt(?int $default = null): ?int;
 
     /**
      * Set entry creation time.
      *
-     * @param string $timestamp - Must be a valid MySQL timestamp.
+     * @param int $timestamp - Must be a valid MySQL timestamp.
      * @return self
      */
-    public function setCreatedAt(string $timestamp): self;
+    public function setCreatedAt(int $timestamp): self;
 
     /**
      * Get entry update time.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned in the event that
      * a value couldn't be retrieved from the database.
-     * @return string|null
+     * @return int|null
      */
-    public function getUpdatedAt(?string $default = null): ?string;
+    public function getUpdatedAt(?int $default = null): ?int;
 
     /**
      * Set entry update time.
      *
-     * @param string $timestamp - Must be a valid MySQL timestamp.
+     * @param int $timestamp - Must be a valid MySQL timestamp.
      * @return self
      */
-    public function setUpdatedAt(string $timestamp): self;
+    public function setUpdatedAt(int $timestamp): self;
 }

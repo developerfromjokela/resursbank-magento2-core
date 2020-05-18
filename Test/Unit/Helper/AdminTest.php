@@ -58,7 +58,7 @@ class AdminTest extends TestCase
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
-        self::assertEquals('Anonymous', $admin->getUserName());
+        static::assertEquals('Anonymous', $admin->getUserName());
     }
 
     /**
@@ -74,14 +74,14 @@ class AdminTest extends TestCase
         $user->setUserName('Lebowski');
 
         // Modify the output of getUser method in Session mock.
-        $this->session->expects(self::any())
+        $this->session->expects(static::any())
             ->method('getUser')
-            ->will(self::returnValue($user));
+            ->will(static::returnValue($user));
 
         // Create a new Admin instance using our mocked Session.
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
-        self::assertEquals('Lebowski', $admin->getUserName());
+        static::assertEquals('Lebowski', $admin->getUserName());
     }
 }

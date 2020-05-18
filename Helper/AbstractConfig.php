@@ -24,12 +24,12 @@ abstract class AbstractConfig extends AbstractHelper
     /**
      * @var ScopeConfigInterface
      */
-    private $reader;
+    protected $reader;
 
     /**
      * @var WriterInterface
      */
-    private $writer;
+    protected $writer;
 
     /**
      * @param ScopeConfigInterface $reader

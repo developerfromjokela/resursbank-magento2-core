@@ -37,40 +37,13 @@
         "constraint": {
             "PRIMARY": true,
             "FK_99E4EF33EDA1CA5EEC19A493575FCFB7": true,
-            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE": true
+            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE": true,
+            "FK_9D924882EF1EBEBF337C1582CFD81DE1": true
         }
     },
     "sales_order": {
         "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true,
             "resursbank_environment": true
-        }
-    },
-    "quote_address": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
-        }
-    },
-    "sales_invoice": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
-        }
-    },
-    "sales_creditmemo": {
-        "column": {
-            "resursbank_payment_fee_amount": true,
-            "base_resursbank_payment_fee_amount": true,
-            "resursbank_payment_fee_tax_amount": true,
-            "base_resursbank_payment_fee_tax_amount": true
         }
     }
 }
