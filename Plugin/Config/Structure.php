@@ -10,6 +10,7 @@ namespace Resursbank\Core\Plugin\Config;
 
 use Exception;
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier as Original;
+use Resursbank\Core\Helper\Log;
 
 /**
  * Create custom configuration sections for all dynamic payment methods.
@@ -21,17 +22,41 @@ use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier as Original;
  */
 class Structure
 {
+    /**
+     * @var Log
+     */
+    private $log;
+    
+    /**
+     * @param Log $log
+     */
+    public function __construct(Log $log)
+    {
+        $this->log = $log;
+    }
+
+    /**
+     * Build and append configuration sections.
+     *
+     * @param Original $subject
+     * @param array $result
+     * @return array
+     * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterModify(
         Original $subject,
         array $result
     ): array {
         try {
             if ($this->hasConfigElement($result)) {
-                $collection = $this->getFakeMethods();
+                // @todo Fetch real methods.
+                $collection = [];
 
                 // Amend array structure for our payment methods.
-                $methods = &$result['other_payment_methods']['children']['resursbank_section']
-                    ['children']['resursbank']['children']['methods']['children']['collection'];
+                $methods = &$result['other_payment_methods']['children']
+                ['resursbank_section']['children']['resursbank']['children']
+                ['methods']['children']['collection'];
 
                 if (!isset($methods['children']) ||
                     !is_array($methods['children'])
@@ -44,7 +69,7 @@ class Structure
                 }
             }
         } catch (Exception $e) {
-            // Log error
+            $this->log->exception($e);
 
             throw $e;
         }
@@ -56,7 +81,7 @@ class Structure
      * Appends a dynamic payment method to config.
      *
      * @param array $config
-     * @param array $method // NEEDS TO CHANGE
+     * @param array $method
      */
     private function addPaymentMethod(
         array &$config,
@@ -83,7 +108,8 @@ class Structure
                     'showInStore' => 1,
                     'label' => 'Sort Order',
                     '_elementType' => 'field',
-                    'path' => "payment/resursbank_section/resursbank/methods/collection/{$method['code']}"
+                    'path' => "payment/resursbank_section/resursbank/methods/collection/{$method['code']}",
+                    'config_path' => "resursbank/methods/{$method['code']}/sort"
                 ]
             ]
         ];
@@ -99,21 +125,15 @@ class Structure
     {
         return (
             isset(
-                $result['other_payment_methods']['children']['resursbank_section']
-                ['children']['resursbank']['children']['methods']['children']['collection']
+                $result['other_payment_methods']['children']
+                ['resursbank_section']['children']['resursbank']
+                ['children']['methods']['children']['collection']
             ) &&
             is_array(
-                $result['other_payment_methods']['children']['resursbank_section']
-                ['children']['resursbank']['children']['methods']['children']['collection']
+                $result['other_payment_methods']['children']
+                ['resursbank_section']['children']['resursbank']
+                ['children']['methods']['children']['collection']
             )
         );
-    }
-
-    private function getFakeMethods(): array
-    {
-        return [
-            ['code' => 'test_method_one', 'label' => 'Test method one'],
-            ['code' => 'test_method_two', 'label' => 'Test method two']
-        ]; 
     }
 }
