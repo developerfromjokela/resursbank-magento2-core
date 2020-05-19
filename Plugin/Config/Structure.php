@@ -55,8 +55,7 @@ class Structure
 
                 // Amend array structure for our payment methods.
                 $methods = &$result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']['children']
-                ['methods']['children']['collection'];
+                ['resursbank_section']['children']['resursbank']['children']['methods'];
 
                 if (!isset($methods['children']) ||
                     !is_array($methods['children'])
@@ -96,7 +95,7 @@ class Structure
             'showInStore' => 1,
             'label' => $method['label'],
             '_elementType' => 'group',
-            'path' => 'payment/resursbank_section/resursbank/methods/collection',
+            'path' => 'payment/resursbank_section/resursbank/methods',
             'children' => [
                 'sort_order' => [
                     'id' => 'sort_order',
@@ -108,7 +107,7 @@ class Structure
                     'showInStore' => 1,
                     'label' => 'Sort Order',
                     '_elementType' => 'field',
-                    'path' => "payment/resursbank_section/resursbank/methods/collection/{$method['code']}",
+                    'path' => "payment/resursbank_section/resursbank/methods/{$method['code']}",
                     'config_path' => "resursbank/methods/{$method['code']}/sort"
                 ]
             ]
@@ -125,14 +124,12 @@ class Structure
     {
         return (
             isset(
-                $result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']
-                ['children']['methods']['children']['collection']
+                $result['other_payment_methods']['children']['resursbank_section']
+                ['children']['resursbank']['children']['methods']
             ) &&
             is_array(
-                $result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']
-                ['children']['methods']['children']['collection']
+                $result['other_payment_methods']['children']['resursbank_section']
+                ['children']['resursbank']['children']['methods']
             )
         );
     }
