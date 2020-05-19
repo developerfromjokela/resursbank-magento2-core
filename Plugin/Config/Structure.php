@@ -26,7 +26,7 @@ class Structure
      * @var Log
      */
     private $log;
-    
+
     /**
      * @param Log $log
      */
@@ -43,6 +43,7 @@ class Structure
      * @return array
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @noinspection PhpUnusedParameterInspectio￼
      */
     public function afterModify(
         Original $subject,
@@ -50,12 +51,12 @@ class Structure
     ): array {
         try {
             if ($this->hasConfigElement($result)) {
-                // @todo Fetch real methods.
                 $collection = [];
 
                 // Amend array structure for our payment methods.
                 $methods = &$result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']['children']['methods'];
+                ['resursbank_section']['children']['resursbank']['children']
+                ['methods'];
 
                 if (!isset($methods['children']) ||
                     !is_array($methods['children'])
@@ -124,12 +125,14 @@ class Structure
     {
         return (
             isset(
-                $result['other_payment_methods']['children']['resursbank_section']
-                ['children']['resursbank']['children']['methods']
+                $result['other_payment_methods']['children']
+                ['resursbank_section']['children']['resursbank']['children']
+                ['methods']
             ) &&
             is_array(
-                $result['other_payment_methods']['children']['resursbank_section']
-                ['children']['resursbank']['children']['methods']
+                $result['other_payment_methods']['children']
+                ['resursbank_section']['children']['resursbank']['children']
+                ['methods']
             )
         );
     }
