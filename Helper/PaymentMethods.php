@@ -180,7 +180,7 @@ class PaymentMethods extends AbstractHelper
 
         if (!is_array($result)) {
             throw new IntegrationException(
-                __('Unexpected payment method data retruned from ECom.')
+                __('Unexpected payment method data returned from ECom.')
             );
         }
 

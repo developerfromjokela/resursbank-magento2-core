@@ -55,6 +55,11 @@ class PaymentMethodsTest extends TestCase
     private $convertedMethodData;
 
     /**
+     * @var PaymentMethods
+     */
+    private $paymentMethods;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -78,6 +83,11 @@ class PaymentMethodsTest extends TestCase
         // Create mocked, empty, instance of Credentials model.
         $this->credentials = $this->objectManager
             ->getObject(Credentials::class);
+
+        // General mock of PaymentMethods service class, applicable in most
+        // tests.
+        $this->paymentMethods = $this->objectManager
+            ->getObject(PaymentMethods::class, ['api' => $this->api]);
 
         // Setup mock of Payment Method data as it would appearing after being
         // converted from an API call.
@@ -209,11 +219,7 @@ class PaymentMethodsTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $methods->getCode('', $this->credentials);
+        $this->paymentMethods->getCode('', $this->credentials);
     }
 
     /**
@@ -229,12 +235,8 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::IDENTIFIER]);
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $this->getValidateDataMethod($methods)->invoke(
-            $methods,
+        $this->getValidateDataMethod($this->paymentMethods)->invoke(
+            $this->paymentMethods,
             $this->convertedMethodData
         );
     }
@@ -255,12 +257,8 @@ class PaymentMethodsTest extends TestCase
             $this->convertedMethodData[PaymentMethodInterface::MIN_ORDER_TOTAL]
         );
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $this->getValidateDataMethod($methods)->invoke(
-            $methods,
+        $this->getValidateDataMethod($this->paymentMethods)->invoke(
+            $this->paymentMethods,
             $this->convertedMethodData
         );
     }
@@ -281,12 +279,8 @@ class PaymentMethodsTest extends TestCase
             $this->convertedMethodData[PaymentMethodInterface::MAX_ORDER_TOTAL]
         );
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $this->getValidateDataMethod($methods)->invoke(
-            $methods,
+        $this->getValidateDataMethod($this->paymentMethods)->invoke(
+            $this->paymentMethods,
             $this->convertedMethodData
         );
     }
@@ -304,12 +298,8 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::TITLE]);
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $this->getValidateDataMethod($methods)->invoke(
-            $methods,
+        $this->getValidateDataMethod($this->paymentMethods)->invoke(
+            $this->paymentMethods,
             $this->convertedMethodData
         );
     }
@@ -327,6 +317,33 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::RAW]);
 
+        $this->getValidateDataMethod($this->paymentMethods)->invoke(
+            $this->paymentMethods,
+            $this->convertedMethodData
+        );
+    }
+
+    /**
+     * Assert that no Exception will be thrown if all the required data is
+     * present in the array submitted to the validateData method.
+     *
+     * @throws ReflectionException
+     * @doesNotPerformAssertions
+     */
+    public function testValidateData()
+    {
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ValidatorException $error) {
+            static::fail('Unexpected ValidatorException.');
+        }
+    }
+
+    public function testResolveMethodDataArrayAcceptsStdClass()
+    {
         /** @var PaymentMethods $methods */
         $methods = $this->objectManager
             ->getObject(PaymentMethods::class, ['api' => $this->api]);
@@ -335,11 +352,6 @@ class PaymentMethodsTest extends TestCase
             $methods,
             $this->convertedMethodData
         );
-    }
-
-    public function testResolveMethodDataArrayAcceptsStdClass()
-    {
-
     }
 
     /**
@@ -369,7 +381,7 @@ class PaymentMethodsTest extends TestCase
         PaymentMethods $obj
     ): ReflectionMethod {
         $obj = new ReflectionObject($obj);
-        $method = $obj->getMethod('validateData');
+        $method = $obj->getMethod('resolveMethodDataArray');
         $method->setAccessible(true);
 
         return $method;
