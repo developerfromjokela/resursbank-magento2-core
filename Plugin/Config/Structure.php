@@ -43,7 +43,7 @@ class Structure
      * @return array
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @noinspection PhpUnusedParameterInspectio￼n
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterModify(
         Original $subject,
