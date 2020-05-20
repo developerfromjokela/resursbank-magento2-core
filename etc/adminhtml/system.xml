@@ -72,20 +72,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/methods/auto_sync_method</config_path>
                         </field>
-                        <group id="tax" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-                             <label>Fee Tax Settings</label>
-                             <field id="class" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                                 <label>Tax Class</label>
-                                 <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
-                                 <config_path>resursbank/api/fee_tax_class</config_path>
-                             </field>
-                             <field id="display" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                                 <label>Price Display</label>
-                                 <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
-                                 <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
-                                 <config_path>resursbank/api/fee_tax_display</config_path>
-                             </field>
-                         </group>
                     </group>
                 </group>
             </group>
