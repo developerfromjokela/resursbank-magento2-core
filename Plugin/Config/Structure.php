@@ -18,7 +18,7 @@ use Resursbank\Core\Helper\Log;
  * We need to create the sections this way since we do not know what payment
  * methods will be available until the client fetches them from the API.
  *
- * @package Resursbank\Core\Plugin\Config\Structure
+ * @package Resursbank\Core\Plugin\Config
  */
 class Structure
 {
@@ -43,7 +43,7 @@ class Structure
      * @return array
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @noinspection PhpUnusedParameterInspectio￼
+     * @noinspection PhpUnusedParameterInspectio￼n
      */
     public function afterModify(
         Original $subject,
