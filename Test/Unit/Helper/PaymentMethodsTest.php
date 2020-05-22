@@ -18,8 +18,11 @@ use ReflectionMethod;
 use ReflectionObject;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\PaymentMethods;
-use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
+use Resursbank\Core\Model\PaymentMethod as PaymentMethodModel;
+use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 use Resursbank\RBEcomPHP\ResursBank;
 
 /**
@@ -45,7 +48,7 @@ class PaymentMethodsTest extends TestCase
     private $connection;
 
     /**
-     * @var Credentials
+     * @var CredentialsModel
      */
     private $credentials;
 
@@ -60,13 +63,31 @@ class PaymentMethodsTest extends TestCase
     private $paymentMethods;
 
     /**
+     * @var Credentials
+     */
+    private $credentialsHelper;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
+        // Prepare object manager.
         $this->objectManager = new ObjectManager($this);
 
-        // Mock the API helper class so we can later modify the behaviour of
+        // Setup mock of Payment Method data as it would appearing after being
+        // converted from an API call.
+        $this->convertedMethodData = [
+            PaymentMethodInterface::IDENTIFIER => 'invoice',
+            PaymentMethodInterface::TITLE => 'Invoice Nr. 1',
+            PaymentMethodInterface::MIN_ORDER_TOTAL => 10,
+            PaymentMethodInterface::MAX_ORDER_TOTAL => 50000,
+            PaymentMethodInterface::RAW => json_encode(
+                ['array', 'with', 'lots', 'of', 'data']
+            )
+        ];
+
+        // Mock the API service class so we can later modify the behaviour of
         // the getConnection method.
         $this->api = $this->getMockBuilder(Api::class)
             ->disableOriginalConstructor()
@@ -80,26 +101,25 @@ class PaymentMethodsTest extends TestCase
             ->setMethods(['getPaymentMethods'])
             ->getMock();
 
+        // Mock the Credentials service class so we can later modify the
+        // behaviour of the getMethodSuffix and getCountry methods.
+        $this->credentialsHelper = $this->getMockBuilder(Credentials::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getMethodSuffix', 'getCountry'])
+            ->getMock();
+
         // Create mocked, empty, instance of Credentials model.
         $this->credentials = $this->objectManager
-            ->getObject(Credentials::class);
+            ->getObject(CredentialsModel::class);
 
-        // General mock of PaymentMethods service class, applicable in most
-        // tests.
-        $this->paymentMethods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        // Setup mock of Payment Method data as it would appearing after being
-        // converted from an API call.
-        $this->convertedMethodData = [
-            PaymentMethodInterface::IDENTIFIER => 'invoice',
-            PaymentMethodInterface::TITLE => 'Invoice Nr. 1',
-            PaymentMethodInterface::MIN_ORDER_TOTAL => 10,
-            PaymentMethodInterface::MAX_ORDER_TOTAL => 50000,
-            PaymentMethodInterface::RAW => json_encode(
-                ['array', 'with', 'lots', 'of', 'data']
-            )
-        ];
+        // Mock of PaymentMethods service class.
+        $this->paymentMethods = $this->objectManager->getObject(
+            PaymentMethods::class,
+            [
+                'api' => $this->api,
+                'credentials' => $this->credentialsHelper
+            ]
+        );
     }
 
     /**
@@ -122,11 +142,7 @@ class PaymentMethodsTest extends TestCase
                 new Exception('Some connection error.')
             ));
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $methods->fetch($this->credentials);
+        $this->paymentMethods->fetch($this->credentials);
     }
 
     /**
@@ -153,11 +169,7 @@ class PaymentMethodsTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connection);
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $methods->fetch($this->credentials);
+        $this->paymentMethods->fetch($this->credentials);
     }
 
     /**
@@ -210,12 +222,68 @@ class PaymentMethodsTest extends TestCase
     }
 
     /**
+     * Assert that the getCode method will return a string matching the pattern
+     * [resursbank_][invoice][_][myusername_1]
+     */
+    public function testGetCode(): void
+    {
+        $this->credentialsHelper
+            ->expects(static::once())
+            ->method('getMethodSuffix')
+            ->will(static::returnValue('batman_' . RESURS_ENVIRONMENTS::TEST));
+
+        try {
+            static::assertSame(
+                (
+                    PaymentMethods::CODE_PREFIX .
+                    'invoice_' .
+                    'batman_' .
+                    RESURS_ENVIRONMENTS::TEST
+                ),
+                $this->paymentMethods->getCode('invoice', $this->credentials)
+            );
+        } catch (ValidatorException $error) {
+            static::fail(
+                'Unexpected ValidatorException while resolving method code.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the getCode method will convert method identifier to
+     * lowercase.
+     */
+    public function testGetCodeWillLowercaseMethodIdentifier(): void
+    {
+        $this->credentialsHelper
+            ->expects(static::once())
+            ->method('getMethodSuffix')
+            ->will(static::returnValue('tony_' . RESURS_ENVIRONMENTS::TEST));
+
+        try {
+            static::assertSame(
+                (
+                    PaymentMethods::CODE_PREFIX .
+                    'partpay_' .
+                    'tony_' .
+                    RESURS_ENVIRONMENTS::TEST
+                ),
+                $this->paymentMethods->getCode('PartPAY', $this->credentials)
+            );
+        } catch (ValidatorException $error) {
+            static::fail(
+                'Unexpected ValidatorException while resolving method code.'
+            );
+        }
+    }
+
+    /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to generate a payment method code without an identifier value.
      *
      * @throws ValidatorException
      */
-    public function testGetCodeThrowsWithEmptyIdentifier()
+    public function testGetCodeThrowsWithEmptyIdentifier(): void
     {
         $this->expectException(ValidatorException::class);
 
@@ -228,7 +296,7 @@ class PaymentMethodsTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testValidateDataThrowsWithoutIdentifier()
+    public function testValidateDataThrowsWithoutIdentifier(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing identifier index.');
@@ -248,7 +316,7 @@ class PaymentMethodsTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testValidateDataThrowsWithoutMinOrderTotal()
+    public function testValidateDataThrowsWithoutMinOrderTotal(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing min_order_total index.');
@@ -270,7 +338,7 @@ class PaymentMethodsTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testValidateDataThrowsWithoutMaxOrderTotal()
+    public function testValidateDataThrowsWithoutMaxOrderTotal(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing max_order_total index.');
@@ -291,7 +359,7 @@ class PaymentMethodsTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testValidateDataThrowsWithoutTitle()
+    public function testValidateDataThrowsWithoutTitle(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing title index.');
@@ -310,7 +378,7 @@ class PaymentMethodsTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testValidateDataThrowsWithoutRaw()
+    public function testValidateDataThrowsWithoutRaw(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing raw index.');
@@ -327,10 +395,12 @@ class PaymentMethodsTest extends TestCase
      * Assert that no Exception will be thrown if all the required data is
      * present in the array submitted to the validateData method.
      *
-     * @throws ReflectionException
+     * NOTE: ValidatorException will be thrown if the data supplied to the
+     * validation method is inaccurate.
+     *
      * @doesNotPerformAssertions
      */
-    public function testValidateData()
+    public function testValidateData(): void
     {
         try {
             $this->getValidateDataMethod($this->paymentMethods)->invoke(
@@ -339,30 +409,298 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ValidatorException $error) {
             static::fail('Unexpected ValidatorException.');
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of validateData method. '
+            );
         }
     }
 
-    public function testResolveMethodDataArrayAcceptsStdClass()
+    /**
+     * Assert that the resolveMethodDataArray method accepts an instance of
+     * stdClass (the expected, though not defined, return value from ECom when
+     * fetching payment methods).
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayAcceptsStdClass(): void
     {
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
-        $this->getValidateDataMethod($methods)->invoke(
-            $methods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                (object)$this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of validateData method. '
+            );
+        }
     }
 
     /**
-     * Retrieve accessible getPath method mock.
+     * Assert that the resolveMethodDataArray method accepts an array.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayAcceptsArray(): void
+    {
+        try {
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of validateData method.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method converts an instance of
+     * stdClass to a simple array.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayConversion(): void
+    {
+        try {
+            static::assertSame(
+                $this->convertedMethodData,
+                $this->getResolveMethodDataArrayMethod(
+                    $this->paymentMethods
+                )->invoke(
+                    $this->paymentMethods,
+                    (object)$this->convertedMethodData
+                )
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of validateData method. '
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method will throw an instance of
+     * IntegrationException when passed an integer.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayDeclinesInt(): void
+    {
+        try {
+            $this->expectException(IntegrationException::class);
+
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                5
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of resolveMethodDataArray method.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method will throw an instance of
+     * IntegrationException when passed a float.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayDeclinesFloat(): void
+    {
+        try {
+            $this->expectException(IntegrationException::class);
+
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                786.33
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of resolveMethodDataArray method.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method will throw an instance of
+     * IntegrationException when passed a float.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayDeclinesBool(): void
+    {
+        try {
+            $this->expectException(IntegrationException::class);
+
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                true
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of resolveMethodDataArray method.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method will throw an instance of
+     * IntegrationException when passed null.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testResolveMethodDataArrayDeclinesNull(): void
+    {
+        try {
+            $this->expectException(IntegrationException::class);
+
+            $this->getResolveMethodDataArrayMethod(
+                $this->paymentMethods
+            )->invoke(
+                $this->paymentMethods,
+                null
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate reflection of resolveMethodDataArray method.'
+            );
+        }
+    }
+
+    /**
+     * Assert that the resolveMethodDataArray method converts an instance of
+     * stdClass to a simple array.
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testFillMethod(): void
+    {
+        try {
+            // Modify return value of a number of methods involved in the
+            // process which fills an instance of the Method data model.
+            $this->credentials
+                ->setEnvironment(RESURS_ENVIRONMENTS::TEST)
+                ->setUsername('Montana')
+                ->setPassword('dneirfelttilymotollehyas');
+
+            $this->credentialsHelper
+                ->expects(static::once())
+                ->method('getCountry')
+                ->will(static::returnValue('SE'));
+
+            $this->credentialsHelper
+                ->expects(static::once())
+                ->method('getMethodSuffix')
+                ->will(
+                    static::returnValue('tony_' . RESURS_ENVIRONMENTS::TEST)
+                );
+
+            /** @var PaymentMethodModel $method */
+            $method = $this->objectManager->getObject(
+                PaymentMethodModel::class
+            );
+
+            // Fill method model instance with data.
+            $this->getFillMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $method,
+                $this->convertedMethodData,
+                $this->credentials
+            );
+
+            // Assert property identifier was assigned the expected value.
+            static::assertSame(
+                $this->convertedMethodData[PaymentMethodInterface::IDENTIFIER],
+                $method->getIdentifier(),
+            );
+
+            // Assert property title was assigned the expected value.
+            static::assertSame(
+                $this->convertedMethodData[PaymentMethodInterface::TITLE],
+                $method->getTitle(),
+            );
+
+            // Assert property min_order_total was assigned the expected value.
+            static::assertSame(
+                (float) $this->convertedMethodData[
+                    PaymentMethodInterface::MIN_ORDER_TOTAL
+                ],
+                $method->getMinOrderTotal(),
+            );
+
+            // Assert property max_order_total was assigned the expected value.
+            static::assertSame(
+                (float) $this->convertedMethodData[
+                PaymentMethodInterface::MAX_ORDER_TOTAL
+                ],
+                $method->getMaxOrderTotal(),
+            );
+
+            // Assert property raw was assigned the expected value.
+            static::assertSame(
+                $this->convertedMethodData[PaymentMethodInterface::RAW],
+                $method->getRaw(),
+            );
+
+            // Assert property code was assigned the expected value.
+            static::assertSame(
+                (
+                    PaymentMethods::CODE_PREFIX .
+                    $this->convertedMethodData[
+                        PaymentMethodInterface::IDENTIFIER
+                    ] .
+                    '_tony_' .
+                     RESURS_ENVIRONMENTS::TEST
+                ),
+                $method->getCode()
+            );
+
+            // Assert property active was assigned the expected value.
+            static::assertSame(
+                true,
+                $method->getActive()
+            );
+
+            // Assert property specific_country was assigned the expected value.
+            static::assertSame(
+                'SE',
+                $method->getSpecificCountry()
+            );
+        } catch (ValidatorException $error) {
+            static::fail(
+                'Unexpected ValidatorException.'
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                $error->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Retrieve accessible validateData method mock.
      *
      * @param PaymentMethods $obj
      * @return ReflectionMethod
      * @throws ReflectionException
      */
-    private function getValidateDataMethod(PaymentMethods $obj): ReflectionMethod
-    {
+    private function getValidateDataMethod(
+        PaymentMethods $obj
+    ): ReflectionMethod {
         $obj = new ReflectionObject($obj);
         $method = $obj->getMethod('validateData');
         $method->setAccessible(true);
@@ -371,7 +709,7 @@ class PaymentMethodsTest extends TestCase
     }
 
     /**
-     * Retrieve accessible getPath method mock.
+     * Retrieve accessible resolveMethodDataArray method mock.
      *
      * @param PaymentMethods $obj
      * @return ReflectionMethod
@@ -382,6 +720,23 @@ class PaymentMethodsTest extends TestCase
     ): ReflectionMethod {
         $obj = new ReflectionObject($obj);
         $method = $obj->getMethod('resolveMethodDataArray');
+        $method->setAccessible(true);
+
+        return $method;
+    }
+
+    /**
+     * Retrieve accessible fill method mock.
+     *
+     * @param PaymentMethods $obj
+     * @return ReflectionMethod
+     * @throws ReflectionException
+     */
+    private function getFillMethod(
+        PaymentMethods $obj
+    ): ReflectionMethod {
+        $obj = new ReflectionObject($obj);
+        $method = $obj->getMethod('fill');
         $method->setAccessible(true);
 
         return $method;

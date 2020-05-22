@@ -206,8 +206,8 @@ class Credentials extends AbstractHelper
             );
         }
 
-        return $this->config->getDefaultCountry(
+        return strtoupper($this->config->getDefaultCountry(
             $credentials->getStore()->getCode()
-        );
+        ));
     }
 }

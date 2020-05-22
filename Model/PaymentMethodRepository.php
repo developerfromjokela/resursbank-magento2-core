@@ -132,6 +132,30 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws NoSuchEntityException
+     */
+    public function getByCode(string $code): PaymentMethodInterface
+    {
+        /** @var PaymentMethod $result */
+        $result = $this->methodFactory->create();
+
+        $this->resourceModel->load(
+            $result,
+            $code,
+            PaymentMethodInterface::CODE
+        );
+
+        if (!$result->getId()) {
+            throw new NoSuchEntityException(
+                __('Unable to find payment method with code %1', $code)
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria

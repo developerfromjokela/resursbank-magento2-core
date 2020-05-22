@@ -13,6 +13,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
@@ -94,22 +95,32 @@ class PaymentMethods extends AbstractHelper
      * @throws IntegrationException
      * @throws StateException
      * @throws ValidatorException
+     * @throws NoSuchEntityException
      */
     public function sync(
         CredentialsModel $credentials
     ): void {
         foreach ($this->fetch($credentials) as $methodData) {
-            $method = $this->methodFactory->create();
-
-            $this->fillMethod(
-                $method,
-                $this->converter->convert(
-                    $this->resolveMethodDataArray($methodData)
-                ),
-                $credentials
+            // Convert data.
+            $data = $this->converter->convert(
+                $this->resolveMethodDataArray($methodData)
             );
 
-            $this->repository->save($method);
+            // Validate converted data to ensure we have everything.
+            $this->validateData($data);
+
+            /** @var PaymentMethodInterface $method */
+            $method = $this->repository->getByCode(
+                $this->getCode(
+                    $data[PaymentMethodInterface::IDENTIFIER],
+                    $credentials
+                )
+            );
+
+            // Overwrite data on method model instance of update db record.
+            $this->repository->save(
+                $this->fill($method, $data, $credentials)
+            );
         }
     }
 
@@ -232,17 +243,15 @@ class PaymentMethods extends AbstractHelper
      * @param PaymentMethodInterface $method
      * @param array $data
      * @param CredentialsModel $credentials
-     * @return void
+     * @return PaymentMethodInterface
      * @throws ValidatorException
      * @throws StateException
      */
-    private function fillMethod(
-        PaymentMethodInterface &$method,
+    private function fill(
+        PaymentMethodInterface $method,
         array $data,
         CredentialsModel $credentials
-    ): void {
-        $this->validateData($data);
-
+    ): PaymentMethodInterface {
         $method->setIdentifier(
             $data[PaymentMethodInterface::IDENTIFIER]
         )->setTitle(
@@ -263,5 +272,7 @@ class PaymentMethods extends AbstractHelper
         )->setSpecificCountry(
             $this->credentials->getCountry($credentials)
         );
+
+        return $method;
     }
 }
