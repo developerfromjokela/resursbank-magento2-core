@@ -17,8 +17,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
@@ -54,6 +54,7 @@ class PaymentMethods extends AbstractHelper
      * @var Repository
      */
     private $repository;
+
     /**
      * @var Credentials
      */
@@ -87,7 +88,7 @@ class PaymentMethods extends AbstractHelper
     /**
      * Fetch available methods from Resurs Bank through the ECom API adapter
      * and synchronize them to our database. We do this both for data integrity
-     * and improved access speed.
+     * and improved latency.
      *
      * @param CredentialsModel $credentials
      * @return void
@@ -106,7 +107,7 @@ class PaymentMethods extends AbstractHelper
                 $this->resolveMethodDataArray($methodData)
             );
 
-            // Validate converted data to ensure we have everything.
+            // Validate converted data.
             $this->validateData($data);
 
             /** @var PaymentMethodInterface $method */
@@ -117,7 +118,7 @@ class PaymentMethods extends AbstractHelper
                 )
             );
 
-            // Overwrite data on method model instance of update db record.
+            // Overwrite data on method model instance and update db entry.
             $this->repository->save(
                 $this->fill($method, $data, $credentials)
             );
@@ -173,7 +174,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * The data returns from ECom when fetching payment methods is described
+     * The data returned from ECom when fetching payment methods is described
      * as mixed. We can therefore not be certain what we get back and need to
      * properly convert the data to an array for further processing.
      *
@@ -199,7 +200,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * Validate array with converted payment method data.
+     * Validate converted payment method data.
      *
      * @param array $data
      * @throws ValidatorException
@@ -239,6 +240,9 @@ class PaymentMethods extends AbstractHelper
 
     /**
      * Fill Payment Method data model with data from anonymous array.
+     *
+     * NOTE: The data array supplied to this method should always be validated
+     * using the validateData method.
      *
      * @param PaymentMethodInterface $method
      * @param array $data

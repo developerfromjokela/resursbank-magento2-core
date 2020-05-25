@@ -29,6 +29,8 @@ use Resursbank\RBEcomPHP\ResursBank;
  * Test cases designed for Resursbank\Core\Helper\PaymentMethods
  *
  * @package Resursbank\Core\Test\Unit\Helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class PaymentMethodsTest extends TestCase
 {
@@ -280,8 +282,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to generate a payment method code without an identifier value.
-     *
-     * @throws ValidatorException
      */
     public function testGetCodeThrowsWithEmptyIdentifier(): void
     {
@@ -293,8 +293,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to validate converted method data where the identifier index is absent.
-     *
-     * @throws ReflectionException
      */
     public function testValidateDataThrowsWithoutIdentifier(): void
     {
@@ -303,18 +301,22 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::IDENTIFIER]);
 
-        $this->getValidateDataMethod($this->paymentMethods)->invoke(
-            $this->paymentMethods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate method reflection of validateData'
+            );
+        }
     }
 
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to validate converted method data where the min_order_total index is
      * absent.
-     *
-     * @throws ReflectionException
      */
     public function testValidateDataThrowsWithoutMinOrderTotal(): void
     {
@@ -325,18 +327,22 @@ class PaymentMethodsTest extends TestCase
             $this->convertedMethodData[PaymentMethodInterface::MIN_ORDER_TOTAL]
         );
 
-        $this->getValidateDataMethod($this->paymentMethods)->invoke(
-            $this->paymentMethods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate method reflection of validateData'
+            );
+        }
     }
 
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to validate converted method data where the max_order_total index is
      * absent.
-     *
-     * @throws ReflectionException
      */
     public function testValidateDataThrowsWithoutMaxOrderTotal(): void
     {
@@ -347,17 +353,21 @@ class PaymentMethodsTest extends TestCase
             $this->convertedMethodData[PaymentMethodInterface::MAX_ORDER_TOTAL]
         );
 
-        $this->getValidateDataMethod($this->paymentMethods)->invoke(
-            $this->paymentMethods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate method reflection of validateData'
+            );
+        }
     }
 
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to validate converted method data where the title index is absent.
-     *
-     * @throws ReflectionException
      */
     public function testValidateDataThrowsWithoutTitle(): void
     {
@@ -366,17 +376,21 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::TITLE]);
 
-        $this->getValidateDataMethod($this->paymentMethods)->invoke(
-            $this->paymentMethods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate method reflection of validateData'
+            );
+        }
     }
 
     /**
      * Assert that an instance of ValidatorException is thrown when we attempt
      * to validate converted method data where the raw index is absent.
-     *
-     * @throws ReflectionException
      */
     public function testValidateDataThrowsWithoutRaw(): void
     {
@@ -385,10 +399,16 @@ class PaymentMethodsTest extends TestCase
 
         unset($this->convertedMethodData[PaymentMethodInterface::RAW]);
 
-        $this->getValidateDataMethod($this->paymentMethods)->invoke(
-            $this->paymentMethods,
-            $this->convertedMethodData
-        );
+        try {
+            $this->getValidateDataMethod($this->paymentMethods)->invoke(
+                $this->paymentMethods,
+                $this->convertedMethodData
+            );
+        } catch (ReflectionException $error) {
+            static::fail(
+                'Failed to initiate method reflection of validateData'
+            );
+        }
     }
 
     /**
@@ -421,6 +441,9 @@ class PaymentMethodsTest extends TestCase
      * stdClass (the expected, though not defined, return value from ECom when
      * fetching payment methods).
      *
+     * NOTE: The expectation is that no Exception is thrown when the method
+     * executes, thus the doesNotPerformAssertions annotation.
+     *
      * @doesNotPerformAssertions
      */
     public function testResolveMethodDataArrayAcceptsStdClass(): void
@@ -441,6 +464,9 @@ class PaymentMethodsTest extends TestCase
 
     /**
      * Assert that the resolveMethodDataArray method accepts an array.
+     *
+     * NOTE: The expectation is that no Exception is thrown when the method
+     * executes, thus the doesNotPerformAssertions annotation.
      *
      * @doesNotPerformAssertions
      */
@@ -463,8 +489,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that the resolveMethodDataArray method converts an instance of
      * stdClass to a simple array.
-     *
-     * @doesNotPerformAssertions
      */
     public function testResolveMethodDataArrayConversion(): void
     {
@@ -488,8 +512,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that the resolveMethodDataArray method will throw an instance of
      * IntegrationException when passed an integer.
-     *
-     * @doesNotPerformAssertions
      */
     public function testResolveMethodDataArrayDeclinesInt(): void
     {
@@ -504,7 +526,7 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ReflectionException $error) {
             static::fail(
-                'Failed to initiate reflection of resolveMethodDataArray method.'
+                'Failed to initiate method reflection of resolveMethodDataArray'
             );
         }
     }
@@ -512,8 +534,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that the resolveMethodDataArray method will throw an instance of
      * IntegrationException when passed a float.
-     *
-     * @doesNotPerformAssertions
      */
     public function testResolveMethodDataArrayDeclinesFloat(): void
     {
@@ -528,16 +548,14 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ReflectionException $error) {
             static::fail(
-                'Failed to initiate reflection of resolveMethodDataArray method.'
+                'Failed to initiate method reflection of resolveMethodDataArray'
             );
         }
     }
 
     /**
      * Assert that the resolveMethodDataArray method will throw an instance of
-     * IntegrationException when passed a float.
-     *
-     * @doesNotPerformAssertions
+     * IntegrationException when passed a bool.
      */
     public function testResolveMethodDataArrayDeclinesBool(): void
     {
@@ -552,7 +570,7 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ReflectionException $error) {
             static::fail(
-                'Failed to initiate reflection of resolveMethodDataArray method.'
+                'Failed to initiate method reflection of resolveMethodDataArray'
             );
         }
     }
@@ -560,8 +578,6 @@ class PaymentMethodsTest extends TestCase
     /**
      * Assert that the resolveMethodDataArray method will throw an instance of
      * IntegrationException when passed null.
-     *
-     * @doesNotPerformAssertions
      */
     public function testResolveMethodDataArrayDeclinesNull(): void
     {
@@ -576,18 +592,18 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ReflectionException $error) {
             static::fail(
-                'Failed to initiate reflection of resolveMethodDataArray method.'
+                'Failed to initiate method reflection of resolveMethodDataArray'
             );
         }
     }
 
     /**
-     * Assert that the resolveMethodDataArray method converts an instance of
-     * stdClass to a simple array.
+     * Assert that the fill method works by comparing the value of each assigned
+     * property on the resulting data model to the data supplied to the method.
      *
-     * @doesNotPerformAssertions
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFillMethod(): void
+    public function testFill(): void
     {
         try {
             // Modify return value of a number of methods involved in the
@@ -606,7 +622,7 @@ class PaymentMethodsTest extends TestCase
                 ->expects(static::once())
                 ->method('getMethodSuffix')
                 ->will(
-                    static::returnValue('tony_' . RESURS_ENVIRONMENTS::TEST)
+                    static::returnValue('cassandra_' . RESURS_ENVIRONMENTS::TEST)
                 );
 
             /** @var PaymentMethodModel $method */
@@ -663,7 +679,7 @@ class PaymentMethodsTest extends TestCase
                     $this->convertedMethodData[
                         PaymentMethodInterface::IDENTIFIER
                     ] .
-                    '_tony_' .
+                    '_cassandra_' .
                      RESURS_ENVIRONMENTS::TEST
                 ),
                 $method->getCode()
@@ -686,7 +702,7 @@ class PaymentMethodsTest extends TestCase
             );
         } catch (ReflectionException $error) {
             static::fail(
-                $error->getMessage()
+                'Failed to initiate reflection of fill method.'
             );
         }
     }

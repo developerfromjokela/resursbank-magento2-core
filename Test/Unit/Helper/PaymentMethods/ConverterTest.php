@@ -59,18 +59,31 @@ class ConverterTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->converter = $this->objectManager->getObject(Converter::class);
+
         $this->apiData = [
             Converter::KEY_ID => 'invoice',
             Converter::KEY_DESCRIPTION => 'My Invoice',
             Converter::KEY_MIN_LIMIT => '150',
             Converter::KEY_MAX_LIMIT => '160.50'
         ];
+
         $this->modelData = [
-            PaymentMethodInterface::IDENTIFIER => $this->apiData[Converter::KEY_ID],
-            PaymentMethodInterface::TITLE => $this->apiData[Converter::KEY_DESCRIPTION],
-            PaymentMethodInterface::MIN_ORDER_TOTAL => $this->apiData[Converter::KEY_MIN_LIMIT],
-            PaymentMethodInterface::MAX_ORDER_TOTAL => $this->apiData[Converter::KEY_MAX_LIMIT]
+            PaymentMethodInterface::IDENTIFIER => $this->apiData[
+                Converter::KEY_ID
+            ],
+            PaymentMethodInterface::TITLE => $this->apiData[
+                Converter::KEY_DESCRIPTION
+            ],
+            PaymentMethodInterface::MIN_ORDER_TOTAL => (float) $this->apiData[
+                Converter::KEY_MIN_LIMIT
+            ],
+            PaymentMethodInterface::MAX_ORDER_TOTAL => (float) $this->apiData[
+                Converter::KEY_MAX_LIMIT
+            ]
         ];
+
+        $this->modelData[PaymentMethodInterface::RAW] =
+            json_encode($this->apiData);
     }
 
     /**
