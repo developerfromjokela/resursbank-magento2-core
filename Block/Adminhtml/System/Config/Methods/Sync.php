@@ -31,7 +31,7 @@ class Sync extends Button
     {
         return $this->create(
             $element,
-            'Sync',
+            'Sync methods now',
             'resursbank_core/methods/sync'
         );
     }
