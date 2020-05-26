@@ -96,7 +96,6 @@ class PaymentMethods extends AbstractHelper
      * @throws IntegrationException
      * @throws StateException
      * @throws ValidatorException
-     * @throws NoSuchEntityException
      */
     public function sync(
         CredentialsModel $credentials
