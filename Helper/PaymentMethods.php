@@ -110,13 +110,17 @@ class PaymentMethods extends AbstractHelper
             // Validate converted data.
             $this->validateData($data);
 
-            /** @var PaymentMethodInterface $method */
-            $method = $this->repository->getByCode(
-                $this->getCode(
-                    $data[PaymentMethodInterface::IDENTIFIER],
-                    $credentials
-                )
-            );
+            try {
+                /** @var PaymentMethodInterface $method */
+                $method = $this->repository->getByCode(
+                    $this->getCode(
+                        $data[PaymentMethodInterface::IDENTIFIER],
+                        $credentials
+                    )
+                );
+            } catch (NoSuchEntityException $e) {
+                $method = $this->methodFactory->create();
+            }
 
             // Overwrite data on method model instance and update db entry.
             $this->repository->save(
