@@ -10,6 +10,7 @@ namespace Resursbank\Core\Test\Unit\Model\Api;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Model\Api\Credentials;
 
@@ -31,6 +32,11 @@ class CredentialsTest extends TestCase
     private $credentials;
 
     /**
+     * @var Store
+     */
+    private $store;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -38,6 +44,7 @@ class CredentialsTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->credentials = $this->objectManager
             ->getObject(Credentials::class);
+        $this->store = $this->objectManager->getObject(Store::class);
     }
 
     /**
@@ -120,5 +127,31 @@ class CredentialsTest extends TestCase
         $this->expectException(ValidatorException::class);
 
         $this->credentials->setEnvironment(2);
+    }
+
+    /**
+     * Assert the store setter works.
+     *
+     * @return void
+     */
+    public function testSetStore(): void
+    {
+        $this->credentials->setStore($this->store);
+
+        static::assertInstanceOf(Store::class, $this->credentials->getStore());
+    }
+
+    /**
+     * Assert the store getter works.
+     *
+     * @return void
+     */
+    public function testGetStoreReturns(): void
+    {
+        static::assertNull($this->credentials->getStore());
+
+        $this->credentials->setStore($this->store);
+
+        static::assertInstanceOf(Store::class, $this->credentials->getStore());
     }
 }
