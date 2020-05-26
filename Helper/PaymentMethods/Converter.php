@@ -22,6 +22,7 @@ namespace Resursbank\Core\Helper\PaymentMethods;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Model\Order;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 
 /**
  * Convert payment method data from the Resurs Bank API to data which can be
@@ -72,26 +73,6 @@ class Converter extends AbstractHelper
     const DEFAULT_VALUE_ORDER_STATUS = Order::STATE_PENDING_PAYMENT;
 
     /**
-     * @var string
-     */
-    const MODEL_KEY_TITLE = 'description';
-
-    /**
-     * @var string
-     */
-    const MODEL_KEY_IDENTIFIER = 'identifier';
-
-    /**
-     * @var string
-     */
-    const MODEL_KEY_MIN_ORDER_TOTAL = 'min_order_total';
-
-    /**
-     * @var string
-     */
-    const MODEL_KEY_MAX_ORDER_TOTAL = 'max_order_total';
-
-    /**
      * @param array $data
      * @return array
      * @throws ValidatorException
@@ -110,10 +91,11 @@ class Converter extends AbstractHelper
 
         // Convert to data Magento can interpret and return.
         return [
-            self::MODEL_KEY_IDENTIFIER => $this->getIdentifier($data),
-            self::MODEL_KEY_MIN_ORDER_TOTAL => $this->getMinLimit($data),
-            self::MODEL_KEY_MAX_ORDER_TOTAL => $this->getMaxLimit($data),
-            self::MODEL_KEY_TITLE => $this->getDescription($data)
+            PaymentMethodInterface::IDENTIFIER => $this->getIdentifier($data),
+            PaymentMethodInterface::MIN_ORDER_TOTAL => $this->getMinLimit($data),
+            PaymentMethodInterface::MAX_ORDER_TOTAL => $this->getMaxLimit($data),
+            PaymentMethodInterface::TITLE => $this->getDescription($data),
+            PaymentMethodInterface::RAW => json_encode($data)
         ];
     }
 

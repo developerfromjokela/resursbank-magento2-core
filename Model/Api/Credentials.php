@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api;
 
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Store\Api\Data\StoreInterface;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
@@ -30,6 +31,11 @@ class Credentials
      * @var int
      */
     private $environment;
+
+    /**
+     * @var StoreInterface
+     */
+    private $store;
 
     /**
      * @param string $username
@@ -112,5 +118,24 @@ class Credentials
     public function getEnvironment(): ?int
     {
         return $this->environment;
+    }
+
+    /**
+     * @param StoreInterface $store
+     * @return self
+     */
+    public function setStore(StoreInterface $store): self
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @return StoreInterface|null
+     */
+    public function getStore(): ?StoreInterface
+    {
+        return $this->store;
     }
 }

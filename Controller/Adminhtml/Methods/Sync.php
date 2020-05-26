@@ -63,9 +63,9 @@ class Sync extends Action
     public function execute()
     {
         try {
-            $this->paymentMethods->sync(
-                $this->credentials->resolveFromConfig()
-            );
+            foreach ($this->credentials->getCollection() as $credentials) {
+                $this->paymentMethods->sync($credentials);
+            }
 
             // Add success message.
             $this->getMessageManager()->addSuccessMessage(

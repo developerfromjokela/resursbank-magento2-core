@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper\Api;
 
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\Core\Helper\Api\Credentials as Helper;
+use Resursbank\Core\Model\Api\Credentials as Model;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 /**
@@ -38,15 +40,19 @@ class CredentialsTest extends TestCase
     private $helper;
 
     /**
+     * @var Store
+     */
+    private $store;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager
-            ->getObject(Model::class);
-        $this->helper = $this->objectManager
-            ->getObject(Helper::class);
+        $this->model = $this->objectManager->getObject(Model::class);
+        $this->helper = $this->objectManager->getObject(Helper::class);
+        $this->store = $this->objectManager->getObject(Store::class);
     }
 
     /**
@@ -154,6 +160,11 @@ class CredentialsTest extends TestCase
     public function testExceptionThrownWithoutEnvWhenGettingSuffix(): void
     {
         $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage(
+            'Failed to resolve method suffix. Missing environment.'
+        );
+
+        $this->model->setUsername('janus');
 
         $this->helper->getMethodSuffix($this->model);
     }
@@ -169,6 +180,9 @@ class CredentialsTest extends TestCase
     public function testExceptionThrownWithoutUsernameWhenGettingSuffix(): void
     {
         $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage(
+            'Failed to resolve method suffix. Missing username.'
+        );
 
         $this->model->setEnvironment(1);
 
@@ -211,5 +225,18 @@ class CredentialsTest extends TestCase
             'bunny_' . RESURS_ENVIRONMENTS::TEST,
             $this->helper->getMethodSuffix($this->model)
         );
+    }
+
+    /**
+     * Assert that an instance of StateException is thrown when there is no
+     * Store instance applied on a Credentials data model instance.
+     *
+     * @throws StateException
+     */
+    public function testGetCountryThrowsWithoutStore(): void
+    {
+        $this->expectException(StateException::class);
+
+        $this->helper->getCountry($this->model);
     }
 }
