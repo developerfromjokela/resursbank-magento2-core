@@ -4,15 +4,15 @@
  * See LICENSE for license details.
  */
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Resursbank\Core\Plugin\Config;
 
 use Exception;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier as Original;
-use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\PaymentMethod;
@@ -31,7 +31,7 @@ class Structure
      * @var Credentials
      */
     private $credentials;
-    
+
     /**
      * @var Log
      */
@@ -40,26 +40,29 @@ class Structure
     /**
      * @var PaymentMethodRepositoryInterface
      */
-    private $paymentMethodRepository;
+    private $paymentMethodRepo;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $searchBuilder;
 
     /**
+     * @param Credentials $credentials
      * @param Log $log
+     * @param PaymentMethodRepositoryInterface $paymentMethodRepo
+     * @param SearchCriteriaBuilder $searchBuilder
      */
     public function __construct(
         Credentials $credentials,
         Log $log,
-        PaymentMethodRepositoryInterface $paymentMethodRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        PaymentMethodRepositoryInterface $paymentMethodRepo,
+        SearchCriteriaBuilder $searchBuilder
     ) {
         $this->credentials = $credentials;
         $this->log = $log;
-        $this->paymentMethodRepository = $paymentMethodRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->paymentMethodRepo = $paymentMethodRepo;
+        $this->searchBuilder = $searchBuilder;
     }
 
     /**
@@ -82,8 +85,8 @@ class Structure
 
                 // Amend array structure for our payment methods.
                 $methods = &$result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']['children']
-                ['methods'];
+                    ['resursbank_section']['children']['resursbank']['children']
+                    ['methods'];
 
                 if (!isset($methods['children']) ||
                     !is_array($methods['children'])
@@ -109,18 +112,19 @@ class Structure
      * Get the payment methods for the current user.
      *
      * @return array
+     * @throws ValidatorException
      */
     private function getPaymentMethods(): array
     {
         $credentials = $this->credentials->resolveFromConfig();
-        
-        $searchCriteria =  $this->searchCriteriaBuilder->addFilter(
+
+        $searchCriteria = $this->searchBuilder->addFilter(
             PaymentMethodInterface::CODE,
             "%{$this->credentials->getMethodSuffix($credentials)}",
             'like'
         )->create();
 
-        return $this->paymentMethodRepository->getList($searchCriteria)->getItems();
+        return $this->paymentMethodRepo->getList($searchCriteria)->getItems();
     }
 
     /**
@@ -155,9 +159,9 @@ class Structure
                     'label' => 'Sort Order',
                     '_elementType' => 'field',
                     'path' => "payment/resursbank_section/resursbank/methods/{$method->getCode()}",
-                    'config_path' => "resursbank/methods/{$method->getCode()}/sort"
-                ]
-            ]
+                    'config_path' => "resursbank/methods/{$method->getCode()}/sort",
+                ],
+            ],
         ];
     }
 
