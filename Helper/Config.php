@@ -87,4 +87,20 @@ class Config extends AbstractConfig
             $scopeType
         );
     }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getDefaultCountry(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): string {
+        return (string) $this->reader->getValue(
+            'general/country/default',
+            $scopeType,
+            $scopeCode
+        );
+    }
 }

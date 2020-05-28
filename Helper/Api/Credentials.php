@@ -10,11 +10,15 @@ namespace Resursbank\Core\Helper\Api;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
+use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Business logic for corresponding data model Model\Api\Credentials.
@@ -34,17 +38,25 @@ class Credentials extends AbstractHelper
     private $objectManager;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Context $context
      * @param Config $config
      * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
         Config $config,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
+        $this->storeManager = $storeManager;
 
         parent::__construct($context);
     }
@@ -103,6 +115,12 @@ class Credentials extends AbstractHelper
             );
         }
 
+        if ($model->getEnvironment() === null) {
+            throw new ValidatorException(
+                __('Failed to resolve method suffix. Missing environment.')
+            );
+        }
+
         return strtolower(
             $model->getUsername() . '_' . $model->getEnvironment()
         );
@@ -130,5 +148,66 @@ class Credentials extends AbstractHelper
         )->setPassword(
             $this->config->getPassword($scopeCode, $scopeType)
         );
+    }
+
+    /**
+     * Returns distinct collection of API credentials from configuration.
+     *
+     * @return array
+     * @throws ValidatorException
+     */
+    public function getCollection(): array
+    {
+        $list = [];
+
+        /** @var StoreInterface $store */
+        foreach ($this->storeManager->getStores() as $store) {
+            /** @var CredentialsModel $credentials */
+            $credentials = $this->resolveFromConfig(
+                $store->getCode()
+            );
+
+            $credentials->setStore($store);
+
+            /** @var string $hash */
+            $hash = $this->getHash($credentials);
+
+            // Never process the same API account twice.
+            if (!array_key_exists($hash, $list)) {
+                $list[$hash] = $credentials;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param CredentialsModel $credentials
+     * @return bool
+     */
+    public function isTestAccount(CredentialsModel $credentials): bool
+    {
+        return $credentials->getEnvironment() === ResursBank::ENVIRONMENT_TEST;
+    }
+
+    /**
+     * NOTE: This method may result in an empty string if no country is
+     * configured for the provided store.
+     *
+     * @param CredentialsModel $credentials
+     * @return string
+     * @throws StateException
+     */
+    public function getCountry(CredentialsModel $credentials): string
+    {
+        if ($credentials->getStore() === null) {
+            throw new StateException(
+                __('Country code cannot be resolved without a store instance.')
+            );
+        }
+
+        return strtoupper($this->config->getDefaultCountry(
+            $credentials->getStore()->getCode()
+        ));
     }
 }
