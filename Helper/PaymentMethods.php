@@ -23,6 +23,7 @@ use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * @package Resursbank\Core\Helper
@@ -61,12 +62,18 @@ class PaymentMethods extends AbstractHelper
     private $credentials;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchBuilder;
+
+    /**
      * @param Context $context
      * @param Api $api
      * @param PaymentMethodFactory $methodFactory
      * @param Converter $converter
      * @param Repository $repository
      * @param Credentials $credentials
+     * @param SearchCriteriaBuilder $searchBuilder
      */
     public function __construct(
         Context $context,
@@ -74,13 +81,15 @@ class PaymentMethods extends AbstractHelper
         PaymentMethodFactory $methodFactory,
         Converter $converter,
         Repository $repository,
-        Credentials $credentials
+        Credentials $credentials,
+        SearchCriteriaBuilder $searchBuilder
     ) {
         $this->api = $api;
         $this->methodFactory = $methodFactory;
         $this->converter = $converter;
         $this->repository = $repository;
         $this->credentials = $credentials;
+        $this->searchBuilder = $searchBuilder;
 
         parent::__construct($context);
     }
@@ -100,6 +109,15 @@ class PaymentMethods extends AbstractHelper
     public function sync(
         CredentialsModel $credentials
     ): void {
+        /**
+         * Deactivate methods currently tracked in the database prior to syncing
+         * entries from the API. This is to ensure methods which have been
+         * deactivated in the API (thus no longer included in the result from
+         * our API call to fetch payment methods) won't be listed in checkout.
+         */
+        $this->deactivateMethods();
+
+        // Fetch methods from the API and store them in our db.
         foreach ($this->fetch($credentials) as $methodData) {
             // Convert data.
             $data = $this->converter->convert(
@@ -149,6 +167,34 @@ class PaymentMethods extends AbstractHelper
         }
 
         return $methods;
+    }
+
+    /**
+     * Deactivate all methods tracked in the db.
+     *
+     * @throws AlreadyExistsException
+     */
+    public function deactivateMethods(): void
+    {
+        foreach ($this->getActiveMethods() as $method) {
+            $this->repository->save($method->setActive(false));
+        }
+    }
+
+    /**
+     * Retrieve collection of all active methods tracked in our db.
+     *
+     * @return PaymentMethodInterface[]
+     */
+    public function getActiveMethods(): array
+    {
+        $searchCriteria = $this->searchBuilder->addFilter(
+            PaymentMethodInterface::ACTIVE,
+            true,
+            'eq'
+        )->create();
+
+        return $this->repository->getList($searchCriteria)->getItems();
     }
 
     /**
