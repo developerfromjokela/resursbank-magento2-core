@@ -21,6 +21,12 @@
     </constraint>
   </table>
   <table name="sales_order" resource="default">
-    <column xsi:type="varchar" name="resursbank_environment" nullable="false" length="255" comment="The selected environment in Resurs Bank config."/>
+    <!--
+        Be aware of these patches before making changes to this column:
+
+        Setup/Patch/Data/ResursbankIsTest
+        Setup/Patch/Schema/ResursbankIsTest
+    -->
+    <column xsi:type="varchar" name="resursbank_is_test" nullable="true" default="null" onCreate="migrateDataFrom(resursbank_environment)" comment="The selected environment in Resurs Bank config."/>
   </table>
 </schema>
