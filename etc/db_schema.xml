@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
   <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
     <column xsi:type="smallint" name="method_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>

@@ -57,7 +57,7 @@ abstract class AbstractConfig extends AbstractHelper
      * @param string $key
      * @param null|string $scopeCode
      * @param string $scopeType
-     * @return string
+     * @return mixed
      */
     public function get(
         string $group,
@@ -66,6 +66,29 @@ abstract class AbstractConfig extends AbstractHelper
         string $scopeType = ScopeInterface::SCOPE_STORE
     ) {
         return $this->reader->getValue(
+            $this->getPath($group, $key),
+            $scopeType,
+            $scopeCode
+        );
+    }
+
+    /**
+     * NOTE: For an explanation of $scopeCode argument please see the get method
+     * above.
+     *
+     * @param string $group
+     * @param string $key
+     * @param null|string $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isEnabled(
+        string $group,
+        string $key,
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): bool {
+        return $this->reader->isSetFlag(
             $this->getPath($group, $key),
             $scopeType,
             $scopeCode
