@@ -80,7 +80,7 @@ class Config extends AbstractConfig
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORE
     ): bool {
-        return (bool) $this->get(
+        return $this->isEnabled(
             self::GROUP,
             'debug',
             $scopeCode,
@@ -101,6 +101,23 @@ class Config extends AbstractConfig
             'general/country/default',
             $scopeType,
             $scopeCode
+        );
+    }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function autoSyncPaymentMethods(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): bool {
+        return $this->isEnabled(
+            'methods',
+            'auto_sync_method',
+            $scopeCode,
+            $scopeType
         );
     }
 }
