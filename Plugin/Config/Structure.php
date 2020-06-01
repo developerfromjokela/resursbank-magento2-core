@@ -4,12 +4,13 @@
  * See LICENSE for license details.
  */
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace Resursbank\Core\Plugin\Config;
 
 use Exception;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier as Original;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
