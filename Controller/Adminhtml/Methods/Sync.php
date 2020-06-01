@@ -69,14 +69,14 @@ class Sync extends Action
 
             // Add success message.
             $this->getMessageManager()->addSuccessMessage(
-                'Successfully synchronized payment methods.'
+                __('Successfully synchronized payment methods.')
             );
         } catch (Exception $e) {
             $this->log->exception($e);
 
             // Add error message.
             $this->getMessageManager()->addErrorMessage(
-                'Failed to synchronize payment methods.'
+                __('Failed to synchronize payment methods.')
             );
         }
 
