@@ -13,8 +13,9 @@
                 <group id="resursbank" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                     <fieldset_css>complex resursbank-section</fieldset_css>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                    <label>Payments</label>
-
+                    <label>
+                        <![CDATA[<div class="resursbank-payment-logo"></div>]]>
+                    </label>
                     <group id="api" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Resurs Bank API</label>
                         <field id="environment" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">

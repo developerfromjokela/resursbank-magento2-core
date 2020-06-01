@@ -1,0 +1,16 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+.complex.resursbank-section .resursbank-payment-logo {
+    background-image: url("../images/RB_182x65.png");
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    width: 190px;
+    height: 70px;
+    display: inline-block;
+}
+
+.complex.resursbank-section .button-container {
+    float: right;
+}
