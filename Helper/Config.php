@@ -96,7 +96,7 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return bool
      */
-    public function roundItemTaxPercentage(
+    public function roundTaxPercentage(
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORE
     ): bool {
