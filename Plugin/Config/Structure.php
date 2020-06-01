@@ -9,8 +9,14 @@ declare(strict_types=1);
 namespace Resursbank\Core\Plugin\Config;
 
 use Exception;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier as Original;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
+use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Model\PaymentMethod;
 
 /**
  * Create custom configuration sections for all dynamic payment methods.
@@ -23,16 +29,41 @@ use Resursbank\Core\Helper\Log;
 class Structure
 {
     /**
+     * @var Credentials
+     */
+    private $credentials;
+
+    /**
      * @var Log
      */
     private $log;
 
     /**
-     * @param Log $log
+     * @var PaymentMethodRepositoryInterface
      */
-    public function __construct(Log $log)
-    {
+    private $paymentMethodRepo;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchBuilder;
+
+    /**
+     * @param Credentials $credentials
+     * @param Log $log
+     * @param PaymentMethodRepositoryInterface $paymentMethodRepo
+     * @param SearchCriteriaBuilder $searchBuilder
+     */
+    public function __construct(
+        Credentials $credentials,
+        Log $log,
+        PaymentMethodRepositoryInterface $paymentMethodRepo,
+        SearchCriteriaBuilder $searchBuilder
+    ) {
+        $this->credentials = $credentials;
         $this->log = $log;
+        $this->paymentMethodRepo = $paymentMethodRepo;
+        $this->searchBuilder = $searchBuilder;
     }
 
     /**
@@ -51,12 +82,12 @@ class Structure
     ): array {
         try {
             if ($this->hasConfigElement($result)) {
-                $collection = [];
+                $collection = $this->getPaymentMethods();
 
                 // Amend array structure for our payment methods.
                 $methods = &$result['other_payment_methods']['children']
-                ['resursbank_section']['children']['resursbank']['children']
-                ['methods'];
+                    ['resursbank_section']['children']['resursbank']['children']
+                    ['methods'];
 
                 if (!isset($methods['children']) ||
                     !is_array($methods['children'])
@@ -64,6 +95,7 @@ class Structure
                     $methods['children'] = [];
                 }
 
+                /** @var PaymentMethod $method */
                 foreach ($collection as $method) {
                     $this->addPaymentMethod($methods, $method);
                 }
@@ -78,23 +110,42 @@ class Structure
     }
 
     /**
+     * Get the payment methods for the current user.
+     *
+     * @return array
+     * @throws ValidatorException
+     */
+    private function getPaymentMethods(): array
+    {
+        $credentials = $this->credentials->resolveFromConfig();
+
+        $searchCriteria = $this->searchBuilder->addFilter(
+            PaymentMethodInterface::CODE,
+            "%{$this->credentials->getMethodSuffix($credentials)}",
+            'like'
+        )->create();
+
+        return $this->paymentMethodRepo->getList($searchCriteria)->getItems();
+    }
+
+    /**
      * Appends a dynamic payment method to config.
      *
      * @param array $config
-     * @param array $method
+     * @param PaymentMethod $method
      */
     private function addPaymentMethod(
         array &$config,
-        array $method
+        PaymentMethod $method
     ) {
-        $config['children'][$method['code']] = [
-            'id' => $method['code'],
+        $config['children'][$method->getCode()] = [
+            'id' => $method->getCode(),
             'translate' => 'label',
             'sortOrder' => 0,
             'showInDefault' => 1,
             'showInWebsite' => 1,
             'showInStore' => 1,
-            'label' => $method['label'],
+            'label' => $method->getTitle(),
             '_elementType' => 'group',
             'path' => 'payment/resursbank_section/resursbank/methods',
             'children' => [
@@ -108,10 +159,10 @@ class Structure
                     'showInStore' => 1,
                     'label' => 'Sort Order',
                     '_elementType' => 'field',
-                    'path' => "payment/resursbank_section/resursbank/methods/{$method['code']}",
-                    'config_path' => "resursbank/methods/{$method['code']}/sort"
-                ]
-            ]
+                    'path' => "payment/resursbank_section/resursbank/methods/{$method->getCode()}",
+                    'config_path' => "resursbank/methods/{$method->getCode()}/sort",
+                ],
+            ],
         ];
     }
 
