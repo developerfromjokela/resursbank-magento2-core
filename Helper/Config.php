@@ -11,6 +11,9 @@ namespace Resursbank\Core\Helper;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
+ * the AbstractConfig class.
+ *
  * @package Resursbank\Core\Helper
  */
 class Config extends AbstractConfig
@@ -83,6 +86,23 @@ class Config extends AbstractConfig
         return $this->isEnabled(
             self::GROUP,
             'debug',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function roundItemTaxPercentage(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): bool {
+        return $this->isEnabled(
+            self::GROUP,
+            'round_tax_percentage',
             $scopeCode,
             $scopeType
         );
