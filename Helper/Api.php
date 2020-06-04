@@ -29,7 +29,7 @@ class Api extends AbstractHelper
     public function getConnection(
         Credentials $credentials,
         string $userAgent = ''
-    ) {
+    ): ResursBank {
         $connection = new ResursBank(
             $credentials->getUsername(),
             $credentials->getPassword(),
@@ -37,8 +37,18 @@ class Api extends AbstractHelper
         );
 
         $connection->setWsdlCache(true);
-        $connection->setUserAgent($userAgent);
+        $connection->setUserAgent($this->getUserAgent($userAgent));
 
         return $connection;
+    }
+
+    /**
+     * @param string $custom
+     * @return string
+     */
+    private function getUserAgent(
+        string $custom = ''
+    ): string {
+        return $custom === '' ? 'Mage 2' : "Mage 2 + ${custom}";
     }
 }
