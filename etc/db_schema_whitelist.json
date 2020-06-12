@@ -1,0 +1,50 @@
+{
+    "resursbank_checkout_account": {
+        "column": {
+            "account_id": true,
+            "username": true,
+            "environment": true,
+            "salt": true,
+            "created_at": true,
+            "updated_at": true,
+            "is_test": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_ENVIRONMENT": true,
+            "RESURSBANK_CHECKOUT_ACCOUNT_USERNAME_IS_TEST": true
+        }
+    },
+    "resursbank_checkout_account_method": {
+        "column": {
+            "method_id": true,
+            "account_id": true,
+            "identifier": true,
+            "code": true,
+            "active": true,
+            "title": true,
+            "min_order_total": true,
+            "max_order_total": true,
+            "order_status": true,
+            "raw": true,
+            "created_at": true,
+            "updated_at": true,
+            "specificcountry": true
+        },
+        "index": {
+            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_ACCOUNT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_99E4EF33EDA1CA5EEC19A493575FCFB7": true,
+            "RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE": true,
+            "FK_9D924882EF1EBEBF337C1582CFD81DE1": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "resursbank_environment": true,
+            "resursbank_is_test": true
+        }
+    }
+}

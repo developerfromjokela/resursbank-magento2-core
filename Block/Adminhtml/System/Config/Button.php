@@ -1,19 +1,8 @@
 <?php
 /**
- * Copyright 2016 Resurs Bank AB
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 declare(strict_types=1);
 
@@ -21,10 +10,10 @@ namespace Resursbank\Core\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Button as MagentoButton;
-use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\LocalizedException;
-use Resursbank\Core\Helper\Config;
+use Resursbank\Core\Helper\Url;
 
 /**
  * Centralised code for buttons in admin config.
@@ -34,19 +23,19 @@ use Resursbank\Core\Helper\Config;
 class Button extends Field
 {
     /**
-     * @var Config
+     * @var Url
      */
-    private $config;
+    private $url;
 
     /**
-     * @param Config $config
+     * @param Url $url
      * @param Context $context
      */
     public function __construct(
-        Config $config,
+        Url $url,
         Context $context
     ) {
-        $this->config = $config;
+        $this->url = $url;
 
         parent::__construct($context);
     }
@@ -54,11 +43,12 @@ class Button extends Field
     /**
      * Unset some non-related element parameters.
      *
-     * @param  AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
     public function render(AbstractElement $element): string
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
 
         return parent::render($element);
@@ -78,6 +68,7 @@ class Button extends Field
         string $label,
         string $path
     ): string {
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->setElement($element);
 
         return $this->getLayout()
@@ -86,7 +77,7 @@ class Button extends Field
             ->setClass('scalable')
             ->setLabel(__($label))
             ->setOnClick(
-                "setLocation('{$this->config->buildUrl($path)}')"
+                "setLocation('{$this->url->getAdminUrl($path)}')"
             )
             ->toHtml();
     }

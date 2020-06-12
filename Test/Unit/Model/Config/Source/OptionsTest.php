@@ -1,33 +1,21 @@
 <?php
 /**
- * Copyright 2016 Resurs Bank AB
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
  */
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Model\Config\Source;
+namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use Resursbank\Core\Model\Config\Source\Options;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases designed for generic options class.
  *
- * @package Resursbank\Core\Test\Model\Config\Source
+ * @package Resursbank\Core\Test\Unit\Model\Config\Source
  */
 class OptionsTest extends TestCase
 {
@@ -37,7 +25,7 @@ class OptionsTest extends TestCase
     private $objectManager;
 
     /**
-     * @var MockObject
+     * @var Options
      */
     private $options;
 
@@ -55,9 +43,9 @@ class OptionsTest extends TestCase
             ->getMockForAbstractClass();
 
         // Mock return value of toArray method, implemented by subclasses.
-        $this->options->expects($this->once())
+        $this->options->expects(static::once())
             ->method('toArray')
-            ->will($this->returnValue([
+            ->will(static::returnValue([
                 'test' => 'Test',
                 'production' => 'Production'
             ]));
@@ -70,7 +58,7 @@ class OptionsTest extends TestCase
      */
     public function testHasSameNumberOfOptionsAsToArray(): void
     {
-        $this->assertCount(2, $this->options->toOptionArray());
+        static::assertCount(2, $this->options->toOptionArray());
     }
 
     /**
@@ -81,7 +69,7 @@ class OptionsTest extends TestCase
      */
     public function testValueConversionFromToOptionArray(): void
     {
-        $this->assertEquals([
+        static::assertSame([
             [
                 'value' => 'test',
                 'label' => 'Test'

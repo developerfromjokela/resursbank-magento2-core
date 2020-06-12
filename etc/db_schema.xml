@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="resursbank_checkout_account_method" resource="default" engine="innodb" comment="Resurs Bank Payment Method Table">
+    <column xsi:type="smallint" name="method_id" padding="5" unsigned="true" nullable="false" identity="true" comment="Prim Key"/>
+    <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Raw Method ID"/>
+    <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Method Code"/>
+    <column xsi:type="boolean" name="active" nullable="false" comment="Active"/>
+    <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Method Title"/>
+    <column xsi:type="decimal" name="min_order_total" scale="5" precision="15" unsigned="true" nullable="false" default="0" comment="Minimum Order Total"/>
+    <column xsi:type="decimal" name="max_order_total" scale="5" precision="15" unsigned="true" nullable="false" default="0" comment="Maximum Order Total"/>
+    <column xsi:type="varchar" name="order_status" nullable="false" length="255" default="pending_payment" comment="Order Status"/>
+    <column xsi:type="text" name="raw" nullable="true" comment="Raw API Data"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+    <column xsi:type="varchar" name="specificcountry" nullable="false" length="255" comment="Which country the method can be used with"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="method_id"/>
+    </constraint>
+    <constraint xsi:type="unique" referenceId="RESURSBANK_CHECKOUT_ACCOUNT_METHOD_CODE">
+      <column name="code"/>
+    </constraint>
+  </table>
+  <table name="sales_order" resource="default">
+    <!--
+        Be aware of these patches before making changes to this column:
+
+        Setup/Patch/Data/ResursbankIsTest
+        Setup/Patch/Schema/ResursbankIsTest
+    -->
+    <column xsi:type="varchar" name="resursbank_is_test" nullable="true" default="null" onCreate="migrateDataFrom(resursbank_environment)" comment="The selected environment in Resurs Bank config."/>
+  </table>
+</schema>
