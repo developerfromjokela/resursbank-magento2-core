@@ -16,7 +16,7 @@ use Resursbank\Core\Model\Api\Payment\ItemFactory;
 /**
  * Shipping data converter.
  */
-class ShippingItem extends AbstractItem implements ItemInterface
+class ShippingItem extends AbstractItem
 {
     /**
      * @var string
@@ -34,29 +34,27 @@ class ShippingItem extends AbstractItem implements ItemInterface
     private $amount;
 
     /**
-     * @var float
+     * @var int
      */
     private $vatPct;
 
     /**
-     * @param ApiConfig $apiConfig
-     * @param AdvancedConfig $advancedConfig
+     * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
      * @param string $method Shipping method code.
      * @param string $description Shipping method title.
      * @param float $amount Amount incl. tax.
-     * @param float $vatPct Tax percentage.
+     * @param int $vatPct Tax percentage.
      */
     public function __construct(
-        ApiConfig $apiConfig,
-        AdvancedConfig $advancedConfig,
+        Config $config,
         ItemFactory $itemFactory,
         Log $log,
         string $method,
         string $description,
         float $amount,
-        float $vatPct
+        int $vatPct
     ) {
         $this->method = $method;
         $this->description = $description;
@@ -64,8 +62,7 @@ class ShippingItem extends AbstractItem implements ItemInterface
         $this->vatPct = $vatPct;
 
         parent::__construct(
-            $apiConfig,
-            $advancedConfig,
+            $config,
             $itemFactory,
             $log
         );
@@ -113,11 +110,9 @@ class ShippingItem extends AbstractItem implements ItemInterface
     /**
      * @inheritDoc
      */
-    public function getVatPct(): float
+    public function getVatPct(): int
     {
-        return $this->sanitizeVatPct(
-            $this->vatPct
-        );
+        return $this->vatPct;
     }
 
     /**

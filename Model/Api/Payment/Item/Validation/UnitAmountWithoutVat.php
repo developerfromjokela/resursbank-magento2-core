@@ -16,22 +16,22 @@ class UnitAmountWithoutVat extends AbstractValidation implements ValidationInter
     /**
      * @var int
      */
-    private const MIN_INTEGER_LENGTH = 0;
+    public const MIN_INTEGER_LENGTH = 0;
 
     /**
      * @var int
      */
-    private const MAX_INTEGER_LENGTH = 15;
+    public const MAX_INTEGER_LENGTH = 15;
 
     /**
      * @var int
      */
-    private const MIN_DECIMAL_LENGTH = 0;
+    public const MIN_DECIMAL_LENGTH = 0;
 
     /**
      * @var int
      */
-    private const MAX_DECIMAL_LENGTH = 5;
+    public const MAX_DECIMAL_LENGTH = 5;
 
     /**
      * NOTE: This is unsigned since payment items of type DISCOUNT expects a

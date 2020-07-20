@@ -39,7 +39,7 @@ class ResursbankIsTest implements SchemaPatchInterface
     /**
      * {@inheritdoc}
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [
             ResursbankIsTestData::class
@@ -49,7 +49,7 @@ class ResursbankIsTest implements SchemaPatchInterface
     /**
      * {@inheritdoc}
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }

@@ -19,7 +19,7 @@ class VatPct extends AbstractValidation implements ValidationInterface
      *
      * @var string[]
      */
-    private const ALLOWED_VALUES = [
+    public const ALLOWED_VALUES = [
         0, 6, 12, 25, 8, 15, 10, 14, 24
     ];
 

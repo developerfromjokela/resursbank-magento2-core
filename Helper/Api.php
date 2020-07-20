@@ -27,7 +27,7 @@ class Api extends AbstractHelper
      */
     public function getConnection(
         Credentials $credentials
-    ) {
+    ): ResursBank {
         return new ResursBank(
             $credentials->getUsername(),
             $credentials->getPassword(),

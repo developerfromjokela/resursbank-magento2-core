@@ -16,22 +16,22 @@ class Quantity extends AbstractValidation implements ValidationInterface
     /**
      * @var int
      */
-    private const MIN_INTEGER_LENGTH = 0;
+    public const MIN_INTEGER_LENGTH = 0;
 
     /**
      * @var int
      */
-    private const MAX_INTEGER_LENGTH = 15;
+    public const MAX_INTEGER_LENGTH = 15;
 
     /**
      * @var int
      */
-    private const MIN_DECIMAL_LENGTH = 0;
+    public const MIN_DECIMAL_LENGTH = 0;
 
     /**
      * @var int
      */
-    private const MAX_DECIMAL_LENGTH = 5;
+    public const MAX_DECIMAL_LENGTH = 5;
 
     /**
      * @inheritDoc

@@ -16,12 +16,12 @@ class Description extends AbstractValidation implements ValidationInterface
     /**
      * @var int
      */
-    private const MIN_LENGTH = 1;
+    public const MIN_LENGTH = 1;
 
     /**
      * @var int
      */
-    private const MAX_LENGTH = 255;
+    public const MAX_LENGTH = 255;
 
     /**
      * @inheritDoc

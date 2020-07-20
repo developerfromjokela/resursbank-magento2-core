@@ -800,9 +800,6 @@ class ItemTest extends TestCase
         $this->item->setType(Item::TYPE_PRODUCT);
         static::assertSame(Item::TYPE_PRODUCT, $this->item->getType());
 
-        $this->item->setType(Item::TYPE_PAYMENT_FEE);
-        static::assertSame(Item::TYPE_PAYMENT_FEE, $this->item->getType());
-
         $this->item->setType(Item::TYPE_SHIPPING);
         static::assertSame(Item::TYPE_SHIPPING, $this->item->getType());
     }

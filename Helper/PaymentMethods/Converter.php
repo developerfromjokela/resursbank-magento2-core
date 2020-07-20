@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper\PaymentMethods;
 
+use JsonException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Model\Order;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use function is_string;
 
 /**
  * Convert payment method data from the Resurs Bank API to data which can be
@@ -24,47 +26,48 @@ class Converter extends AbstractHelper
     /**
      * @var string
      */
-    const KEY_DESCRIPTION = 'description';
+    public const KEY_DESCRIPTION = 'description';
 
     /**
      * @var string
      */
-    const KEY_ID = 'id';
+    public const KEY_ID = 'id';
 
     /**
      * @var string
      */
-    const KEY_MIN_LIMIT = 'minLimit';
+    public const KEY_MIN_LIMIT = 'minLimit';
 
     /**
      * @var string
      */
-    const KEY_MAX_LIMIT = 'maxLimit';
+    public const KEY_MAX_LIMIT = 'maxLimit';
 
     /**
      * @var string
      */
-    const DEFAULT_DESCRIPTION = 'Resurs Bank Payment';
+    public const DEFAULT_DESCRIPTION = 'Resurs Bank Payment';
 
     /**
      * @var float
      */
-    const DEFAULT_MIN_LIMIT = 150.0;
+    public const DEFAULT_MIN_LIMIT = 150.0;
 
     /**
      * @var float
      */
-    const DEFAULT_MAX_LIMIT = 0.0;
+    public const DEFAULT_MAX_LIMIT = 0.0;
 
     /**
      * @var string
      */
-    const DEFAULT_VALUE_ORDER_STATUS = Order::STATE_PENDING_PAYMENT;
+    public const DEFAULT_VALUE_ORDER_STATUS = Order::STATE_PENDING_PAYMENT;
 
     /**
      * @param array $data
      * @return array
      * @throws ValidatorException
+     * @throws JsonException
      */
     public function convert(array $data): array
     {
@@ -73,7 +76,7 @@ class Converter extends AbstractHelper
             throw new ValidatorException(
                 __(
                     'Data conversion failed. Provided data is invalid. %1',
-                    json_encode($data)
+                    json_encode($data, JSON_THROW_ON_ERROR)
                 )
             );
         }
@@ -84,7 +87,7 @@ class Converter extends AbstractHelper
             PaymentMethodInterface::MIN_ORDER_TOTAL => $this->getMinLimit($data),
             PaymentMethodInterface::MAX_ORDER_TOTAL => $this->getMaxLimit($data),
             PaymentMethodInterface::TITLE => $this->getDescription($data),
-            PaymentMethodInterface::RAW => json_encode($data)
+            PaymentMethodInterface::RAW => json_encode($data, JSON_THROW_ON_ERROR)
         ];
     }
 

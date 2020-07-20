@@ -17,7 +17,7 @@ use Resursbank\Core\Model\Api\Payment\ItemFactory;
 /**
  * Discount data converter.
  */
-class DiscountItem extends AbstractItem implements ItemInterface
+class DiscountItem extends AbstractItem
 {
     /**
      * @var string
@@ -35,8 +35,7 @@ class DiscountItem extends AbstractItem implements ItemInterface
     private $taxAmount;
 
     /**
-     * @param ApiConfig $apiConfig
-     * @param AdvancedConfig $advancedConfig
+     * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
      * @param string $couponCode
@@ -44,8 +43,7 @@ class DiscountItem extends AbstractItem implements ItemInterface
      * @param float $taxAmount Tax amount.
      */
     public function __construct(
-        ApiConfig $apiConfig,
-        AdvancedConfig $advancedConfig,
+        Config $config,
         ItemFactory $itemFactory,
         Log $log,
         string $couponCode,
@@ -57,8 +55,7 @@ class DiscountItem extends AbstractItem implements ItemInterface
         $this->taxAmount = $taxAmount;
 
         parent::__construct(
-            $apiConfig,
-            $advancedConfig,
+            $config,
             $itemFactory,
             $log
         );
@@ -132,9 +129,9 @@ class DiscountItem extends AbstractItem implements ItemInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function getVatPct(): float
+    public function getVatPct(): int
     {
-        $exclTax = abs((float) $this->amount) - $this->taxAmount;
+        $exclTax = abs($this->amount) - $this->taxAmount;
 
         $result = ($exclTax > 0 && $this->taxAmount > 0) ?
             (($this->taxAmount / $exclTax) * 100) :
@@ -145,7 +142,7 @@ class DiscountItem extends AbstractItem implements ItemInterface
             $result = round($result);
         }
 
-        return $this->sanitizeVatPct($result);
+        return (int) $result;
     }
 
     /**

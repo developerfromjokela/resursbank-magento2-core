@@ -10,17 +10,16 @@ namespace Resursbank\Core\Model\Api\Payment\Converter\Item;
 
 use Exception;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
-use Resursbank\Core\Helper\Config\Core\Advanced as AdvancedConfig;
-use Resursbank\Core\Helper\Config\Core\Api as ApiConfig;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\ArtNo;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitAmountWithoutVat;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 use Resursbank\Core\Model\Api\Payment\ItemFactory;
+use function strlen;
 
 /**
  * Convert an item entity, such as an Order Item, into an object prepared for a
@@ -29,14 +28,9 @@ use Resursbank\Core\Model\Api\Payment\ItemFactory;
 abstract class AbstractItem implements ItemInterface
 {
     /**
-     * @var ApiConfig
+     * @var Config
      */
-    protected $apiConfig;
-
-    /**
-     * @var AdvancedConfig
-     */
-    protected $advancedConfig;
+    protected $config;
 
     /**
      * @var ItemFactory
@@ -49,19 +43,16 @@ abstract class AbstractItem implements ItemInterface
     protected $log;
 
     /**
-     * @param ApiConfig $apiConfig
-     * @param AdvancedConfig $advancedConfig
+     * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
      */
     public function __construct(
-        ApiConfig $apiConfig,
-        AdvancedConfig $advancedConfig,
+        Config $config,
         ItemFactory $itemFactory,
         Log $log
     ) {
-        $this->apiConfig = $apiConfig;
-        $this->advancedConfig = $advancedConfig;
+        $this->config = $config;
         $this->itemFactory = $itemFactory;
         $this->log = $log;
     }
@@ -87,11 +78,10 @@ abstract class AbstractItem implements ItemInterface
      * Unit measurement configuration value.
      *
      * @return string
-     * @throws Exception
      */
     public function getUnitMeasure(): string
     {
-        return $this->apiConfig->getUnitMeasure();
+        return Item::UNIT_MEASURE;
     }
 
     /**
@@ -105,7 +95,7 @@ abstract class AbstractItem implements ItemInterface
      */
     public function roundTaxPercentage(): bool
     {
-        return $this->advancedConfig->roundTaxPercentage();
+        return $this->config->roundTaxPercentage();
     }
 
     /**
@@ -119,11 +109,7 @@ abstract class AbstractItem implements ItemInterface
      */
     public function sanitizeArtNo(string $artNo): string
     {
-        $result = (string) preg_replace(
-            ArtNo::REGEX,
-            "",
-            strtolower((string) $artNo)
-        );
+        $result = (string) preg_replace(ArtNo::REGEX, '', strtolower($artNo));
 
         if (strlen($result) > ArtNo::MAX_LENGTH) {
             $result = substr($result, 0, ArtNo::MAX_LENGTH);
@@ -143,19 +129,6 @@ abstract class AbstractItem implements ItemInterface
     public function sanitizeUnitAmountWithoutVat(float $amount): float
     {
         return round($amount, UnitAmountWithoutVat::MAX_DECIMAL_LENGTH);
-    }
-
-    /**
-     * The "vatPct" property may not include more than 5 decimals. Please refer
-     * to the linked documentation for further information.
-     *
-     * @param float $amount
-     * @return float
-     * @link https://test.resurs.com/docs/display/ecom/Hosted+payment+flow+data
-     */
-    public function sanitizeVatPct(float $amount): float
-    {
-        return round($amount, VatPct::MAX_DECIMAL_LENGTH);
     }
 
     /**

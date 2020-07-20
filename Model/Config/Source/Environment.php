@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Resursbank\RBEcomPHP\ResursBank;
 
 /**
@@ -16,7 +15,7 @@ use Resursbank\RBEcomPHP\ResursBank;
  *
  * @package Resursbank\Core\Model\Config\Source
  */
-class Environment extends Options implements OptionSourceInterface
+class Environment extends Options
 {
     /**
      * @inheritDoc

@@ -18,7 +18,7 @@ class Type extends AbstractValidation implements ValidationInterface
     /**
      * @var string[]
      */
-    private const ALLOWED_VALUES = [
+    public const ALLOWED_VALUES = [
         Item::TYPE_PRODUCT,
         Item::TYPE_DISCOUNT,
         Item::TYPE_SHIPPING

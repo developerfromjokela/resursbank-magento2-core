@@ -22,17 +22,17 @@ class ArtNo extends AbstractValidation implements ValidationInterface
      *
      * @var string
      */
-    private const REGEX = '/[^a-z0-9]/';
+    public const REGEX = '/[^a-z0-9]/';
 
     /**
      * @var int
      */
-    private const MIN_LENGTH = 1;
+    public const MIN_LENGTH = 1;
 
     /**
      * @var int
      */
-    private const MAX_LENGTH = 100;
+    public const MAX_LENGTH = 100;
 
     /**
      * @inheritDoc

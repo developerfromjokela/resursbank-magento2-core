@@ -14,11 +14,10 @@ use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFa
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\PaymentFeeItem;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\PaymentFeeItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
+use function is_array;
 
 /**
  * Basic data conversion class for payment payload.
@@ -46,29 +45,21 @@ abstract class AbstractConverter implements ConverterInterface
     private $taxResourceFactory;
 
     /**
-     * @var PaymentFeeItemFactory
-     */
-    private $feeItemFactory;
-
-    /**
      * @param Log $log
      * @param TaxItemResourceFactory $taxResourceFactory
      * @param ShippingItemFactory $shippingItemFactory
      * @param DiscountItemFactory $discountItemFactory
-     * @param PaymentFeeItemFactory $feeItemFactory
      */
     public function __construct(
         Log $log,
         TaxItemResourceFactory $taxResourceFactory,
         ShippingItemFactory $shippingItemFactory,
-        DiscountItemFactory $discountItemFactory,
-        PaymentFeeItemFactory $feeItemFactory
+        DiscountItemFactory $discountItemFactory
     ) {
         $this->log = $log;
         $this->shippingItemFactory = $shippingItemFactory;
         $this->discountItemFactory = $discountItemFactory;
         $this->taxResourceFactory = $taxResourceFactory;
-        $this->feeItemFactory = $feeItemFactory;
     }
 
     /**
@@ -84,13 +75,14 @@ abstract class AbstractConverter implements ConverterInterface
         $result = [];
 
         if ($this->includeShippingData($method, $amount)) {
+            /** @noinspection PhpUndefinedMethodInspection */
             /** @var ShippingItem $item */
-            $item = $this->shippingItemFactory->create([
-                'method' => $method,
-                'description' => $description,
-                'amount' => $amount,
-                'vatPct' => $vatPct
-            ]);
+            $item = $this->shippingItemFactory->create(compact([
+                'method',
+                'description',
+                'amount',
+                'vatPct'
+            ]));
 
             $result[] = $item->getItem();
         }
@@ -110,37 +102,13 @@ abstract class AbstractConverter implements ConverterInterface
         $result = [];
 
         if ($this->includeDiscountData($amount)) {
+            /** @noinspection PhpUndefinedMethodInspection */
             /** @var DiscountItem $item */
-            $item = $this->discountItemFactory->create([
-                'couponCode' => $couponCode,
-                'amount' => $amount,
-                'taxAmount' => $taxAmount
-            ]);
-
-            $result[] = $item->getItem();
-        }
-
-        return $result;
-    }
-
-    /**
-     * @inheritDoc
-     * @throws Exception
-     */
-    public function getPaymentFeeData(
-        string $name,
-        float $amount,
-        float $vatPct
-    ): array {
-        $result = [];
-
-        if ($this->includePaymentFeeData($amount)) {
-            /** @var PaymentFeeItem $item */
-            $item = $this->feeItemFactory->create([
-                'name' => $name,
-                'amount' => $amount,
-                'vatPct' => $vatPct
-            ]);
+            $item = $this->discountItemFactory->create(compact([
+                'couponCode',
+                'amount',
+                'taxAmount'
+            ]));
 
             $result[] = $item->getItem();
         }
@@ -164,14 +132,6 @@ abstract class AbstractConverter implements ConverterInterface
     public function includeDiscountData(float $amount): bool
     {
         return ($amount < 0);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function includePaymentFeeData(float $amount): bool
-    {
-        return $amount > 0.0;
     }
 
     /**
@@ -207,11 +167,12 @@ abstract class AbstractConverter implements ConverterInterface
     ): float {
         $result = 0.0;
 
+        /** @noinspection PhpUndefinedMethodInspection */
         /** @var TaxItemResource $taxItem */
         $taxItem = $this->taxResourceFactory->create();
         $collection = $taxItem->getTaxItemsByOrderId($orderId);
 
-        $foundMatchingTaxItemType = false;
+        $match = false;
 
         /** @var array $item */
         foreach ($collection as $item) {
@@ -219,7 +180,7 @@ abstract class AbstractConverter implements ConverterInterface
                 isset($item['taxable_item_type']) &&
                 $item['taxable_item_type'] === $type
             ) {
-                $foundMatchingTaxItemType = true;
+                $match = true;
 
                 $result = isset($item['tax_percent']) ?
                     (float) $item['tax_percent'] :
@@ -229,7 +190,7 @@ abstract class AbstractConverter implements ConverterInterface
             }
         }
 
-        if (!$foundMatchingTaxItemType) {
+        if (!$match) {
             $this->log->info(
                 'Could not find matching tax item type ' . $type . ' on ' .
                 'order entity ' . $orderId

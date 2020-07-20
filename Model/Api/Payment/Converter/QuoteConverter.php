@@ -16,7 +16,6 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\PaymentFeeItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
@@ -38,15 +37,13 @@ class QuoteConverter extends AbstractConverter
      * @param ShippingItemFactory $shippingItemFactory
      * @param DiscountItemFactory $discountItemFactory
      * @param ProductItemFactory $productItemFactory
-     * @param PaymentFeeItemFactory $feeItemFactory
      */
     public function __construct(
         Log $log,
         TaxItemResourceFactory $taxResourceFactory,
         ShippingItemFactory $shippingItemFactory,
         DiscountItemFactory $discountItemFactory,
-        ProductItemFactory $productItemFactory,
-        PaymentFeeItemFactory $feeItemFactory
+        ProductItemFactory $productItemFactory
     ) {
         $this->productItemFactory = $productItemFactory;
 
@@ -54,8 +51,7 @@ class QuoteConverter extends AbstractConverter
             $log,
             $taxResourceFactory,
             $shippingItemFactory,
-            $discountItemFactory,
-            $feeItemFactory
+            $discountItemFactory
         );
     }
 
@@ -105,6 +101,7 @@ class QuoteConverter extends AbstractConverter
             /** @var Item $product */
             foreach ($entity->getAllItems() as $product) {
                 if ($product->getQty() > 0) {
+                    /** @noinspection PhpUndefinedMethodInspection */
                     /** @var ProductItem $item */
                     $item = $this->productItemFactory->create([
                         'product' => $product

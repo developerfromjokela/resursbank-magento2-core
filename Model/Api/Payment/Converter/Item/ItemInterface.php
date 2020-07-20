@@ -56,9 +56,9 @@ interface ItemInterface
     public function getUnitAmountWithoutVat(): float;
 
     /**
-     * @return float
+     * @return int
      */
-    public function getVatPct(): float;
+    public function getVatPct(): int;
 
     /**
      * @return string

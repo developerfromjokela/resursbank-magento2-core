@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Converter\Item\Quote;
 
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\ItemInterface;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\AbstractItem;
 use Resursbank\Core\Helper\Config;
@@ -19,7 +18,7 @@ use Resursbank\Core\Helper\Log;
 /**
  * Product data converter.
  */
-class ProductItem extends AbstractItem implements ItemInterface
+class ProductItem extends AbstractItem
 {
     /**
      * @var QuoteItem
@@ -27,15 +26,13 @@ class ProductItem extends AbstractItem implements ItemInterface
     protected $product;
 
     /**
-     * @param ApiConfig $apiConfig
-     * @param AdvancedConfig $advancedConfig
+     * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
      * @param QuoteItem $product
      */
     public function __construct(
-        ApiConfig $apiConfig,
-        AdvancedConfig $advancedConfig,
+        Config $config,
         ItemFactory $itemFactory,
         Log $log,
         QuoteItem $product
@@ -43,8 +40,7 @@ class ProductItem extends AbstractItem implements ItemInterface
         $this->product = $product;
 
         parent::__construct(
-            $apiConfig,
-            $advancedConfig,
+            $config,
             $itemFactory,
             $log
         );
@@ -87,11 +83,9 @@ class ProductItem extends AbstractItem implements ItemInterface
     /**
      * @inheritDoc
      */
-    public function getVatPct(): float
+    public function getVatPct(): int
     {
-        return $this->sanitizeVatPct(
-            (float) $this->product->getTaxPercent()
-        );
+        return (int) round($this->product->getTaxPercent());
     }
 
     /**

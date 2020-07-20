@@ -28,81 +28,79 @@ use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 class Item
 {
     /**
+     * Unit measure value.
+     */
+    public const UNIT_MEASURE = 'st';
+
+    /**
      * Data key representing SKU.
      *
      * @var string
      */
-    const KEY_ART_NO = 'artNo';
+    public const KEY_ART_NO = 'artNo';
 
     /**
      * Data key representing description.
      *
      * @var string
      */
-    const KEY_DESCRIPTION = 'description';
+    public const KEY_DESCRIPTION = 'description';
 
     /**
      * Data key representing quantity.
      *
      * @var string
      */
-    const KEY_QUANTITY = 'quantity';
+    public const KEY_QUANTITY = 'quantity';
 
     /**
      * Data key representing unit measure.
      *
      * @var string
      */
-    const KEY_UNIT_MEASURE = 'unitMeasure';
+    public const KEY_UNIT_MEASURE = 'unitMeasure';
 
     /**
      * Data key representing price excl. tax.
      *
      * @var string
      */
-    const KEY_UNIT_AMOUNT_WITHOUT_VAT = 'unitAmountWithoutVat';
+    public const KEY_UNIT_AMOUNT_WITHOUT_VAT = 'unitAmountWithoutVat';
 
     /**
      * Data key representing tax percentage.
      *
      * @var string
      */
-    const KEY_VAT_PCT = 'vatPct';
+    public const KEY_VAT_PCT = 'vatPct';
 
     /**
      * Data key representing item type.
      *
      * @var string
      */
-    const KEY_TYPE = 'type';
+    public const KEY_TYPE = 'type';
 
     /**
      * Shipping item type identifier.
      *
      * @var string
      */
-    const TYPE_SHIPPING = 'SHIPPING_FEE';
+    public const TYPE_SHIPPING = 'SHIPPING_FEE';
 
     /**
      * General item type identifier.
      *
      * @var string
      */
-    const TYPE_PRODUCT = 'ORDER_LINE';
+    public const TYPE_PRODUCT = 'ORDER_LINE';
 
     /**
      * Discount item type identifier.
      *
      * @var string
      */
-    const TYPE_DISCOUNT = 'DISCOUNT';
-
-    /**
-     * Payment fee item type identifier.
-     *
-     * @var string
-     */
-    const TYPE_PAYMENT_FEE = 'ORDER_LINE';
+    public const TYPE_DISCOUNT = 'DISCOUNT';
 
     /**
      * @var string
@@ -127,7 +125,7 @@ class Item
      *
      * @var string
      */
-    private $unitMeasure = 'st';
+    private $unitMeasure = self::UNIT_MEASURE;
 
     /**
      * Unit price without VAT (excl. tax).
@@ -195,7 +193,7 @@ class Item
      * @param float $quantity
      * @param string $unitMeasure
      * @param float $unitAmountWithoutVat
-     * @param float $vatPct
+     * @param int $vatPct
      * @param string $type
      * @param ArtNo $artNoValidator
      * @param Description $descriptionValidator

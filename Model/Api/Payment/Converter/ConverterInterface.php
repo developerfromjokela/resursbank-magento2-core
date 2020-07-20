@@ -52,20 +52,6 @@ interface ConverterInterface
     ): array;
 
     /**
-     * Extract payment fee information from $subject entity.
-     *
-     * @param string $name
-     * @param float $amount
-     * @param float $vatPct
-     * @return PaymentItem[]
-     */
-    public function getPaymentFeeData(
-        string $name,
-        float $amount,
-        float $vatPct
-    ): array;
-
-    /**
      * Whether or not to include shipping data in payment payload.
      *
      * @param string $method
@@ -84,16 +70,6 @@ interface ConverterInterface
      * @return bool
      */
     public function includeDiscountData(
-        float $amount
-    ): bool;
-
-    /**
-     * Whether or not to include payment fee data in payment payload.
-     *
-     * @param float $amount
-     * @return bool
-     */
-    public function includePaymentFeeData(
         float $amount
     ): bool;
 }
