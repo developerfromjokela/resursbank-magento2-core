@@ -107,8 +107,9 @@ abstract class AbstractItem implements ItemInterface
      * @return string
      * @link https://test.resurs.com/docs/display/ecom/Hosted+payment+flow+data
      */
-    public function sanitizeArtNo(string $artNo): string
-    {
+    public function sanitizeArtNo(
+        string $artNo
+    ): string {
         $result = (string) preg_replace(ArtNo::REGEX, '', strtolower($artNo));
 
         if (strlen($result) > ArtNo::MAX_LENGTH) {
@@ -126,8 +127,9 @@ abstract class AbstractItem implements ItemInterface
      * @return float
      * @link https://test.resurs.com/docs/display/ecom/Hosted+payment+flow+data
      */
-    public function sanitizeUnitAmountWithoutVat(float $amount): float
-    {
+    public function sanitizeUnitAmountWithoutVat(
+        float $amount
+    ): float {
         return round($amount, UnitAmountWithoutVat::MAX_DECIMAL_LENGTH);
     }
 
@@ -135,8 +137,11 @@ abstract class AbstractItem implements ItemInterface
      * @param CreditmemoItem|OrderItem|QuoteItem|AbstractModel $item
      * @return mixed
      */
-    public function getOrderId(AbstractModel $item)
-    {
-        return ($item instanceof OrderItem) ? $item->getId() : $item->getOrderId();
+    public function getOrderId(
+        AbstractModel $item
+    ) {
+        return ($item instanceof OrderItem) ?
+            $item->getId() :
+            $item->getOrderId();
     }
 }

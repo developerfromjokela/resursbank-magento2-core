@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Converter;
 
 use Exception;
-use function is_array;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
@@ -20,6 +19,7 @@ use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
+use function is_array;
 
 /**
  * Quote entity conversion for payment payloads.
@@ -63,8 +63,9 @@ class QuoteConverter extends AbstractConverter
      * @return PaymentItem[]
      * @throws Exception
      */
-    public function convert(Quote $entity): array
-    {
+    public function convert(
+        Quote $entity
+    ): array {
         /** @var Address $address */
         $address = $entity->getShippingAddress();
 
@@ -93,8 +94,9 @@ class QuoteConverter extends AbstractConverter
      * @return PaymentItem[]
      * @throws Exception
      */
-    protected function getProductData(Quote $entity): array
-    {
+    protected function getProductData(
+        Quote $entity
+    ): array {
         $result = [];
 
         if ($this->includeProductData($entity)) {
@@ -121,8 +123,9 @@ class QuoteConverter extends AbstractConverter
      * @param Quote $entity
      * @return bool
      */
-    public function includeProductData(Quote $entity): bool
-    {
+    public function includeProductData(
+        Quote $entity
+    ): bool {
         $items = $entity->getAllItems();
 
         return !empty($items);
@@ -134,8 +137,9 @@ class QuoteConverter extends AbstractConverter
      * @param Address $address
      * @return float
      */
-    private function getShippingVatPct(Address $address): float
-    {
+    private function getShippingVatPct(
+        Address $address
+    ): float {
         $result = 0.0;
 
         $taxes = $address->getData('items_applied_taxes');
@@ -154,8 +158,9 @@ class QuoteConverter extends AbstractConverter
      * @param PaymentItem[] $items
      * @return float
      */
-    public function getCollectedTotal(array $items): float
-    {
+    public function getCollectedTotal(
+        array $items
+    ): float {
         $result = 0;
 
         /** @var PaymentItem $item */

@@ -328,7 +328,7 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the setDescription method allows values with a length of 100.
+     * Assert that the setDescription method allows values with a length of 255.
      *
      * @return void
      * @throws Exception
@@ -619,8 +619,7 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the setUnitAmountWithoutVat method accepts and converts
-     * integer values to floats.
+     * Assert that the setUnitAmountWithoutVat method accepts negative values.
      *
      * @return void
      * @throws Exception
@@ -663,8 +662,7 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the setVatPct method will assign a value to the
-     * vatPct prop.
+     * Assert that the setVatPct method will assign a value to the vatPct prop.
      *
      * @return void
      * @throws Exception
@@ -677,8 +675,8 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the method setVatPct will return an instance of
-     * the Item data model.
+     * Assert that the method setVatPct will return an instance of the Item data
+     * model.
      *
      * @return void
      * @throws Exception
@@ -771,8 +769,8 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the method setType will return an instance of
-     * the Item data model.
+     * Assert that the method setType will return an instance of the Item data
+     * model.
      *
      * @return void
      * @throws Exception

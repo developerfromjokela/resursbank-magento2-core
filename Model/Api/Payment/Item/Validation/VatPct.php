@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Item\Validation;
 
 /**
- * Validation routines for property "unitMeasure".
+ * Validation routines for property "vatPct".
  */
 class VatPct extends AbstractValidation implements ValidationInterface
 {

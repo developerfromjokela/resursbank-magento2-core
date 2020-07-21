@@ -129,8 +129,9 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @inheritDoc
      */
-    public function includeDiscountData(float $amount): bool
-    {
+    public function includeDiscountData(
+        float $amount
+    ): bool {
         return ($amount < 0);
     }
 
@@ -141,8 +142,9 @@ abstract class AbstractConverter implements ConverterInterface
      * @param PaymentItem[] $items
      * @return array
      */
-    public function convertItemsToArrays(array $items): array
-    {
+    public function convertItemsToArrays(
+        array $items
+    ): array {
         $result = [];
 
         /** @var PaymentItem $item */

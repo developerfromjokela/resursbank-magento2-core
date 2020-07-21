@@ -16,7 +16,6 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Button;
  * Render button to sync payment methods.
  *
  * @package Resursbank\Core\Block\Adminhtml\System\Config\Methods
- * @SuppressWarnings (LongInheritanceChain)
  */
 class Sync extends Button
 {
