@@ -17,6 +17,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use function is_string;
 
 /**
  * @package Resursbank\Checkout\Helper
@@ -70,8 +71,9 @@ abstract class AbstractLog extends AbstractHelper
      * @param Logger $logger
      * @return $this
      */
-    public function setLogger(Logger $logger): self
-    {
+    public function setLogger(
+        Logger $logger
+    ): self {
         $this->logger = $logger;
 
         return $this;
@@ -94,12 +96,14 @@ abstract class AbstractLog extends AbstractHelper
     }
 
     /**
-     * @param array|string|Exception $text
+     * @param string $text
      * @param bool $force
      * @return self
      */
-    public function error(string $text, $force = false): self
-    {
+    public function error(
+        string $text,
+        bool $force = false
+    ): self {
         if ($force || $this->isEnabled()) {
             $this->logger->error($text);
         }
@@ -112,8 +116,10 @@ abstract class AbstractLog extends AbstractHelper
      * @param bool $force
      * @return self
      */
-    public function exception(Exception $error, $force = false): self
-    {
+    public function exception(
+        Exception $error,
+        bool $force = false
+    ): self {
         if ($force || $this->isEnabled()) {
             $this->logger->error(
                 $error->getFile() . ' :: ' . $error->getLine() . '   -   '

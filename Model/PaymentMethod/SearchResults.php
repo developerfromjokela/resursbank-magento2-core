@@ -11,6 +11,7 @@ namespace Resursbank\Core\Model\PaymentMethod;
 use Magento\Framework\Api\SearchResults as FrameworkSearchResults;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use function is_array;
 
 /**
  * @package Resursbank\Core\Model\PaymentMethod

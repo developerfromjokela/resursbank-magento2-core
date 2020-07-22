@@ -29,10 +29,7 @@ abstract class Options implements OptionSourceInterface
         $result = [];
 
         foreach ($this->toArray() as $value => $label) {
-            $result[] = [
-                'value' => $value,
-                'label' => $label
-            ];
+            $result[] = compact(['value', 'label']);
         }
 
         return $result;

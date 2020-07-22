@@ -17,6 +17,7 @@ use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\PaymentMethod;
+use function is_array;
 
 /**
  * Create custom configuration sections for all dynamic payment methods.
@@ -137,7 +138,7 @@ class Structure
     private function addPaymentMethod(
         array &$config,
         PaymentMethod $method
-    ) {
+    ): void {
         $config['children'][$method->getCode()] = [
             'id' => $method->getCode(),
             'translate' => 'label',

@@ -19,12 +19,12 @@ class RemapConfigPaths implements DataPatchInterface
     /**
      * Old config section.
      */
-    const OLD_SECTION = 'resursbank_checkout';
+    public const OLD_SECTION = 'resursbank_checkout';
 
     /**
      * New config section.
      */
-    const NEW_SECTION = 'resursbank';
+    public const NEW_SECTION = 'resursbank';
 
     /**
      * @var ModuleDataSetupInterface
@@ -43,7 +43,7 @@ class RemapConfigPaths implements DataPatchInterface
     /**
      * {@inheritdoc}
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
@@ -51,7 +51,7 @@ class RemapConfigPaths implements DataPatchInterface
     /**
      * {@inheritdoc}
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
