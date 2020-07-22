@@ -407,6 +407,14 @@ class Item
      */
     public function toArray(): array
     {
-        return get_object_vars($this);
+        return [
+            self::KEY_ART_NO => $this->getArtNo(),
+            self::KEY_DESCRIPTION => $this->getDescription(),
+            self::KEY_QUANTITY => $this->getQuantity(),
+            self::KEY_UNIT_MEASURE => $this->getUnitMeasure(),
+            self::KEY_UNIT_AMOUNT_WITHOUT_VAT => $this->getUnitAmountWithoutVat(),
+            self::KEY_VAT_PCT => $this->getVatPct(),
+            self::KEY_TYPE => $this->getType()
+        ];
     }
 }
