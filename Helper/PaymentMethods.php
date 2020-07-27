@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use JsonException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -24,6 +25,7 @@ use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use function is_array;
 
 /**
  * @package Resursbank\Core\Helper
@@ -34,7 +36,7 @@ class PaymentMethods extends AbstractHelper
     /**
      * @var string
      */
-    const CODE_PREFIX = 'resursbank_';
+    public const CODE_PREFIX = 'resursbank_';
 
     /**
      * @var Api
@@ -105,6 +107,7 @@ class PaymentMethods extends AbstractHelper
      * @throws IntegrationException
      * @throws StateException
      * @throws ValidatorException
+     * @throws JsonException
      */
     public function sync(
         CredentialsModel $credentials
@@ -136,6 +139,7 @@ class PaymentMethods extends AbstractHelper
                     )
                 );
             } catch (NoSuchEntityException $e) {
+                /** @noinspection PhpUndefinedMethodInspection */
                 $method = $this->methodFactory->create();
             }
 
@@ -190,8 +194,7 @@ class PaymentMethods extends AbstractHelper
     {
         $searchCriteria = $this->searchBuilder->addFilter(
             PaymentMethodInterface::ACTIVE,
-            true,
-            'eq'
+            true
         )->create();
 
         return $this->repository->getList($searchCriteria)->getItems();

@@ -22,16 +22,33 @@ class Api extends AbstractHelper
 {
     /**
      * @param Credentials $credentials
+     * @param string $userAgent
      * @return ResursBank
      * @throws Exception
      */
     public function getConnection(
-        Credentials $credentials
-    ) {
-        return new ResursBank(
+        Credentials $credentials,
+        string $userAgent = ''
+    ): ResursBank {
+        $connection = new ResursBank(
             $credentials->getUsername(),
             $credentials->getPassword(),
             $credentials->getEnvironment()
         );
+
+        $connection->setWsdlCache(true);
+        $connection->setUserAgent($this->getUserAgent($userAgent));
+
+        return $connection;
+    }
+
+    /**
+     * @param string $custom
+     * @return string
+     */
+    private function getUserAgent(
+        string $custom = ''
+    ): string {
+        return $custom === '' ? 'Mage 2' : "Mage 2 + ${custom}";
     }
 }

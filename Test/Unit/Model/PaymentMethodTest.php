@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Model;
 
+use JsonException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -744,7 +745,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testSetRawThrowsOnInvalidJson(): void
     {
-        $this->expectException(ValidatorException::class);
+        $this->expectException(JsonException::class);
         $this->method->setRaw('{test: false');
     }
 

@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model;
 
+use JsonException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\AbstractModel;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
+use function is_int;
 
 /**
  * @package Resursbank\Core\Model
@@ -24,7 +26,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(Resource::class);
     }
@@ -236,16 +238,13 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
+     * @throws JsonException
      * @inheritDoc
      */
     public function setRaw(string $value): PaymentMethodInterface
     {
-        if (json_decode($value) === null) {
-            throw new ValidatorException(__(
-                'Raw API value must be a valid JSON formatted string.'
-            ));
-        }
+        // We want to store the encoded value but this lets us confirm its JSON.
+        json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
         $this->setData(self::RAW, $value);
 

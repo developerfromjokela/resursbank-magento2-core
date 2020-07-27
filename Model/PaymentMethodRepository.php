@@ -116,6 +116,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function get(int $methodId): PaymentMethodInterface
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -136,6 +137,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function getByCode(string $code): PaymentMethodInterface
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -160,12 +162,14 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function getList(
         SearchCriteriaInterface $searchCriteria
     ): PaymentMethodSearchResultsInterface {
+        /** @noinspection PhpUndefinedMethodInspection */
         $collection = $this->collectionFactory->create();
 
         $this->filterProcessor->process($searchCriteria, $collection);
 
         $collection->load();
 
+        /** @noinspection PhpUndefinedMethodInspection */
         return $this->searchResultsFactory->create()
             ->setSearchCriteria($searchCriteria)
             ->setItems($collection->getItems())
