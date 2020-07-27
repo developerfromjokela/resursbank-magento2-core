@@ -53,7 +53,7 @@ class ResursbankIsTest implements DataPatchInterface
     /**
      * {@inheritdoc}
      */
-    public function apply()
+    public function apply(): self
     {
         $tableName = 'sales_order';
         $colName = 'resursbank_is_test';
@@ -96,5 +96,7 @@ class ResursbankIsTest implements DataPatchInterface
 
             $this->moduleDataSetup->getConnection()->endSetup();
         }
+
+        return $this;
     }
 }
