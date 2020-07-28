@@ -22,6 +22,7 @@ use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethod as PaymentMethodModel;
+use Resursbank\Core\Model\Ui\ConfigProvider;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 use Resursbank\RBEcomPHP\ResursBank;
 
@@ -237,7 +238,7 @@ class PaymentMethodsTest extends TestCase
         try {
             static::assertSame(
                 (
-                    PaymentMethods::CODE_PREFIX .
+                    ConfigProvider::CODE_PREFIX .
                     'invoice_' .
                     'batman_' .
                     RESURS_ENVIRONMENTS::TEST
@@ -265,7 +266,7 @@ class PaymentMethodsTest extends TestCase
         try {
             static::assertSame(
                 (
-                    PaymentMethods::CODE_PREFIX .
+                    ConfigProvider::CODE_PREFIX .
                     'partpay_' .
                     'tony_' .
                     RESURS_ENVIRONMENTS::TEST
@@ -675,7 +676,7 @@ class PaymentMethodsTest extends TestCase
             // Assert property code was assigned the expected value.
             static::assertSame(
                 (
-                    PaymentMethods::CODE_PREFIX .
+                    ConfigProvider::CODE_PREFIX .
                     $this->convertedMethodData[
                         PaymentMethodInterface::IDENTIFIER
                     ] .

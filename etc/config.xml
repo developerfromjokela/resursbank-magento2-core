@@ -7,6 +7,31 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <payment>
+            <resursbank_default>
+                <active>1</active>
+                <model>Resursbank\Core\Model\Payment\Resursbank</model>
+                <order_status>pending_payment</order_status>
+                <allowspecific>0</allowspecific>
+                <group>resursbank</group>
+                <title>Resurs Bank</title>
+                <!-- Adapter information. Capture / Refund / Cancel / Void implements through a separate module. -->
+                <payment_action>authorize</payment_action>
+                <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <is_gateway>1</is_gateway>
+                <!-- Explicitly specify false values. -->
+                <can_order>0</can_order>
+                <can_use_internal>0</can_use_internal>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
+                <can_edit>0</can_edit>
+                <is_gateway>0</is_gateway>
+                <is_offline>0</is_offline>
+                <can_initialize>0</can_initialize>
+                <can_review_payment>0</can_review_payment>
+                <can_use_for_multishipping>0</can_use_for_multishipping>
+            </resursbank_default>
+        </payment>
         <resursbank>
             <api>
                 <environment>test</environment>

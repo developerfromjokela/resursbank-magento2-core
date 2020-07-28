@@ -24,6 +24,11 @@ class Config extends AbstractConfig
     public const GROUP = 'api';
 
     /**
+     * @var string
+     */
+    public const METHODS_GROUP = 'methods';
+
+    /**
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return int
@@ -134,8 +139,29 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORE
     ): bool {
         return $this->isEnabled(
-            'methods',
+            self::METHODS_GROUP,
             'auto_sync_method',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * Retrieve configured sort order of specified payment method.
+     *
+     * @param string $code
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return int
+     */
+    public function getMethodSortOrder(
+        string $code,
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): int {
+        return (int) $this->get(
+            self::METHODS_GROUP,
+            "{$code}/sort_order",
             $scopeCode,
             $scopeType
         );
