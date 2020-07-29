@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway\Command;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Command\GatewayCommand;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -87,7 +87,7 @@ class Gateway extends GatewayCommand
      * @throws CommandException
      * @throws ClientException
      * @throws ConverterException
-     * @throws LocalizedException
+     * @throws ValidatorException
      */
     public function execute(
         array $commandSubject
@@ -105,35 +105,43 @@ class Gateway extends GatewayCommand
     }
 
     /**
+     * Resolve payment data anonymous array,
+     *
+     * @param array $data
+     * @return PaymentDataObjectInterface
+     * @throws ValidatorException
+     */
+    public function getPayment(
+        array $data
+    ): PaymentDataObjectInterface {
+        if (!isset($data['payment'])) {
+            throw new ValidatorException(__('Missing payment data.'));
+        }
+
+        /** @var PaymentDataObjectInterface $payment */
+        $payment = $data['payment'];
+
+        if (!($payment instanceof PaymentDataObjectInterface)) {
+            throw new ValidatorException(
+                __(
+                    'Payment data must be instance of ' .
+                    PaymentDataObjectInterface::class
+                )
+            );
+        }
+
+        return $data['payment'];
+    }
+
+    /**
      * Check if gateway commands are enabled.
      *
      * @param PaymentDataObjectInterface $payment
      * @return bool
      */
-    protected function isEnabled(
+    private function isEnabled(
         PaymentDataObjectInterface $payment
     ): bool {
         return $payment->getOrder()->getGrandTotalAmount() > 0;
-    }
-
-    /**
-     * Resolve payment data from commandSubject,
-     *
-     * @param array $commandSubject
-     * @return PaymentDataObjectInterface
-     * @throws LocalizedException
-     */
-    protected function getPayment(
-        array $commandSubject
-    ): PaymentDataObjectInterface {
-        if (!isset($commandSubject['payment']) ||
-            !$commandSubject['payment'] instanceof PaymentDataObjectInterface
-        ) {
-            throw new LocalizedException(
-                __('Payment data object should be provided')
-            );
-        }
-
-        return $commandSubject['payment'];
     }
 }

@@ -13,6 +13,7 @@ use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use function is_string;
 
 /**
@@ -28,12 +29,20 @@ class TransferFactory implements TransferFactoryInterface
     private $transferBuilder;
 
     /**
+     * @var CredentialsHelper
+     */
+    private $credentialsHelper;
+
+    /**
      * @param TransferBuilder $transferBuilder
+     * @param CredentialsHelper $credentialsHelper
      */
     public function __construct(
-        TransferBuilder $transferBuilder
+        TransferBuilder $transferBuilder,
+        CredentialsHelper $credentialsHelper
     ) {
         $this->transferBuilder = $transferBuilder;
+        $this->credentialsHelper = $credentialsHelper;
     }
 
     /**
@@ -43,66 +52,71 @@ class TransferFactory implements TransferFactoryInterface
     public function create(
         array $request
     ): TransferInterface {
-        $this->validate($request);
-
         return $this->transferBuilder
             ->setClientConfig([
-                'credentials' => $request['credentials']
+                'credentials' => $this->getCredentials($request)
             ])
             ->setBody([
-                'reference' => $request['reference']
+                'reference' => $this->getReference($request)
             ])
             ->build();
     }
 
     /**
-     * @param array $request
+     * @param array $data
+     * @return Credentials
      * @throws ValidatorException
      */
-    private function validate(
-        array $request
-    ): void {
-        $this->validateCredentials($request);
-        $this->validateOrderReference($request);
-    }
-
-    /**
-     * @param array $request
-     * @throws ValidatorException
-     */
-    private function validateCredentials(
-        array $request
-    ): void {
-        if (!isset($request['credentials'])) {
+    public function getCredentials(
+        array $data
+    ): Credentials {
+        if (!isset($data['credentials'])) {
             throw new ValidatorException(
                 __('Missing credentials in request.')
             );
         }
 
-        if (!($request['credentials'] instanceof Credentials)) {
+        if (!($data['credentials'] instanceof Credentials)) {
             throw new ValidatorException(
                 __('Request credentials must be of type ' . Credentials::class)
             );
         }
+
+        if (!$this->credentialsHelper->hasCredentials($data['credentials'])) {
+            throw new ValidatorException(
+                __('Incomplete request credentials.')
+            );
+        }
+
+        return $data['credentials'];
     }
 
     /**
-     * @param array $request
+     * @param array $data
+     * @return string
      * @throws ValidatorException
      */
-    private function validateOrderReference(
-        array $request
-    ): void {
-        if (!isset($request['reference'])) {
+    public function getReference(
+        array $data
+    ): string {
+        if (!isset($data['reference'])) {
             throw new ValidatorException(
-                __('Missing order reference in request.')
+                __('Missing reference in request.')
             );
         }
 
-        if (!is_string($request['reference'])) {
+        if (!is_string($data['reference'])) {
             throw new ValidatorException(
-                __('Requested order reference must be a string.')
+                __('Requested reference must be a string.')
             );
         }
+
+        if ($data['reference'] === '') {
+            throw new ValidatorException(
+                __('Missing reference value.')
+            );
+        }
+
+        return $data['reference'];
     }
 }

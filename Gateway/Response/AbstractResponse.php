@@ -67,19 +67,19 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
     ): string {
         if (!isset($response['reference'])) {
             throw new ValidatorException(
-                __('Missing payment reference in response.')
+                __('Missing reference in response.')
             );
         }
 
         if (!is_string($response['reference'])) {
             throw new ValidatorException(
-                __('Payment reference must be a string.')
+                __('Reference must be a string.')
             );
         }
 
         if ($response['reference'] === '') {
             throw new ValidatorException(
-                __('Missing payment reference value.')
+                __('Missing reference value.')
             );
         }
 
@@ -100,7 +100,7 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
 
         if (!is_bool($response['status'])) {
             throw new ValidatorException(
-                __('Status must a bool.')
+                __('Status must be a bool.')
             );
         }
 

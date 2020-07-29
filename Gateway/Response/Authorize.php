@@ -26,17 +26,9 @@ class Authorize extends AbstractResponse
         string $reference,
         bool $status
     ): void {
-        // Close transaction.
         if ($status) {
-//            // Use order increment_id as payment id at Resurs Bank.
-//            $this->apiModel->updatePaymentReference(
-//                $this->apiHelper->getQuote()->getData(
-//                    ApiHelper::QUOTE_TOKEN_FIELD
-//                ),
-//                $response['reference']
-//            );
-
-            $payment->getPayment()->setTransactionId($response['reference']);
+            // Close transaction.
+            $payment->getPayment()->setTransactionId($reference);
             $payment->getPayment()->setIsTransactionClosed(false);
         }
 

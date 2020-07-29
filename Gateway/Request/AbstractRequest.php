@@ -14,7 +14,6 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Resursbank\Core\Exception\MissingCredentialsException;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Helper\Log;
@@ -68,7 +67,7 @@ abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
 
     /**
      * @inheritdoc
-     * @throws MissingCredentialsException
+     * @throws ValidatorException
      * @throws NoSuchEntityException
      * @throws ValidatorException
      */
@@ -95,7 +94,7 @@ abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
      *
      * @param PaymentDataObjectInterface $payment
      * @return Credentials
-     * @throws MissingCredentialsException
+     * @throws ValidatorException
      * @throws NoSuchEntityException
      * @throws ValidatorException
      */
@@ -111,9 +110,9 @@ abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
         $credentials = $this->credentialsHelper->resolveFromConfig($storeCode);
 
         if (!$this->credentialsHelper->hasCredentials($credentials)) {
-            throw new MissingCredentialsException(
-                'Failed to obtain API credentials for order ' .
-                $payment->getOrder()->getOrderIncrementId()
+            throw new ValidatorException(
+                __('Failed to obtain API credentials for order ' .
+                $payment->getOrder()->getOrderIncrementId())
             );
         }
 
