@@ -329,6 +329,9 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+     * Check if the payment method code starts with "resursbank_" to determine
+     * whether or not it belong to us.
+     *
      * @param string $code
      * @return bool
      */

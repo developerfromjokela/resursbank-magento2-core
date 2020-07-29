@@ -16,12 +16,16 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 class ConfigProvider implements ConfigProviderInterface
 {
     /**
+     * Payment method code prefix.
+     *
      * @var string
      */
     public const CODE_PREFIX = 'resursbank_';
 
     /**
-     * Default Resurs Bank payment method code.
+     * Default payment method code.
+     *
+     * @var string
      */
     public const CODE = self::CODE_PREFIX . 'default';
 

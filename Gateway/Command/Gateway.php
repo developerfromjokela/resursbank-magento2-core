@@ -21,12 +21,9 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 
 /**
- * Gateway command execution.
- *
  * @package Resursbank\Core\Gateway\Command
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -35,21 +32,14 @@ class Gateway extends GatewayCommand
     /**
      * @var Log
      */
-    protected $log;
+    private $log;
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Gateway constructor.
      * @param BuilderInterface $requestBuilder
      * @param TransferFactoryInterface $transferFactory
      * @param ClientInterface $client
      * @param LoggerInterface $logger
      * @param Log $log
-     * @param Config $config
      * @param HandlerInterface|null $handler
      * @param ValidatorInterface|null $validator
      * @param ErrorMessageMapperInterface|null $errorMessageMapper
@@ -60,13 +50,11 @@ class Gateway extends GatewayCommand
         ClientInterface $client,
         LoggerInterface $logger,
         Log $log,
-        Config $config,
         HandlerInterface $handler = null,
         ValidatorInterface $validator = null,
         ErrorMessageMapperInterface $errorMessageMapper = null
     ) {
         $this->log = $log;
-        $this->config = $config;
 
         parent::__construct(
             $requestBuilder,
@@ -80,9 +68,7 @@ class Gateway extends GatewayCommand
     }
 
     /**
-     * Execute gateway command.
-     *
-     * @param array $commandSubject
+     * @param array $data
      * @return void
      * @throws CommandException
      * @throws ClientException
@@ -90,13 +76,13 @@ class Gateway extends GatewayCommand
      * @throws ValidatorException
      */
     public function execute(
-        array $commandSubject
+        array $data
     ): void {
         /** @var PaymentDataObjectInterface $payment */
-        $payment = $this->getPayment($commandSubject);
+        $payment = $this->getPayment($data);
 
         if ($this->isEnabled($payment)) {
-            parent::execute($commandSubject);
+            parent::execute($data);
         } else {
             $this->log->info(
                 'Skipping ' . $payment->getOrder()->getOrderIncrementId()
@@ -105,7 +91,7 @@ class Gateway extends GatewayCommand
     }
 
     /**
-     * Resolve payment data anonymous array,
+     * Resolve PaymentDataObjectInterface object from anonymous array.
      *
      * @param array $data
      * @return PaymentDataObjectInterface
@@ -134,7 +120,7 @@ class Gateway extends GatewayCommand
     }
 
     /**
-     * Check if gateway commands are enabled.
+     * Conditions for our gateway commands to be available.
      *
      * @param PaymentDataObjectInterface $payment
      * @return bool

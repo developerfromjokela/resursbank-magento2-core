@@ -17,7 +17,8 @@ use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use function is_string;
 
 /**
- * Create instances of TransferBuilder and apply assembled request data.
+ * Generate instance of TransferInterface and apply data required for outgoing
+ * API calls to Resurs Bank.
  *
  * @package Resursbank\Core\Gateway\Http
  */
@@ -63,6 +64,8 @@ class TransferFactory implements TransferFactoryInterface
     }
 
     /**
+     * Resolve Credentials instance from anonymous array.
+     *
      * @param array $data
      * @return Credentials
      * @throws ValidatorException
@@ -92,6 +95,8 @@ class TransferFactory implements TransferFactoryInterface
     }
 
     /**
+     * Resolve payment / order reference from anonymous array.
+     *
      * @param array $data
      * @return string
      * @throws ValidatorException

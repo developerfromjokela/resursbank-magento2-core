@@ -11,14 +11,14 @@ namespace Resursbank\Core\Gateway\Request;
 use Resursbank\Core\Model\Api\Credentials;
 
 /**
- * Describes methods required to collect and construct request data.
+ * Describes methods required to compile and handle data for outgoing API calls.
  *
  * @package Resursbank\Core\Gateway\Request
  */
 interface EcomRequestInterface
 {
     /**
-     * Execute Resurs Bank API request through ECom API adapter.
+     * Log request information.
      *
      * @param Credentials $credentials
      * @param string $reference

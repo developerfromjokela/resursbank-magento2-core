@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Test\Unit\Gateway\Http;
+namespace Resursbank\Core\Test\Unit\Gateway\Response;
 
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -37,7 +37,7 @@ class AbstractResponseTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        // Mock TransferFactory object (the target of our tests).
+        // Mock AbstractResponse (the target of our tests).
         $this->response = $this->getMockBuilder(AbstractResponse::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -45,9 +45,9 @@ class AbstractResponseTest extends TestCase
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it hasn't been supplied any reference.
+     * ValidatorException if we supply an empty array.
      */
-    public function testGetReferenceValidateWithoutReference(): void
+    public function testGetReferenceThrowsWithoutReference(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing reference in response.');
@@ -57,24 +57,21 @@ class AbstractResponseTest extends TestCase
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it has been supplied reference with the wrong
-     * data type.
+     * ValidatorException the supplied reference is not a string.
      */
-    public function testGetReferenceValidateType(): void
+    public function testGetReferenceThrowsOnWrongType(): void
     {
         $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage(
-            'Reference must be a string.'
-        );
+        $this->expectExceptionMessage('Reference must be a string.');
 
         $this->response->getReference(['reference' => true]);
     }
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it has been supplied an empty reference value.
+     * ValidatorException if we supply an empty string.
      */
-    public function testGetReferenceValidateEmptyValue(): void
+    public function testGetReferenceThrowsOnEmptyValue(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing reference value.');
@@ -84,7 +81,7 @@ class AbstractResponseTest extends TestCase
 
     /**
      * Assert that the getReference method will resolve supplied reference from
-     * anonymous array containing reference data.
+     * anonymous array containing response data.
      */
     public function testGetReference(): void
     {
@@ -101,9 +98,9 @@ class AbstractResponseTest extends TestCase
 
     /**
      * Assert that the wasSuccessful method will throw an instance of
-     * ValidatorException if it hasn't been supplied any status.
+     * ValidatorException if we supply an empty array.
      */
-    public function testWasSuccessfulValidateWithoutStatus(): void
+    public function testWasSuccessfulThrowsWithoutStatus(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing status in response.');
@@ -113,15 +110,12 @@ class AbstractResponseTest extends TestCase
 
     /**
      * Assert that the wasSuccessful method will throw an instance of
-     * ValidatorException if it has been supplied status with the wrong
-     * data type.
+     * ValidatorException if the supplied status isn't of type bool.
      */
-    public function testWasSuccessfulValidateType(): void
+    public function testWasSuccessfulThrowsOnWrongType(): void
     {
         $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage(
-            'Status must be a bool.'
-        );
+        $this->expectExceptionMessage('Status must be a bool.');
 
         $this->response->wasSuccessful(['status' => 44]);
     }

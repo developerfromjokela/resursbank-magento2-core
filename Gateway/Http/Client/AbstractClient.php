@@ -9,17 +9,15 @@ declare(strict_types=1);
 namespace Resursbank\Core\Gateway\Http\Client;
 
 use Exception;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use Resursbank\Core\Gateway\Http\TransferFactory;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\RBEcomPHP\ResursBank;
-use Resursbank\Core\Gateway\Http\TransferFactory;
 
 /**
- * Base for all commands including API calls.
- *
  * @package Resursbank\Core\Gateway\Http\Client
  */
 abstract class AbstractClient implements ClientInterface, EcomClientInterface
@@ -49,7 +47,7 @@ abstract class AbstractClient implements ClientInterface, EcomClientInterface
     /**
      * @param TransferInterface $transferObject
      * @return array
-     * @throws LocalizedException
+     * @throws ValidatorException
      */
     public function placeRequest(
         TransferInterface $transferObject

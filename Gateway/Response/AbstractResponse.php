@@ -18,8 +18,6 @@ use function is_bool;
 use function is_string;
 
 /**
- * General methods to handle response from command request.
- *
  * @package Resursbank\Core\Gateway\Response
  */
 abstract class AbstractResponse implements HandlerInterface, EcomResponseInterface

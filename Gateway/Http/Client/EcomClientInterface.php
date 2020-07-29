@@ -11,7 +11,8 @@ namespace Resursbank\Core\Gateway\Http\Client;
 use Resursbank\Core\Model\Api\Credentials;
 
 /**
- * Describes methods required to perform outgoing API requests to Resurs Bank.
+ * Describes methods required to perform outgoing API requests to the Resurs
+ * Bank API.
  *
  * @package Resursbank\Core\Gateway\Http
  */

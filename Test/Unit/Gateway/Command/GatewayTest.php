@@ -58,7 +58,7 @@ class GatewayTest extends TestCase
             ->setMethods(['getGrandTotalAmount'])
             ->getMock();
 
-        // Mock Gateway instance.
+        // Mock Gateway (the target or our tests).
         $this->gateway = $this->objectManager->getObject(Gateway::class);
 
         // Mock PaymentDataObject instance.
@@ -86,7 +86,9 @@ class GatewayTest extends TestCase
                 )
             );
         } catch (ReflectionException $e) {
-            static::fail($e->getMessage());
+            static::fail(
+                'Failed to mock isEnabled method: ' . $e->getMessage()
+            );
         }
     }
 
@@ -108,14 +110,15 @@ class GatewayTest extends TestCase
                 )
             );
         } catch (ReflectionException $e) {
-            static::fail($e->getMessage());
+            static::fail(
+                'Failed to mock isEnabled method: ' . $e->getMessage()
+            );
         }
     }
 
     /**
      * Assert that the getPayment method will throw an instance of
-     * ValidatorException if it's called without any being supplied any payment
-     * data.
+     * ValidatorException if it's called without being supplied payment data.
      */
     public function testGetPaymentThrowsWithoutPaymentData(): void
     {
@@ -127,8 +130,8 @@ class GatewayTest extends TestCase
 
     /**
      * Assert that the getPayment method will throw an instance of
-     * ValidatorException if it's provided data which does not match
-     * PaymentDataObject.
+     * ValidatorException if supplied payment data doesn't match the expected
+     * type PaymentDataObjectInterface.
      */
     public function testGetPaymentThrowsWithUnexpectedPaymentData(): void
     {

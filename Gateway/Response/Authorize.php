@@ -11,7 +11,7 @@ namespace Resursbank\Core\Gateway\Response;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
- * Handle response from authorize request.
+ * Handle response from authorization request.
  *
  * @package Resursbank\Core\Gateway\Response
  */

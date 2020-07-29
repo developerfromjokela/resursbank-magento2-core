@@ -20,8 +20,6 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Credentials;
 
 /**
- * Common methods and properties to construct request data.
- *
  * @package Resursbank\Core\Gateway\Request
  */
 abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
@@ -47,7 +45,6 @@ abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
     private $storeManager;
 
     /**
-     * AbstractRequest constructor.
      * @param Api $api
      * @param Log $log
      * @param CredentialsHelper $credentialsHelper
@@ -83,7 +80,6 @@ abstract class AbstractRequest implements BuilderInterface, EcomRequestInterface
         /** @var Credentials $credentials */
         $credentials = $this->getCredentials($payment);
 
-        // Debug log.
         $this->logInfo($credentials, $reference);
 
         return compact('credentials', 'reference');

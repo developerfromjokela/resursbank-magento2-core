@@ -11,10 +11,10 @@ namespace Resursbank\Core\Gateway\Handler;
 use Exception;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Resursbank\Core\Gateway\Command\Gateway;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository;
-use Resursbank\Core\Gateway\Command\Gateway;
 
 /**
  * @package Resursbank\Core\Gateway\Handler
@@ -57,7 +57,7 @@ class Title implements ValueHandlerInterface
     }
 
     /**
-     * Resolve correct method title.
+     * Resolve method title using PaymentDataObjectInterface in anonymous array.
      *
      * @param array $subject
      * @param null|int|string $storeId

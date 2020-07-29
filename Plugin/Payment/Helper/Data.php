@@ -64,6 +64,12 @@ class Data
     }
 
     /**
+     * Since we do not define our dynamic payment methods in the <payment>
+     * section of our config.xml file we will need to manually append our
+     * methods to the array collected by Magento.
+     *
+     * Without this our payment methods will not be recognized in checkout.
+     *
      * @param Subject $subject
      * @param array $result
      * @return array
@@ -79,7 +85,7 @@ class Data
             foreach ($this->paymentMethods->getActiveMethods() as $method) {
                 $code = $method->getCode();
 
-                // Append payment method to result.
+                // Append payment method to resulting list.
                 $result[$code] = $result[ConfigProvider::CODE];
                 $result[$code]['title'] = $method->getTitle();
                 $result[$code]['sort_order'] = $this->getSortOrder($code);
@@ -92,6 +98,10 @@ class Data
     }
 
     /**
+     * Since we do not define our dynamic payment methods in the <payment>
+     * section of our config.xml we will need to manually create an instance of
+     * our payment method model.
+     *
      * @param Subject $subject
      * @param callable $proceed
      * @param string $code
@@ -111,6 +121,9 @@ class Data
     }
 
     /**
+     * Generate instance of our payment method model and apply the code of the
+     * requested payment method (ie. "resursbank_invoice" or similar).
+     *
      * @param string $code
      * @return MethodInterface
      * @throws LocalizedException
@@ -122,6 +135,8 @@ class Data
     }
 
     /**
+     * Retrieve payment method sort order from our configuration.
+     *
      * @param string $code
      * @return int
      */

@@ -11,8 +11,6 @@ namespace Resursbank\Core\Gateway\Request;
 use Resursbank\Core\Model\Api\Credentials;
 
 /**
- * Construct data for capture request.
- *
  * @package Resursbank\Core\Gateway\Request
  */
 class Authorize extends AbstractRequest

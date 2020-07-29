@@ -12,14 +12,14 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
- * Describes methods required to handle response from ECom communication.
+ * Describes methods required to handle responses from outgoing API calls.
  *
  * @package Resursbank\Core\Gateway\Response
  */
 interface EcomResponseInterface
 {
     /**
-     * Execute Resurs Bank API request through ECom API adapter.
+     * Process response from API call.
      *
      * @param PaymentDataObjectInterface $payment
      * @param array $response

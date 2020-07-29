@@ -58,7 +58,9 @@ class GeneralTest extends TestCase
                 ])
             );
         } catch (ReflectionException $e) {
-            static::fail('Failed to wasSuccessful method: ' . $e->getMessage());
+            static::fail(
+                'Failed to mock wasSuccessful method: ' . $e->getMessage()
+            );
         }
     }
 

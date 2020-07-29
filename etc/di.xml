@@ -50,7 +50,7 @@
         </arguments>
     </virtualType>
 
-    <!-- Authorize command -->
+    <!-- Authorization command -->
     <virtualType name="ResursbankGatewayAuthorizeCommand" type="Resursbank\Core\Gateway\Command\Gateway">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Resursbank\Core\Gateway\Request\Authorize</argument>
@@ -61,6 +61,7 @@
         </arguments>
     </virtualType>
 
+    <!-- Authorization request. -->
     <type name="Resursbank\Core\Gateway\Request\Authorize">
         <arguments>
             <argument name="config" xsi:type="object">ResursbankGatewayConfig</argument>

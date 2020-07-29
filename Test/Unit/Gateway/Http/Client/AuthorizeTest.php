@@ -43,11 +43,15 @@ class AuthorizeTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        // Mock Authorize object (the target of our tests).
-        $this->authorize = $this->objectManager->getObject(Authorize::class);
+        // Mock Authorize (the target of our tests).
+        $this->authorize = $this->objectManager->getObject(
+            Authorize::class
+        );
 
-        // Mock Credentials object.
-        $this->credentials = $this->objectManager->getObject(Credentials::class);
+        // Mock Credentials.
+        $this->credentials = $this->objectManager->getObject(
+            Credentials::class
+        );
     }
 
     /**

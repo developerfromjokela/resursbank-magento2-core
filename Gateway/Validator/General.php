@@ -12,7 +12,7 @@ use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 
 /**
- * General validation process of gateway command response.
+ * General validation rules for API call responses.
  *
  * @package Resursbank\Core\Gateway\Validator
  */
@@ -37,17 +37,17 @@ class General extends AbstractValidator
     }
 
     /**
-     * Resolve response status from validation subject.
+     * Resolve response status from anonymous array.
      *
-     * @param array $validationSubject
+     * @param array $data
      * @return bool
      */
     protected function wasSuccessful(
-        array $validationSubject
+        array $data
     ): bool {
         return (
-            isset($validationSubject['response']['status']) &&
-            $validationSubject['response']['status'] === true
+            isset($data['response']['status']) &&
+            $data['response']['status'] === true
         );
     }
 }

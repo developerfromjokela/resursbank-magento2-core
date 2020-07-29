@@ -44,7 +44,7 @@ class TransferFactoryTest extends TestCase
     private $credentialsHelper;
 
     /**
-     * @var object
+     * @var TransferBuilder
      */
     private $transferBuilder;
 
@@ -65,7 +65,7 @@ class TransferFactoryTest extends TestCase
             TransferBuilder::class
         );
 
-        // Mock TransferFactory object (the target of our tests).
+        // Mock TransferFactory (the target of our tests).
         $this->transferFactory = $this->objectManager->getObject(
             TransferFactory::class,
             [
@@ -74,7 +74,7 @@ class TransferFactoryTest extends TestCase
             ]
         );
 
-        // Mock Credentials object.
+        // Mock Credentials.
         $this->credentials = $this->objectManager->getObject(
             Credentials::class
         );
@@ -82,9 +82,9 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getCredentials method will throw an instance of
-     * ValidatorException if it hasn't been supplied any credentials.
+     * ValidatorException if we supply it an empty array.
      */
-    public function testGetCredentialsValidateWithoutCredentials(): void
+    public function testGetCredentialsThrowsWithoutCredentials(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing credentials in request.');
@@ -94,10 +94,10 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getCredentials method will throw an instance of
-     * ValidatorException if it has been supplied credentials with the wrong
-     * data type.
+     * ValidatorException if the supplied credentials is not an instance of
+     * Credentials.
      */
-    public function testGetCredentialsValidateType(): void
+    public function testGetCredentialsThrowsOnWrongType(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
@@ -109,10 +109,10 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getCredentials method will throw an instance of
-     * ValidatorException if it has been supplied credentials without a
+     * ValidatorException if the supplied Credentials instance is missing a
      * username.
      */
-    public function testGetCredentialsValidateWithoutUsername(): void
+    public function testGetCredentialsThrowsWithoutUsername(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Incomplete request credentials.');
@@ -126,7 +126,7 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getCredentials method will throw an instance of
-     * ValidatorException if it has been supplied credentials without a
+     * ValidatorException if the supplied Credentials instance is missing a
      * password.
      */
     public function testGetCredentialsValidateWithoutPassword(): void
@@ -148,7 +148,9 @@ class TransferFactoryTest extends TestCase
     public function testGetCredentials(): void
     {
         try {
-            $this->credentials->setUsername('rambo')->setPassword('alwaysblue');
+            $this->credentials
+                ->setUsername('rambo')
+                ->setPassword('alwaysblue');
 
             $result = $this->transferFactory->getCredentials(
                 ['credentials' => $this->credentials]
@@ -162,9 +164,9 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it hasn't been supplied any reference.
+     * ValidatorException if we supply an empty array.
      */
-    public function testGetReferenceValidateWithoutReference(): void
+    public function testGetReferenceThrowsWithoutReference(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing reference in request.');
@@ -174,10 +176,9 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it has been supplied reference with the wrong
-     * data type.
+     * ValidatorException if the supplied reference is not a string.
      */
-    public function testGetReferenceValidateType(): void
+    public function testGetReferenceThrowsOnWrongType(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
@@ -189,9 +190,9 @@ class TransferFactoryTest extends TestCase
 
     /**
      * Assert that the getReference method will throw an instance of
-     * ValidatorException if it has been supplied an empty reference value.
+     * ValidatorException if we supply it an empty string.
      */
-    public function testGetReferenceValidateEmptyValue(): void
+    public function testGetReferenceThrowsOnEmptyValue(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Missing reference value.');
