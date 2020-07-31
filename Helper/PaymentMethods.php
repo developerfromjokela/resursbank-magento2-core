@@ -23,6 +23,7 @@ use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
+use Resursbank\Core\Model\Ui\ConfigProvider;
 use stdClass;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use function is_array;
@@ -33,11 +34,6 @@ use function is_array;
  */
 class PaymentMethods extends AbstractHelper
 {
-    /**
-     * @var string
-     */
-    public const CODE_PREFIX = 'resursbank_';
-
     /**
      * @var Api
      */
@@ -219,7 +215,7 @@ class PaymentMethods extends AbstractHelper
             );
         }
 
-        return self::CODE_PREFIX .
+        return ConfigProvider::CODE_PREFIX .
             strtolower($identifier) .
             '_' .
             $this->credentials->getMethodSuffix($credentials);
@@ -330,5 +326,18 @@ class PaymentMethods extends AbstractHelper
         );
 
         return $method;
+    }
+
+    /**
+     * Check if the payment method code starts with "resursbank_" to determine
+     * whether or not it belong to us.
+     *
+     * @param string $code
+     * @return bool
+     */
+    public function isResursBankMethod(
+        string $code
+    ): bool {
+        return strpos($code, ConfigProvider::CODE_PREFIX) === 0;
     }
 }
