@@ -45,7 +45,7 @@ class SubjectReaderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        // Mock SubjectReader (the target orofour tests).
+        // Mock SubjectReader (the target of our tests).
         $this->subjectReader = $this->objectManager->getObject(
             SubjectReader::class
         );
