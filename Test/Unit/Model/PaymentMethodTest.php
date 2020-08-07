@@ -23,6 +23,7 @@ use Resursbank\Core\Model\PaymentMethod;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class PaymentMethodTest extends TestCase
 {
@@ -115,7 +116,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMethodIdDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::METHOD_ID, null);
+        $this->method->setData(PaymentMethod::METHOD_ID);
         self::assertSame(999, $this->method->getMethodId(999));
         self::assertNull($this->method->getMethodId());
     }
@@ -201,7 +202,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetIdentifierDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::IDENTIFIER, null);
+        $this->method->setData(PaymentMethod::IDENTIFIER);
         self::assertSame('PARTPAY', $this->method->getIdentifier('PARTPAY'));
         self::assertNull($this->method->getIdentifier());
     }
@@ -285,7 +286,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testCodeDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::CODE, null);
+        $this->method->setData(PaymentMethod::CODE);
         self::assertSame(
             'lars_test_invoice',
             $this->method->getCode('lars_test_invoice')
@@ -359,7 +360,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testActiveDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::ACTIVE, null);
+        $this->method->setData(PaymentMethod::ACTIVE);
         static::assertTrue($this->method->getActive(true));
         static::assertNull($this->method->getActive());
     }
@@ -431,7 +432,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testTitleDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::TITLE, null);
+        $this->method->setData(PaymentMethod::TITLE);
         static::assertSame('321', $this->method->getTitle('321'));
         static::assertNull($this->method->getTitle());
     }
@@ -517,7 +518,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMinOrderTotalDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL, null);
+        $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL);
         static::assertSame(321.321, $this->method->getMinOrderTotal(321.321));
         static::assertNull($this->method->getMinOrderTotal());
     }
@@ -603,7 +604,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, null);
+        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL);
         self::assertSame(4476.321, $this->method->getMaxOrderTotal(4476.321));
         self::assertNull($this->method->getMaxOrderTotal());
     }
@@ -675,7 +676,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testOrderStatusDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::ORDER_STATUS, null);
+        $this->method->setData(PaymentMethod::ORDER_STATUS);
         self::assertSame('STATUS', $this->method->getOrderStatus('STATUS'));
         self::assertNull($this->method->getOrderStatus());
     }
@@ -699,8 +700,8 @@ class PaymentMethodTest extends TestCase
     /**
      * Assert that the setRaw method will assign a value to the raw property.
      *
-     * @throws ValidatorException
      * @return void
+     * @throws JsonException
      */
     public function testSetRaw(): void
     {
@@ -708,9 +709,7 @@ class PaymentMethodTest extends TestCase
             $this->method->getData(PaymentMethod::RAW)
         );
 
-        $data = json_encode([
-            'test_false' => false
-        ]);
+        $data = json_encode(['test_false' => false], JSON_THROW_ON_ERROR);
 
         $this->method->setRaw($data);
 
@@ -724,16 +723,17 @@ class PaymentMethodTest extends TestCase
      * Assert that the method setRaw will return an instance of the
      * PaymentMethod data model.
      *
-     * @throws ValidatorException
      * @return void
+     * @throws JsonException
      */
     public function testSetRawReturnSelf(): void
     {
         static::assertInstanceOf(
             PaymentMethod::class,
-            $this->method->setRaw(json_encode([
-                'test' => 1
-            ]))
+            $this->method->setRaw(json_encode(
+                ['test' => 1],
+                JSON_THROW_ON_ERROR
+            ))
         );
     }
 
@@ -768,7 +768,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetRawDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::RAW, null);
+        $this->method->setData(PaymentMethod::RAW);
         self::assertSame('testing', $this->method->getRaw('testing'));
         self::assertNull($this->method->getRaw());
     }
@@ -879,7 +879,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetSpecificCountryDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, null);
+        $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY);
         self::assertSame('FI', $this->method->getSpecificCountry('FI'));
         self::assertNull($this->method->getSpecificCountry());
     }
@@ -923,7 +923,6 @@ class PaymentMethodTest extends TestCase
      * Assert that the method setCreatedAt will return an instance of the
      * PaymentMethod data model.
      *
-     * @throws ValidatorException
      * @return void
      */
     public function testSetCreatedAtReturnSelf(): void
@@ -954,7 +953,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetCreatedAtDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::CREATED_AT, null);
+        $this->method->setData(PaymentMethod::CREATED_AT);
         self::assertSame(7769943, $this->method->getCreatedAt(7769943));
         self::assertNull($this->method->getCreatedAt());
     }
@@ -1030,7 +1029,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethod::UPDATED_AT, null);
+        $this->method->setData(PaymentMethod::UPDATED_AT);
         self::assertSame(4345, $this->method->getUpdatedAt(4345));
         self::assertNull($this->method->getUpdatedAt());
     }

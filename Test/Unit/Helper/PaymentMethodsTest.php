@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Unit\Helper;
 
 use Exception;
+use JsonException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -72,6 +73,7 @@ class PaymentMethodsTest extends TestCase
 
     /**
      * @inheritDoc
+     * @throws JsonException
      */
     protected function setUp(): void
     {
@@ -86,7 +88,8 @@ class PaymentMethodsTest extends TestCase
             PaymentMethodInterface::MIN_ORDER_TOTAL => 10,
             PaymentMethodInterface::MAX_ORDER_TOTAL => 50000,
             PaymentMethodInterface::RAW => json_encode(
-                ['array', 'with', 'lots', 'of', 'data']
+                ['array', 'with', 'lots', 'of', 'data'],
+                JSON_THROW_ON_ERROR
             )
         ];
 
@@ -163,8 +166,7 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Modify return value of getPaymentMethods method from the API class.
-        $this->connection->expects(static::any())
-            ->method('getPaymentMethods')
+        $this->connection->method('getPaymentMethods')
             ->willReturn('This is not an array.');
 
         // Make sure our API adapter returns our mocked API class instance.
@@ -200,7 +202,7 @@ class PaymentMethodsTest extends TestCase
         ];
 
         // Modify return value of getPaymentMethods method from the API class.
-        $this->connection->expects(static::any())
+        $this->connection->expects(static::once())
             ->method('getPaymentMethods')
             ->willReturn(
                 $methodsData
@@ -218,9 +220,14 @@ class PaymentMethodsTest extends TestCase
         try {
             // Assert our fetch method does not alter the data retrieved through
             // the API adapter.
-            static::assertSame($methodsData, $methods->fetch($this->credentials));
+            static::assertSame($methodsData, $methods->fetch(
+                $this->credentials
+            ));
         } catch (IntegrationException $e) {
-            static::fail('Failed asserting return value of the fetch method.');
+            static::fail(
+                'Failed asserting return value of the fetch method: ' .
+                $e->getMessage()
+            );
         }
     }
 
@@ -233,7 +240,7 @@ class PaymentMethodsTest extends TestCase
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
-            ->will(static::returnValue('batman_' . RESURS_ENVIRONMENTS::TEST));
+            ->willReturn('batman_' . RESURS_ENVIRONMENTS::TEST);
 
         try {
             static::assertSame(
@@ -245,9 +252,10 @@ class PaymentMethodsTest extends TestCase
                 ),
                 $this->paymentMethods->getCode('invoice', $this->credentials)
             );
-        } catch (ValidatorException $error) {
+        } catch (ValidatorException $e) {
             static::fail(
-                'Unexpected ValidatorException while resolving method code.'
+                'Unexpected ValidatorException while resolving method code: ' .
+                $e->getMessage()
             );
         }
     }
@@ -261,7 +269,7 @@ class PaymentMethodsTest extends TestCase
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
-            ->will(static::returnValue('tony_' . RESURS_ENVIRONMENTS::TEST));
+            ->willReturn('tony_' . RESURS_ENVIRONMENTS::TEST);
 
         try {
             static::assertSame(
@@ -273,9 +281,10 @@ class PaymentMethodsTest extends TestCase
                 ),
                 $this->paymentMethods->getCode('PartPAY', $this->credentials)
             );
-        } catch (ValidatorException $error) {
+        } catch (ValidatorException $e) {
             static::fail(
-                'Unexpected ValidatorException while resolving method code.'
+                'Unexpected ValidatorException while resolving method code: ' .
+                $e->getMessage()
             );
         }
     }
@@ -307,9 +316,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of validateData'
+                'Failed to initiate method reflection of validateData: ' .
+                $e->getMessage()
             );
         }
     }
@@ -333,9 +343,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of validateData'
+                'Failed to initiate method reflection of validateData: ' .
+                $e->getMessage()
             );
         }
     }
@@ -359,9 +370,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of validateData'
+                'Failed to initiate method reflection of validateData: ' .
+                $e->getMessage()
             );
         }
     }
@@ -382,9 +394,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of validateData'
+                'Failed to initiate method reflection of validateData: ' .
+                $e->getMessage()
             );
         }
     }
@@ -405,9 +418,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of validateData'
+                'Failed to initiate method reflection of validateData: ' .
+                $e->getMessage()
             );
         }
     }
@@ -428,11 +442,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ValidatorException $error) {
-            static::fail('Unexpected ValidatorException.');
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate reflection of validateData method. '
+                'Failed to initiate reflection of validateData method: ' .
+                $e->getMessage()
             );
         }
     }
@@ -456,9 +469,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 (object)$this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate reflection of validateData method. '
+                'Failed to initiate reflection of validateData method: ' .
+                $e->getMessage()
             );
         }
     }
@@ -480,9 +494,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $this->convertedMethodData
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate reflection of validateData method.'
+                'Failed to initiate reflection of validateData method: ' .
+                $e->getMessage()
             );
         }
     }
@@ -503,9 +518,10 @@ class PaymentMethodsTest extends TestCase
                     (object)$this->convertedMethodData
                 )
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate reflection of validateData method. '
+                'Failed to initiate reflection of validateData method: ' .
+                $e->getMessage()
             );
         }
     }
@@ -525,9 +541,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 5
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of resolveMethodDataArray'
+                'Failed to initiate method reflection of ' .
+                'resolveMethodDataArray: ' . $e->getMessage()
             );
         }
     }
@@ -547,9 +564,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 786.33
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of resolveMethodDataArray'
+                'Failed to initiate method reflection of ' .
+                'resolveMethodDataArray: ' . $e->getMessage()
             );
         }
     }
@@ -569,9 +587,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 true
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of resolveMethodDataArray'
+                'Failed to initiate method reflection of ' .
+                'resolveMethodDataArray: ' . $e->getMessage()
             );
         }
     }
@@ -591,9 +610,10 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 null
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate method reflection of resolveMethodDataArray'
+                'Failed to initiate method reflection of ' .
+                'resolveMethodDataArray: ' . $e->getMessage()
             );
         }
     }
@@ -606,6 +626,21 @@ class PaymentMethodsTest extends TestCase
      */
     public function testFill(): void
     {
+        $this->credentialsHelper
+            ->expects(static::once())
+            ->method('getCountry')
+            ->willReturn('SE');
+
+        $this->credentialsHelper
+            ->expects(static::once())
+            ->method('getMethodSuffix')
+            ->willReturn('cassandra_' . RESURS_ENVIRONMENTS::TEST);
+
+        /** @var PaymentMethodModel $method */
+        $method = $this->objectManager->getObject(
+            PaymentMethodModel::class
+        );
+
         try {
             // Modify return value of a number of methods involved in the
             // process which fills an instance of the Method data model.
@@ -614,23 +649,6 @@ class PaymentMethodsTest extends TestCase
                 ->setUsername('Montana')
                 ->setPassword('dneirfelttilymotollehyas');
 
-            $this->credentialsHelper
-                ->expects(static::once())
-                ->method('getCountry')
-                ->will(static::returnValue('SE'));
-
-            $this->credentialsHelper
-                ->expects(static::once())
-                ->method('getMethodSuffix')
-                ->will(
-                    static::returnValue('cassandra_' . RESURS_ENVIRONMENTS::TEST)
-                );
-
-            /** @var PaymentMethodModel $method */
-            $method = $this->objectManager->getObject(
-                PaymentMethodModel::class
-            );
-
             // Fill method model instance with data.
             $this->getFillMethod($this->paymentMethods)->invoke(
                 $this->paymentMethods,
@@ -638,74 +656,72 @@ class PaymentMethodsTest extends TestCase
                 $this->convertedMethodData,
                 $this->credentials
             );
-
-            // Assert property identifier was assigned the expected value.
-            static::assertSame(
-                $this->convertedMethodData[PaymentMethodInterface::IDENTIFIER],
-                $method->getIdentifier(),
-            );
-
-            // Assert property title was assigned the expected value.
-            static::assertSame(
-                $this->convertedMethodData[PaymentMethodInterface::TITLE],
-                $method->getTitle(),
-            );
-
-            // Assert property min_order_total was assigned the expected value.
-            static::assertSame(
-                (float) $this->convertedMethodData[
-                    PaymentMethodInterface::MIN_ORDER_TOTAL
-                ],
-                $method->getMinOrderTotal(),
-            );
-
-            // Assert property max_order_total was assigned the expected value.
-            static::assertSame(
-                (float) $this->convertedMethodData[
-                PaymentMethodInterface::MAX_ORDER_TOTAL
-                ],
-                $method->getMaxOrderTotal(),
-            );
-
-            // Assert property raw was assigned the expected value.
-            static::assertSame(
-                $this->convertedMethodData[PaymentMethodInterface::RAW],
-                $method->getRaw(),
-            );
-
-            // Assert property code was assigned the expected value.
-            static::assertSame(
-                (
-                    ConfigProvider::CODE_PREFIX .
-                    $this->convertedMethodData[
-                        PaymentMethodInterface::IDENTIFIER
-                    ] .
-                    '_cassandra_' .
-                     RESURS_ENVIRONMENTS::TEST
-                ),
-                $method->getCode()
-            );
-
-            // Assert property active was assigned the expected value.
-            static::assertSame(
-                true,
-                $method->getActive()
-            );
-
-            // Assert property specific_country was assigned the expected value.
-            static::assertSame(
-                'SE',
-                $method->getSpecificCountry()
-            );
-        } catch (ValidatorException $error) {
+        } catch (ValidatorException $e) {
             static::fail(
-                'Unexpected ValidatorException.'
+                'Unexpected ValidatorException: ' . $e->getMessage()
             );
-        } catch (ReflectionException $error) {
+        } catch (ReflectionException $e) {
             static::fail(
-                'Failed to initiate reflection of fill method.'
+                'Failed to initiate reflection of fill method: ' .
+                $e->getMessage()
             );
         }
+
+        // Assert property identifier was assigned the expected value.
+        static::assertSame(
+            $this->convertedMethodData[PaymentMethodInterface::IDENTIFIER],
+            $method->getIdentifier(),
+        );
+
+        // Assert property title was assigned the expected value.
+        static::assertSame(
+            $this->convertedMethodData[PaymentMethodInterface::TITLE],
+            $method->getTitle(),
+        );
+
+        // Assert property min_order_total was assigned the expected value.
+        static::assertSame(
+            (float) $this->convertedMethodData[
+            PaymentMethodInterface::MIN_ORDER_TOTAL
+            ],
+            $method->getMinOrderTotal(),
+        );
+
+        // Assert property max_order_total was assigned the expected value.
+        static::assertSame(
+            (float) $this->convertedMethodData[
+            PaymentMethodInterface::MAX_ORDER_TOTAL
+            ],
+            $method->getMaxOrderTotal(),
+        );
+
+        // Assert property raw was assigned the expected value.
+        static::assertSame(
+            $this->convertedMethodData[PaymentMethodInterface::RAW],
+            $method->getRaw(),
+        );
+
+        // Assert property code was assigned the expected value.
+        static::assertSame(
+            (
+                ConfigProvider::CODE_PREFIX .
+                $this->convertedMethodData[
+                PaymentMethodInterface::IDENTIFIER
+                ] .
+                '_cassandra_' .
+                RESURS_ENVIRONMENTS::TEST
+            ),
+            $method->getCode()
+        );
+
+        // Assert property active was assigned the expected value.
+        static::assertTrue($method->getActive());
+
+        // Assert property specific_country was assigned the expected value.
+        static::assertSame(
+            'SE',
+            $method->getSpecificCountry()
+        );
     }
 
     /**
