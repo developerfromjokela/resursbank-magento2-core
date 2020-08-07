@@ -53,7 +53,10 @@ class ApiTest extends TestCase
                 $this->getGetUserAgentMethod($this->api)->invoke($this->api, '')
             );
         } catch (ReflectionException $e) {
-            static::fail('Failed to resolve getUserAgent method mock.');
+            static::fail(
+                'Failed to resolve getUserAgent method mock: ' .
+                $e->getMessage()
+            );
         }
     }
 
@@ -74,7 +77,10 @@ class ApiTest extends TestCase
                 )
             );
         } catch (ReflectionException $e) {
-            static::fail('Failed to resolve getUserAgent method mock.');
+            static::fail(
+                'Failed to resolve getUserAgent method mock: ' .
+                $e->getMessage()
+            );
         }
     }
 

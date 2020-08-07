@@ -58,7 +58,10 @@ class AbstractConfigTest extends TestCase
                 $this->getPathMethod()->invoke($this->config, 'api', 'flow')
             );
         } catch (ReflectionException $e) {
-            static::fail('Failed to create reflection method of getPath.');
+            static::fail(
+                'Failed to create reflection method of getPath: ' .
+                $e->getMessage()
+            );
         }
     }
 

@@ -45,10 +45,7 @@ class OptionsTest extends TestCase
         // Mock return value of toArray method, implemented by subclasses.
         $this->options->expects(static::once())
             ->method('toArray')
-            ->will(static::returnValue([
-                'test' => 'Test',
-                'production' => 'Production'
-            ]));
+            ->willReturn(['test' => 'Test', 'production' => 'Production']);
     }
 
     /**

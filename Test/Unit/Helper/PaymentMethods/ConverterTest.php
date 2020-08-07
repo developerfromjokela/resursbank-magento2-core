@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper\PaymentMethods;
 
+use JsonException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,7 @@ use Resursbank\Core\Helper\PaymentMethods\Converter;
  * Tests designed for payment method data conversion.
  *
  * @package Resursbank\Core\Test\Unit\Helper\PaymentMethods
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ConverterTest extends TestCase
 {
@@ -43,6 +45,7 @@ class ConverterTest extends TestCase
 
     /**
      * @inheritDoc
+     * @throws JsonException
      */
     public function setUp(): void
     {
@@ -72,7 +75,7 @@ class ConverterTest extends TestCase
         ];
 
         $this->modelData[PaymentMethodInterface::RAW] =
-            json_encode($this->apiData);
+            json_encode($this->apiData, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -323,7 +326,7 @@ class ConverterTest extends TestCase
      * Assert that the convert method casts a ValidatorException instance when
      * validation fails prior to conversion.
      *
-     * @throws ValidatorException
+     * @throws JsonException
      */
     public function testConvertThrowsValidatorExceptionWithFaultyData(): void
     {
@@ -340,6 +343,7 @@ class ConverterTest extends TestCase
      * API as expected).
      *
      * @throws ValidatorException
+     * @throws JsonException
      */
     public function testConvert(): void
     {

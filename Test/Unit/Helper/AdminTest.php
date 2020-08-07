@@ -74,9 +74,8 @@ class AdminTest extends TestCase
         $user->setUserName('Lebowski');
 
         // Modify the output of getUser method in Session mock.
-        $this->session->expects(static::any())
-            ->method('getUser')
-            ->will(static::returnValue($user));
+        $this->session->method('getUser')
+            ->willReturn($user);
 
         // Create a new Admin instance using our mocked Session.
         $admin = $this->objectManager
