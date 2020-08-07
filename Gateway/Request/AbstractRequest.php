@@ -11,13 +11,8 @@ namespace Resursbank\Core\Gateway\Request;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Resursbank\Core\Helper\Api;
-use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
-use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\Core\Gateway\SubjectReader;
 
 /**
  * @package Resursbank\Core\Gateway\Request
@@ -25,46 +20,22 @@ use Resursbank\Core\Model\Api\Credentials;
 abstract class AbstractRequest implements BuilderInterface
 {
     /**
-     * @var Api
+     * @var SubjectReader
      */
-    protected $api;
+    private $subjectReader;
 
     /**
-     * @var Log
-     */
-    protected $log;
-
-    /**
-     * @var CredentialsHelper
-     */
-    protected $credentialsHelper;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param Api $api
-     * @param Log $log
-     * @param CredentialsHelper $credentialsHelper
-     * @param StoreManagerInterface $storeManager
+     * @param SubjectReader $subjectReader
      */
     public function __construct(
-        Api $api,
-        Log $log,
-        CredentialsHelper $credentialsHelper,
-        StoreManagerInterface $storeManager
+        SubjectReader $subjectReader
     ) {
-        $this->api = $api;
-        $this->log = $log;
-        $this->credentialsHelper = $credentialsHelper;
-        $this->storeManager = $storeManager;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
-     * @inheritdoc
-     * @throws ValidatorException
+     * @param array $buildSubject
+     * @return array
      * @throws NoSuchEntityException
      * @throws ValidatorException
      */
@@ -72,44 +43,13 @@ abstract class AbstractRequest implements BuilderInterface
         array $buildSubject
     ): array {
         /** @var PaymentDataObjectInterface $payment */
-        $payment = SubjectReader::readPayment($buildSubject);
+        $payment = $this->subjectReader->readPayment($buildSubject);
 
-        /** @var string $reference */
-        $reference = $payment->getOrder()->getOrderIncrementId();
-
-        /** @var Credentials $credentials */
-        $credentials = $this->getCredentials($payment);
-
-        return compact('credentials', 'reference');
-    }
-
-    /**
-     * Resolve credentials from active configuration.
-     *
-     * @param PaymentDataObjectInterface $payment
-     * @return Credentials
-     * @throws ValidatorException
-     * @throws NoSuchEntityException
-     * @throws ValidatorException
-     */
-    protected function getCredentials(
-        PaymentDataObjectInterface $payment
-    ): Credentials {
-        /** @var string $storeCode */
-        $storeCode = $this->storeManager->getStore(
-            $payment->getOrder()->getStoreId()
-        )->getCode();
-
-        /** @var Credentials $credentials */
-        $credentials = $this->credentialsHelper->resolveFromConfig($storeCode);
-
-        if (!$this->credentialsHelper->hasCredentials($credentials)) {
-            throw new ValidatorException(
-                __('Failed to obtain API credentials for order ' .
-                $payment->getOrder()->getOrderIncrementId())
-            );
-        }
-
-        return $credentials;
+        return [
+            'credentials' => $this->subjectReader->readCredentials(
+                $buildSubject
+            ),
+            'reference' => $payment->getOrder()->getOrderIncrementId()
+        ];
     }
 }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway;
 
+use InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -61,8 +62,9 @@ class SubjectReader
      *
      * @param array $subject
      * @return Credentials
-     * @throws ValidatorException
+     * @throws InvalidArgumentException
      * @throws NoSuchEntityException
+     * @throws ValidatorException
      */
     public function readCredentials(
         array $subject
@@ -101,7 +103,7 @@ class SubjectReader
     ): string {
         if (!isset($data['reference'])) {
             throw new ValidatorException(
-                __('Missing reference in request.')
+                __('Missing reference.')
             );
         }
 
