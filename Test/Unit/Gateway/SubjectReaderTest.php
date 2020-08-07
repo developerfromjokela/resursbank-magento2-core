@@ -45,7 +45,7 @@ class SubjectReaderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        // Mock SubjectReader (the target or our tests).
+        // Mock SubjectReader (the target orofour tests).
         $this->subjectReader = $this->objectManager->getObject(
             SubjectReader::class
         );
@@ -58,7 +58,8 @@ class SubjectReaderTest extends TestCase
 
     /**
      * Assert that the readPayment method will throw an instance of
-     * ValidatorException if it's called without being supplied payment data.
+     * InvalidArgumentException if it's called without being supplied payment
+     * data.
      */
     public function testReadPaymentThrowsWithoutPaymentData(): void
     {
@@ -69,8 +70,8 @@ class SubjectReaderTest extends TestCase
 
     /**
      * Assert that the readPayment method will throw an instance of
-     * ValidatorException if supplied payment data doesn't match the expected
-     * type PaymentDataObjectInterface.
+     * InvalidArgumentException if supplied payment data doesn't match the
+     * expected type PaymentDataObjectInterface.
      */
     public function testReadPaymentThrowsWithUnexpectedPaymentData(): void
     {
@@ -100,7 +101,7 @@ class SubjectReaderTest extends TestCase
 
     /**
      * Assert that the readCredentials method will throw an instance of
-     * ValidatorException if we supply it an empty array.
+     * InvalidArgumentException if we supply it an empty array.
      */
     public function testReadCredentialsThrowsWithoutPayment(): void
     {

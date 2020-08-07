@@ -58,7 +58,7 @@ class GatewayTest extends TestCase
             ->setMethods(['getGrandTotalAmount'])
             ->getMock();
 
-        // Mock Gateway (the target or our tests).
+        // Mock Gateway (the target of our tests).
         $this->gateway = $this->objectManager->getObject(Gateway::class);
 
         // Mock PaymentDataObject instance.
