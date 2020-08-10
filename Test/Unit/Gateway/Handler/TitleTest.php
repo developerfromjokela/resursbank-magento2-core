@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Gateway\Handler\Title;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository;
-use Resursbank\Core\Gateway\Command\Gateway;
+use Resursbank\Core\Gateway\SubjectReader;
 
 /**
  * Test cases designed for Resursbank\Core\Gateway\Handler\Title
@@ -40,9 +40,9 @@ class TitleTest extends TestCase
     private $repo;
 
     /**
-     * @var Gateway
+     * @var SubjectReader
      */
-    private $gateway;
+    private $subjectReader;
 
     /**
      * @inheritDoc
@@ -57,13 +57,18 @@ class TitleTest extends TestCase
             ->setMethods(['getByCode'])
             ->getMock();
 
-        // Mock Gateway.
-        $this->gateway = $this->objectManager->getObject(Gateway::class);
+        // Mock SubjectReader.
+        $this->subjectReader = $this->objectManager->getObject(
+            SubjectReader::class
+        );
 
         // Mock Title (target of these tests).
         $this->title = $this->objectManager->getObject(
             Title::class,
-            ['repository' => $this->repo, 'gateway' => $this->gateway]
+            [
+                'repository' => $this->repo,
+                'subjectReader' => $this->subjectReader
+            ]
         );
     }
 

@@ -17,10 +17,12 @@
         </arguments>
     </type>
 
-    <!-- Configuration reader. -->
-    <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
+    <!-- Commands infrastructure -->
+    <virtualType name="ResursbankGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="commands" xsi:type="array">
+                <!--                <item name="authorize" xsi:type="string">Resursbank\Core\Gateway\Command\Authorize</item>-->
+            </argument>
         </arguments>
     </virtualType>
 
@@ -41,32 +43,30 @@
         </arguments>
     </virtualType>
 
-    <!-- Commands infrastructure -->
-    <virtualType name="ResursbankGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+    <!-- Configuration reader. -->
+    <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="authorize" xsi:type="string">ResursbankGatewayAuthorizeCommand</item>
-            </argument>
+            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </virtualType>
 
-    <!-- Authorization command -->
-    <virtualType name="ResursbankGatewayAuthorizeCommand" type="Resursbank\Core\Gateway\Command\Gateway">
-        <arguments>
-            <argument name="requestBuilder" xsi:type="object">Resursbank\Core\Gateway\Request\Authorize</argument>
-            <argument name="handler" xsi:type="object">Resursbank\Core\Gateway\Response\Authorize</argument>
-            <argument name="client" xsi:type="object">Resursbank\Core\Gateway\Http\Client\Authorize</argument>
-            <argument name="transferFactory" xsi:type="object">Resursbank\Core\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Resursbank\Core\Gateway\Validator\General</argument>
-        </arguments>
-    </virtualType>
+<!--    &lt;!&ndash; Authorization command &ndash;&gt;-->
+<!--    <virtualType name="ResursbankGatewayAuthorizeCommand" type="Resursbank\Core\Gateway\Command\Authorize">-->
+<!--        <arguments>-->
+<!--            <argument name="requestBuilder" xsi:type="object">Resursbank\Core\Gateway\Request\Authorize</argument>-->
+<!--            <argument name="handler" xsi:type="object">Resursbank\Core\Gateway\Response\Authorize</argument>-->
+<!--            <argument name="client" xsi:type="object">Resursbank\Core\Gateway\Http\Client\Authorize</argument>-->
+<!--            <argument name="transferFactory" xsi:type="object">Resursbank\Core\Gateway\Http\TransferFactory</argument>-->
+<!--            <argument name="validator" xsi:type="object">Resursbank\Core\Gateway\Validator\General</argument>-->
+<!--        </arguments>-->
+<!--    </virtualType>-->
 
-    <!-- Authorization request. -->
-    <type name="Resursbank\Core\Gateway\Request\Authorize">
-        <arguments>
-            <argument name="config" xsi:type="object">ResursbankGatewayConfig</argument>
-        </arguments>
-    </type>
+<!--    &lt;!&ndash; Authorization request. &ndash;&gt;-->
+<!--    <type name="Resursbank\Core\Gateway\Request\Authorize">-->
+<!--        <arguments>-->
+<!--            <argument name="config" xsi:type="object">ResursbankGatewayConfig</argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
 
     <!-- Payment Method interfaces. -->
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />

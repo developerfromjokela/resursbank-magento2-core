@@ -11,7 +11,7 @@ namespace Resursbank\Core\Gateway\Handler;
 use Exception;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Resursbank\Core\Gateway\Command\Gateway;
+use Resursbank\Core\Gateway\SubjectReader;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository;
@@ -32,28 +32,28 @@ class Title implements ValueHandlerInterface
     private $repository;
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
      * @var Log
      */
     private $log;
 
     /**
-     * @var Gateway
-     */
-    private $gateway;
-
-    /**
      * @param PaymentMethodRepository $repository
+     * @param SubjectReader $subjectReader
      * @param Log $log
-     * @param Gateway $gateway
      */
     public function __construct(
         PaymentMethodRepository $repository,
-        Log $log,
-        Gateway $gateway
+        SubjectReader $subjectReader,
+        Log $log
     ) {
         $this->repository = $repository;
+        $this->subjectReader = $subjectReader;
         $this->log = $log;
-        $this->gateway = $gateway;
     }
 
     /**
@@ -73,7 +73,7 @@ class Title implements ValueHandlerInterface
 
         try {
             /** @var PaymentDataObjectInterface $payment */
-            $payment = $this->gateway->getPayment($subject);
+            $payment = $this->subjectReader->readPayment($subject);
 
             /** @var PaymentMethod $method */
             $method = $this->repository->getByCode(

@@ -58,7 +58,7 @@ class GatewayTest extends TestCase
             ->setMethods(['getGrandTotalAmount'])
             ->getMock();
 
-        // Mock Gateway (the target or our tests).
+        // Mock Gateway (the target of our tests).
         $this->gateway = $this->objectManager->getObject(Gateway::class);
 
         // Mock PaymentDataObject instance.
@@ -113,52 +113,6 @@ class GatewayTest extends TestCase
             static::fail(
                 'Failed to mock isEnabled method: ' . $e->getMessage()
             );
-        }
-    }
-
-    /**
-     * Assert that the getPayment method will throw an instance of
-     * ValidatorException if it's called without being supplied payment data.
-     */
-    public function testGetPaymentThrowsWithoutPaymentData(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage('Missing payment data.');
-
-        $this->gateway->getPayment([]);
-    }
-
-    /**
-     * Assert that the getPayment method will throw an instance of
-     * ValidatorException if supplied payment data doesn't match the expected
-     * type PaymentDataObjectInterface.
-     */
-    public function testGetPaymentThrowsWithUnexpectedPaymentData(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage(
-            'Payment data must be instance of ' . PaymentDataObject::class
-        );
-
-        $this->gateway->getPayment(
-            ['payment' => 'Not an instance of PaymentDataObject']
-        );
-    }
-
-    /**
-     * Assert that the getPayment method will return the supplied
-     * PaymentDataObject instance from the supplied anonymous array.
-     */
-    public function testGetPaymentResolvesPaymentDataObject(): void
-    {
-        try {
-            $result = $this->gateway->getPayment(
-                ['payment' => $this->methodData]
-            );
-
-            static::assertSame($this->methodData, $result);
-        } catch (ValidatorException $e) {
-            static::fail('Failed to resolve payment data: ' . $e->getMessage());
         }
     }
 

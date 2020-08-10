@@ -20,7 +20,7 @@ use function is_string;
 /**
  * @package Resursbank\Core\Gateway\Response
  */
-abstract class AbstractResponse implements HandlerInterface, EcomResponseInterface
+abstract class AbstractResponse implements HandlerInterface
 {
     /**
      * @var Log
@@ -38,7 +38,6 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
 
     /**
      * @inheritdoc
-     * @throws ValidatorException
      * @throws JsonException
      */
     public function handle(
@@ -49,16 +48,13 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
         $payment = SubjectReader::readPayment($handlingSubject);
 
         // Process response.
-        $this->process(
-            $payment,
-            $response,
-            $this->getReference($response),
-            $this->wasSuccessful($response)
-        );
+        $this->process($payment, $response);
     }
 
     /**
-     * @inheritDoc
+     * @param array $response
+     * @return string
+     * @throws ValidatorException
      */
     public function getReference(
         array $response
@@ -85,7 +81,9 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
     }
 
     /**
-     * @inheritDoc
+     * @param array $response
+     * @return bool
+     * @throws ValidatorException
      */
     public function wasSuccessful(
         array $response
@@ -106,14 +104,13 @@ abstract class AbstractResponse implements HandlerInterface, EcomResponseInterfa
     }
 
     /**
-     * @inheritdoc
+     * @param PaymentDataObjectInterface $payment
+     * @param array $response
      * @throws JsonException
      */
     public function process(
         PaymentDataObjectInterface $payment,
-        array $response,
-        string $reference,
-        bool $status
+        array $response
     ): void {
         $this->log->info(
             'Response for ' .
