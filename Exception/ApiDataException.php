@@ -11,11 +11,11 @@ namespace Resursbank\Core\Exception;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Indicates a problem with data management in client session.
+ * Indicates a problem with data transmitted between the server and the API.
  *
  * @package Resursbank\Core\Exception
  */
-class SessionDataException extends LocalizedException
+class ApiDataException extends LocalizedException
 {
 
 }
