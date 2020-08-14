@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="resursbank_checkout_sync_payment_methods" instance="Resursbank\Core\Cron\SyncPaymentMethods" method="execute">
+        <job name="resursbank_core_sync_payment_methods" instance="Resursbank\Core\Cron\SyncPaymentMethods" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>
