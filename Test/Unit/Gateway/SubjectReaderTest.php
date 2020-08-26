@@ -13,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Payment\Model\Info;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Gateway\SubjectReader;
 
@@ -52,7 +53,8 @@ class SubjectReaderTest extends TestCase
 
         // Mock PaymentDataObject instance.
         $this->methodData = $this->objectManager->getObject(
-            PaymentDataObject::class
+            PaymentDataObject::class,
+            ['payment' => $this->objectManager->getObject(Info::class)]
         );
     }
 
@@ -168,6 +170,44 @@ class SubjectReaderTest extends TestCase
             static::assertSame('54565656223', $result);
         } catch (ValidatorException $e) {
             static::fail('Failed resolving reference: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Assert that the readPaymentMethodCode method will return an empty string
+     * if no payment method has been assigned yet.
+     */
+    public function testReadPaymentMethodCodeWithoutCode(): void
+    {
+        try {
+            $this->methodData->getPayment()->setMethod(null);
+
+            $result = $this->subjectReader->readPaymentMethodCode(
+                ['payment' => $this->methodData]
+            );
+
+            static::assertSame('', $result);
+        } catch (InvalidArgumentException $e) {
+            static::fail('Failed to resolve payment data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Assert that the readPaymentMethodCode method will return the code
+     * attached to the payment method within the client session.
+     */
+    public function testReadPaymentMethodCodeWithCode(): void
+    {
+        try {
+            $this->methodData->getPayment()->setMethod('invoice');
+
+            $result = $this->subjectReader->readPaymentMethodCode(
+                ['payment' => $this->methodData]
+            );
+
+            static::assertSame('invoice', $result);
+        } catch (InvalidArgumentException $e) {
+            static::fail('Failed to resolve payment data: ' . $e->getMessage());
         }
     }
 }

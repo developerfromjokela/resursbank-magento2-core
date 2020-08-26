@@ -72,16 +72,15 @@ class Title implements ValueHandlerInterface
         $result = self::DEFAULT_TITLE;
 
         try {
-            /** @var PaymentDataObjectInterface $payment */
-            $payment = $this->subjectReader->readPayment($subject);
+            $code = $this->subjectReader->readPaymentMethodCode($subject);
 
-            /** @var PaymentMethod $method */
-            $method = $this->repository->getByCode(
-                $payment->getPayment()->getMethod()
-            );
+            if ($code !== '') {
+                /** @var PaymentMethod $method */
+                $method = $this->repository->getByCode($code);
 
-            if ($method->getTitle() !== null) {
-                $result = $method->getTitle();
+                if ($method->getTitle() !== null) {
+                    $result = $method->getTitle();
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);

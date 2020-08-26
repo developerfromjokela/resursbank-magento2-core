@@ -121,4 +121,21 @@ class SubjectReader
 
         return $data['reference'];
     }
+
+    /**
+     * Retrieve payment method code as a string from quote data in session.
+     *
+     * @param array $data
+     * @return string
+     */
+    public function readPaymentMethodCode(
+        array $data
+    ): string {
+        /** @var PaymentDataObjectInterface $payment */
+        $payment = $this->readPayment($data);
+
+        $code = $payment->getPayment()->getMethod();
+
+        return is_string($code) ? $code : '';
+    }
 }
