@@ -123,7 +123,7 @@ class SubjectReader
     }
 
     /**
-     * Retrieve payment method code as a string from quote data in session.
+     * Retrieve payment method code as a string from supplied data.
      *
      * @param array $data
      * @return string

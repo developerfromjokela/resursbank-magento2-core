@@ -179,35 +179,27 @@ class SubjectReaderTest extends TestCase
      */
     public function testReadPaymentMethodCodeWithoutCode(): void
     {
-        try {
-            $this->methodData->getPayment()->setMethod(null);
+        $this->methodData->getPayment()->setMethod(null);
 
-            $result = $this->subjectReader->readPaymentMethodCode(
-                ['payment' => $this->methodData]
-            );
+        $result = $this->subjectReader->readPaymentMethodCode(
+            ['payment' => $this->methodData]
+        );
 
-            static::assertSame('', $result);
-        } catch (InvalidArgumentException $e) {
-            static::fail('Failed to resolve payment data: ' . $e->getMessage());
-        }
+        static::assertSame('', $result);
     }
 
     /**
      * Assert that the readPaymentMethodCode method will return the code
-     * attached to the payment method within the client session.
+     * attached to the payment method within the anonymous array.
      */
     public function testReadPaymentMethodCodeWithCode(): void
     {
-        try {
-            $this->methodData->getPayment()->setMethod('invoice');
+        $this->methodData->getPayment()->setMethod('invoice');
 
-            $result = $this->subjectReader->readPaymentMethodCode(
-                ['payment' => $this->methodData]
-            );
+        $result = $this->subjectReader->readPaymentMethodCode(
+            ['payment' => $this->methodData]
+        );
 
-            static::assertSame('invoice', $result);
-        } catch (InvalidArgumentException $e) {
-            static::fail('Failed to resolve payment data: ' . $e->getMessage());
-        }
+        static::assertSame('invoice', $result);
     }
 }
