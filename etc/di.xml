@@ -72,4 +72,8 @@
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
+
+    <type name="Magento\Payment\Helper\Data">
+        <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
+    </type>
 </config>
