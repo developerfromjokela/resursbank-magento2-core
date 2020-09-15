@@ -36,7 +36,13 @@ class Api extends AbstractHelper
             $credentials->getEnvironment()
         );
 
+        // Enable WSDL cache to suppress redundant API calls.
         $connection->setWsdlCache(true);
+
+        // Enable usage of PSP methods.
+        $connection->setSimplifiedPsp(true);
+
+        // Supply API call with debug information.
         $connection->setUserAgent($this->getUserAgent($userAgent));
 
         return $connection;
