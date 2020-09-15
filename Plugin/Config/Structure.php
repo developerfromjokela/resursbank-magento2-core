@@ -103,8 +103,6 @@ class Structure
             }
         } catch (Exception $e) {
             $this->log->exception($e);
-
-            throw $e;
         }
 
         return $result;
