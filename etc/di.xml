@@ -52,6 +52,6 @@
 
     <!-- Prevent order confirmation email from being sent upon order creation. -->
     <type name="Magento\Sales\Model\Order">
-        <plugin name="resursbank_rco_stop_order_confirmation_email" type="Resursbank\Rco\Plugin\Order\StopConfirmationEmail" />
+        <plugin name="resursbank_core_stop_order_confirmation_email" type="Resursbank\Core\Plugin\Order\StopConfirmationEmail" />
     </type>
 </config>
