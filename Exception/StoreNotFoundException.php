@@ -10,10 +10,6 @@ namespace Resursbank\Core\Exception;
 
 use Exception;
 
-/**
- * We could not find the current store.
- */
 class StoreNotFoundException extends Exception
 {
-
 }
