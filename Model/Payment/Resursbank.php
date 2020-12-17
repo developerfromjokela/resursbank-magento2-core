@@ -77,8 +77,10 @@ class Resursbank extends Adapter
      *
      * @inheritdoc
      */
-    public function getConfigData($field, $storeId = null): string
-    {
+    public function getConfigData(
+        $field,
+        $storeId = null
+    ): string {
         return $field === 'title' ?
             $this->getTitle() :
             (string) parent::getConfigData($field, $storeId);
