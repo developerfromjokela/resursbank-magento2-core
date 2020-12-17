@@ -23,14 +23,14 @@ use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use Resursbank\Core\Model\Ui\ConfigProvider;
+use Resursbank\Core\Model\Payment\Resursbank as Method;
 use stdClass;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use function is_array;
 
 /**
- * @package Resursbank\Core\Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @noinspection EfferentObjectCouplingInspection
  */
 class PaymentMethods extends AbstractHelper
 {
@@ -104,6 +104,7 @@ class PaymentMethods extends AbstractHelper
      * @throws StateException
      * @throws ValidatorException
      * @throws JsonException
+     * @noinspection BadExceptionsProcessingInspection
      */
     public function sync(
         CredentialsModel $credentials
@@ -134,7 +135,10 @@ class PaymentMethods extends AbstractHelper
                         $credentials
                     )
                 );
-            } catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $error) {
+                // NOTE: NoSuchEntityException is expected if the requested
+                // method does not exist within the database, which is why we
+                // just ignore it here and create a clean Method data model.
                 /** @noinspection PhpUndefinedMethodInspection */
                 $method = $this->methodFactory->create();
             }
@@ -215,7 +219,7 @@ class PaymentMethods extends AbstractHelper
             );
         }
 
-        return ConfigProvider::CODE_PREFIX .
+        return Method::CODE_PREFIX .
             strtolower($identifier) .
             '_' .
             $this->credentials->getMethodSuffix($credentials);
@@ -338,6 +342,6 @@ class PaymentMethods extends AbstractHelper
     public function isResursBankMethod(
         string $code
     ): bool {
-        return strpos($code, ConfigProvider::CODE_PREFIX) === 0;
+        return strpos($code, Method::CODE_PREFIX) === 0;
     }
 }

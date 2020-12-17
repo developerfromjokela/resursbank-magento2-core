@@ -15,8 +15,8 @@ use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\PaymentMethod;
-use Resursbank\Core\Model\Ui\ConfigProvider;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
+use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
 
@@ -46,21 +46,29 @@ class Data
     private $methodFactory;
 
     /**
+     * @var Repository
+     */
+    private $repository;
+
+    /**
      * @param PaymentMethods $paymentMethods
      * @param Config $config
      * @param Log $log
      * @param MethodFactory $methodFactory
+     * @param Repository $repository
      */
     public function __construct(
         PaymentMethods $paymentMethods,
         Config $config,
         Log $log,
-        MethodFactory $methodFactory
+        MethodFactory $methodFactory,
+        Repository $repository
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->config = $config;
         $this->log = $log;
         $this->methodFactory = $methodFactory;
+        $this->repository = $repository;
     }
 
     /**
@@ -86,7 +94,7 @@ class Data
                 $code = $method->getCode();
 
                 // Append payment method to resulting list.
-                $result[$code] = $result[ConfigProvider::CODE];
+                $result[$code] = $result[Method::CODE];
                 $result[$code]['title'] = $method->getTitle();
                 $result[$code]['sort_order'] = $this->getSortOrder($code);
             }
@@ -131,7 +139,15 @@ class Data
     private function getMethod(
         string $code
     ): MethodInterface {
-        return $this->methodFactory->create(Method::class, ['code' => $code]);
+        /** @var Method $metod */
+        $method = $this->methodFactory->create(
+            Method::class,
+            ['code' => $code]
+        );
+
+        $method->setTitle($this->getTitle($code));
+
+        return $method;
     }
 
     /**
@@ -144,5 +160,26 @@ class Data
         string $code
     ): int {
         return $this->config->getMethodSortOrder($code);
+    }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    private function getTitle(
+        string $code
+    ): string {
+        $result = Method::TITLE;
+
+        try {
+            if ($code !== Method::CODE) {
+                $method = $this->repository->getByCode($code);
+                $result = $method->getTitle($result);
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
     }
 }

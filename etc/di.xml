@@ -9,7 +9,7 @@
     <!-- Payment method configuration. -->
     <type name="Resursbank\Core\Model\Payment\Resursbank">
         <arguments>
-            <argument name="code" xsi:type="const">Resursbank\Core\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="code" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">ResursbankGatewayValueHandlerPool</argument>
@@ -20,7 +20,6 @@
     <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="title" xsi:type="string">Resursbank\Core\Gateway\Handler\Title</item>
                 <item name="default" xsi:type="string">ResursbankGatewayConfigValueHandler</item>
             </argument>
         </arguments>
@@ -36,7 +35,7 @@
     <!-- Configuration reader. -->
     <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
         </arguments>
     </virtualType>
 
