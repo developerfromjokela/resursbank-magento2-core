@@ -173,33 +173,33 @@ class SubjectReaderTest extends TestCase
         }
     }
 
-    /**
-     * Assert that the readPaymentMethodCode method will return an empty string
-     * if no payment method has been assigned yet.
-     */
-    public function testReadPaymentMethodCodeWithoutCode(): void
-    {
-        $this->methodData->getPayment()->setMethod(null);
+//    /**
+//     * Assert that the readPaymentMethodCode method will return an empty string
+//     * if no payment method has been assigned yet.
+//     */
+//    public function testReadPaymentMethodCodeWithoutCode(): void
+//    {
+//        $this->methodData->getPayment()->setMethod(null);
+//
+//        $result = $this->subjectReader->readPaymentMethodCode(
+//            ['payment' => $this->methodData]
+//        );
+//
+//        static::assertSame('', $result);
+//    }
 
-        $result = $this->subjectReader->readPaymentMethodCode(
-            ['payment' => $this->methodData]
-        );
-
-        static::assertSame('', $result);
-    }
-
-    /**
-     * Assert that the readPaymentMethodCode method will return the code
-     * attached to the payment method within the anonymous array.
-     */
-    public function testReadPaymentMethodCodeWithCode(): void
-    {
-        $this->methodData->getPayment()->setMethod('invoice');
-
-        $result = $this->subjectReader->readPaymentMethodCode(
-            ['payment' => $this->methodData]
-        );
-
-        static::assertSame('invoice', $result);
-    }
+//    /**
+//     * Assert that the readPaymentMethodCode method will return the code
+//     * attached to the payment method within the anonymous array.
+//     */
+//    public function testReadPaymentMethodCodeWithCode(): void
+//    {
+//        $this->methodData->getPayment()->setMethod('invoice');
+//
+//        $result = $this->subjectReader->readPaymentMethodCode(
+//            ['payment' => $this->methodData]
+//        );
+//
+//        static::assertSame('invoice', $result);
+//    }
 }

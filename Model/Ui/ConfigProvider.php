@@ -9,26 +9,10 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Resursbank\Core\Model\Payment\Resursbank as Method;
 
-/**
- * @package Resursbank\Checkout\Model\Ui
- */
 class ConfigProvider implements ConfigProviderInterface
 {
-    /**
-     * Payment method code prefix.
-     *
-     * @var string
-     */
-    public const CODE_PREFIX = 'resursbank_';
-
-    /**
-     * Default payment method code.
-     *
-     * @var string
-     */
-    public const CODE = self::CODE_PREFIX . 'default';
-
     /**
      * @inheritdoc
      */
@@ -36,7 +20,7 @@ class ConfigProvider implements ConfigProviderInterface
     {
         return [
             'payment' => [
-                self::CODE => [
+                Method::CODE => [
                     'enabled' => true
                 ]
             ]
