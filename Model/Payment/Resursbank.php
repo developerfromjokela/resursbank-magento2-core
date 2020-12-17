@@ -14,6 +14,8 @@ class Resursbank extends Adapter
 {
     /**
      * Default title.
+     *
+     * @var string
      */
     public const TITLE = 'Resurs Bank';
 
@@ -69,16 +71,16 @@ class Resursbank extends Adapter
      * correct the title of this payment method instance (see setTitle and
      * getTitle above).
      *
-     * This payment  method was implemented to ensure the correct title is
+     * This payment method was implemented to ensure the correct title is
      * displayed on the order view:
      * vendor/magento/module-payment/view/adminhtml/templates/info/default.phtml
      *
      * @inheritdoc
      */
-    public function getConfigData($field, $storeId = null)
+    public function getConfigData($field, $storeId = null): string
     {
         return $field === 'title' ?
             $this->getTitle() :
-            parent::getConfigData($field, $storeId);
+            (string) parent::getConfigData($field, $storeId);
     }
 }

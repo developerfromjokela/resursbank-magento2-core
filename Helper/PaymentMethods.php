@@ -1,4 +1,4 @@
-<?php /** @noinspection EfferentObjectCouplingInspection */
+<?php
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -30,6 +30,7 @@ use function is_array;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @noinspection EfferentObjectCouplingInspection
  */
 class PaymentMethods extends AbstractHelper
 {
@@ -136,7 +137,7 @@ class PaymentMethods extends AbstractHelper
                 );
             } catch (NoSuchEntityException $error) {
                 // NOTE: NoSuchEntityException is expected if the requested
-                // method does not exists within the database, which is why we
+                // method does not exist within the database, which is why we
                 // just ignore it here and create a clean Method data model.
                 /** @noinspection PhpUndefinedMethodInspection */
                 $method = $this->methodFactory->create();
