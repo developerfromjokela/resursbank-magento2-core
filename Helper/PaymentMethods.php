@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -19,6 +19,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
@@ -350,16 +351,25 @@ class PaymentMethods extends AbstractHelper
      * from the configuration.
      *
      * @param null|CredentialsModel $credentials
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return array
      * @throws ValidatorException
      */
     public function getMethodsByCredentials(
-        ?CredentialsModel $credentials = null
+        ?CredentialsModel $credentials = null,
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
     ): array {
+        // Automatically resolve credentials for active API account.
         if ($credentials === null) {
-            $credentials = $this->credentials->resolveFromConfig();
+            $credentials = $this->credentials->resolveFromConfig(
+                $scopeCode,
+                $scopeType
+            );
         }
 
+        // Construct query to extract methods from database.
         $searchCriteria = $this->searchBuilder->addFilter(
             PaymentMethodInterface::ACTIVE,
             true
@@ -369,6 +379,7 @@ class PaymentMethods extends AbstractHelper
             'like'
         )->create();
 
+        // Execute query.
         return $this->repository->getList($searchCriteria)->getItems();
     }
 }
