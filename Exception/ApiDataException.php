@@ -12,8 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Indicates a problem with data transmitted between the server and the API.
- *
- * @package Resursbank\Core\Exception
  */
 class ApiDataException extends LocalizedException
 {

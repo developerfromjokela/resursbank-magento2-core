@@ -12,8 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Indicates a problem with data management in client session.
- *
- * @package Resursbank\Core\Exception
  */
 class SessionDataException extends LocalizedException
 {

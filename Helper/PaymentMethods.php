@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use function is_array;
 use JsonException;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -21,12 +23,10 @@ use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
+use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use Resursbank\Core\Model\Payment\Resursbank as Method;
 use stdClass;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use function is_array;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -343,5 +343,32 @@ class PaymentMethods extends AbstractHelper
         string $code
     ): bool {
         return strpos($code, Method::CODE_PREFIX) === 0;
+    }
+
+    /**
+     * NOTE: If not provided a Credentials model instance it will be resolved
+     * from the configuration.
+     *
+     * @param null|CredentialsModel $credentials
+     * @return array
+     * @throws ValidatorException
+     */
+    public function getMethodsByCredentials(
+        ?CredentialsModel $credentials = null
+    ): array {
+        if ($credentials === null) {
+            $credentials = $this->credentials->resolveFromConfig();
+        }
+
+        $searchCriteria = $this->searchBuilder->addFilter(
+            PaymentMethodInterface::ACTIVE,
+            true
+        )->addFilter(
+            PaymentMethodInterface::CODE,
+            "%{$this->credentials->getMethodSuffix($credentials)}",
+            'like'
+        )->create();
+
+        return $this->repository->getList($searchCriteria)->getItems();
     }
 }
