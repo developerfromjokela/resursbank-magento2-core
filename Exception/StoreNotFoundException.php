@@ -10,6 +10,9 @@ namespace Resursbank\Core\Exception;
 
 use Exception;
 
+/**
+ * Indicates a problem with data management in client session.
+ */
 class StoreNotFoundException extends Exception
 {
 }
