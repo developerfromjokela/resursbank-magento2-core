@@ -12,9 +12,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 
-/**
- * @package Resursbank\Core\Api
- */
 interface PaymentMethodRepositoryInterface
 {
     /**

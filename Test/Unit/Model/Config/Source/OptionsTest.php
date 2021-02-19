@@ -14,8 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases designed for generic options class.
- *
- * @package Resursbank\Core\Test\Unit\Model\Config\Source
  */
 class OptionsTest extends TestCase
 {
@@ -39,7 +37,7 @@ class OptionsTest extends TestCase
         // Mock abstract Option class and whitelist toArray method so we can
         // mock its return value.
         $this->options = $this->getMockBuilder(Options::class)
-            ->setMethods(['toArray'])
+            ->onlyMethods(['toArray'])
             ->getMockForAbstractClass();
 
         // Mock return value of toArray method, implemented by subclasses.

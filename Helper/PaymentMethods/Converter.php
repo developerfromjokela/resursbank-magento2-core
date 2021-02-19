@@ -18,8 +18,6 @@ use function is_string;
 /**
  * Convert payment method data from the Resurs Bank API to data which can be
  * interpreted by our Magento module.
- *
- * @package Resursbank\Core\Helper\PaymentMethods
  */
 class Converter extends AbstractHelper
 {
@@ -64,13 +62,14 @@ class Converter extends AbstractHelper
     public const DEFAULT_VALUE_ORDER_STATUS = Order::STATE_PENDING_PAYMENT;
 
     /**
-     * @param array $data
-     * @return array
+     * @param array<mixed> $data
+     * @return array<mixed>
      * @throws ValidatorException
      * @throws JsonException
      */
-    public function convert(array $data): array
-    {
+    public function convert(
+        array $data
+    ): array {
         // Validate provided data.
         if (!$this->validate($data)) {
             throw new ValidatorException(
@@ -92,20 +91,22 @@ class Converter extends AbstractHelper
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @return bool
      */
-    public function validate(array $data): bool
-    {
+    public function validate(
+        array $data
+    ): bool {
         return $this->getIdentifier($data) !== null;
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @return string
      */
-    public function getIdentifier(array $data): ?string
-    {
+    public function getIdentifier(
+        array $data
+    ): ?string {
         return (
             isset($data[self::KEY_ID]) &&
             is_string($data[self::KEY_ID]) &&
@@ -114,11 +115,12 @@ class Converter extends AbstractHelper
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @return string
      */
-    public function getDescription(array $data): string
-    {
+    public function getDescription(
+        array $data
+    ): string {
         return (
             isset($data[self::KEY_DESCRIPTION]) &&
             is_string($data[self::KEY_DESCRIPTION]) &&
@@ -127,11 +129,12 @@ class Converter extends AbstractHelper
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @return float
      */
-    public function getMinLimit(array $data): float
-    {
+    public function getMinLimit(
+        array $data
+    ): float {
         return (
             isset($data[self::KEY_MIN_LIMIT]) &&
             is_numeric($data[self::KEY_MIN_LIMIT])
@@ -139,11 +142,12 @@ class Converter extends AbstractHelper
     }
 
     /**
-     * @param array $data
+     * @param array<mixed> $data
      * @return float
      */
-    public function getMaxLimit(array $data): float
-    {
+    public function getMaxLimit(
+        array $data
+    ): float {
         return (
             isset($data[self::KEY_MAX_LIMIT]) &&
             is_numeric($data[self::KEY_MAX_LIMIT])

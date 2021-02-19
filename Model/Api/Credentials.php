@@ -12,9 +12,6 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Store\Api\Data\StoreInterface;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
-/**
- * @package Resursbank\Core\Model\Api
- */
 class Credentials
 {
     /**

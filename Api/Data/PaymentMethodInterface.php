@@ -8,9 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Api\Data;
 
-/**
- * @package Resursbank\Core\Api\Data
- */
 interface PaymentMethodInterface
 {
     /**

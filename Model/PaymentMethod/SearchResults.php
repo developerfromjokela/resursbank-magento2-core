@@ -13,9 +13,6 @@ use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use function is_array;
 
-/**
- * @package Resursbank\Core\Model\PaymentMethod
- */
 class SearchResults extends FrameworkSearchResults implements PaymentMethodSearchResultsInterface
 {
     /**
@@ -28,12 +25,14 @@ class SearchResults extends FrameworkSearchResults implements PaymentMethodSearc
      * the PaymentMethodInterface.
      *
      * @inheritDoc
+     * @return array<PaymentMethodInterface>
      */
     public function getItems(): array
     {
         /** @var PaymentMethodInterface[] $result */
         $result = parent::getItems();
 
+        /** @phpstan-ignore-next-line */
         return is_array($result) ? $result : [];
     }
 

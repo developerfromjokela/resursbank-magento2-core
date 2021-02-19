@@ -16,29 +16,6 @@
         </arguments>
     </type>
 
-    <!-- Value handlers -->
-    <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">ResursbankGatewayConfigValueHandler</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <!-- General value handler. -->
-    <virtualType name="ResursbankGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
-        <arguments>
-            <argument name="configInterface" xsi:type="object">ResursbankGatewayConfig</argument>
-        </arguments>
-    </virtualType>
-
-    <!-- Configuration reader. -->
-    <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
-        </arguments>
-    </virtualType>
-
     <!-- Payment Method interfaces. -->
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />

@@ -17,8 +17,6 @@ use Resursbank\Core\Helper\AbstractConfig;
 
 /**
  * Test cases designed for Resursbank\Core\Helper\AbstractConfig
- *
- * @package Resursbank\Core\Test\Unit\Helper
  */
 class AbstractConfigTest extends TestCase
 {
@@ -69,7 +67,6 @@ class AbstractConfigTest extends TestCase
      * Retrieve accessible getPath method mock.
      *
      * @return ReflectionMethod
-     * @throws ReflectionException
      */
     private function getPathMethod(): ReflectionMethod
     {

@@ -10,9 +10,6 @@ namespace Resursbank\Core\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
-/**
- * @package Resursbank\Core\Api\Data
- */
 interface PaymentMethodSearchResultsInterface extends SearchResultsInterface
 {
     /**

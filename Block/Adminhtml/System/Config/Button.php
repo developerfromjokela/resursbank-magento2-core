@@ -17,8 +17,6 @@ use Resursbank\Core\Helper\Url;
 
 /**
  * Centralised code for buttons in admin config.
- *
- * @package Resursbank\Core\Block\Adminhtml\System\Config
  */
 class Button extends Field
 {
@@ -49,6 +47,7 @@ class Button extends Field
     public function render(AbstractElement $element): string
     {
         /** @noinspection PhpUndefinedMethodInspection */
+        /** @phpstan-ignore-next-line */
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
 
         return parent::render($element);
@@ -69,8 +68,10 @@ class Button extends Field
         string $path
     ): string {
         /** @noinspection PhpUndefinedMethodInspection */
+        /** @phpstan-ignore-next-line */
         $this->setElement($element);
 
+        /** @phpstan-ignore-next-line */
         return $this->getLayout()
             ->createBlock(MagentoButton::class)
             ->setType('button')

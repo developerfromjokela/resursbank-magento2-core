@@ -18,8 +18,6 @@ use Resursbank\Core\Helper\PaymentMethods;
 /**
  * This controller executes the process which synchronizes all available payment
  * methods from Resurs Bank to the corresponding table in the database.
- *
- * @package Resursbank\Checkout\Controller\Adminhtml\Method
  */
 class Sync extends Action
 {

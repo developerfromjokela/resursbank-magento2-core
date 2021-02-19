@@ -142,6 +142,6 @@ abstract class AbstractItem implements ItemInterface
     ) {
         return ($item instanceof OrderItem) ?
             $item->getId() :
-            $item->getOrderId();
+            $item->getOrderId(); /** @phpstan-ignore-line */
     }
 }

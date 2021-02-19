@@ -56,7 +56,7 @@ class PaymentMethodsTest extends TestCase
     private $credentials;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $convertedMethodData;
 
@@ -96,28 +96,30 @@ class PaymentMethodsTest extends TestCase
         // the getConnection method.
         $this->api = $this->getMockBuilder(Api::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMock();
 
         // Mock instance of ResursBank class (API connection) so we can later
         // modify the behaviour of the getPaymentMethods method.
         $this->connection = $this->getMockBuilder(ResursBank::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPaymentMethods'])
+            ->onlyMethods(['getPaymentMethods'])
             ->getMock();
 
         // Mock the Credentials service class so we can later modify the
         // behaviour of the getMethodSuffix and getCountry methods.
         $this->credentialsHelper = $this->getMockBuilder(Credentials::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodSuffix', 'getCountry'])
+            ->onlyMethods(['getMethodSuffix', 'getCountry'])
             ->getMock();
 
         // Create mocked, empty, instance of Credentials model.
+        /** @phpstan-ignore-next-line */
         $this->credentials = $this->objectManager
             ->getObject(CredentialsModel::class);
 
         // Mock of PaymentMethods service class.
+        /** @phpstan-ignore-next-line */
         $this->paymentMethods = $this->objectManager->getObject(
             PaymentMethods::class,
             [
@@ -141,6 +143,7 @@ class PaymentMethodsTest extends TestCase
         $this->expectExceptionMessage('Some connection error.');
 
         // Make the getConnection method on our API adapter toss an Exception.
+        /** @phpstan-ignore-next-line */
         $this->api->expects(static::once())
             ->method('getConnection')
             ->will(static::throwException(
@@ -165,10 +168,12 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Modify return value of getPaymentMethods method from the API class.
+        /** @phpstan-ignore-next-line */
         $this->connection->method('getPaymentMethods')
             ->willReturn('This is not an array.');
 
         // Make sure our API adapter returns our mocked API class instance.
+        /** @phpstan-ignore-next-line */
         $this->api->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connection);
@@ -201,6 +206,7 @@ class PaymentMethodsTest extends TestCase
         ];
 
         // Modify return value of getPaymentMethods method from the API class.
+        /** @phpstan-ignore-next-line */
         $this->connection->expects(static::once())
             ->method('getPaymentMethods')
             ->willReturn(
@@ -208,6 +214,7 @@ class PaymentMethodsTest extends TestCase
             );
 
         // Make sure our API adapter returns our mocked API class instance.
+        /** @phpstan-ignore-next-line */
         $this->api->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connection);
@@ -236,6 +243,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCode(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
@@ -265,6 +273,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCodeWillLowercaseMethodIdentifier(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
@@ -625,11 +634,13 @@ class PaymentMethodsTest extends TestCase
      */
     public function testFill(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getCountry')
             ->willReturn('SE');
 
+        /** @phpstan-ignore-next-line */
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')

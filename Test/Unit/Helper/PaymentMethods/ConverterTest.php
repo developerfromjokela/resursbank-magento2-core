@@ -18,7 +18,6 @@ use Resursbank\Core\Helper\PaymentMethods\Converter;
 /**
  * Tests designed for payment method data conversion.
  *
- * @package Resursbank\Core\Test\Unit\Helper\PaymentMethods
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ConverterTest extends TestCase
@@ -34,12 +33,12 @@ class ConverterTest extends TestCase
     private $converter;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $apiData = [];
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $modelData;
 
@@ -50,6 +49,8 @@ class ConverterTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        /** @phpstan-ignore-next-line */
         $this->converter = $this->objectManager->getObject(Converter::class);
 
         $this->apiData = [

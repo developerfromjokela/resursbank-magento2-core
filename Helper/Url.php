@@ -12,9 +12,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Backend\Model\UrlInterface;
 
-/**
- * @package Resursbank\Core\Helper
- */
 class Url extends AbstractHelper
 {
     /**

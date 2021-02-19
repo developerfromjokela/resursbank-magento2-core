@@ -14,7 +14,7 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 class ConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @inheritdoc
+     * @return array<mixed>
      */
     public function getConfig(): array
     {

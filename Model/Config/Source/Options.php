@@ -9,12 +9,11 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Generic methods for option collections mainly utilised for select elements
  * within the configuration.
- *
- * @package Resursbank\Core\Model\Config\Source
  */
 abstract class Options implements OptionSourceInterface
 {
@@ -22,7 +21,7 @@ abstract class Options implements OptionSourceInterface
      * Returns a list of options formatted to function with select elements in
      * the admin configuration.
      *
-     * @return array
+     * @return array<array>
      */
     public function toOptionArray(): array
     {
@@ -38,7 +37,7 @@ abstract class Options implements OptionSourceInterface
     /**
      * Returns an associative array of options formatted as 'value' => 'label'.
      *
-     * @return array
+     * @return array<int|string, string|Phrase>
      */
     public function toArray(): array
     {

@@ -12,14 +12,12 @@ use Resursbank\Core\Model\PaymentMethod as Model;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
-/**
- * @package Resursbank\Core\Model\ResourceModel\PaymentMethod
- */
 class Collection extends AbstractCollection
 {
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection MagicMethodsValidityInspection
      */
     protected function _construct(): void
     {

@@ -11,13 +11,13 @@ namespace Resursbank\Core\Setup\Patch\Data;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use function is_array;
+use function is_string;
 
 /**
  * Map old config paths to new config paths.
  *
  * Alters Resurs Bank database entries in the "core_config_data" table.
- *
- * @package Resursbank\Core\Setup\Patch\Data
  */
 class RemapConfigPaths implements DataPatchInterface
 {
@@ -116,15 +116,13 @@ class RemapConfigPaths implements DataPatchInterface
             $this->moduleDataSetup
                 ->getConnection()
                 ->select()
-                ->exists(
-                    $select,
-                    "path = '${oldSection}/${old}'",
-                    true
-                );
+                ->exists($select, "path = '${oldSection}/${old}'");
 
-            $fetch = $this->moduleDataSetup->getConnection()->fetchRow(
-                $select->assemble()
-            );
+            $statement = $select->assemble();
+
+            $fetch = (is_string($statement)) ?
+                $this->moduleDataSetup->getConnection()->fetchRow($statement) :
+                null;
 
             // If old path exists, map it to its new path.
             if (is_array($fetch) && !empty($fetch)) {

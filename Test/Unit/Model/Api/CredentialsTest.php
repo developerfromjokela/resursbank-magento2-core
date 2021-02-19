@@ -16,8 +16,6 @@ use Resursbank\Core\Model\Api\Credentials;
 
 /**
  * Test cases designed for Credentials data model.
- *
- * @package Resursbank\Core\Test\Unit\Model\Api
  */
 class CredentialsTest extends TestCase
 {
@@ -42,8 +40,12 @@ class CredentialsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        /** @phpstan-ignore-next-line */
         $this->credentials = $this->objectManager
             ->getObject(Credentials::class);
+
+        /** @phpstan-ignore-next-line */
         $this->store = $this->objectManager->getObject(Store::class);
     }
 
@@ -73,34 +75,6 @@ class CredentialsTest extends TestCase
         $this->expectException(ValidatorException::class);
 
         $this->credentials->setPassword('');
-    }
-
-    /**
-     * Assert that "0" is a valid environment value.
-     *
-     * @return void
-     * @throws ValidatorException
-     */
-    public function testCanSetEnvironment0(): void
-    {
-        static::assertInstanceOf(
-            Credentials::class,
-            $this->credentials->setEnvironment(0)
-        );
-    }
-
-    /**
-     * Assert that "1" is a valid environment value.
-     *
-     * @return void
-     * @throws ValidatorException
-     */
-    public function testCanSetEnvironment1(): void
-    {
-        static::assertInstanceOf(
-            Credentials::class,
-            $this->credentials->setEnvironment(1)
-        );
     }
 
     /**

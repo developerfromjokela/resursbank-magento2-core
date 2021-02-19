@@ -403,7 +403,7 @@ class Item
     /**
      * Retrieve object data converted to array.
      *
-     * @return array
+     * @return array<mixed>
      */
     public function toArray(): array
     {

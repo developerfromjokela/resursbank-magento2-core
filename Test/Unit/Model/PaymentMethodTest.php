@@ -17,7 +17,6 @@ use Resursbank\Core\Model\PaymentMethod;
 /**
  * Test cases designed for PaymentMethod data model.
  *
- * @package Resursbank\Core\Test\Unit\Model
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -39,6 +38,7 @@ class PaymentMethodTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
+        /** @phpstan-ignore-next-line */
         $this->method = $objectManager->getObject(PaymentMethod::class);
     }
 
