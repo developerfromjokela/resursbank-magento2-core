@@ -18,9 +18,9 @@
 
     <!--
         The value handler definition is required to ensure values are located in
-        the config table. Without this, payment methods render during checkout
-        for example, since Magento won't be able to to obtain their "active"
-        flag.
+        the config table. Without this, payment methods won't render during
+        checkout for example, since Magento won't be able to to obtain their
+        "active" flag.
     -->
     <!-- Value handlers -->
     <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
