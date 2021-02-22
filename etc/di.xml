@@ -34,7 +34,7 @@
     <!-- General value handler. -->
     <virtualType name="ResursbankGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
+            <argument name="configInterface" xsi:type="object">ResursbankGatewayConfig</argument>
         </arguments>
     </virtualType>
 
