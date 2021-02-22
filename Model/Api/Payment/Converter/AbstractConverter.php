@@ -140,7 +140,7 @@ abstract class AbstractConverter implements ConverterInterface
      * understand.
      *
      * @param PaymentItem[] $items
-     * @return array
+     * @return array<array>
      */
     public function convertItemsToArrays(
         array $items
@@ -176,7 +176,7 @@ abstract class AbstractConverter implements ConverterInterface
 
         $match = false;
 
-        /** @var array $item */
+        /** @var array<mixed> $item */
         foreach ($collection as $item) {
             if (is_array($item) &&
                 isset($item['taxable_item_type']) &&

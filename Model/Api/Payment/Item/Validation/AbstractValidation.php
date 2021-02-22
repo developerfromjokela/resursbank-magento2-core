@@ -27,7 +27,7 @@ abstract class AbstractValidation
      */
     public function getSubject(): string
     {
-        return lcfirst(substr(strrchr(static::class, "\\"), 1));
+        return lcfirst(substr((string) strrchr(static::class, "\\"), 1));
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class AbstractValidation
      * NOTE: int(0) values are treated as unlimited length.
      *
      * @param string $value
-     * @param array $length
+     * @param array<mixed> $length
      * @return void
      * @throws InvalidArgumentException
      */
@@ -92,7 +92,7 @@ abstract class AbstractValidation
      * integer or decimal digit would.
      *
      * @param float $value
-     * @param array $length
+     * @param array<mixed> $length
      * @return void
      * @link https://www.php.net/manual/en/language.types.float.php
      */
@@ -151,7 +151,7 @@ abstract class AbstractValidation
      * Validate the provided $value is included in $list of allowed values.
      *
      * @param mixed $value
-     * @param array $list
+     * @param array<mixed> $list
      * @return void
      * @throws InvalidArgumentException
      * @throws JsonException

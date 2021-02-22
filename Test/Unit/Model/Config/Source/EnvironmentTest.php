@@ -15,8 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test cases designed for environment options.
- *
- * @package Resursbank\Core\Test\Unit\Model\Config\Source
  */
 class EnvironmentTest extends TestCase
 {
@@ -36,6 +34,8 @@ class EnvironmentTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        /** @phpstan-ignore-next-line */
         $this->environment = $this->objectManager
             ->getObject(Environment::class);
     }

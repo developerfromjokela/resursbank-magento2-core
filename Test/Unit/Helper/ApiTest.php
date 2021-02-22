@@ -36,6 +36,8 @@ class ApiTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        /** @phpstan-ignore-next-line */
         $this->api = $this->objectManager->getObject(Api::class);
     }
 

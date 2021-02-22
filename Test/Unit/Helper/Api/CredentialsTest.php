@@ -20,7 +20,6 @@ use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 /**
  * Test cases designed for Credentials data model.
  *
- * @package Resursbank\Core\Test\Unit\Helper\Api
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CredentialsTest extends TestCase
@@ -51,8 +50,14 @@ class CredentialsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        /** @phpstan-ignore-next-line */
         $this->model = $this->objectManager->getObject(Model::class);
+
+        /** @phpstan-ignore-next-line */
         $this->helper = $this->objectManager->getObject(Helper::class);
+
+        /** @phpstan-ignore-next-line */
         $this->store = $this->objectManager->getObject(Store::class);
     }
 

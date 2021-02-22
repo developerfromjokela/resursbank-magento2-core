@@ -8,17 +8,17 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Config\Source;
 
+use Magento\Framework\Phrase;
 use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Compile list of API environment alternatives.
- *
- * @package Resursbank\Core\Model\Config\Source
  */
 class Environment extends Options
 {
     /**
      * @inheritDoc
+     * @return array<int, Phrase>
      */
     public function toArray(): array
     {

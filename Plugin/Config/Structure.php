@@ -24,8 +24,6 @@ use function is_array;
  *
  * We need to create the sections this way since we do not know what payment
  * methods will be available until the client fetches them from the API.
- *
- * @package Resursbank\Core\Plugin\Config
  */
 class Structure
 {
@@ -71,8 +69,8 @@ class Structure
      * Build and append configuration sections.
      *
      * @param Original $subject
-     * @param array $result
-     * @return array
+     * @param array<array> $result
+     * @return array<array>
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpUnusedParameterInspection
@@ -111,7 +109,7 @@ class Structure
     /**
      * Get the payment methods for the current user.
      *
-     * @return array
+     * @return array<PaymentMethodInterface>
      * @throws ValidatorException
      */
     private function getPaymentMethods(): array
@@ -130,7 +128,7 @@ class Structure
     /**
      * Appends a dynamic payment method to config.
      *
-     * @param array $config
+     * @param array<array> $config
      * @param PaymentMethod $method
      */
     private function addPaymentMethod(
@@ -168,11 +166,12 @@ class Structure
     /**
      * Check if config array includes element for payment methods.
      *
-     * @param array $result
+     * @param array<array> $result
      * @return bool
      */
-    private function hasConfigElement(array $result): bool
-    {
+    private function hasConfigElement(
+        array $result
+    ): bool {
         return (
             isset(
                 $result['other_payment_methods']['children']

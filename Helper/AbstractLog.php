@@ -19,9 +19,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use function is_string;
 
-/**
- * @package Resursbank\Checkout\Helper
- */
 abstract class AbstractLog extends AbstractHelper
 {
     /**

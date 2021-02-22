@@ -16,15 +16,14 @@ use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\ArtNo;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\Description;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\Quantity;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitMeasure;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitAmountWithoutVat;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\Type;
+use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitAmountWithoutVat;
+use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitMeasure;
+use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 
 /**
  * Test cases designed for Payment\Item data model.
  *
- * @package Resursbank\Core\Test\Unit\Model\Api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -42,7 +41,7 @@ class ItemTest extends TestCase
     private $item;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $data = [
         Item::KEY_ART_NO => 'pastrami',
@@ -119,6 +118,7 @@ class ItemTest extends TestCase
             Type::class
         );
 
+        /** @phpstan-ignore-next-line */
         $this->item = $this->objectManager->getObject(
             Item::class,
             array_merge(
@@ -191,21 +191,6 @@ class ItemTest extends TestCase
         $this->item->setArtNo('geno1');
 
         self::assertSame('geno1', $this->item->getArtNo());
-    }
-
-    /**
-     * Assert that the method setArtNo will return an instance of the Item data
-     * model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetArtNoReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setArtNo('mallow55')
-        );
     }
 
     /**
@@ -300,21 +285,6 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the method setDescription will return an instance of the Item
-     * data model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetDescriptionReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setDescription('Totally tubular sunglasses!')
-        );
-    }
-
-    /**
      * Assert that the setDescription method allows values with a length of 1.
      *
      * @return void
@@ -392,18 +362,6 @@ class ItemTest extends TestCase
         $this->item->setQuantity(65.7765);
 
         self::assertSame(65.7765, $this->item->getQuantity());
-    }
-
-    /**
-     * Assert that the method setQuantity will return an instance of the Item
-     * data model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetQuantityReturnSelf(): void
-    {
-        static::assertInstanceOf(Item::class, $this->item->setQuantity(7));
     }
 
     /**
@@ -492,21 +450,6 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the method setUnitMeasure will return an instance of the Item
-     * data model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetUnitMeasureReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setUnitMeasure('st')
-        );
-    }
-
-    /**
      * Assert that the setUnitMeasure method allows values with a length of 1.
      *
      * @return void
@@ -574,21 +517,6 @@ class ItemTest extends TestCase
         $this->item->setUnitAmountWithoutVat(123123.4545);
 
         self::assertSame(123123.4545, $this->item->getUnitAmountWithoutVat());
-    }
-
-    /**
-     * Assert that the method setUnitAmountWithoutVat will return an instance of
-     * the Item data model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetUnitAmountWithoutVatReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setUnitAmountWithoutVat(758)
-        );
     }
 
     /**
@@ -675,21 +603,6 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Assert that the method setVatPct will return an instance of the Item data
-     * model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetVatPctReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setVatPct(12)
-        );
-    }
-
-    /**
      * Assert that the setVatPct method accepts all the values specified by the
      * validator.
      *
@@ -766,21 +679,6 @@ class ItemTest extends TestCase
         $this->item->setType(Item::TYPE_PRODUCT);
 
         self::assertSame(Item::TYPE_PRODUCT, $this->item->getType());
-    }
-
-    /**
-     * Assert that the method setType will return an instance of the Item data
-     * model.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testSetTypeReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            Item::class,
-            $this->item->setType(Item::TYPE_DISCOUNT)
-        );
     }
 
     /**

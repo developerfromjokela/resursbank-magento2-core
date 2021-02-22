@@ -23,8 +23,6 @@ use function array_key_exists;
 
 /**
  * Business logic for corresponding data model Model\Api\Credentials.
- *
- * @package Resursbank\Core\Helper\Api
  */
 class Credentials extends AbstractHelper
 {
@@ -154,7 +152,7 @@ class Credentials extends AbstractHelper
     /**
      * Returns distinct collection of API credentials from configuration.
      *
-     * @return array
+     * @return array<CredentialsModel>
      * @throws ValidatorException
      */
     public function getCollection(): array

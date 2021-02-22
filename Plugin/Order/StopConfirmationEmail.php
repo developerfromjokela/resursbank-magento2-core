@@ -16,8 +16,6 @@ use Resursbank\Rco\Helper\Log;
  * Prevents the order confirmation email from being sent upon order creation.
  * The order confirmation email will instead be sent when we receive a callback
  * indicating the payment has been confirmed by Resurs Bank.
- *
- * @package Resursbank\Core\Plugin\Order
  */
 class StopConfirmationEmail
 {

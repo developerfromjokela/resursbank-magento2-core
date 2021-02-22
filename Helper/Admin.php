@@ -15,8 +15,6 @@ use Magento\User\Model\User;
 
 /**
  * Generic methods to assist with admin related actions.
- *
- * @package Resursbank\Core\Helper
  */
 class Admin extends AbstractHelper
 {

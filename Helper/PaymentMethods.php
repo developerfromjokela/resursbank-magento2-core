@@ -153,11 +153,12 @@ class PaymentMethods extends AbstractHelper
 
     /**
      * @param CredentialsModel $credentials
-     * @return array
+     * @return array<stdClass>
      * @throws IntegrationException
      */
-    public function fetch(CredentialsModel $credentials): array
-    {
+    public function fetch(
+        CredentialsModel $credentials
+    ): array {
         try {
             $methods = $this->api->getConnection($credentials)
                 ->getPaymentMethods();
@@ -232,11 +233,12 @@ class PaymentMethods extends AbstractHelper
      * properly convert the data to an array for further processing.
      *
      * @param mixed $data
-     * @return array
+     * @return array<array>
      * @throws IntegrationException
      */
-    private function resolveMethodDataArray($data): array
-    {
+    private function resolveMethodDataArray(
+        $data
+    ): array {
         $result = $data;
 
         if ($data instanceof stdClass) {
@@ -255,11 +257,12 @@ class PaymentMethods extends AbstractHelper
     /**
      * Validate converted payment method data.
      *
-     * @param array $data
+     * @param array<mixed> $data
      * @throws ValidatorException
      */
-    private function validateData(array $data): void
-    {
+    private function validateData(
+        array $data
+    ): void {
         if (!isset($data[PaymentMethodInterface::IDENTIFIER])) {
             throw new ValidatorException(
                 __('Missing identifier index.')
@@ -298,7 +301,7 @@ class PaymentMethods extends AbstractHelper
      * using the validateData method.
      *
      * @param PaymentMethodInterface $method
-     * @param array $data
+     * @param array<mixed> $data
      * @param CredentialsModel $credentials
      * @return PaymentMethodInterface
      * @throws ValidatorException
@@ -353,7 +356,7 @@ class PaymentMethods extends AbstractHelper
      * @param null|CredentialsModel $credentials
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return array
+     * @return array<PaymentMethodInterface>
      * @throws ValidatorException
      */
     public function getMethodsByCredentials(

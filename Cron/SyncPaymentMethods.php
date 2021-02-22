@@ -16,8 +16,6 @@ use Resursbank\Core\Helper\PaymentMethods;
 
 /**
  * Automatically sync payment methods for all configured accounts.
- *
- * @package Resursbank\Checkout\Cron
  */
 class SyncPaymentMethods
 {

@@ -15,8 +15,6 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 /**
  * Converts data for the "resursbank_is_test" column in the "sales_order"
  * table after the data has been migrated.
- *
- * @package Resursbank\Core\Setup\Patch\Data
  */
 class ResursbankIsTest implements DataPatchInterface
 {

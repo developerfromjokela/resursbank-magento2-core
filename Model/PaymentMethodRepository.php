@@ -23,7 +23,6 @@ use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
 
 /**
- * @package Resursbank\Core\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentMethodRepository implements PaymentMethodRepositoryInterface
@@ -79,8 +78,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @throws AlreadyExistsException
      * @throws Exception
      */
-    public function save(PaymentMethodInterface $entry): PaymentMethodInterface
-    {
+    public function save(
+        PaymentMethodInterface $entry
+    ): PaymentMethodInterface {
         /** @var PaymentMethod $entry */
         $this->resourceModel->save($entry);
 
@@ -91,8 +91,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function delete(PaymentMethodInterface $entry): bool
-    {
+    public function delete(
+        PaymentMethodInterface $entry
+    ): bool {
         /** @var PaymentMethod $entry */
         $this->resourceModel->delete($entry);
 
@@ -105,8 +106,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function deleteById(int $methodId): bool
-    {
+    public function deleteById(
+        int $methodId
+    ): bool {
         return $this->delete($this->get($methodId));
     }
 
@@ -114,8 +116,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @inheritDoc
      * @throws NoSuchEntityException
      */
-    public function get(int $methodId): PaymentMethodInterface
-    {
+    public function get(
+        int $methodId
+    ): PaymentMethodInterface {
         /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
@@ -135,8 +138,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @inheritDoc
      * @throws NoSuchEntityException
      */
-    public function getByCode(string $code): PaymentMethodInterface
-    {
+    public function getByCode(
+        string $code
+    ): PaymentMethodInterface {
         /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
@@ -170,6 +174,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         $collection->load();
 
         /** @noinspection PhpUndefinedMethodInspection */
+        /** @noinspection PhpParamsInspection */
         return $this->searchResultsFactory->create()
             ->setSearchCriteria($searchCriteria)
             ->setItems($collection->getItems())

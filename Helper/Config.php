@@ -13,8 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
  * the AbstractConfig class.
- *
- * @package Resursbank\Core\Helper
  */
 class Config extends AbstractConfig
 {

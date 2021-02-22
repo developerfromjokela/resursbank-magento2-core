@@ -17,8 +17,6 @@ use Magento\Framework\DB\Ddl\Table;
  * This patch applies changes to the "resursbank_is_test" column after the
  * data has been migrated and converted from the old "resursbank_environment"
  * column in the "sales_order" table.
- *
- * @package Resursbank\Core\Setup\Patch\Schema
  */
 class ResursbankIsTest implements SchemaPatchInterface
 {

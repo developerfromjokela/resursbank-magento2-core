@@ -11,18 +11,15 @@ namespace Resursbank\Core\Plugin\Payment\Helper;
 use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
+use Magento\Payment\Model\Method\Factory as MethodFactory;
+use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
-use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
+use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use Magento\Payment\Model\Method\Factory as MethodFactory;
-use Magento\Payment\Model\MethodInterface;
 
-/**
- * @package Resursbank\Core\Plugin\Payment\Helper
- */
 class Data
 {
     /**
@@ -79,8 +76,8 @@ class Data
      * Without this our payment methods will not be recognized in checkout.
      *
      * @param Subject $subject
-     * @param array $result
-     * @return array
+     * @param array<string, array> $result
+     * @return array<string, array>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpUnusedParameterInspection
      */
@@ -94,9 +91,11 @@ class Data
                 $code = $method->getCode();
 
                 // Append payment method to resulting list.
-                $result[$code] = $result[Method::CODE];
-                $result[$code]['title'] = $method->getTitle();
-                $result[$code]['sort_order'] = $this->getSortOrder($code);
+                if ($code !== null) {
+                    $result[$code] = $result[Method::CODE];
+                    $result[$code]['title'] = $method->getTitle();
+                    $result[$code]['sort_order'] = $this->getSortOrder($code);
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);
@@ -139,7 +138,7 @@ class Data
     private function getMethod(
         string $code
     ): MethodInterface {
-        /** @var Method $metod */
+        /** @var Method $method */
         $method = $this->methodFactory->create(
             Method::class,
             ['code' => $code]
@@ -173,8 +172,13 @@ class Data
 
         try {
             if ($code !== Method::CODE) {
-                $method = $this->repository->getByCode($code);
-                $result = $method->getTitle($result);
+                $title = $this->repository
+                    ->getByCode($code)
+                    ->getTitle($result);
+
+                if ($title !== null) {
+                    $result = $title;
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);

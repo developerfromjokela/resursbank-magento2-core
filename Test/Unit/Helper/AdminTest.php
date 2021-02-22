@@ -16,8 +16,6 @@ use Resursbank\Core\Helper\Admin;
 
 /**
  * Test cases designed for Resursbank\Core\Helper\Admin
- *
- * @package Resursbank\Core\Test\Unit\Helper
  */
 class AdminTest extends TestCase
 {
@@ -42,7 +40,7 @@ class AdminTest extends TestCase
         // modify its output.
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
     }
 
@@ -58,6 +56,7 @@ class AdminTest extends TestCase
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
+        /** @phpstan-ignore-next-line */
         static::assertEquals('Anonymous', $admin->getUserName());
     }
 
@@ -71,16 +70,19 @@ class AdminTest extends TestCase
     {
         // Mock a User object.
         $user = $this->objectManager->getObject(User::class);
+
+        /** @phpstan-ignore-next-line */
         $user->setUserName('Lebowski');
 
         // Modify the output of getUser method in Session mock.
-        $this->session->method('getUser')
-            ->willReturn($user);
+        /** @phpstan-ignore-next-line */
+        $this->session->method('getUser')->willReturn($user);
 
         // Create a new Admin instance using our mocked Session.
         $admin = $this->objectManager
             ->getObject(Admin::class, ['session' => $this->session]);
 
+        /** @phpstan-ignore-next-line */
         static::assertEquals('Lebowski', $admin->getUserName());
     }
 }

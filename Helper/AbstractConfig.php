@@ -16,8 +16,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Provides basic methods to simplify configuration read/write.
- *
- * @package Resursbank\Core\Helper
  */
 abstract class AbstractConfig extends AbstractHelper
 {

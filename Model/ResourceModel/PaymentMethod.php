@@ -10,14 +10,12 @@ namespace Resursbank\Core\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-/**
- * @package Resursbank\Core\Model\ResourceModel
- */
 class PaymentMethod extends AbstractDb
 {
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection MagicMethodsValidityInspection
      */
     protected function _construct(): void
     {

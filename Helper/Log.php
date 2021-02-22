@@ -11,9 +11,6 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\Context;
 
-/**
- * @package Resursbank\Checkout\Helper
- */
 class Log extends AbstractLog
 {
     /**

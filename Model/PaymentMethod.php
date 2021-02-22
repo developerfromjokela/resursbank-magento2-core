@@ -16,7 +16,6 @@ use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
 use function is_int;
 
 /**
- * @package Resursbank\Core\Model
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class PaymentMethod extends AbstractModel implements PaymentMethodInterface
@@ -25,6 +24,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      * Initialize model.
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection MagicMethodsValidityInspection
      */
     protected function _construct(): void
     {

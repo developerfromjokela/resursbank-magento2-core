@@ -15,8 +15,6 @@ use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * API adapter utilising the EComPHP library.
- *
- * @package Resursbank\Core\Helper
  */
 class Api extends AbstractHelper
 {
