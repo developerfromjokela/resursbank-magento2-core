@@ -33,6 +33,6 @@
         Setup/Patch/Data/ResursbankIsTest
         Setup/Patch/Schema/ResursbankIsTest
     -->
-    <column xsi:type="varchar" name="resursbank_is_test" nullable="true" default="null" onCreate="migrateDataFrom(resursbank_environment)" comment="The selected environment in Resurs Bank config."/>
+    <column xsi:type="boolean" name="resursbank_is_test" nullable="true" comment="Whether the purchase was conducted in test."/>
   </table>
 </schema>
