@@ -114,15 +114,23 @@ class Structure
      */
     private function getPaymentMethods(): array
     {
+        $result = [];
+
         $credentials = $this->credentials->resolveFromConfig();
 
-        $searchCriteria = $this->searchBuilder->addFilter(
-            PaymentMethodInterface::CODE,
-            "%{$this->credentials->getMethodSuffix($credentials)}",
-            'like'
-        )->create();
+        if ($this->credentials->hasCredentials($credentials)) {
+            $searchCriteria = $this->searchBuilder->addFilter(
+                PaymentMethodInterface::CODE,
+                "%{$this->credentials->getMethodSuffix($credentials)}",
+                'like'
+            )->create();
 
-        return $this->paymentMethodRepo->getList($searchCriteria)->getItems();
+            $result = $this->paymentMethodRepo
+                ->getList($searchCriteria)
+                ->getItems();
+        }
+
+        return $result;
     }
 
     /**
