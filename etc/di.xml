@@ -12,8 +12,38 @@
             <argument name="code" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">ResursbankGatewayValueHandlerPool</argument>
         </arguments>
     </type>
+
+    <!--
+        The value handler definition is required to ensure values are located in
+        the config table. Without this, payment methods won't render during
+        checkout for example, since Magento won't be able to to obtain their
+        "active" flag.
+    -->
+    <!-- Value handlers -->
+    <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">ResursbankGatewayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- General value handler. -->
+    <virtualType name="ResursbankGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">ResursbankGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader. -->
+    <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
+        </arguments>
+    </virtualType>
 
     <!-- Payment Method interfaces. -->
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
