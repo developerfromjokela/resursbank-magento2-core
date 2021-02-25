@@ -364,6 +364,8 @@ class PaymentMethods extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORE
     ): array {
+        $result = [];
+
         // Automatically resolve credentials for active API account.
         if ($credentials === null) {
             $credentials = $this->credentials->resolveFromConfig(
@@ -372,17 +374,21 @@ class PaymentMethods extends AbstractHelper
             );
         }
 
-        // Construct query to extract methods from database.
-        $searchCriteria = $this->searchBuilder->addFilter(
-            PaymentMethodInterface::ACTIVE,
-            true
-        )->addFilter(
-            PaymentMethodInterface::CODE,
-            "%{$this->credentials->getMethodSuffix($credentials)}",
-            'like'
-        )->create();
+        if ($this->credentials->hasCredentials($credentials)) {
+            // Construct query to extract methods from database.
+            $searchCriteria = $this->searchBuilder->addFilter(
+                PaymentMethodInterface::ACTIVE,
+                true
+            )->addFilter(
+                PaymentMethodInterface::CODE,
+                "%{$this->credentials->getMethodSuffix($credentials)}",
+                'like'
+            )->create();
 
-        // Execute query.
-        return $this->repository->getList($searchCriteria)->getItems();
+            // Execute query.
+            $result = $this->repository->getList($searchCriteria)->getItems();
+        }
+
+        return $result;
     }
 }

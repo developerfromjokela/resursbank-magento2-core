@@ -140,13 +140,22 @@ class Credentials extends AbstractHelper
         /** @var CredentialsModel $credentials */
         $credentials = $this->objectManager->get(CredentialsModel::class);
 
-        return $credentials->setEnvironment(
+        $credentials->setEnvironment(
             $this->config->getEnvironment($scopeCode, $scopeType)
-        )->setUsername(
-            $this->config->getUsername($scopeCode, $scopeType)
-        )->setPassword(
-            $this->config->getPassword($scopeCode, $scopeType)
         );
+
+        $username = $this->config->getUsername($scopeCode, $scopeType);
+        $password = $this->config->getPassword($scopeCode, $scopeType);
+
+        if ($username !== '') {
+            $credentials->setUsername($username);
+        }
+
+        if ($password !== '') {
+            $credentials->setPassword($password);
+        }
+
+        return $credentials;
     }
 
     /**
@@ -162,18 +171,18 @@ class Credentials extends AbstractHelper
         /** @var StoreInterface $store */
         foreach ($this->storeManager->getStores() as $store) {
             /** @var CredentialsModel $credentials */
-            $credentials = $this->resolveFromConfig(
-                $store->getCode()
-            );
+            $credentials = $this->resolveFromConfig($store->getCode());
 
-            $credentials->setStore($store);
+            if ($this->hasCredentials($credentials)) {
+                $credentials->setStore($store);
 
-            /** @var string $hash */
-            $hash = $this->getHash($credentials);
+                /** @var string $hash */
+                $hash = $this->getHash($credentials);
 
-            // Never process the same API account twice.
-            if (!array_key_exists($hash, $list)) {
-                $list[$hash] = $credentials;
+                // Never process the same API account twice.
+                if (!array_key_exists($hash, $list)) {
+                    $list[$hash] = $credentials;
+                }
             }
         }
 
