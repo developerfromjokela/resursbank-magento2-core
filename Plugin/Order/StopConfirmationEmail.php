@@ -8,66 +8,44 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Plugin\Order;
 
-use Exception;
 use Magento\Sales\Model\Order;
-use Resursbank\Rco\Helper\Log;
+use Resursbank\Core\Helper\Order as OrderHelper;
 
 /**
- * Prevents the order confirmation email from being sent upon order creation.
- * The order confirmation email will instead be sent when we receive a callback
- * indicating the payment has been confirmed by Resurs Bank.
+ * Applies a value to the column "resursbank_is_test" to reflect whether a
+ * payment was conducted in the test or production environment.
  */
 class StopConfirmationEmail
 {
     /**
-     * @var Log
+     * @var OrderHelper
      */
-    private $log;
+    private $orderHelper;
 
     /**
-     * @param Log $log
+     * @param OrderHelper $orderHelper
      */
     public function __construct(
-        Log $log
+        OrderHelper $orderHelper
     ) {
-        $this->log = $log;
+        $this->orderHelper = $orderHelper;
     }
 
     /**
      * @param Order $subject
      * @param Order $result
      * @return Order
-     * @throws Exception
+     * @noinspection PhpUnusedParameterInspection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterBeforeSave(
         Order $subject,
         Order $result
     ): Order {
-        try {
-            if ($this->isEnabled($subject)) {
-                $subject->setCanSendNewEmailFlag(false);
-            }
-        } catch (Exception $e) {
-            $this->log->exception($e);
+        if ($this->orderHelper->isNew($subject)) {
+            $result->setCanSendNewEmailFlag(false);
         }
 
         return $result;
-    }
-
-    /**
-     * Check whether or not this plugin should execute.
-     *
-     * @param Order $order
-     * @return bool
-     * @throws Exception
-     */
-    private function isEnabled(
-        Order $order
-    ): bool {
-        return (
-            $order->isObjectNew() &&
-            !$order->getOriginalIncrementId() &&
-            $order->getGrandTotal() > 0
-        );
     }
 }
