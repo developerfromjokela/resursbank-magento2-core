@@ -9,7 +9,10 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\RBEcomPHP\ResursBank;
 
@@ -18,6 +21,24 @@ use Resursbank\RBEcomPHP\ResursBank;
  */
 class Api extends AbstractHelper
 {
+    /**
+     * @var CredentialsHelper
+     */
+    private $credentialsHelper;
+
+    /**
+     * @param Context $context
+     * @param CredentialsHelper $credentialsHelper
+     */
+    public function __construct(
+        Context $context,
+        CredentialsHelper $credentialsHelper
+    ) {
+        $this->credentialsHelper = $credentialsHelper;
+
+        parent::__construct($context);
+    }
+
     /**
      * @param Credentials $credentials
      * @param string $userAgent
@@ -28,11 +49,19 @@ class Api extends AbstractHelper
         Credentials $credentials,
         string $userAgent = ''
     ): ResursBank {
-        $connection = new ResursBank(
-            $credentials->getUsername(),
-            $credentials->getPassword(),
-            $credentials->getEnvironment()
-        );
+        $user = $credentials->getUsername();
+        $pass = $credentials->getPassword();
+        $env = $credentials->getEnvironment();
+
+        // Validate API credentials & settings.
+        if ($user === null || $pass === null || $env === null) {
+            throw new InvalidArgumentException(
+                'Failed to establish API connection, incomplete Credentials.'
+            );
+        }
+
+        // Establish API connection.
+        $connection = new ResursBank($user, $pass, $env);
 
         // Enable WSDL cache to suppress redundant API calls.
         $connection->setWsdlCache(true);

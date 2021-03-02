@@ -34,6 +34,7 @@ class ResursbankTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
+        /** @phpstan-ignore-next-line */
         $this->method = $this->objectManager->getObject(Method::class);
     }
 
