@@ -98,8 +98,11 @@ class Sync implements HttpGetActionInterface
             );
         }
 
+        $test = $this->redirect->getRefererUrl();
+        $test2 = 'asd';
+
         return $this->resultFactory
-            ->create(ResultFactory::TYPE_JSON)
-            ->setHeader('location', $this->redirect->getRefererUrl(), true);
+            ->create(ResultFactory::TYPE_REDIRECT)
+            ->setUrl($this->redirect->getRefererUrl());
     }
 }
