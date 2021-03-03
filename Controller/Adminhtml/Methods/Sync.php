@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Controller\Adminhtml\Methods;
 
 use Exception;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultFactory;
@@ -89,18 +90,17 @@ class Sync implements HttpGetActionInterface
             }
 
             $this->message->addSuccessMessage(
-                __('Successfully synchronized payment methods.')
+                (string) __('Successfully synchronized payment methods.')
             );
         } catch (Exception $e) {
             $this->log->exception($e);
             $this->message->addErrorMessage(
-                __('Failed to synchronize payment methods.')
+                (string) __('Failed to synchronize payment methods.')
             );
         }
-        
 
-        return $this->resultFactory
-            ->create(ResultFactory::TYPE_REDIRECT)
-            ->setUrl($this->redirect->getRefererUrl());
+        /** @var Redirect $result */
+        $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $result->setUrl($this->redirect->getRefererUrl());
     }
 }
