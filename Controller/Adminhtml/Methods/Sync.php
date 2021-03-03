@@ -97,9 +97,7 @@ class Sync implements HttpGetActionInterface
                 __('Failed to synchronize payment methods.')
             );
         }
-
-        $test = $this->redirect->getRefererUrl();
-        $test2 = 'asd';
+        
 
         return $this->resultFactory
             ->create(ResultFactory::TYPE_REDIRECT)
