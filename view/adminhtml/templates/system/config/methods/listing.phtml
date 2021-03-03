@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
+
+/** @var Listing $block */
+/** @var Escaper $escaper */
+/** @noinspection PhpUndefinedMethodInspection */
+/** @phpstan-ignore-next-line */
+$methods = $block->getMethods();
+?>
+
+<?php if (!empty($methods)): ?>
+    <h2 style="margin-top: 25px;">
+        <?php /** @phpstan-ignore-next-line */ ?>
+        <?= $escaper->escapeHtml(__('Synced payment methods')) ?>
+    </h2>
+    <?php foreach ($methods as $method): ?>
+    <div style="border-bottom: 1px dashed #c0c0c0; margin-bottom: 10px; padding-bottom: 10px;">
+        <?php /** @phpstan-ignore-next-line */ ?>
+        <div style="font-weight: bold; margin-bottom: 10px;"><?= $escaper->escapeHtml($method->getTitle()) ?></div>
+        <?php /** @phpstan-ignore-next-line */ ?>
+        <div><?= $escaper->escapeHtml($block->getMin($method)) ?></div>
+        <?php /** @phpstan-ignore-next-line */ ?>
+        <div><?= $escaper->escapeHtml($block->getMax($method)) ?></div>
+    </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <?php /** @phpstan-ignore-next-line */ ?>
+    <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
+<?php endif; ?>
