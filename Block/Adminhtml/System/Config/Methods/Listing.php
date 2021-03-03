@@ -10,16 +10,15 @@ namespace Resursbank\Core\Block\Adminhtml\System\Config\Methods;
 
 use Exception;
 use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
-use Magento\Config\Block\System\Config\Form\Field;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * List payment methods and relevant metadata on config page.
@@ -42,11 +41,6 @@ class Listing extends Field
     private $priceCurrency;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var RequestInterface
      */
     private $request;
@@ -56,9 +50,8 @@ class Listing extends Field
      * @param PaymentMethods $paymentMethods
      * @param Log $log
      * @param PriceCurrencyInterface $priceCurrency
-     * @param StoreManagerInterface $storeManager
      * @param RequestInterface $request
-     * @param array $data
+     * @param array<mixed> $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
@@ -66,7 +59,6 @@ class Listing extends Field
         PaymentMethods $paymentMethods,
         Log $log,
         PriceCurrencyInterface $priceCurrency,
-        StoreManagerInterface $storeManager,
         RequestInterface $request,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
@@ -74,7 +66,6 @@ class Listing extends Field
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
         $this->priceCurrency = $priceCurrency;
-        $this->storeManager = $storeManager;
         $this->request = $request;
 
         $this->setTemplate('system/config/methods/listing.phtml');
@@ -120,9 +111,7 @@ class Listing extends Field
                 $price,
                 false,
                 PriceCurrencyInterface::DEFAULT_PRECISION,
-                $this->storeManager->getStore(
-                    $this->request->getParam('store', 0)
-                )
+                $this->request->getParam('store', 0)
             );
         } catch (Exception $e) {
             $this->log->exception($e);
@@ -141,7 +130,7 @@ class Listing extends Field
         return __(
             'Minimum order total %1',
             $this->formatPrice(
-                $method->getMinOrderTotal()
+                (float) $method->getMinOrderTotal()
             )
         );
     }
@@ -156,7 +145,7 @@ class Listing extends Field
         return __(
             'Maximum order total %1',
             $this->formatPrice(
-                $method->getMaxOrderTotal()
+                (float) $method->getMaxOrderTotal()
             )
         );
     }
@@ -178,7 +167,7 @@ class Listing extends Field
     }
 
     /**
-     * Get the button and scripts contents
+     * Get HTML content.
      *
      * @param AbstractElement $element
      * @return string
