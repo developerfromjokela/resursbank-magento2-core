@@ -68,6 +68,10 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/methods/auto_sync_method</config_path>
                         </field>
+                        <field id="listing" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing</frontend_model>
+                            <config_path>resursbank/methods/listing</config_path>
+                        </field>
                     </group>
                 </group>
             </group>
