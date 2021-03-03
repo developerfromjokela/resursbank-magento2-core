@@ -82,14 +82,11 @@ class SetEnvironmentFlag
      *
      * @param Order $order
      * @return bool
-     * @throws NoSuchEntityException
      */
     private function isTestEnvironment(
         Order $order
     ): bool {
-        $env = $this->config->getEnvironment(
-            $this->orderHelper->getStoreCode($order)
-        );
+        $env = $this->config->getEnvironment($order->getStore()->getCode());
 
         return $env === ResursBank::ENVIRONMENT_TEST;
     }
