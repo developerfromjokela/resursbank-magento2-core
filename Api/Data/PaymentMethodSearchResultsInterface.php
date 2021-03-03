@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\DataObject;
 
 interface PaymentMethodSearchResultsInterface extends SearchResultsInterface
 {
@@ -22,7 +23,7 @@ interface PaymentMethodSearchResultsInterface extends SearchResultsInterface
     /**
      * Set list of items to search through.
      *
-     * @param PaymentMethodInterface[] $items
+     * @param array<PaymentMethodInterface|DataObject> $items
      * @return self
      */
     public function setItems(array $items): self;
