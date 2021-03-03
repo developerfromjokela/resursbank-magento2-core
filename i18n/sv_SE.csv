@@ -19,5 +19,5 @@
 "Close","Stäng"
 "Payment methods will be displayed when synced.","Betalmetoder kommer visas efter synkronisering."
 "Synced payment methods","Synkroniserade betalmetoder"
-"Minimum order total %s","Minsta ordersumma"
-"Maximum order total %s","Högsta ordersumma"
+"Minimum order total %1","Minsta ordersumma %1"
+"Maximum order total %1","Högsta ordersumma %1"
