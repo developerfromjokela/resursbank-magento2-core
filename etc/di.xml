@@ -13,6 +13,7 @@
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">ResursbankGatewayValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">ResursbankGatewayCommandPool</argument>
         </arguments>
     </type>
 
@@ -55,8 +56,25 @@
         <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
     </type>
 
-    <!-- Prevent order confirmation email from being sent upon order creation. -->
+    <!-- Order related plugins. -->
     <type name="Magento\Sales\Model\Order">
+        <!-- Prevent order confirmation email from being sent upon order creation. -->
         <plugin name="resursbank_core_stop_order_confirmation_email" type="Resursbank\Core\Plugin\Order\StopConfirmationEmail" />
+
+        <!-- Set "resursbank_is_test" flag depending on configured environment. -->
+        <plugin name="resursbank_core_set_environment_flag" type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
     </type>
+s
+    <!-- Gateway command pool configuration. -->
+    <virtualType
+        name="ResursbankGatewayCommandPool"
+        type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">
+                    Resursbank\Core\Gateway\Command\Authorize
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
