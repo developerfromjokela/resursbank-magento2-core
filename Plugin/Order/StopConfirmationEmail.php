@@ -12,8 +12,8 @@ use Magento\Sales\Model\Order;
 use Resursbank\Core\Helper\Order as OrderHelper;
 
 /**
- * Applies a value to the column "resursbank_is_test" to reflect whether a
- * payment was conducted in the test or production environment.
+ * Prevent order confirmation email from being sent when the order is created.
+ * We will submit the email when we receive callback BOOKED from Resurs Bank.
  */
 class StopConfirmationEmail
 {
