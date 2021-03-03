@@ -72,6 +72,9 @@ class Api extends AbstractHelper
         // Supply API call with debug information.
         $connection->setUserAgent($this->getUserAgent($userAgent));
 
+        // Apply auto debitable types.
+        $connection->setAutoDebitableTypes(false);
+
         return $connection;
     }
 
