@@ -9,8 +9,12 @@ declare(strict_types=1);
 namespace Resursbank\Core\Controller\Adminhtml\Methods;
 
 use Exception;
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -19,7 +23,7 @@ use Resursbank\Core\Helper\PaymentMethods;
  * This controller executes the process which synchronizes all available payment
  * methods from Resurs Bank to the corresponding table in the database.
  */
-class Sync extends Action
+class Sync implements HttpGetActionInterface
 {
     /**
      * @var PaymentMethods
@@ -37,47 +41,66 @@ class Sync extends Action
     private $log;
 
     /**
-     * @param Context $context
+     * @var ResultFactory
+     */
+    private $resultFactory;
+
+    /**
+     * @var RedirectInterface
+     */
+    private $redirect;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $message;
+
+    /**
      * @param PaymentMethods $paymentMethods
      * @param Credentials $credentials
      * @param Log $log
+     * @param ResultFactory $resultFactory
+     * @param RedirectInterface $redirect
+     * @param ManagerInterface $message
      */
     public function __construct(
-        Context $context,
         PaymentMethods $paymentMethods,
         Credentials $credentials,
-        Log $log
+        Log $log,
+        ResultFactory $resultFactory,
+        RedirectInterface $redirect,
+        ManagerInterface $message
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->credentials = $credentials;
         $this->log = $log;
-
-        parent::__construct($context);
+        $this->resultFactory = $resultFactory;
+        $this->redirect = $redirect;
+        $this->message = $message;
     }
 
     /**
      * Synchronize payment methods.
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         try {
             foreach ($this->credentials->getCollection() as $credentials) {
                 $this->paymentMethods->sync($credentials);
             }
 
-            // Add success message.
-            $this->getMessageManager()->addSuccessMessage(
-                __('Successfully synchronized payment methods.')
+            $this->message->addSuccessMessage(
+                (string) __('Successfully synchronized payment methods.')
             );
         } catch (Exception $e) {
             $this->log->exception($e);
-
-            // Add error message.
-            $this->getMessageManager()->addErrorMessage(
-                __('Failed to synchronize payment methods.')
+            $this->message->addErrorMessage(
+                (string) __('Failed to synchronize payment methods.')
             );
         }
 
-        $this->_redirect($this->_redirect->getRefererUrl());
+        /** @var Redirect $result */
+        $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $result->setUrl($this->redirect->getRefererUrl());
     }
 }
