@@ -15,11 +15,11 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\AddressRepository;
+use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Request;
-use Resursbank\Simplified\Helper\Log;
-use Resursbank\Simplified\Helper\Payment;
-use Resursbank\Simplified\Model\Api\Payment as PaymentModel;
+use Resursbank\Core\Model\Api\Payment as PaymentModel;
 
 /**
  * When the order has been placed and payment completed, retrieve the payment
@@ -32,11 +32,6 @@ class UpdateBillingAddress
      * @var Log
      */
     private $log;
-
-    /**
-     * @var Payment
-     */
-    private $payment;
 
     /**
      * @var AddressRepository
@@ -52,28 +47,32 @@ class UpdateBillingAddress
      * @var Order
      */
     private $order;
+    /**
+     * @var Api
+     */
+    private $api;
 
     /**
      * @param Log $log
-     * @param Payment $payment
      * @param AddressRepository $addressRepository
      * @param Request $request
      * @param Order $order
+     * @param Api $api
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Log $log,
-        Payment $payment,
         AddressRepository $addressRepository,
         Request $request,
-        Order $order
+        Order $order,
+        Api $api
     ) {
         $this->log = $log;
         $this->request = $request;
-        $this->payment = $payment;
         $this->addressRepository = $addressRepository;
         $this->order = $order;
         $this->request = $request;
+        $this->api = $api;
     }
 
     /**
@@ -95,19 +94,14 @@ class UpdateBillingAddress
             $order = $this->order->getOrderByQuoteId(
                 $this->request->getQuoteId()
             );
-            $paymentId = $this->order->getIncrementId($order);
-            $payment = $this->payment->getPayment($paymentId);
+            $payment = $this->api->toPayment(
+                $this->api->getPayment($order)
+            );
 
             if ($payment instanceof PaymentModel) {
                 $this->overrideBillingAddress($payment, $order);
             }
         } catch (Exception $e) {
-            $this->log->info(
-                'Failed to update billing address on order ' .
-                ($paymentId ?? 'UNKNOWN') . '. The address on the payment at ' .
-                'Resurs Bank may differ. See complete Exception below.'
-            );
-
             $this->log->exception($e);
         }
 

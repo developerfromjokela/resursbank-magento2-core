@@ -97,14 +97,6 @@ s
         <plugin
             name="resursbank_core_order_update_billing_address"
             type="Resursbank\Core\Plugin\Order\UpdateBillingAddress"
-            sortOrder="998"/>
-    </type>
-
-    <!-- Clear session data after order placement. -->
-    <type name="Magento\Checkout\Controller\Onepage\Success">
-        <plugin
-            name="resursbank_core_order_clear_session"
-            type="Resursbank\Core\Plugin\Order\ClearSession"
-            sortOrder="999"/>
+            sortOrder="98"/>
     </type>
 </config>

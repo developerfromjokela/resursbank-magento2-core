@@ -11,10 +11,18 @@ namespace Resursbank\Core\Plugin\Order;
 use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\Session\SuccessValidator;
-use Resursbank\Simplified\Helper\Log;
-use Resursbank\Core\Helper\Request;
+use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
+use Resursbank\Core\Helper\Request;
 
+/**
+ * Restores the checkout session based on relevant values gathered from a quote
+ * and its corresponding order.
+ *
+ * If the session has been lost during the signing process (likely due to
+ * switching browsers), we need to restore specific session values to ensure
+ * Magento handles the success / failure procedure correctly.
+ */
 class RestoreSession
 {
     /**
@@ -47,7 +55,6 @@ class RestoreSession
      * @param Order $order
      * @param Session $session
      * @param SuccessValidator $successValidator
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Log $log,
@@ -64,13 +71,6 @@ class RestoreSession
     }
 
     /**
-     * Restores the checkout session based on relevant values gathered from a
-     * quote and its corresponding order.
-     *
-     * If the session has been lost during the signing process (likely due to
-     * switching browsers), we need to restore specific session values to
-     * ensure Magento handles the success / failure procedure correctly.
-     *
      * @return void
      */
     public function beforeExecute(): void
@@ -91,8 +91,5 @@ class RestoreSession
         } catch (Exception $e) {
             $this->log->exception($e);
         }
-
-        $data = $this->session->getData();
-        $test2 =' asd';
     }
 }

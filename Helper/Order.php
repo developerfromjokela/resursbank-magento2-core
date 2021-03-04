@@ -81,9 +81,8 @@ class Order extends AbstractHelper
 
         if (!($order instanceof OrderInterface)) {
             throw new InvalidDataException(__(
-                'Order with quote ID: ' .
-                $quoteId .
-                ' could not be found in the database.'
+                'Order with quote ID: %1 could not be found in the database.',
+                $quoteId
             ));
         }
 
