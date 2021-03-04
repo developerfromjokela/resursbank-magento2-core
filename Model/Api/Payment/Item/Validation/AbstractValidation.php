@@ -11,6 +11,7 @@ namespace Resursbank\Core\Model\Api\Payment\Item\Validation;
 use InvalidArgumentException;
 use JsonException;
 use function in_array;
+use function is_array;
 use function strlen;
 
 /**
@@ -100,14 +101,17 @@ abstract class AbstractValidation
         float $value,
         array $length
     ): void {
+        /** @var array $pieces */
         $pieces = explode('.', (string) $value);
 
-        if (isset($pieces[0], $length['integer'])) {
-            $this->hasStringLength($pieces[0], $length['integer']);
-        }
+        if (is_array($pieces)) {
+            if (isset($pieces[0], $length['integer'])) {
+                $this->hasStringLength($pieces[0], $length['integer']);
+            }
 
-        if (isset($pieces[1], $length['decimal'])) {
-            $this->hasStringLength($pieces[1], $length['decimal']);
+            if (isset($pieces[1], $length['decimal'])) {
+                $this->hasStringLength($pieces[1], $length['decimal']);
+            }
         }
     }
 

@@ -56,12 +56,8 @@
         <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
     </type>
 
-    <!-- Order related plugins. -->
+    <!-- Set "resursbank_is_test" flag depending on configured environment. -->
     <type name="Magento\Sales\Model\Order">
-        <!-- Prevent order confirmation email from being sent upon order creation. -->
-        <plugin name="resursbank_core_stop_order_confirmation_email" type="Resursbank\Core\Plugin\Order\StopConfirmationEmail" />
-
-        <!-- Set "resursbank_is_test" flag depending on configured environment. -->
         <plugin name="resursbank_core_set_environment_flag" type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
     </type>
 s
