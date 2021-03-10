@@ -83,7 +83,7 @@ s
     <!-- Restore session data, in case of intermediate browser change during signing. -->
     <type name="Magento\Checkout\Controller\Onepage\Success">
         <plugin
-            name="resursbank_core_order_update_billing_address"
+            name="resursbank_core_order_restore_session"
             type="Resursbank\Core\Plugin\Order\RestoreSession"
             sortOrder="0"/>
     </type>
@@ -93,6 +93,6 @@ s
         <plugin
             name="resursbank_core_order_update_billing_address"
             type="Resursbank\Core\Plugin\Order\UpdateBillingAddress"
-            sortOrder="98"/>
+            sortOrder="100"/>
     </type>
 </config>

@@ -101,7 +101,6 @@ abstract class AbstractValidation
         float $value,
         array $length
     ): void {
-        /** @var array $pieces */
         $pieces = explode('.', (string) $value);
 
         if (is_array($pieces)) {

@@ -22,6 +22,8 @@ use Resursbank\Core\Helper\Request;
  * If the session has been lost during the signing process (likely due to
  * switching browsers), we need to restore specific session values to ensure
  * Magento handles the success / failure procedure correctly.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RestoreSession
 {

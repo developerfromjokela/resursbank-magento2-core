@@ -38,14 +38,22 @@ class Api extends AbstractHelper
     private $credentialsHelper;
 
     /**
+     * @var Order
+     */
+    private $orderHelper;
+
+    /**
      * @param Context $context
      * @param CredentialsHelper $credentialsHelper
+     * @param Order $orderHelper
      */
     public function __construct(
         Context $context,
-        CredentialsHelper $credentialsHelper
+        CredentialsHelper $credentialsHelper,
+        Order $orderHelper
     ) {
         $this->credentialsHelper = $credentialsHelper;
+        $this->orderHelper = $orderHelper;
 
         parent::__construct($context);
     }
@@ -102,7 +110,7 @@ class Api extends AbstractHelper
         OrderInterface $order
     ): stdClass {
         $payment = $this->getConnection($this->getCredentialsFromOrder($order))
-            ->getPayment($order->getIncrementId());
+            ->getPayment($this->orderHelper->getIncrementId($order));
 
         if (!($payment instanceof stdClass)) {
             throw new ValidatorException(__('Unexpected response from ECom.'));

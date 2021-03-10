@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model;
 
+use function is_int;
 use JsonException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\AbstractModel;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as Resource;
-use function is_int;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
