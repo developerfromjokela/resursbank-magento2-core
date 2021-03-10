@@ -14,13 +14,10 @@ class Flow extends Options
 {
     /**
      * @inheritDoc
-     * @return array<string, string>
+     * @return array
      */
     public function toArray(): array
     {
-        return [
-            'rco' => 'Resurs bank Checkout',
-            'simplified' => 'Resurs bank Simplified'
-        ];
+        return [];
     }
 }
