@@ -14,6 +14,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Model\Api\Address as ApiAddress;
 use Resursbank\Core\Model\Api\Credentials;
@@ -101,22 +102,67 @@ class Api extends AbstractHelper
      * Retrieve payment from Resurs Bank corresponding to Magento order.
      *
      * @param OrderInterface $order
-     * @return stdClass
-     * @throws ValidatorException
+     * @return stdClass|null
      * @throws ResursException
-     * @throws Exception
+     * @throws ValidatorException
+     * @throws InvalidDataException
      */
     public function getPayment(
         OrderInterface $order
-    ): stdClass {
-        $payment = $this->getConnection($this->getCredentialsFromOrder($order))
-            ->getPayment($this->orderHelper->getIncrementId($order));
+    ): ?stdClass {
+        $payment = null;
 
-        if (!($payment instanceof stdClass)) {
-            throw new ValidatorException(__('Unexpected response from ECom.'));
+        try {
+            $payment = $this->getConnection($this->getCredentialsFromOrder($order))
+                ->getPayment($this->orderHelper->getIncrementId($order));
+
+            if (!($payment instanceof stdClass)) {
+                throw new ValidatorException(__('Unexpected response from ECom.'));
+            }
+        } catch (Exception $e) {
+            // If there is no payment we will receive an Exception from ECom.
+            if (!$this->validateMissingPaymentException($e)) {
+                throw $e;
+            }
         }
 
         return $payment;
+    }
+
+    /**
+     * Validate that an Exception was thrown because a payment was actually
+     * missing.
+     *
+     * @param Exception $error
+     * @return bool
+     */
+    public function validateMissingPaymentException(
+        Exception $error
+    ): bool {
+        return (
+            $error->getCode() === 3 ||
+            $error->getCode() === 8
+        );
+    }
+
+    /**
+     * Makes a request to Resurs Bank's API to check if a payment exists for
+     * an order at Resurs Bank.
+     *
+     * If you're planning on using the payment afterwards it's better to use
+     * @link getPayment and check the return value. That way you won't waste
+     * time making an extra request to the API.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     * @throws InvalidDataException
+     * @throws ResursException
+     * @throws ValidatorException
+     */
+    public function paymentExists(
+        OrderInterface $order
+    ): bool {
+        return $this->getPayment($order) !== null;
     }
 
     /**

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\AddressRepository;
+use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
@@ -94,9 +95,17 @@ class UpdateBillingAddress
             $order = $this->order->getOrderByQuoteId(
                 $this->request->getQuoteId()
             );
-            $payment = $this->api->toPayment(
-                $this->api->getPayment($order)
-            );
+
+            $paymentData = $this->api->getPayment($order);
+
+            if ($paymentData === null) {
+                throw new InvalidDataException(__(
+                    'Payment data does not exist for ' .
+                    $this->order->getIncrementId($order)
+                ));
+            }
+
+            $payment = $this->api->toPayment($paymentData);
 
             if ($payment instanceof PaymentModel) {
                 $this->overrideBillingAddress($payment, $order);
