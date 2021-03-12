@@ -46,21 +46,6 @@
         </arguments>
     </virtualType>
 
-    <!-- Payment Method interfaces. -->
-    <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
-    <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
-    <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
-
-    <!-- Append our payment methods in frontend checkout process. -->
-    <type name="Magento\Payment\Helper\Data">
-        <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
-    </type>
-
-    <!-- Set "resursbank_is_test" flag depending on configured environment. -->
-    <type name="Magento\Sales\Model\Order">
-        <plugin name="resursbank_core_set_environment_flag" type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
-    </type>
-s
     <!-- Gateway command pool configuration. -->
     <virtualType
         name="ResursbankGatewayCommandPool"
@@ -73,6 +58,28 @@ s
             </argument>
         </arguments>
     </virtualType>
+
+    <!-- Payment Method interfaces. -->
+    <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
+    <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
+    <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
+
+    <preference
+        for="Magento\Quote\Api\CartRepositoryInterface"
+        type="Magento\Quote\Model\QuoteRepository" />
+    <preference
+        for="Magento\Quote\Api\Data\CartInterface"
+        type="Magento\Quote\Model\Quote" />
+
+    <!-- Append our payment methods in frontend checkout process. -->
+    <type name="Magento\Payment\Helper\Data">
+        <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
+    </type>
+
+    <!-- Set "resursbank_is_test" flag depending on configured environment. -->
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="resursbank_core_set_environment_flag" type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
+    </type>
 
     <!--
     NOTE: The order of all plugins tied to
@@ -94,5 +101,19 @@ s
             name="resursbank_core_order_update_billing_address"
             type="Resursbank\Core\Plugin\Order\UpdateBillingAddress"
             sortOrder="100"/>
+    </type>
+
+    <!-- Checkout failure page. -->
+    <type name="Magento\Checkout\Controller\Onepage\Failure">
+        <plugin
+            name="resursbank_core_rebuild_cart"
+            type="Resursbank\Core\Plugin\Order\RebuildCart" />
+    </type>
+
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <!-- Handle orders for failed payments. -->
+        <plugin
+            name="resursbank_core_remove_order"
+            type="Resursbank\Core\Plugin\Order\RemoveOrder" />
     </type>
 </config>

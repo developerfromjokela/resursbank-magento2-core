@@ -73,6 +73,22 @@
                             <config_path>resursbank/methods/listing</config_path>
                         </field>
                     </group>
+                    <group id="advanced" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Advanced</label>
+                        <field id="reuse_erroneously_created_orders" translate="label, comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Reuse Erroneously Created Orders</label>
+                            <comment>
+                                There is a chance a canceled order will be created if
+                                an error occurs during the order placement process. If
+                                subsequent errors occurs, this can quickly lead to the
+                                system being flooded with canceled orders. With this
+                                setting enabled, a canceled order (created due to an
+                                error) will be reused if possible.
+                            </comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
+                        </field>
+                    </group>
                 </group>
             </group>
         </section>
