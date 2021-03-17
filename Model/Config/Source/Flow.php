@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Config\Source;
 
-use Magento\Framework\Phrase;
-
 class Flow extends Options
 {
     /**
+     * NOTE: Options are appended through plugins in submodules adding API
+     * implementations (like RCO or Simplified).
+     *
      * @inheritDoc
-     * @return array
+     * @noinspection SenselessMethodDuplicationInspection
      */
     public function toArray(): array
     {
