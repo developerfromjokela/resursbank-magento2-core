@@ -98,8 +98,6 @@ class RebuildCart
     }
 
     /**
-     * Cancel the previous order, rebuild the cart and redirect to the cart.
-
      * @return Redirect
      * @throws Exception
      */
@@ -147,11 +145,14 @@ class RebuildCart
 
         if (!($payment instanceof OrderPaymentInterface)) {
             throw new InvalidDataException(__(
-                "Payment does not exist for order {$order->getIncrementId()}"
+                'Payment does not exist for order %1',
+                $order->getIncrementId()
             ));
         }
 
-        return $this->config->isReuseErroneouslyCreatedOrdersEnabled() &&
-            $this->paymentMethods->isResursBankMethod($payment->getMethod());
+        return (
+            $this->config->isReuseErroneouslyCreatedOrdersEnabled() &&
+            $this->paymentMethods->isResursBankMethod($payment->getMethod())
+        );
     }
 }

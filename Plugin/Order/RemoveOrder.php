@@ -112,7 +112,8 @@ class RemoveOrder
 
         if (!($payment instanceof OrderPaymentInterface)) {
             throw new InvalidDataException(__(
-                "Payment does not exist for order {$order->getIncrementId()}"
+                'Payment does not exist for order %1',
+                $order->getIncrementId()
             ));
         }
 

@@ -171,10 +171,10 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Whether or not to reuse canceled orders that are created during the
-     * order placement process. If enabled this setting allows the system to
-     * replace a canceled order that was created due to an error with the
-     * current order.
+     * Defines whether or not delete orders which were canceled during the
+     * checkout process when an error occurs with the payment (for example if
+     * the client fails to sign using the BankId). This ensures there are no
+     * gaps in the increment id:s of the orders.
      *
      * NOTE: Only works if the customer is still in the same session as the
      * canceled order when it was created.

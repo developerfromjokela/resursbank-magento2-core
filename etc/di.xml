@@ -64,13 +64,6 @@
     <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
 
-    <preference
-        for="Magento\Quote\Api\CartRepositoryInterface"
-        type="Magento\Quote\Model\QuoteRepository" />
-    <preference
-        for="Magento\Quote\Api\Data\CartInterface"
-        type="Magento\Quote\Model\Quote" />
-
     <!-- Append our payment methods in frontend checkout process. -->
     <type name="Magento\Payment\Helper\Data">
         <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
@@ -110,8 +103,8 @@
             type="Resursbank\Core\Plugin\Order\RebuildCart" />
     </type>
 
+    <!-- Handle orders for failed payments. -->
     <type name="Magento\Quote\Model\QuoteManagement">
-        <!-- Handle orders for failed payments. -->
         <plugin
             name="resursbank_core_remove_order"
             type="Resursbank\Core\Plugin\Order\RemoveOrder" />

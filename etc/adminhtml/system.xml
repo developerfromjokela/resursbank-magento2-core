@@ -74,7 +74,7 @@
                         </field>
                     </group>
                     <group id="advanced" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Advanced</label>
+                        <label>Advanced Settings</label>
                         <field id="reuse_erroneously_created_orders" translate="label, comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Reuse Erroneously Created Orders</label>
                             <comment>
