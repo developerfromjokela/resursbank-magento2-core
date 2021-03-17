@@ -18,6 +18,11 @@
                     </label>
                     <group id="api" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Resurs Bank API</label>
+                        <field id="flow" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Checkout type</label>
+                            <source_model>Resursbank\Core\Model\Config\Source\Flow</source_model>
+                            <config_path>resursbank/api/flow</config_path>
+                        </field>
                         <field id="environment" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Environment</label>
                             <source_model>Resursbank\Core\Model\Config\Source\Environment</source_model>
