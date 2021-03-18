@@ -34,6 +34,23 @@ class Config extends AbstractConfig
     /**
      * @param string|null $scopeCode
      * @param string $scopeType
+     * @return string
+     */
+    public function getFlow(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): string {
+        return (string) $this->get(
+            self::GROUP,
+            'flow',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return int
      */
     public function getEnvironment(
