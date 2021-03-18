@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
@@ -18,7 +17,7 @@ use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Applies a value to the column "resursbank_is_test" to reflect whether a
- * payment was conducted in the test or production environment.
+ * payment was created in the test or production environment.
  */
 class SetEnvironmentFlag
 {
@@ -56,8 +55,6 @@ class SetEnvironmentFlag
      * @param Order $subject
      * @param Order $result
      * @return Order
-     * @noinspection PhpUnusedParameterInspection
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterBeforeSave(
         Order $subject,

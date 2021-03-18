@@ -27,6 +27,11 @@ class Config extends AbstractConfig
     public const METHODS_GROUP = 'methods';
 
     /**
+     * @var string
+     */
+    public const ADVANCED_GROUP = 'advanced';
+
+    /**
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return int
@@ -160,6 +165,31 @@ class Config extends AbstractConfig
         return (int) $this->get(
             self::METHODS_GROUP,
             "{$code}/sort_order",
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * Defines whether or not delete orders which were canceled during the
+     * checkout process when an error occurs with the payment (for example if
+     * the client fails to sign using the BankId). This ensures there are no
+     * gaps in the increment id:s of the orders.
+     *
+     * NOTE: Only works if the customer is still in the same session as the
+     * canceled order when it was created.
+     *
+     * @param null|string $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isReuseErroneouslyCreatedOrdersEnabled(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): bool {
+        return $this->isEnabled(
+            self::ADVANCED_GROUP,
+            'reuse_erroneously_created_orders',
             $scopeCode,
             $scopeType
         );
