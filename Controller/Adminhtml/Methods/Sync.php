@@ -85,13 +85,23 @@ class Sync implements HttpGetActionInterface
     public function execute(): ResultInterface
     {
         try {
-            foreach ($this->credentials->getCollection() as $credentials) {
-                $this->paymentMethods->sync($credentials);
-            }
+            $credentialsList = $this->credentials->getCollection();
 
-            $this->message->addSuccessMessage(
-                (string) __('Successfully synchronized payment methods.')
-            );
+            if (!empty($credentialsList)) {
+                foreach ($this->credentials->getCollection() as $credentials) {
+                    $this->paymentMethods->sync($credentials);
+                }
+
+                $this->message->addSuccessMessage(
+                    (string)__('Successfully synchronized payment methods.')
+                );
+            } else {
+                $this->message->addNoticeMessage(
+                    (string)__(
+                        'There are no credentials to sync payment methods.'
+                    )
+                );
+            }
         } catch (Exception $e) {
             $this->log->exception($e);
             $this->message->addErrorMessage(
