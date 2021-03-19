@@ -93,7 +93,6 @@ class Data
         array $result
     ): array {
         try {
-            /** @var PaymentMethod $method */
             foreach ($this->getMethodList() as $method) {
                 $code = $method->getCode();
 
@@ -134,22 +133,19 @@ class Data
         array $result
     ): array {
         try {
-            $isMultiDimensional = isset($result[0]) && is_array($result[0]);
+            $isMultiDimensional = is_array(reset($result));
 
-            /** @var PaymentMethod $method */
             foreach ($this->getMethodList() as $method) {
                 $code = $method->getCode();
 
                 // Append payment method to resulting list.
                 if ($code !== null) {
-                    if ($isMultiDimensional) {
-                        $result[] = [
+                    $result[$code] = $isMultiDimensional ?
+                        [
                             'value' => $code,
                             'label' => $method->getTitle('Resurs Bank')
-                        ];
-                    } else {
-                        $result[$code] = $method->getTitle('Resurs Bank');
-                    }
+                        ] :
+                        $method->getTitle('Resurs Bank');
                 }
             }
         } catch (Exception $e) {
