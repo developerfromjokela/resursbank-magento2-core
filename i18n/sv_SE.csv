@@ -25,3 +25,4 @@
 "Reuse Erroneously Created Orders","Återanvänd Felaktigt Skapade Ordrar"
 "There is a chance a canceled order will be created if an error occurs during the order placement process. If subsequent errors occur, this can quickly lead to the system being flooded with canceled orders. With this setting enabled, a canceled order (created due to an error) will be reused if possible.","Det finns en chans att en annullerad beställning skapas när ett fel inträffar vid utcheckning. Om flera fel skulle inträffa betyder det att systemet kan fyllas med annullerade beställningar. Med den här inställningen påslagen skulle en beställning, som felaktigt blivit skapad, bli återanvänd ifall det går."
 "Checkout type","Typ av kassa"
+"There are no credentials to sync payment methods.","Det finns inga API uppgifter för att synka betalmetoder."
