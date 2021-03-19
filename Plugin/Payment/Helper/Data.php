@@ -13,12 +13,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
+use function is_array;
 
 class Data
 {
@@ -46,6 +48,11 @@ class Data
      * @var Repository
      */
     private $repository;
+
+    /**
+     * @var PaymentMethodInterface[]|null
+     */
+    private $methodList;
 
     /**
      * @param PaymentMethods $paymentMethods
@@ -87,7 +94,7 @@ class Data
     ): array {
         try {
             /** @var PaymentMethod $method */
-            foreach ($this->paymentMethods->getActiveMethods() as $method) {
+            foreach ($this->getMethodList() as $method) {
                 $code = $method->getCode();
 
                 // Append payment method to resulting list.
@@ -95,6 +102,54 @@ class Data
                     $result[$code] = $result[Method::CODE];
                     $result[$code]['title'] = $method->getTitle();
                     $result[$code]['sort_order'] = $this->getSortOrder($code);
+                }
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
+    }
+
+    /**
+     * This method appends our payment methods to the list compiled by the core
+     * method. The core method will produce a one or two dimensional array with
+     * options ($code => $title).
+     *
+     * The native method will read the titles directly from the config, ignoring
+     * the value handler specified on the method configuration.
+     *
+     * For this reason we must modify the output to include our methods,
+     * otherwise they won't show up in configuration select boxes or in the
+     * order grid.
+     *
+     * @param Subject $subject
+     * @param array<mixed> $result
+     * @return array<mixed>
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @noinspection PhpUnusedParameterInspection
+     */
+    public function afterGetPaymentMethodList(
+        Subject $subject,
+        array $result
+    ): array {
+        try {
+            $isMultiDimensional = isset($result[0]) && is_array($result[0]);
+
+            /** @var PaymentMethod $method */
+            foreach ($this->getMethodList() as $method) {
+                $code = $method->getCode();
+
+                // Append payment method to resulting list.
+                if ($code !== null) {
+                    if ($isMultiDimensional) {
+                        $result[] = [
+                            'value' => $code,
+                            'label' => $method->getTitle('Resurs Bank')
+                        ];
+                    } else {
+                        $result[$code] = $method->getTitle('Resurs Bank');
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -185,5 +240,20 @@ class Data
         }
 
         return $result;
+    }
+
+    /**
+     * Store resolve method collection in a local variable to avoid expensive
+     * database transactions during the same request cycle.
+     *
+     * @return PaymentMethodInterface[]
+     */
+    private function getMethodList(): array
+    {
+        if ($this->methodList === null) {
+            $this->methodList = $this->paymentMethods->getActiveMethods();
+        }
+
+        return $this->methodList;
     }
 }
