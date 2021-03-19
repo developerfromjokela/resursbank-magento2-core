@@ -88,7 +88,7 @@ class Sync implements HttpGetActionInterface
             $credentialsList = $this->credentials->getCollection();
 
             if (!empty($credentialsList)) {
-                foreach ($this->credentials->getCollection() as $credentials) {
+                foreach ($credentialsList as $credentials) {
                     $this->paymentMethods->sync($credentials);
                 }
 
