@@ -118,6 +118,9 @@ class PaymentMethods extends AbstractHelper
          */
         $this->deactivateMethods();
 
+        // Payment method sort order.
+        $sortOrder = 0;
+
         // Fetch methods from the API and store them in our db.
         foreach ($this->fetch($credentials) as $methodData) {
             // Convert data.
@@ -143,6 +146,9 @@ class PaymentMethods extends AbstractHelper
                 /** @noinspection PhpUndefinedMethodInspection */
                 $method = $this->methodFactory->create();
             }
+
+            // Set method sort order to reflect order in list from API call.
+            $method->setSortOrder(++$sortOrder);
 
             // Overwrite data on method model instance and update db entry.
             $this->repository->save(
@@ -304,8 +310,8 @@ class PaymentMethods extends AbstractHelper
      * @param array<mixed> $data
      * @param CredentialsModel $credentials
      * @return PaymentMethodInterface
-     * @throws ValidatorException
      * @throws StateException
+     * @throws ValidatorException
      */
     private function fill(
         PaymentMethodInterface $method,

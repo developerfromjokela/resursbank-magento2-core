@@ -100,7 +100,7 @@ class Data
                 if ($code !== null) {
                     $result[$code] = $result[Method::CODE];
                     $result[$code]['title'] = $method->getTitle();
-                    $result[$code]['sort_order'] = $this->getSortOrder($code);
+                    $result[$code]['sort_order'] = $method->getSortOrder();
                 }
             }
         } catch (Exception $e) {
