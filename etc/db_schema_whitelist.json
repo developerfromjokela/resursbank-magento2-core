@@ -23,6 +23,7 @@
             "code": true,
             "active": true,
             "title": true,
+            "sort_order": true,
             "min_order_total": true,
             "max_order_total": true,
             "order_status": true,
