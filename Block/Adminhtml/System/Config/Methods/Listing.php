@@ -122,31 +122,41 @@ class Listing extends Field
 
     /**
      * @param PaymentMethodInterface $method
-     * @return Phrase
+     * @return String
      */
     public function getMin(
         PaymentMethodInterface $method
-    ): Phrase {
-        return __(
-            'Minimum order total %1',
-            $this->formatPrice(
-                (float) $method->getMinOrderTotal()
-            )
-        );
+    ): String {
+        return $this->showMinMax($method)
+            ? (string) $this->formatPrice((float) $method->getMinOrderTotal())
+            : '';
     }
 
     /**
      * @param PaymentMethodInterface $method
-     * @return Phrase
+     * @return String
      */
     public function getMax(
         PaymentMethodInterface $method
-    ): Phrase {
-        return __(
-            'Maximum order total %1',
-            $this->formatPrice(
-                (float) $method->getMaxOrderTotal()
-            )
+    ): String {
+        return $this->showMinMax($method)
+            ? (string) $this->formatPrice((float) $method->getMaxOrderTotal())
+            : '';
+    }
+
+    /**
+     * Only show Min & Max for methods that have a type that is not
+     * CARD or PAYMENT_PROVIDER.
+     *
+     * @param PaymentMethodInterface $method
+     * @return bool
+     */
+    public function showMinMax(
+        PaymentMethodInterface $method
+    ) {
+        return !in_array(
+            $method->getType(),
+            ['CARD', 'PAYMENT_PROVIDER']
         );
     }
 
