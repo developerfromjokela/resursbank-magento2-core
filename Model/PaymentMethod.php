@@ -156,6 +156,33 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
+    public function getSortOrder(?int $default = null): ?int
+    {
+        $result = $this->getData(self::SORT_ORDER);
+
+        return $result === null ? $default : (int)$result;
+    }
+
+    /**
+     * @throws ValidatorException
+     * @inheritDoc
+     */
+    public function setSortOrder(int $order): PaymentMethodInterface
+    {
+        if ($order < 0) {
+            throw new ValidatorException(
+                __('Sort order cannot be lower than 0.')
+            );
+        }
+
+        $this->setData(self::SORT_ORDER, $order);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getMinOrderTotal(?float $default = null): ?float
     {
         $result = $this->getData(self::MIN_ORDER_TOTAL);
