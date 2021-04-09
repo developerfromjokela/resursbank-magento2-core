@@ -15,7 +15,6 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\Quote\ProductItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
@@ -66,7 +65,6 @@ class QuoteConverter extends AbstractConverter
     public function convert(
         Quote $entity
     ): array {
-        /** @var Address $address */
         $address = $entity->getShippingAddress();
 
         return array_merge(
@@ -103,8 +101,6 @@ class QuoteConverter extends AbstractConverter
             /** @var Item $product */
             foreach ($entity->getAllItems() as $product) {
                 if ($product->getQty() > 0) {
-                    /** @noinspection PhpUndefinedMethodInspection */
-                    /** @var ProductItem $item */
                     $item = $this->productItemFactory->create([
                         'product' => $product
                     ]);
@@ -163,7 +159,6 @@ class QuoteConverter extends AbstractConverter
     ): float {
         $result = 0;
 
-        /** @var PaymentItem $item */
         foreach ($items as $item) {
             if ($item instanceof PaymentItem) {
                 $result += (

@@ -121,6 +121,30 @@ abstract class AbstractConfig extends AbstractHelper
     }
 
     /**
+     * NOTE: Unlike the reader (see the get() method above), the writer expects
+     * you to provide an id of the intended resource (website/store/view) rather
+     * than a code.
+     *
+     * @param string $group
+     * @param string $key
+     * @param int $scopeId
+     * @param string $scopeType
+     * @return void
+     */
+    public function delete(
+        string $group,
+        string $key,
+        int $scopeId = 0,
+        string $scopeType = ScopeInterface::SCOPE_STORE
+    ): void {
+        $this->writer->delete(
+            $this->getPath($group, $key),
+            $scopeType,
+            $scopeId
+        );
+    }
+
+    /**
      * Retrieved path to one of our settings based on provided group / key.
      *
      * @param string $group

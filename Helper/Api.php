@@ -44,30 +44,36 @@ class Api extends AbstractHelper
     private $orderHelper;
 
     /**
+     * @var Version
+     */
+    private $version;
+
+    /**
      * @param Context $context
      * @param CredentialsHelper $credentialsHelper
      * @param Order $orderHelper
+     * @param Version $version
      */
     public function __construct(
         Context $context,
         CredentialsHelper $credentialsHelper,
-        Order $orderHelper
+        Order $orderHelper,
+        Version $version
     ) {
         $this->credentialsHelper = $credentialsHelper;
         $this->orderHelper = $orderHelper;
+        $this->version = $version;
 
         parent::__construct($context);
     }
 
     /**
      * @param Credentials $credentials
-     * @param string $userAgent
      * @return ResursBank
      * @throws Exception
      */
     public function getConnection(
-        Credentials $credentials,
-        string $userAgent = ''
+        Credentials $credentials
     ): ResursBank {
         $user = $credentials->getUsername();
         $pass = $credentials->getPassword();
@@ -88,9 +94,9 @@ class Api extends AbstractHelper
 
         // Enable usage of PSP methods.
         $connection->setSimplifiedPsp(true);
-
+        
         // Supply API call with debug information.
-        $connection->setUserAgent($this->getUserAgent($userAgent));
+        $connection->setUserAgent($this->getUserAgent());
 
         // Deactivate auto debitable types.
         $connection->setAutoDebitableTypes(false);
@@ -316,12 +322,13 @@ class Api extends AbstractHelper
     }
 
     /**
-     * @param string $custom
      * @return string
      */
-    private function getUserAgent(
-        string $custom = ''
-    ): string {
-        return $custom === '' ? 'Mage 2' : "Mage 2 + ${custom}";
+    public function getUserAgent(): string
+    {
+        return sprintf(
+            'Magento 2 | Resursbank_Core %s',
+            $this->version->getComposerVersion('Resursbank_Core')
+        );
     }
 }
