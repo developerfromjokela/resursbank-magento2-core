@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Api\Payment\Converter\Item;
 
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Item;
@@ -46,6 +47,7 @@ class ShippingItem extends AbstractItem
      * @param string $description Shipping method title.
      * @param float $amount Amount incl. tax.
      * @param int $vatPct Tax percentage.
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,
@@ -54,18 +56,15 @@ class ShippingItem extends AbstractItem
         string $method,
         string $description,
         float $amount,
-        int $vatPct
+        int $vatPct,
+        StoreManagerInterface $storeManager
     ) {
         $this->method = $method;
         $this->description = $description;
         $this->amount = $amount;
         $this->vatPct = $vatPct;
 
-        parent::__construct(
-            $config,
-            $itemFactory,
-            $log
-        );
+        parent::__construct($config, $itemFactory, $log, $storeManager);
     }
 
     /**

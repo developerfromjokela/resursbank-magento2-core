@@ -8,9 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Helper\Context;
-
 class Log extends AbstractLog
 {
     /**
@@ -22,30 +19,4 @@ class Log extends AbstractLog
      * @inheritDoc
      */
     protected $file = 'resursbank_core';
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @inheritDoc
-     */
-    public function __construct(
-        DirectoryList $directories,
-        Context $context,
-        Config $config
-    ) {
-        $this->config = $config;
-
-        parent::__construct($directories, $context);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        return $this->config->isDebugEnabled();
-    }
 }

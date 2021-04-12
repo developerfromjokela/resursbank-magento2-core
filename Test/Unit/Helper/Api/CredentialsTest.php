@@ -232,17 +232,4 @@ class CredentialsTest extends TestCase
             $this->helper->getMethodSuffix($this->model)
         );
     }
-
-    /**
-     * Assert that an instance of StateException is thrown when there is no
-     * Store instance applied on a Credentials data model instance.
-     *
-     * @throws StateException
-     */
-    public function testGetCountryThrowsWithoutStore(): void
-    {
-        $this->expectException(StateException::class);
-
-        $this->helper->getCountry($this->model);
-    }
 }

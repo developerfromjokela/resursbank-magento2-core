@@ -81,6 +81,10 @@ class Sync implements HttpGetActionInterface
 
     /**
      * Synchronize payment methods.
+     *
+     * NOTE: We deactivate all methods currently in our table before we sync
+     * from the API. Methods needs to be retained locally, to ensure the
+     * functionality of past orders utilising expired methods.
      */
     public function execute(): ResultInterface
     {
@@ -88,6 +92,8 @@ class Sync implements HttpGetActionInterface
             $credentialsList = $this->credentials->getCollection();
 
             if (!empty($credentialsList)) {
+                $this->paymentMethods->deactivateMethods();
+
                 foreach ($credentialsList as $credentials) {
                     $this->paymentMethods->sync($credentials);
                 }

@@ -13,6 +13,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Item;
@@ -43,6 +44,11 @@ abstract class AbstractItem implements ItemInterface
     protected $log;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
@@ -50,11 +56,13 @@ abstract class AbstractItem implements ItemInterface
     public function __construct(
         Config $config,
         ItemFactory $itemFactory,
-        Log $log
+        Log $log,
+        StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->itemFactory = $itemFactory;
         $this->log = $log;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -95,7 +103,17 @@ abstract class AbstractItem implements ItemInterface
      */
     public function roundTaxPercentage(): bool
     {
-        return $this->config->roundTaxPercentage();
+        $result = false;
+
+        try {
+            $result = $this->config->roundTaxPercentage(
+                $this->storeManager->getStore()->getCode()
+            );
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
     }
 
     /**

@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
@@ -52,24 +53,32 @@ class RemoveOrder
     private $paymentMethods;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param OrderRepositoryInterface $orderRepo
      * @param Log $log
      * @param Config $config
      * @param PaymentMethods $paymentMethods
      * @param Session $session
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         OrderRepositoryInterface $orderRepo,
         Log $log,
         Config $config,
         PaymentMethods $paymentMethods,
-        Session $session
+        Session $session,
+        StoreManagerInterface $storeManager
     ) {
         $this->orderRepo = $orderRepo;
         $this->session = $session;
         $this->log = $log;
         $this->config = $config;
         $this->paymentMethods = $paymentMethods;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -117,8 +126,10 @@ class RemoveOrder
             ));
         }
 
+        $storeCode = $this->storeManager->getStore()->getCode();
+
         return (
-            $this->config->isReuseErroneouslyCreatedOrdersEnabled() &&
+            $this->config->isReuseErroneouslyCreatedOrdersEnabled($storeCode) &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod()) &&
             $order->getIncrementId() === $reservedOrderId
         );

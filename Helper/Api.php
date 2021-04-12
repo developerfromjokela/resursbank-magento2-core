@@ -12,8 +12,10 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Model\Api\Address as ApiAddress;
@@ -106,6 +108,7 @@ class Api extends AbstractHelper
      * @throws ResursException
      * @throws ValidatorException
      * @throws InvalidDataException
+     * @throws NoSuchEntityException
      */
     public function getPayment(
         OrderInterface $order
@@ -113,11 +116,16 @@ class Api extends AbstractHelper
         $payment = null;
 
         try {
-            $payment = $this->getConnection($this->getCredentialsFromOrder($order))
-                ->getPayment($this->orderHelper->getIncrementId($order));
+            $payment = $this->getConnection(
+                $this->getCredentialsFromOrder($order)
+            )->getPayment(
+                $this->orderHelper->getIncrementId($order)
+            );
 
             if (!($payment instanceof stdClass)) {
-                throw new ValidatorException(__('Unexpected response from ECom.'));
+                throw new ValidatorException(
+                    __('Unexpected response from ECom.')
+                );
             }
         } catch (Exception $e) {
             // If there is no payment we will receive an Exception from ECom.
@@ -158,6 +166,7 @@ class Api extends AbstractHelper
      * @throws InvalidDataException
      * @throws ResursException
      * @throws ValidatorException
+     * @throws NoSuchEntityException
      */
     public function paymentExists(
         OrderInterface $order
@@ -176,7 +185,8 @@ class Api extends AbstractHelper
         OrderInterface $order
     ): Credentials {
         $credentials = $this->credentialsHelper->resolveFromConfig(
-            (string) $order->getStoreId()
+            (string) $order->getStoreId(),
+            ScopeInterface::SCOPE_STORES
         );
 
         /** @phpstan-ignore-next-line */

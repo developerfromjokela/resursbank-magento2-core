@@ -4,16 +4,20 @@
  * See LICENSE for license details.
  */
 
+declare(strict_types=1);
+
 namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Config;
@@ -68,6 +72,11 @@ class RebuildCart
     private $paymentMethods;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ManagerInterface $messageManager
      * @param Log $log
      * @param UrlInterface $url
@@ -76,6 +85,7 @@ class RebuildCart
      * @param CartHelper $cartHelper
      * @param Config $config
      * @param PaymentMethods $paymentMethods
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -85,7 +95,8 @@ class RebuildCart
         Session $checkoutSession,
         CartHelper $cartHelper,
         Config $config,
-        PaymentMethods $paymentMethods
+        PaymentMethods $paymentMethods,
+        StoreManagerInterface $storeManager
     ) {
         $this->messageManager = $messageManager;
         $this->log = $log;
@@ -95,6 +106,7 @@ class RebuildCart
         $this->cartHelper = $cartHelper;
         $this->config = $config;
         $this->paymentMethods = $paymentMethods;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -126,7 +138,7 @@ class RebuildCart
                 'for this inconvenience.'
             ));
 
-            $this->log->error($e);
+            $this->log->exception($e);
         }
 
         // Redirect to cart page.
@@ -134,11 +146,14 @@ class RebuildCart
     }
 
     /**
+     * Whether or not this plugin should execute.
+     *
      * @param OrderInterface $order
      * @return bool
      * @throws InvalidDataException
+     * @throws NoSuchEntityException
      */
-    public function isEnabled(
+    private function isEnabled(
         OrderInterface $order
     ): bool {
         $payment = $order->getPayment();
@@ -150,8 +165,10 @@ class RebuildCart
             ));
         }
 
+        $storeCode = $this->storeManager->getStore()->getCode();
+
         return (
-            $this->config->isReuseErroneouslyCreatedOrdersEnabled() &&
+            $this->config->isReuseErroneouslyCreatedOrdersEnabled($storeCode) &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
     }

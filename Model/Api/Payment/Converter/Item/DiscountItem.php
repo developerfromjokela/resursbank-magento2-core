@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Converter\Item;
 
 use Exception;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Model\Api\Payment\Item;
@@ -41,6 +42,7 @@ class DiscountItem extends AbstractItem
      * @param string $couponCode
      * @param float $amount Amount incl. tax.
      * @param float $taxAmount Tax amount.
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,
@@ -48,17 +50,14 @@ class DiscountItem extends AbstractItem
         Log $log,
         string $couponCode,
         float $amount,
-        float $taxAmount
+        float $taxAmount,
+        StoreManagerInterface $storeManager
     ) {
         $this->couponCode = $couponCode;
         $this->amount = $amount;
         $this->taxAmount = $taxAmount;
 
-        parent::__construct(
-            $config,
-            $itemFactory,
-            $log
-        );
+        parent::__construct($config, $itemFactory, $log, $storeManager);
     }
 
     /**

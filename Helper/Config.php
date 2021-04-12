@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -32,13 +33,18 @@ class Config extends AbstractConfig
     public const ADVANCED_GROUP = 'advanced';
 
     /**
+     * @var string
+     */
+    public const DEBUG_GROUP = 'debug';
+
+    /**
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
      */
     public function getFlow(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
             self::GROUP,
@@ -54,8 +60,8 @@ class Config extends AbstractConfig
      * @return int
      */
     public function getEnvironment(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): int {
         return (int) $this->get(
             self::GROUP,
@@ -71,8 +77,8 @@ class Config extends AbstractConfig
      * @return string
      */
     public function getUsername(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
             self::GROUP,
@@ -88,8 +94,8 @@ class Config extends AbstractConfig
      * @return string
      */
     public function getPassword(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
             self::GROUP,
@@ -100,19 +106,15 @@ class Config extends AbstractConfig
     }
 
     /**
-     * @param string|null $scopeCode
-     * @param string $scopeType
      * @return bool
      */
-    public function isDebugEnabled(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
-    ): bool {
+    public function isDebugEnabled(): bool
+    {
         return $this->isEnabled(
-            self::GROUP,
-            'debug',
-            $scopeCode,
-            $scopeType
+            self::DEBUG_GROUP,
+            'enabled',
+            null,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
     }
 
@@ -122,11 +124,11 @@ class Config extends AbstractConfig
      * @return bool
      */
     public function roundTaxPercentage(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->isEnabled(
-            self::GROUP,
+            self::ADVANCED_GROUP,
             'round_tax_percentage',
             $scopeCode,
             $scopeType
@@ -139,8 +141,8 @@ class Config extends AbstractConfig
      * @return string
      */
     public function getDefaultCountry(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->reader->getValue(
             'general/country/default',
@@ -155,8 +157,8 @@ class Config extends AbstractConfig
      * @return bool
      */
     public function autoSyncPaymentMethods(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->isEnabled(
             self::METHODS_GROUP,
@@ -201,8 +203,8 @@ class Config extends AbstractConfig
      * @return bool
      */
     public function isReuseErroneouslyCreatedOrdersEnabled(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->isEnabled(
             self::ADVANCED_GROUP,
