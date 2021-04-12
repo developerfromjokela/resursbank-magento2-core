@@ -38,13 +38,13 @@ class Scope extends AbstractHelper
     }
 
     /**
-     * Retrieve scope type specified in request. If none, use default.
+     * Retrieve scope type parameter name, if any.
      *
      * @return string
      */
     public function getTypeParam(): string
     {
-        $result = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        $result = '';
 
         if ($this->request->getParam('website') !== null) {
             $result = ScopeInterface::SCOPE_WEBSITE;
@@ -74,7 +74,7 @@ class Scope extends AbstractHelper
     }
 
     /**
-     * Get scope id/code from request, if specified. If none, use NULL.
+     * Get scope id / code from request, if specified, otherwise return NULL.
      *
      * @param string|null $type
      * @return string|null
@@ -82,7 +82,11 @@ class Scope extends AbstractHelper
     public function getId(
         ?string $type = null
     ): ?string {
-        $value = $this->request->getParam($type ?? $this->getTypeParam());
+        $type = $type ?? $this->getTypeParam();
+
+        $value = $type !== '' ?
+            $this->request->getParam($type ?? $this->getTypeParam()) :
+            null;
 
         return is_numeric($value) ? (string) $value : null;
     }

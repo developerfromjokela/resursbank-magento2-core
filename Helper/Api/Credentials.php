@@ -170,16 +170,6 @@ class Credentials extends AbstractHelper
     }
 
     /**
-     * @param CredentialsModel $credentials
-     * @return bool
-     */
-    public function isTestAccount(
-        CredentialsModel $credentials
-    ): bool {
-        return $credentials->getEnvironment() === ResursBank::ENVIRONMENT_TEST;
-    }
-
-    /**
      * Returns distinct collection of API credentials from configuration.
      *
      * @return array<CredentialsModel>
