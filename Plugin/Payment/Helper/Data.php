@@ -14,11 +14,9 @@ use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
-use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use function is_array;
 
@@ -28,11 +26,6 @@ class Data
      * @var PaymentMethods
      */
     private $paymentMethods;
-
-    /**
-     * @var Config
-     */
-    private $config;
 
     /**
      * @var Log
@@ -56,20 +49,17 @@ class Data
 
     /**
      * @param PaymentMethods $paymentMethods
-     * @param Config $config
      * @param Log $log
      * @param MethodFactory $methodFactory
      * @param Repository $repository
      */
     public function __construct(
         PaymentMethods $paymentMethods,
-        Config $config,
         Log $log,
         MethodFactory $methodFactory,
         Repository $repository
     ) {
         $this->paymentMethods = $paymentMethods;
-        $this->config = $config;
         $this->log = $log;
         $this->methodFactory = $methodFactory;
         $this->repository = $repository;
@@ -100,7 +90,7 @@ class Data
                 if ($code !== null) {
                     $result[$code] = $result[Method::CODE];
                     $result[$code]['title'] = $method->getTitle();
-                    $result[$code]['sort_order'] = $this->getSortOrder($code);
+                    $result[$code]['sort_order'] = $method->getSortOrder();
                 }
             }
         } catch (Exception $e) {
@@ -198,18 +188,6 @@ class Data
         $method->setTitle($this->getTitle($code));
 
         return $method;
-    }
-
-    /**
-     * Retrieve payment method sort order from our configuration.
-     *
-     * @param string $code
-     * @return int
-     */
-    private function getSortOrder(
-        string $code
-    ): int {
-        return $this->config->getMethodSortOrder($code);
     }
 
     /**

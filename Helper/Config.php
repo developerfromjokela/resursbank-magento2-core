@@ -169,27 +169,6 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Retrieve configured sort order of specified payment method.
-     *
-     * @param string $code
-     * @param string|null $scopeCode
-     * @param string $scopeType
-     * @return int
-     */
-    public function getMethodSortOrder(
-        string $code,
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
-    ): int {
-        return (int) $this->get(
-            self::METHODS_GROUP,
-            "{$code}/sort_order",
-            $scopeCode,
-            $scopeType
-        );
-    }
-
-    /**
      * Defines whether or not delete orders which were canceled during the
      * checkout process when an error occurs with the payment (for example if
      * the client fails to sign using the BankId). This ensures there are no

@@ -38,6 +38,11 @@ interface PaymentMethodInterface
     /**
      * @var string
      */
+    public const SORT_ORDER = 'sort_order';
+
+    /**
+     * @var string
+     */
     public const MIN_ORDER_TOTAL = 'min_order_total';
 
     /**
@@ -154,6 +159,23 @@ interface PaymentMethodInterface
      * @return self
      */
     public function setTitle(string $title): self;
+
+    /**
+     * Get payment method sort order.
+     *
+     * @param int|null $default - Value to be returned in the event that
+     * a value couldn't be retrieved from the database.
+     * @return int|null
+     */
+    public function getSortOrder(?int $default = null): ?int;
+
+    /**
+     * Set payment method sort order.
+     *
+     * @param int $order
+     * @return self
+     */
+    public function setSortOrder(int $order): self;
 
     /**
      * Get payment method minimum order total (cart total required to make the
