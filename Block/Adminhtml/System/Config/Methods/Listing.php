@@ -19,6 +19,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\Helper\Scope;
 
 /**
  * List payment methods and relevant metadata on config page.
@@ -44,6 +45,10 @@ class Listing extends Field
      * @var RequestInterface
      */
     private $request;
+    /**
+     * @var Scope
+     */
+    private $scope;
 
     /**
      * @param Context $context
@@ -51,7 +56,8 @@ class Listing extends Field
      * @param Log $log
      * @param PriceCurrencyInterface $priceCurrency
      * @param RequestInterface $request
-     * @param array<mixed> $data
+     * @param Scope $scope
+     * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
@@ -60,6 +66,7 @@ class Listing extends Field
         Log $log,
         PriceCurrencyInterface $priceCurrency,
         RequestInterface $request,
+        Scope $scope,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
@@ -67,6 +74,7 @@ class Listing extends Field
         $this->log = $log;
         $this->priceCurrency = $priceCurrency;
         $this->request = $request;
+        $this->scope = $scope;
 
         $this->setTemplate('system/config/methods/listing.phtml');
 
@@ -81,7 +89,10 @@ class Listing extends Field
         $result = [];
 
         try {
-            return $this->paymentMethods->getMethodsByCredentials();
+            return $this->paymentMethods->getMethodsByCredentials(
+                $this->scope->getId(),
+                $this->scope->getType()
+            );
         } catch (Exception $e) {
             $this->log->exception($e);
         }

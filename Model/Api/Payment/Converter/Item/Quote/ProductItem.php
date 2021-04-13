@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Converter\Item\Quote;
 
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\AbstractItem;
 use Resursbank\Core\Helper\Config;
@@ -30,20 +31,18 @@ class ProductItem extends AbstractItem
      * @param ItemFactory $itemFactory
      * @param Log $log
      * @param QuoteItem $product
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,
         ItemFactory $itemFactory,
         Log $log,
-        QuoteItem $product
+        QuoteItem $product,
+        StoreManagerInterface $storeManager
     ) {
         $this->product = $product;
 
-        parent::__construct(
-            $config,
-            $itemFactory,
-            $log
-        );
+        parent::__construct($config, $itemFactory, $log, $storeManager);
     }
 
     /**

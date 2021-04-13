@@ -24,22 +24,27 @@ abstract class AbstractLog extends AbstractHelper
     /**
      * @var Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var DirectoryList
      */
-    protected $directories;
+    private $directories;
 
     /**
-     * Channel name for the Logger.
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * Channel name for the Logger (overwritten by child class).
      *
      * @var string
      */
     protected $loggerName = '';
 
     /**
-     * Filename where entries are stored.
+     * Filename where entries are stored (overwritten by child class).
      *
      * @var string
      */
@@ -47,17 +52,18 @@ abstract class AbstractLog extends AbstractHelper
 
     /**
      * @param DirectoryList $directories
+     * @param Config $config
      * @param Context $context
      * @throws FileSystemException
-     * @throws Exception
-     * @throws InvalidArgumentException
      * @throws ValidatorException
      */
     public function __construct(
         DirectoryList $directories,
+        Config $config,
         Context $context
     ) {
         $this->directories = $directories;
+        $this->config = $config;
 
         $this->initLog();
 
@@ -132,7 +138,7 @@ abstract class AbstractLog extends AbstractHelper
      */
     public function isEnabled(): bool
     {
-        return true;
+        return $this->config->isDebugEnabled();
     }
 
     /**

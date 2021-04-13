@@ -104,28 +104,28 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert the store setter works.
+     * Assert the country setter works.
      *
      * @return void
      */
-    public function testSetStore(): void
+    public function testSetCountry(): void
     {
-        $this->credentials->setStore($this->store);
+        $this->credentials->setCountry('SE');
 
-        static::assertInstanceOf(Store::class, $this->credentials->getStore());
+        static::assertSame('SE', $this->credentials->getCountry());
     }
 
     /**
-     * Assert the store getter works.
+     * Assert the country getter works.
      *
      * @return void
      */
-    public function testGetStoreReturns(): void
+    public function testGetCountryReturns(): void
     {
-        static::assertNull($this->credentials->getStore());
+        static::assertNull($this->credentials->getCountry());
 
-        $this->credentials->setStore($this->store);
+        $this->credentials->setCountry('NO');
 
-        static::assertInstanceOf(Store::class, $this->credentials->getStore());
+        static::assertSame('NO', $this->credentials->getCountry());
     }
 }

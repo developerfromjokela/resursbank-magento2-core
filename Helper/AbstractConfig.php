@@ -60,8 +60,8 @@ abstract class AbstractConfig extends AbstractHelper
     public function get(
         string $group,
         string $key,
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ) {
         return $this->reader->getValue(
             $this->getPath($group, $key),
@@ -83,8 +83,8 @@ abstract class AbstractConfig extends AbstractHelper
     public function isEnabled(
         string $group,
         string $key,
-        ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->reader->isSetFlag(
             $this->getPath($group, $key),
@@ -110,7 +110,7 @@ abstract class AbstractConfig extends AbstractHelper
         string $key,
         string $value,
         int $scopeId = 0,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ): void {
         $this->writer->save(
             $this->getPath($group, $key),
@@ -131,6 +131,6 @@ abstract class AbstractConfig extends AbstractHelper
         string $group,
         string $key
     ): string {
-        return "resursbank/{$group}/{$key}";
+        return "payment/resursbank_{$group}/{$key}";
     }
 }

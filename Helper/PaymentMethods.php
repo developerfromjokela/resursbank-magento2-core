@@ -12,14 +12,13 @@ use Exception;
 use function is_array;
 use JsonException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
@@ -102,7 +101,6 @@ class PaymentMethods extends AbstractHelper
      * @return void
      * @throws AlreadyExistsException
      * @throws IntegrationException
-     * @throws StateException
      * @throws ValidatorException
      * @throws JsonException
      * @noinspection BadExceptionsProcessingInspection
@@ -132,7 +130,6 @@ class PaymentMethods extends AbstractHelper
             $this->validateData($data);
 
             try {
-                /** @var PaymentMethodInterface $method */
                 $method = $this->repository->getByCode(
                     $this->getCode(
                         $data[PaymentMethodInterface::IDENTIFIER],
@@ -318,6 +315,14 @@ class PaymentMethods extends AbstractHelper
         array $data,
         CredentialsModel $credentials
     ): PaymentMethodInterface {
+        $country = $credentials->getCountry();
+
+        if ($country === null) {
+            throw new ValidatorException(
+                __('Credentials has no country code assigned.')
+            );
+        }
+
         $method->setIdentifier(
             $data[PaymentMethodInterface::IDENTIFIER]
         )->setTitle(
@@ -336,7 +341,7 @@ class PaymentMethods extends AbstractHelper
         )->setActive(
             true
         )->setSpecificCountry(
-            $this->credentials->getCountry($credentials)
+            $credentials->getCountry()
         );
 
         return $method;
@@ -359,26 +364,21 @@ class PaymentMethods extends AbstractHelper
      * NOTE: If not provided a Credentials model instance it will be resolved
      * from the configuration.
      *
-     * @param null|CredentialsModel $credentials
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return array<PaymentMethodInterface>
+     * @return array
      * @throws ValidatorException
      */
     public function getMethodsByCredentials(
-        ?CredentialsModel $credentials = null,
         ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ): array {
         $result = [];
 
-        // Automatically resolve credentials for active API account.
-        if ($credentials === null) {
-            $credentials = $this->credentials->resolveFromConfig(
-                $scopeCode,
-                $scopeType
-            );
-        }
+        $credentials = $this->credentials->resolveFromConfig(
+            $scopeCode,
+            $scopeType
+        );
 
         if ($this->credentials->hasCredentials($credentials)) {
             // Construct query to extract methods from database.

@@ -8,18 +8,17 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper\Api;
 
+use function array_key_exists;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\RBEcomPHP\ResursBank;
-use function array_key_exists;
 
 /**
  * Business logic for corresponding data model Model\Api\Credentials.
@@ -64,8 +63,9 @@ class Credentials extends AbstractHelper
      * @param CredentialsModel $model
      * @return bool
      */
-    public function hasCredentials(CredentialsModel $model): bool
-    {
+    public function hasCredentials(
+        CredentialsModel $model
+    ): bool {
         return (
             $model->getUsername() !== null &&
             $model->getPassword() !== null
@@ -79,8 +79,9 @@ class Credentials extends AbstractHelper
      * @return string
      * @throws ValidatorException
      */
-    public function getHash(CredentialsModel $model): string
-    {
+    public function getHash(
+        CredentialsModel $model
+    ): string {
         if ($model->getUsername() === null) {
             throw new ValidatorException(
                 __('Unable to generate hash. Missing username.')
@@ -106,8 +107,9 @@ class Credentials extends AbstractHelper
      * @return string - Returns a lowercase string.
      * @throws ValidatorException
      */
-    public function getMethodSuffix(CredentialsModel $model): string
-    {
+    public function getMethodSuffix(
+        CredentialsModel $model
+    ): string {
         if ($model->getUsername() === null) {
             throw new ValidatorException(
                 __('Failed to resolve method suffix. Missing username.')
@@ -135,10 +137,9 @@ class Credentials extends AbstractHelper
      */
     public function resolveFromConfig(
         ?string $scopeCode = null,
-        string $scopeType = ScopeInterface::SCOPE_STORE
+        string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ): CredentialsModel {
-        /** @var CredentialsModel $credentials */
-        $credentials = $this->objectManager->get(CredentialsModel::class);
+        $credentials = $this->objectManager->create(CredentialsModel::class);
 
         $credentials->setEnvironment(
             $this->config->getEnvironment($scopeCode, $scopeType)
@@ -155,6 +156,16 @@ class Credentials extends AbstractHelper
             $credentials->setPassword($password);
         }
 
+        $country = $this->config->getDefaultCountry($scopeCode, $scopeType);
+
+        if ($country === '') {
+            throw new ValidatorException(
+                __('Failed to apply country to Credentials instance.')
+            );
+        }
+
+        $credentials->setCountry(strtoupper($country));
+
         return $credentials;
     }
 
@@ -166,56 +177,41 @@ class Credentials extends AbstractHelper
      */
     public function getCollection(): array
     {
-        $list = [];
+        $result = [];
 
-        /** @var StoreInterface $store */
+        // Default scope.
+        $collection = [
+            $this->resolveFromConfig()
+        ];
+
+        // Website scope.
+        foreach ($this->storeManager->getWebsites() as $website) {
+            $collection[] = $this->resolveFromConfig(
+                $website->getCode(),
+                ScopeInterface::SCOPE_WEBSITES
+            );
+        }
+
+        // Store scope.
         foreach ($this->storeManager->getStores() as $store) {
-            /** @var CredentialsModel $credentials */
-            $credentials = $this->resolveFromConfig($store->getCode());
+            $collection[] = $this->resolveFromConfig(
+                $store->getCode(),
+                ScopeInterface::SCOPE_STORES
+            );
+        }
 
+        // Filter list (make it contain only unique instances).
+        foreach ($collection as $credentials) {
             if ($this->hasCredentials($credentials)) {
-                $credentials->setStore($store);
-
-                /** @var string $hash */
                 $hash = $this->getHash($credentials);
 
                 // Never process the same API account twice.
-                if (!array_key_exists($hash, $list)) {
-                    $list[$hash] = $credentials;
+                if (!array_key_exists($hash, $result)) {
+                    $result[$hash] = $credentials;
                 }
             }
         }
 
-        return $list;
-    }
-
-    /**
-     * @param CredentialsModel $credentials
-     * @return bool
-     */
-    public function isTestAccount(CredentialsModel $credentials): bool
-    {
-        return $credentials->getEnvironment() === ResursBank::ENVIRONMENT_TEST;
-    }
-
-    /**
-     * NOTE: This method may result in an empty string if no country is
-     * configured for the provided store.
-     *
-     * @param CredentialsModel $credentials
-     * @return string
-     * @throws StateException
-     */
-    public function getCountry(CredentialsModel $credentials): string
-    {
-        if ($credentials->getStore() === null) {
-            throw new StateException(
-                __('Country code cannot be resolved without a store instance.')
-            );
-        }
-
-        return strtoupper($this->config->getDefaultCountry(
-            $credentials->getStore()->getCode()
-        ));
+        return $result;
     }
 }

@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api;
 
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Store\Api\Data\StoreInterface;
 use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 
 class Credentials
@@ -30,17 +29,18 @@ class Credentials
     private $environment;
 
     /**
-     * @var StoreInterface
+     * @var string
      */
-    private $store;
+    private $country;
 
     /**
      * @param string $username
      * @return self
      * @throws ValidatorException
      */
-    public function setUsername(string $username): self
-    {
+    public function setUsername(
+        string $username
+    ): self {
         if ($username === '') {
             throw new ValidatorException(
                 __('Username cannot be empty.')
@@ -65,8 +65,9 @@ class Credentials
      * @return self
      * @throws ValidatorException
      */
-    public function setPassword(string $password): self
-    {
+    public function setPassword(
+        string $password
+    ): self {
         if ($password === '') {
             throw new ValidatorException(
                 __('Password cannot be empty.')
@@ -91,8 +92,9 @@ class Credentials
      * @return self
      * @throws ValidatorException
      */
-    public function setEnvironment(int $environment): self
-    {
+    public function setEnvironment(
+        int $environment
+    ): self {
         if ($environment !== RESURS_ENVIRONMENTS::PRODUCTION &&
             $environment !== RESURS_ENVIRONMENTS::TEST
         ) {
@@ -118,21 +120,22 @@ class Credentials
     }
 
     /**
-     * @param StoreInterface $store
+     * @param string $country
      * @return self
      */
-    public function setStore(StoreInterface $store): self
-    {
-        $this->store = $store;
+    public function setCountry(
+        string $country
+    ): self {
+        $this->country = $country;
 
         return $this;
     }
 
     /**
-     * @return StoreInterface|null
+     * @return string|null
      */
-    public function getStore(): ?StoreInterface
+    public function getCountry(): ?string
     {
-        return $this->store;
+        return $this->country;
     }
 }
