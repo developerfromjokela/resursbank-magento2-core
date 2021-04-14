@@ -153,7 +153,7 @@ class Listing extends Field
     public function showMinMax(
         PaymentMethodInterface $method
     ): bool {
-        return !in_array(
+        return !\in_array(
             $method->getType(),
             ['CARD', 'PAYMENT_PROVIDER']
         );
@@ -182,6 +182,7 @@ class Listing extends Field
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function _getElementHtml(
         AbstractElement $element
