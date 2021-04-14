@@ -13,7 +13,6 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;

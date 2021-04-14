@@ -22,9 +22,9 @@ $methods = $block->getMethods();
     <table style="width: 100%;">
         <thead>
             <tr>
-                <th style="width: 55%; padding: .75rem 0; text-align: left; border-bottom: 2px solid #dee2e6;"><?= __('Name') ?></th>
-                <th style="width: 20%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= __('Min total') ?></th>
-                <th style="width: 25%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= __('Max total') ?></th>
+                <th style="width: 55%; padding: .75rem 0; text-align: left; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Name')) ?></th>
+                <th style="width: 20%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Min total')) ?></th>
+                <th style="width: 25%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Max total')) ?></th>
             </tr>
         </thead>
         <tbody>
