@@ -128,7 +128,7 @@ class Listing extends Field
         PaymentMethodInterface $method
     ): String {
         return $this->showMinMax($method)
-            ? (string) $this->formatPrice((float) $method->getMinOrderTotal())
+            ? $this->formatPrice((float) $method->getMinOrderTotal())
             : '';
     }
 
@@ -140,7 +140,7 @@ class Listing extends Field
         PaymentMethodInterface $method
     ): String {
         return $this->showMinMax($method)
-            ? (string) $this->formatPrice((float) $method->getMaxOrderTotal())
+            ? $this->formatPrice((float) $method->getMaxOrderTotal())
             : '';
     }
 
@@ -153,7 +153,7 @@ class Listing extends Field
      */
     public function showMinMax(
         PaymentMethodInterface $method
-    ) {
+    ): bool {
         return !in_array(
             $method->getType(),
             ['CARD', 'PAYMENT_PROVIDER']
