@@ -13,7 +13,6 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
@@ -133,31 +132,41 @@ class Listing extends Field
 
     /**
      * @param PaymentMethodInterface $method
-     * @return Phrase
+     * @return String
      */
     public function getMin(
         PaymentMethodInterface $method
-    ): Phrase {
-        return __(
-            'Minimum order total %1',
-            $this->formatPrice(
-                (float) $method->getMinOrderTotal()
-            )
-        );
+    ): String {
+        return $this->showMinMax($method)
+            ? $this->formatPrice((float) $method->getMinOrderTotal())
+            : '';
     }
 
     /**
      * @param PaymentMethodInterface $method
-     * @return Phrase
+     * @return String
      */
     public function getMax(
         PaymentMethodInterface $method
-    ): Phrase {
-        return __(
-            'Maximum order total %1',
-            $this->formatPrice(
-                (float) $method->getMaxOrderTotal()
-            )
+    ): String {
+        return $this->showMinMax($method)
+            ? $this->formatPrice((float) $method->getMaxOrderTotal())
+            : '';
+    }
+
+    /**
+     * Only show Min & Max for methods that have a type that is not
+     * CARD or PAYMENT_PROVIDER.
+     *
+     * @param PaymentMethodInterface $method
+     * @return bool
+     */
+    public function showMinMax(
+        PaymentMethodInterface $method
+    ): bool {
+        return !\in_array(
+            $method->getType(),
+            ['CARD', 'PAYMENT_PROVIDER']
         );
     }
 
@@ -184,6 +193,7 @@ class Listing extends Field
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function _getElementHtml(
         AbstractElement $element

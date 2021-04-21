@@ -279,6 +279,22 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @throws JsonException
+     * @inheritdoc
+     */
+    public function getType(): ?string
+    {
+        $raw = json_decode(
+            $this->getRaw(),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        return $raw['type'] ?? null;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getSpecificCountry(?string $default = null): ?string

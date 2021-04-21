@@ -19,16 +19,24 @@ $methods = $block->getMethods();
         <?php /** @phpstan-ignore-next-line */ ?>
         <?= $escaper->escapeHtml(__('Synced payment methods')) ?>
     </h2>
-    <?php foreach ($methods as $method): ?>
-    <div style="border-bottom: 1px dashed #c0c0c0; margin-bottom: 10px; padding-bottom: 10px;">
-        <?php /** @phpstan-ignore-next-line */ ?>
-        <div style="font-weight: bold; margin-bottom: 10px;"><?= $escaper->escapeHtml($method->getTitle()) ?></div>
-        <?php /** @phpstan-ignore-next-line */ ?>
-        <div><?= $escaper->escapeHtml($block->getMin($method)) ?></div>
-        <?php /** @phpstan-ignore-next-line */ ?>
-        <div><?= $escaper->escapeHtml($block->getMax($method)) ?></div>
-    </div>
-    <?php endforeach; ?>
+    <table style="width: 100%;">
+        <thead>
+            <tr>
+                <th style="width: 55%; padding: .75rem 0; text-align: left; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Name')) ?></th>
+                <th style="width: 20%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Min total')) ?></th>
+                <th style="width: 25%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;"><?= $escaper->escapeHtml(__('Max total')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($methods as $method): ?>
+            <tr>
+                <td style="padding: .75rem 0; border-bottom: 1px solid #dee2e6;"><?= $escaper->escapeHtml($method->getTitle()) ?></td>
+                <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;"><?= $escaper->escapeHtml($block->getMin($method)) ?></td>
+                <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;"><?= $escaper->escapeHtml($block->getMax($method)) ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 <?php else: ?>
     <?php /** @phpstan-ignore-next-line */ ?>
     <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>

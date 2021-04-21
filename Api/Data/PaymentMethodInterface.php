@@ -250,6 +250,13 @@ interface PaymentMethodInterface
     public function setRaw(string $value): self;
 
     /**
+     * From the raw API response, fetch the method type.
+     *
+     * @return string|null
+     */
+    public function getType(): ?string;
+
+    /**
      * Get payment method country restriction.
      *
      * @param string|null $default - Value to be returned in the event that
