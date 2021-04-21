@@ -123,6 +123,11 @@ abstract class AbstractLog extends AbstractHelper
         Exception $error,
         bool $force = false
     ): self {
+        /**
+         * NOTE: The order of these checks are important, changing them may
+         * introduce a circular dependency error (since Log classes need to log
+         * Exceptions sometimes).
+         */
         if ($force || $this->isEnabled()) {
             $this->logger->error(
                 $error->getFile() . ' :: ' . $error->getLine() . '   -   '

@@ -26,6 +26,8 @@ use Resursbank\Core\Model\Api\Payment as PaymentModel;
  * When the order has been placed and the payment is booked, retrieve the
  * payment from Resurs Bank, and update the billing address on the order in
  * Magento to reflect the address on the payment.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateBillingAddress
 {
