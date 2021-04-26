@@ -100,7 +100,9 @@ class QuoteConverter extends AbstractConverter
         if ($this->includeProductData($entity)) {
             /** @var Item $product */
             foreach ($entity->getAllItems() as $product) {
-                if ($product->getQty() > 0) {
+                if ($product->getQty() > 0 &&
+                    !$this->hasConfigurableParent($product)
+                ) {
                     $item = $this->productItemFactory->create([
                         'product' => $product
                     ]);
@@ -168,5 +170,20 @@ class QuoteConverter extends AbstractConverter
         }
 
         return (float) $result;
+    }
+
+    /**
+     * Whether a product have a configurable product as a parent.
+     *
+     * @param Item $product
+     * @return bool
+     */
+    private function hasConfigurableParent(
+        Item $product
+    ): bool {
+        return (
+            $product->getParentItem() instanceof Item &&
+            $product->getParentItem()->getProductType() === 'configurable'
+        );
     }
 }
