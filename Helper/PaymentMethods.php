@@ -108,14 +108,6 @@ class PaymentMethods extends AbstractHelper
     public function sync(
         CredentialsModel $credentials
     ): void {
-        /**
-         * Deactivate methods currently tracked in the database prior to syncing
-         * entries from the API. This is to ensure methods which have been
-         * deactivated in the API (thus no longer included in the result from
-         * our API call to fetch payment methods) won't be listed in checkout.
-         */
-        $this->deactivateMethods();
-
         // Payment method sort order.
         $sortOrder = 0;
 
