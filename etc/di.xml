@@ -80,16 +80,17 @@
     plugins must execute in proper order. There are also plugins in other
     modules, like Simplified, which adhere to this order.
     -->
-    <!-- Restore session data, in case of intermediate browser change during signing. -->
     <type name="Magento\Checkout\Controller\Onepage\Success">
+        <!--
+        Restore session data, in case of intermediate browser change
+        during signing.
+        -->
         <plugin
             name="resursbank_core_order_restore_session"
             type="Resursbank\Core\Plugin\Order\RestoreSession"
             sortOrder="0"/>
-    </type>
 
-    <!-- Update billing address after order placement. -->
-    <type name="Magento\Checkout\Controller\Onepage\Success">
+        <!-- Update billing address after order placement. -->
         <plugin
             name="resursbank_core_order_update_billing_address"
             type="Resursbank\Core\Plugin\Order\UpdateBillingAddress"
@@ -98,9 +99,19 @@
 
     <!-- Checkout failure page. -->
     <type name="Magento\Checkout\Controller\Onepage\Failure">
+        <!--
+        Restore session data, in case of intermediate browser change
+        during signing.
+        -->
+        <plugin
+            name="resursbank_core_order_restore_session"
+            type="Resursbank\Core\Plugin\Order\RestoreSession"
+            sortOrder="0"/>
+
         <plugin
             name="resursbank_core_rebuild_cart"
-            type="Resursbank\Core\Plugin\Order\RebuildCart" />
+            type="Resursbank\Core\Plugin\Order\RebuildCart"
+            sortOrder="1"/>
     </type>
 
     <!-- Handle orders for failed payments. -->

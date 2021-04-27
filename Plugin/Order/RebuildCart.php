@@ -11,8 +11,8 @@ namespace Resursbank\Core\Plugin\Order;
 use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -23,6 +23,7 @@ use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
+use Magento\Checkout\Controller\Onepage\Failure;
 
 /**
  * Cancel the previous order, rebuild the cart and redirect to the cart.
@@ -110,13 +111,16 @@ class RebuildCart
     }
 
     /**
-     * @return Redirect
+     * @param Failure $subject
+     * @param Page|Redirect $result
+     * @return Page|Redirect
      * @throws Exception
+     * @noinspection PhpUnusedParameterInspection
      */
-    public function afterExecute(): Redirect
-    {
-        $redirect = $this->redirectFactory->create();
-
+    public function afterExecute(
+        Failure $subject,
+        $result
+    ) {
         try {
             $order = $this->checkoutSession->getLastRealOrder();
 
@@ -129,6 +133,11 @@ class RebuildCart
                     'The payment failed. Please confirm the cart content ' .
                     'and try a different payment method.'
                 ));
+
+                // Redirect to cart page.
+                $result = $this->redirectFactory->create()->setPath(
+                    $this->url->getUrl('checkout/cart')
+                );
             }
         } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__(
@@ -141,8 +150,7 @@ class RebuildCart
             $this->log->exception($e);
         }
 
-        // Redirect to cart page.
-        return $redirect->setPath($this->url->getUrl('checkout/cart'));
+        return $result;
     }
 
     /**
@@ -151,7 +159,6 @@ class RebuildCart
      * @param OrderInterface $order
      * @return bool
      * @throws InvalidDataException
-     * @throws NoSuchEntityException
      */
     private function isEnabled(
         OrderInterface $order
@@ -165,10 +172,7 @@ class RebuildCart
             ));
         }
 
-        $storeCode = $this->storeManager->getStore()->getCode();
-
         return (
-            $this->config->isReuseErroneouslyCreatedOrdersEnabled($storeCode) &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
     }
