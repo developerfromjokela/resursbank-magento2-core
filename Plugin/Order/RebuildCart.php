@@ -15,6 +15,11 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
+<<<<<<< Updated upstream
+=======
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\App\RequestInterface;
+>>>>>>> Stashed changes
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -73,9 +78,15 @@ class RebuildCart
     private $paymentMethods;
 
     /**
+<<<<<<< Updated upstream
      * @var StoreManagerInterface
      */
     private $storeManager;
+=======
+     * @var RequestInterface
+     */
+    private $request;
+>>>>>>> Stashed changes
 
     /**
      * @param ManagerInterface $messageManager
@@ -86,7 +97,11 @@ class RebuildCart
      * @param CartHelper $cartHelper
      * @param Config $config
      * @param PaymentMethods $paymentMethods
+<<<<<<< Updated upstream
      * @param StoreManagerInterface $storeManager
+=======
+     * @param RequestInterface $request
+>>>>>>> Stashed changes
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -95,9 +110,14 @@ class RebuildCart
         RedirectFactory $redirectFactory,
         Session $checkoutSession,
         CartHelper $cartHelper,
+<<<<<<< Updated upstream
         Config $config,
         PaymentMethods $paymentMethods,
         StoreManagerInterface $storeManager
+=======
+        PaymentMethods $paymentMethods,
+        RequestInterface $request
+>>>>>>> Stashed changes
     ) {
         $this->messageManager = $messageManager;
         $this->log = $log;
@@ -107,7 +127,11 @@ class RebuildCart
         $this->cartHelper = $cartHelper;
         $this->config = $config;
         $this->paymentMethods = $paymentMethods;
+<<<<<<< Updated upstream
         $this->storeManager = $storeManager;
+=======
+        $this->request = $request;
+>>>>>>> Stashed changes
     }
 
     /**
@@ -173,6 +197,7 @@ class RebuildCart
         }
 
         return (
+            (int) $this->request->getParam('disable_rebuild_cart') !== 1 &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
     }
