@@ -241,7 +241,10 @@ class Api extends AbstractHelper
             property_exists($payment, 'signingUrl') ?
                 (string) $payment->signingUrl :
                 '',
-            property_exists($payment, 'customer') ?
+            (
+                property_exists($payment, 'customer') &&
+                $payment->customer instanceof stdClass
+            ) ?
                 $this->toCustomer(
                     $payment->customer,
                     $isCompany
