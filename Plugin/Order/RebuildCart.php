@@ -9,29 +9,20 @@ declare(strict_types=1);
 namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
+use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
-<<<<<<< Updated upstream
-=======
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
-use Magento\Checkout\Controller\Onepage\Failure;
 
 /**
  * Cancel the previous order, rebuild the cart and redirect to the cart.
@@ -71,31 +62,14 @@ class RebuildCart
     private $cartHelper;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var PaymentMethods
      */
     private $paymentMethods;
 
     /**
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-=======
      * @var RequestInterface
      */
     private $request;
->>>>>>> Stashed changes
-=======
-     * @var RequestInterface
-     */
-    private $request;
->>>>>>> Stashed changes
 
     /**
      * @param ManagerInterface $messageManager
@@ -104,17 +78,8 @@ class RebuildCart
      * @param RedirectFactory $redirectFactory
      * @param Session $checkoutSession
      * @param CartHelper $cartHelper
-     * @param Config $config
      * @param PaymentMethods $paymentMethods
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-     * @param StoreManagerInterface $storeManager
-=======
      * @param RequestInterface $request
->>>>>>> Stashed changes
-=======
-     * @param RequestInterface $request
->>>>>>> Stashed changes
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -123,19 +88,8 @@ class RebuildCart
         RedirectFactory $redirectFactory,
         Session $checkoutSession,
         CartHelper $cartHelper,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        Config $config,
-        PaymentMethods $paymentMethods,
-        StoreManagerInterface $storeManager
-=======
         PaymentMethods $paymentMethods,
         RequestInterface $request
->>>>>>> Stashed changes
-=======
-        PaymentMethods $paymentMethods,
-        RequestInterface $request
->>>>>>> Stashed changes
     ) {
         $this->messageManager = $messageManager;
         $this->log = $log;
@@ -143,17 +97,8 @@ class RebuildCart
         $this->redirectFactory = $redirectFactory;
         $this->checkoutSession = $checkoutSession;
         $this->cartHelper = $cartHelper;
-        $this->config = $config;
         $this->paymentMethods = $paymentMethods;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        $this->storeManager = $storeManager;
-=======
         $this->request = $request;
->>>>>>> Stashed changes
-=======
-        $this->request = $request;
->>>>>>> Stashed changes
     }
 
     /**
@@ -162,6 +107,7 @@ class RebuildCart
      * @return Page|Redirect
      * @throws Exception
      * @noinspection PhpUnusedParameterInspection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         Failure $subject,
@@ -182,7 +128,7 @@ class RebuildCart
 
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
-                    $this->url->getUrl('checkout/cart')
+                    $this->url->getUrl('checkout') . '/#payment'
                 );
             }
         } catch (Exception $e) {
