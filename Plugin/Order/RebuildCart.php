@@ -19,6 +19,9 @@ use Magento\Framework\UrlInterface;
 =======
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -79,9 +82,15 @@ class RebuildCart
 
     /**
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      * @var StoreManagerInterface
      */
     private $storeManager;
+=======
+     * @var RequestInterface
+     */
+    private $request;
+>>>>>>> Stashed changes
 =======
      * @var RequestInterface
      */
@@ -98,7 +107,11 @@ class RebuildCart
      * @param Config $config
      * @param PaymentMethods $paymentMethods
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      * @param StoreManagerInterface $storeManager
+=======
+     * @param RequestInterface $request
+>>>>>>> Stashed changes
 =======
      * @param RequestInterface $request
 >>>>>>> Stashed changes
@@ -111,9 +124,14 @@ class RebuildCart
         Session $checkoutSession,
         CartHelper $cartHelper,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         Config $config,
         PaymentMethods $paymentMethods,
         StoreManagerInterface $storeManager
+=======
+        PaymentMethods $paymentMethods,
+        RequestInterface $request
+>>>>>>> Stashed changes
 =======
         PaymentMethods $paymentMethods,
         RequestInterface $request
@@ -128,7 +146,11 @@ class RebuildCart
         $this->config = $config;
         $this->paymentMethods = $paymentMethods;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         $this->storeManager = $storeManager;
+=======
+        $this->request = $request;
+>>>>>>> Stashed changes
 =======
         $this->request = $request;
 >>>>>>> Stashed changes
