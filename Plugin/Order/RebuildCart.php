@@ -16,6 +16,7 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Resursbank\Core\Exception\InvalidDataException;
@@ -66,6 +67,11 @@ class RebuildCart
     private $paymentMethods;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param ManagerInterface $messageManager
      * @param Log $log
      * @param UrlInterface $url
@@ -73,6 +79,7 @@ class RebuildCart
      * @param Session $checkoutSession
      * @param CartHelper $cartHelper
      * @param PaymentMethods $paymentMethods
+     * @param RequestInterface $request
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -81,7 +88,8 @@ class RebuildCart
         RedirectFactory $redirectFactory,
         Session $checkoutSession,
         CartHelper $cartHelper,
-        PaymentMethods $paymentMethods
+        PaymentMethods $paymentMethods,
+        RequestInterface $request
     ) {
         $this->messageManager = $messageManager;
         $this->log = $log;
@@ -90,6 +98,7 @@ class RebuildCart
         $this->checkoutSession = $checkoutSession;
         $this->cartHelper = $cartHelper;
         $this->paymentMethods = $paymentMethods;
+        $this->request = $request;
     }
 
     /**
@@ -156,6 +165,7 @@ class RebuildCart
         }
 
         return (
+            (int) $this->request->getParam('disable_rebuild_cart') !== 1 &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
     }
