@@ -136,8 +136,8 @@ class Credentials extends AbstractHelper
      * @throws ValidatorException
      */
     public function resolveFromConfig(
-        ?string $scopeCode = null,
-        string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        ?string $scopeCode,
+        string $scopeType
     ): CredentialsModel {
         $credentials = $this->objectManager->create(CredentialsModel::class);
 
@@ -181,7 +181,10 @@ class Credentials extends AbstractHelper
 
         // Default scope.
         $collection = [
-            $this->resolveFromConfig()
+            $this->resolveFromConfig(
+                null,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )
         ];
 
         // Website scope.
