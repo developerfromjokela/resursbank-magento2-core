@@ -27,6 +27,7 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
+use function json_decode;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -65,6 +66,11 @@ class PaymentMethods extends AbstractHelper
     private $searchBuilder;
 
     /**
+     * @var Log
+     */
+    private $log;
+
+    /**
      * @param Context $context
      * @param Api $api
      * @param PaymentMethodFactory $methodFactory
@@ -72,6 +78,7 @@ class PaymentMethods extends AbstractHelper
      * @param Repository $repository
      * @param Credentials $credentials
      * @param SearchCriteriaBuilder $searchBuilder
+     * @param Log $log
      */
     public function __construct(
         Context $context,
@@ -80,7 +87,8 @@ class PaymentMethods extends AbstractHelper
         Converter $converter,
         Repository $repository,
         Credentials $credentials,
-        SearchCriteriaBuilder $searchBuilder
+        SearchCriteriaBuilder $searchBuilder,
+        Log $log
     ) {
         $this->api = $api;
         $this->methodFactory = $methodFactory;
@@ -88,6 +96,7 @@ class PaymentMethods extends AbstractHelper
         $this->repository = $repository;
         $this->credentials = $credentials;
         $this->searchBuilder = $searchBuilder;
+        $this->log = $log;
 
         parent::__construct($context);
     }
@@ -132,7 +141,6 @@ class PaymentMethods extends AbstractHelper
                 // NOTE: NoSuchEntityException is expected if the requested
                 // method does not exist within the database, which is why we
                 // just ignore it here and create a clean Method data model.
-                /** @noinspection PhpUndefinedMethodInspection */
                 $method = $this->methodFactory->create();
             }
 
@@ -299,7 +307,6 @@ class PaymentMethods extends AbstractHelper
      * @param array<mixed> $data
      * @param CredentialsModel $credentials
      * @return PaymentMethodInterface
-     * @throws StateException
      * @throws ValidatorException
      */
     private function fill(
@@ -385,6 +392,36 @@ class PaymentMethods extends AbstractHelper
 
             // Execute query.
             $result = $this->repository->getList($searchCriteria)->getItems();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Retrieve list of eligible customer types attached to payment method
+     * instance.
+     *
+     * @param PaymentMethodInterface $method
+     * @return array
+     */
+    public function getCustomerTypes(
+        PaymentMethodInterface $method
+    ): array {
+        $result = [];
+
+        try {
+            $rawValue = $method->getRaw('');
+            $decoded = $rawValue !== '' ?
+                json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
+                [];
+
+            if (isset($decoded['customerType'])) {
+                $result = is_array($decoded['customerType']) ?
+                    $decoded['customerType'] :
+                    [$decoded['customerType']];
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
         }
 
         return $result;
