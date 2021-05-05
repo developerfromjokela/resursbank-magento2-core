@@ -429,8 +429,6 @@ class PaymentMethods extends AbstractHelper
             $this->log->exception($e);
         }
 
-        $this->log->info(\json_encode($result));
-
         return $result;
     }
 }
