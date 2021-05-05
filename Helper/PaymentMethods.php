@@ -411,13 +411,8 @@ class PaymentMethods extends AbstractHelper
 
         try {
             $rawValue = $method->getRaw('');
-            $decoded = $rawValue !== '' && $rawValue !== null ?
-                json_decode(
-                    $rawValue,
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR
-                ) :
+            $decoded = $rawValue !== '' ?
+                json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];
 
             if (isset($decoded['customerTypes'])) {
