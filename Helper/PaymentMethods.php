@@ -415,10 +415,10 @@ class PaymentMethods extends AbstractHelper
                 json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];
 
-            if (isset($decoded['customerTypes'])) {
-                $result = is_array($decoded['customerTypes']) ?
-                    $decoded['customerTypes'] :
-                    [$decoded['customerTypes']];
+            if (isset($decoded['customerType'])) {
+                $result = is_array($decoded['customerType']) ?
+                    $decoded['customerType'] :
+                    [$decoded['customerType']];
             }
         } catch (Exception $e) {
             $this->log->exception($e);
