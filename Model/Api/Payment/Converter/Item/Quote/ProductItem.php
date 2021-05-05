@@ -66,9 +66,9 @@ class ProductItem extends AbstractItem
      */
     public function getQuantity(): float
     {
-        return $this->product->getProductType() === 'bundle' ?
-            0 :
-            (float) $this->product->getQty();
+        return $this->product->getProductType() !== 'bundle' ?
+            (float) $this->product->getQty() :
+            0.0;
     }
 
     /**
