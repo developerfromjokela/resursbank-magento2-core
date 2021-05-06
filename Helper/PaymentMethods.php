@@ -410,16 +410,36 @@ class PaymentMethods extends AbstractHelper
         $result = [];
 
         try {
+            $data = $this->getRaw($method);
+
+            if (isset($data['customerType'])) {
+                $result = is_array($data['customerType']) ?
+                    $data['customerType'] :
+                    [$data['customerType']];
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Retrieve decoded raw value.
+     *
+     * @param PaymentMethodInterface $method
+     * @return array
+     */
+    public function getRaw(
+        PaymentMethodInterface $method
+    ): array {
+        $result = [];
+
+        try {
             $rawValue = $method->getRaw('');
-            $decoded = $rawValue !== '' ?
+            $result = $rawValue !== '' ?
                 json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];
-
-            if (isset($decoded['customerType'])) {
-                $result = is_array($decoded['customerType']) ?
-                    $decoded['customerType'] :
-                    [$decoded['customerType']];
-            }
         } catch (Exception $e) {
             $this->log->exception($e);
         }
