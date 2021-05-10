@@ -118,7 +118,6 @@ class RebuildCart
 
             if ($this->isEnabled($order)) {
                 $this->cartHelper->rebuildCart($order);
-throw new Exception('asdasd');
 
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
