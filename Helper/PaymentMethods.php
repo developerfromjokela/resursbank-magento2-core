@@ -118,7 +118,8 @@ class PaymentMethods extends AbstractHelper
         CredentialsModel $credentials
     ): void {
         // Payment method sort order.
-        $sortOrder = 10;
+        // @SuppressWarnings(PHPMD.UnusedLocalVariable)
+        $sortOrder = 0;
 
         // Fetch methods from the API and store them in our db.
         foreach ($this->fetch($credentials) as $methodData) {
