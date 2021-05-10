@@ -13,12 +13,12 @@ use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
@@ -31,11 +31,6 @@ use Resursbank\Core\Helper\PaymentMethods;
  */
 class RebuildCart
 {
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
     /**
      * @var UrlInterface
      */
@@ -72,7 +67,11 @@ class RebuildCart
     private $request;
 
     /**
-     * @param ManagerInterface $messageManager
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
      * @param Log $log
      * @param UrlInterface $url
      * @param RedirectFactory $redirectFactory
@@ -80,18 +79,18 @@ class RebuildCart
      * @param CartHelper $cartHelper
      * @param PaymentMethods $paymentMethods
      * @param RequestInterface $request
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
-        ManagerInterface $messageManager,
         Log $log,
         UrlInterface $url,
         RedirectFactory $redirectFactory,
         Session $checkoutSession,
         CartHelper $cartHelper,
         PaymentMethods $paymentMethods,
-        RequestInterface $request
+        RequestInterface $request,
+        OrderRepositoryInterface $orderRepository
     ) {
-        $this->messageManager = $messageManager;
         $this->log = $log;
         $this->url = $url;
         $this->redirectFactory = $redirectFactory;
@@ -99,6 +98,7 @@ class RebuildCart
         $this->cartHelper = $cartHelper;
         $this->paymentMethods = $paymentMethods;
         $this->request = $request;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -117,6 +117,10 @@ class RebuildCart
             $order = $this->checkoutSession->getLastRealOrder();
 
             if ($this->isEnabled($order)) {
+                // Cancel order since payment failed.
+                $this->cancelOrder($order);
+
+                // Rebuild cart.
                 $this->cartHelper->rebuildCart($order);
 
                 // Redirect to cart page.
@@ -128,14 +132,16 @@ class RebuildCart
                 );
             }
         } catch (Exception $e) {
-            $this->messageManager->addErrorMessage(__(
+            $this->log->exception($e);
+
+            // Because the message bag is not rendered on the failure page.
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->checkoutSession->setErrorMessage(__(
                 'The payment failed and the cart could not be rebuilt. ' .
                 'Please add the items back to your cart manually and try ' .
                 'a different payment alternative. We sincerely apologize ' .
                 'for this inconvenience.'
             ));
-
-            $this->log->exception($e);
         }
 
         return $result;
@@ -164,5 +170,21 @@ class RebuildCart
             (int) $this->request->getParam('disable_rebuild_cart') !== 1 &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
+    }
+
+    /**
+     * Cancel request order.
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    private function cancelOrder(
+        OrderInterface $order
+    ): void {
+        try {
+            $this->orderRepository->save($order->cancel());
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
     }
 }
