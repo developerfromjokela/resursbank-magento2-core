@@ -119,16 +119,12 @@ class RebuildCart
             if ($this->isEnabled($order)) {
                 $this->cartHelper->rebuildCart($order);
 
-                // Add error message explaining the payment failed but they may
-                // try a different payment method.
-                $this->messageManager->addErrorMessage(__(
-                    'The payment failed. Please confirm the cart content ' .
-                    'and try a different payment method.'
-                ));
-
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
-                    $this->url->getUrl('checkout') . '/#payment'
+                    $this->url->getUrl(
+                        'checkout',
+                        ['resursbank_payment_failed' => 1]
+                    ) . '/#payment'
                 );
             }
         } catch (Exception $e) {

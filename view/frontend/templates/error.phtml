@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Resursbank\Core\ViewModel\Error;
+
+/** @var Template $block */
+/** @var Error $viewModel */
+/** @var Escaper $escaper */
+/** @var string $message */
+/** @noinspection PhpUndefinedMethodInspection */
+/** @phpstan-ignore-next-line */
+$viewModel = $block->getViewModel();
+?>
+<?php if ($viewModel->paymentFailed()): ?>
+<script>
+    alert('<?= $escaper->escapeHtml(__(
+        'The payment failed. Please confirm the cart content and try a ' .
+         'different payment method.'
+    )) ?>');
+</script>
+<?php endif; ?>
