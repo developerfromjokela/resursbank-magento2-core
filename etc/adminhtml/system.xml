@@ -57,12 +57,12 @@
                     </group>
                     <group id="methods" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Methods</label>
-                        <field id="sync" type="button" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="sync" type="button" sortOrder="0" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Sync payment methods</label>
                             <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
                             <config_path>payment/resursbank_methods/sync</config_path>
                         </field>
-                        <field id="auto_sync_method" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="auto_sync_method" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Automatically sync payment methods</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/resursbank_methods/auto_sync_method</config_path>
