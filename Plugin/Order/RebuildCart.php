@@ -114,7 +114,6 @@ class RebuildCart
         $result
     ) {
         try {
-            throw new Exception('asdasdasdasdasdasssasdasdasda');
             $order = $this->checkoutSession->getLastRealOrder();
 
             if ($this->isEnabled($order)) {
