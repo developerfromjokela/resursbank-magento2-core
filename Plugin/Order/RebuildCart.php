@@ -13,7 +13,6 @@ use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
@@ -31,11 +30,6 @@ use Resursbank\Core\Helper\PaymentMethods;
  */
 class RebuildCart
 {
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
     /**
      * @var UrlInterface
      */
@@ -72,7 +66,6 @@ class RebuildCart
     private $request;
 
     /**
-     * @param ManagerInterface $messageManager
      * @param Log $log
      * @param UrlInterface $url
      * @param RedirectFactory $redirectFactory
@@ -82,7 +75,6 @@ class RebuildCart
      * @param RequestInterface $request
      */
     public function __construct(
-        ManagerInterface $messageManager,
         Log $log,
         UrlInterface $url,
         RedirectFactory $redirectFactory,
@@ -91,7 +83,6 @@ class RebuildCart
         PaymentMethods $paymentMethods,
         RequestInterface $request
     ) {
-        $this->messageManager = $messageManager;
         $this->log = $log;
         $this->url = $url;
         $this->redirectFactory = $redirectFactory;
@@ -114,6 +105,7 @@ class RebuildCart
         $result
     ) {
         try {
+            throw new Exception('asdasdasdasdasdasssasdasdasda');
             $order = $this->checkoutSession->getLastRealOrder();
 
             if ($this->isEnabled($order)) {
@@ -128,14 +120,16 @@ class RebuildCart
                 );
             }
         } catch (Exception $e) {
-            $this->messageManager->addErrorMessage(__(
+            $this->log->exception($e);
+
+            // Because the message bag is not rendered on the failure page.
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->checkoutSession->setErrorMessage(__(
                 'The payment failed and the cart could not be rebuilt. ' .
                 'Please add the items back to your cart manually and try ' .
                 'a different payment alternative. We sincerely apologize ' .
                 'for this inconvenience.'
             ));
-
-            $this->log->exception($e);
         }
 
         return $result;
