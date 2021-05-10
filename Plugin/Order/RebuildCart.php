@@ -23,7 +23,6 @@ use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
-use Resursbank\Core\Helper\Config;
 
 /**
  * Cancel the previous order, rebuild the cart and redirect to the cart.
@@ -73,11 +72,6 @@ class RebuildCart
     private $request;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param ManagerInterface $messageManager
      * @param Log $log
      * @param UrlInterface $url
@@ -86,7 +80,6 @@ class RebuildCart
      * @param CartHelper $cartHelper
      * @param PaymentMethods $paymentMethods
      * @param RequestInterface $request
-     * @param Config $config
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -96,8 +89,7 @@ class RebuildCart
         Session $checkoutSession,
         CartHelper $cartHelper,
         PaymentMethods $paymentMethods,
-        RequestInterface $request,
-        Config $config
+        RequestInterface $request
     ) {
         $this->messageManager = $messageManager;
         $this->log = $log;
@@ -107,7 +99,6 @@ class RebuildCart
         $this->cartHelper = $cartHelper;
         $this->paymentMethods = $paymentMethods;
         $this->request = $request;
-        $this->config = $config;
     }
 
     /**
@@ -127,14 +118,7 @@ class RebuildCart
 
             if ($this->isEnabled($order)) {
                 $this->cartHelper->rebuildCart($order);
-//
-//                // Add error message explaining the payment failed but they may
-//                // try a different payment method.
-//                if ($this->config->getFlow())
-//                $this->messageManager->addErrorMessage(__(
-//                    'The payment failed. Please confirm the cart content ' .
-//                    'and try a different payment method.'
-//                ));
+throw new Exception('asdasd');
 
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
