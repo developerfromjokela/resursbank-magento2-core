@@ -144,8 +144,11 @@ class PaymentMethods extends AbstractHelper
                 $method = $this->methodFactory->create();
             }
 
-            // Set method sort order to reflect order in list from API call.
-            $method->setSortOrder(++$sortOrder);
+            /**
+             * Magentos rendering component for the payment method list will
+             * randomly sort the methods incorrectly unless we space them a bit.
+             */
+            $method->setSortOrder($sortOrder+=10);
 
             // Overwrite data on method model instance and update db entry.
             $this->repository->save(
