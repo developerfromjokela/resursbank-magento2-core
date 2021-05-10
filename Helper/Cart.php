@@ -14,8 +14,8 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 
 /**
  * Methods to handle and manipulate shopping cart.
@@ -59,14 +59,12 @@ class Cart extends AbstractHelper
     /**
      * Rebuilds the cart from an order.
      *
-     * @param Order $order
-     * @param bool $cancelOrder
+     * @param OrderInterface $order
      * @return bool
      * @throws NoSuchEntityException
      */
     public function rebuildCart(
-        Order $order,
-        bool $cancelOrder = true
+        OrderInterface $order
     ): bool {
         $quote = $this->quoteRepo->get($order->getQuoteId());
         $result = false;
@@ -76,10 +74,6 @@ class Cart extends AbstractHelper
 
             $this->checkoutSession->replaceQuote($quote);
             $this->quoteRepo->save($quote);
-
-            if ($cancelOrder) {
-                $this->orderRepo->save($order->cancel());
-            }
 
             $result = true;
         }
