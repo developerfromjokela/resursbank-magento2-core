@@ -75,6 +75,11 @@ class Address
     private $country;
 
     /**
+     * @var string
+     */
+    private $telephone;
+
+    /**
      * @param bool $isCompany
      * @param string $fullName
      * @param string $firstName
@@ -84,6 +89,8 @@ class Address
      * @param string $postalArea
      * @param string $postalCode
      * @param string $country
+     * @param string $telephone
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         bool $isCompany = false,
@@ -94,7 +101,8 @@ class Address
         string $addressRow2 = '',
         string $postalArea = '',
         string $postalCode = '',
-        string $country = ''
+        string $country = '',
+        string $telephone = ''
     ) {
         $this->setIsCompany($isCompany)
             ->setFullName($fullName)
@@ -104,7 +112,8 @@ class Address
             ->setAddressRow2($addressRow2)
             ->setPostalArea($postalArea)
             ->setPostalCode($postalCode)
-            ->setCountry($country);
+            ->setCountry($country)
+            ->setTelephone($telephone);
     }
 
     /**
@@ -291,5 +300,25 @@ class Address
     public function getCountry(): string
     {
         return $this->country;
+    }
+
+    /**
+     * @param string $value
+     * @return self
+     */
+    public function setTelephone(
+        string $value
+    ): self {
+        $this->telephone = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelephone(): string
+    {
+        return $this->telephone;
     }
 }

@@ -96,7 +96,7 @@ class Api extends AbstractHelper
 
         // Enable usage of PSP methods.
         $connection->setSimplifiedPsp(true);
-        
+
         // Supply API call with debug information.
         $connection->setUserAgent($this->getUserAgent());
 
@@ -267,13 +267,15 @@ class Api extends AbstractHelper
         stdClass $customer,
         bool $isCompany = null
     ): Customer {
+        $phone = property_exists($customer, 'phone') ?
+            (string) $customer->phone :
+            '';
+
         return new Customer(
             property_exists($customer, 'governmentId') ?
                 (string) $customer->governmentId :
                 '',
-            property_exists($customer, 'phone') ?
-                (string) $customer->phone :
-                '',
+            $phone,
             property_exists($customer, 'email') ?
                 (string) $customer->email :
                 '',
@@ -281,7 +283,7 @@ class Api extends AbstractHelper
                 (string) $customer->type :
                 '',
             property_exists($customer, 'address') ?
-                $this->toAddress($customer->address, $isCompany) :
+                $this->toAddress($customer->address, $isCompany, $phone) :
                 null
         );
     }
@@ -292,14 +294,16 @@ class Api extends AbstractHelper
      * but it's not required to. Missing properties will be created using
      * default values.
      *
-     * @param bool|null $isCompany
      * @param object $address
+     * @param bool|null $isCompany
+     * @param string $telephone
      * @return ApiAddress
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function toAddress(
         object $address,
-        bool $isCompany = null
+        bool $isCompany = null,
+        string $telephone = ''
     ): ApiAddress {
         return new ApiAddress(
             (
@@ -330,7 +334,8 @@ class Api extends AbstractHelper
                 '',
             property_exists($address, 'country') ?
                 (string) $address->country :
-                ''
+                '',
+            $telephone
         );
     }
 
