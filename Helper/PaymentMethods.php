@@ -28,6 +28,7 @@ use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
 use function json_decode;
+use function strlen;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -359,7 +360,10 @@ class PaymentMethods extends AbstractHelper
     public function isResursBankMethod(
         string $code
     ): bool {
-        return strpos($code, Method::CODE_PREFIX) === 0;
+        return (
+            strpos($code, Method::CODE_PREFIX) === 0 &&
+            is_numeric($code[strlen($code) - 1])
+        );
     }
 
     /**
