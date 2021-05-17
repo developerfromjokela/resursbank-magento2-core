@@ -9,8 +9,17 @@
     width: 190px;
     height: 70px;
     display: inline-block;
+    margin-right: 20px;
+    vertical-align: middle;
 }
 
 .complex.resursbank-section .button-container {
     float: right;
+}
+
+.complex.resursbank-section .resursbank-payment-description {
+    font-weight: normal;
+    vertical-align: middle;
+    width: 49%;
+    display: inline-block;
 }
