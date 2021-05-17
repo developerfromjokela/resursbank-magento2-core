@@ -82,7 +82,7 @@
                         <label>Round Item Tax</label>
                         <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/resursbank_api/round_tax_percentage</config_path>
+                        <config_path>payment/resursbank_advanced/round_tax_percentage</config_path>
                     </field>
                 </group>
                 <group id="debug" sortOrder="99" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -91,7 +91,7 @@
                         <label>Enabled</label>
                         <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/resursbank_api/debug</config_path>
+                        <config_path>payment/resursbank_debug/enabled</config_path>
                     </field>
                 </group>
             </group>
