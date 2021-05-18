@@ -64,13 +64,13 @@ class Url extends AbstractHelper
      * URL client is redirect back to after successfully completing their
      * payment at the gateway.
      *
-     * NOTE: We include quote id and order increment id to support intermediate
-     * browser change during the signing procedure. For example, if the client
-     * signs their payment at the gateway using BankID on a smart phone the
-     * redirect URL may be opened in the OS default browser instead of the
-     * browser utilised by the customer to perform the purchase. This means the
-     * session data is lost and the order will thus fail. By including these
-     * parameters we can load the data back into the session if it's missing.
+     * NOTE: We include quote id to support intermediate browser change during
+     * signing. For example, if the client signs their payment using BankID on a
+     * smart phone the redirect URL may be opened in the OS default browser
+     * instead of the browser utilised by the customer to perform their
+     * purchase. This means the session data is lost and the order will fail.
+     * By including this parameter we can load the data back into the session
+     * if it's missing.
      *
      * @param int $quoteId
      * @return string
@@ -85,11 +85,11 @@ class Url extends AbstractHelper
     }
 
     /**
-     * URL client is redirect back to after failing to completing their payment
-     * at the gateway.
+     * URL client is redirected back to after failing to completing their
+     * payment at the gateway.
      *
-     * NOTE: For information regarding the included quote and order parameters
-     * please refer to the getSuccessCallbackUrl() docblock above.
+     * NOTE: For information regarding the included quote id parameter, please
+     * refer to the getSuccessUrl() docblock above.
      *
      * @param int $quoteId
      * @return string
