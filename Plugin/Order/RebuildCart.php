@@ -13,7 +13,6 @@ use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -22,6 +21,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Helper\Url;
 use Resursbank\Core\Helper\PaymentMethods;
 
 /**
@@ -32,7 +32,7 @@ use Resursbank\Core\Helper\PaymentMethods;
 class RebuildCart
 {
     /**
-     * @var UrlInterface
+     * @var Url
      */
     private $url;
 
@@ -73,7 +73,7 @@ class RebuildCart
 
     /**
      * @param Log $log
-     * @param UrlInterface $url
+     * @param Url $url
      * @param RedirectFactory $redirectFactory
      * @param Session $checkoutSession
      * @param CartHelper $cartHelper
@@ -83,7 +83,7 @@ class RebuildCart
      */
     public function __construct(
         Log $log,
-        UrlInterface $url,
+        Url $url,
         RedirectFactory $redirectFactory,
         Session $checkoutSession,
         CartHelper $cartHelper,
@@ -125,10 +125,7 @@ class RebuildCart
 
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
-                    $this->url->getUrl(
-                        'checkout',
-                        ['resursbank_payment_failed' => 1]
-                    ) . '/#payment'
+                    $this->url->getCheckoutRebuildRedirectUrl()
                 );
             }
         } catch (Exception $e) {
