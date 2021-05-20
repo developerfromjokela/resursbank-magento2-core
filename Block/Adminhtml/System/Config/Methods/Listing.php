@@ -88,7 +88,7 @@ class Listing extends Field
         $result = [];
 
         try {
-            return $this->paymentMethods->getMethodsByCredentials(
+            $result = $this->paymentMethods->getMethodsByCredentials(
                 $this->scope->getId(),
                 $this->scope->getType()
             );

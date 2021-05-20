@@ -32,11 +32,10 @@
                 <can_use_for_multishipping>0</can_use_for_multishipping>
             </resursbank_default>
         </payment>
-        <payment>
-            <resursbank_api>
+        <resursbank>
+            <api>
                 <environment>1</environment>
-                <debug>0</debug>
-            </resursbank_api>
-        </payment>
+            </api>
+        </resursbank>
     </default>
 </config>

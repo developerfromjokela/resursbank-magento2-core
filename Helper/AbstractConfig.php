@@ -155,6 +155,6 @@ abstract class AbstractConfig extends AbstractHelper
         string $group,
         string $key
     ): string {
-        return "payment/resursbank_{$group}/{$key}";
+        return "resursbank/{$group}/{$key}";
     }
 }
