@@ -20,7 +20,7 @@ class Config extends AbstractConfig
     /**
      * @var string
      */
-    public const GROUP = 'api';
+    public const API_GROUP = 'api';
 
     /**
      * @var string
@@ -47,7 +47,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
-            self::GROUP,
+            self::API_GROUP,
             'flow',
             $scopeCode,
             $scopeType
@@ -64,7 +64,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): int {
         return (int) $this->get(
-            self::GROUP,
+            self::API_GROUP,
             'environment',
             $scopeCode,
             $scopeType
@@ -81,7 +81,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
-            self::GROUP,
+            self::API_GROUP,
             'username_' . $this->getEnvironment($scopeCode, $scopeType),
             $scopeCode,
             $scopeType
@@ -98,7 +98,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return (string) $this->get(
-            self::GROUP,
+            self::API_GROUP,
             'password_' . $this->getEnvironment($scopeCode, $scopeType),
             $scopeCode,
             $scopeType
