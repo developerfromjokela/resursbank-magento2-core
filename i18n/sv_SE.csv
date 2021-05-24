@@ -29,3 +29,5 @@
 "There are no credentials to sync payment methods.","Det finns inga API uppgifter för att synka betalmetoder."
 "Delete aborted orders","Ta bort avbrutna beställningar"
 "Delete order when payment is aborted, to avoid orders with pending payment.","Ta bort beställning när betalning avbryts, för att undvika beställningar som inväntar betalning."
+"General","Generellt"
+"Debug","Felsökningsläge"
