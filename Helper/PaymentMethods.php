@@ -361,8 +361,11 @@ class PaymentMethods extends AbstractHelper
         string $code
     ): bool {
         return (
-            strpos($code, Method::CODE_PREFIX) === 0 &&
-            is_numeric($code[strlen($code) - 1])
+            $code === 'resursbank_default' ||
+            (
+                strpos($code, Method::CODE_PREFIX) === 0 &&
+                is_numeric($code[strlen($code) - 1])
+            )
         );
     }
 
