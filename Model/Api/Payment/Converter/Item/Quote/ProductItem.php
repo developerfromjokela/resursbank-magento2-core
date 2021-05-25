@@ -76,9 +76,10 @@ class ProductItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        return $this->sanitizeUnitAmountWithoutVat(
-            (float) $this->product->getConvertedPrice()
-        );
+        return $this->product->getProductType() !== 'bundle' ?
+            $this->sanitizeUnitAmountWithoutVat(
+                (float) $this->product->getConvertedPrice()
+            ) : 0.0;
     }
 
     /**
@@ -86,7 +87,9 @@ class ProductItem extends AbstractItem
      */
     public function getVatPct(): int
     {
-        return (int) round($this->product->getTaxPercent());
+        return $this->product->getProductType() !== 'bundle' ?
+            (int) round($this->product->getTaxPercent()) :
+            0;
     }
 
     /**
