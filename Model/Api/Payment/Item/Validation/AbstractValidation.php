@@ -96,6 +96,7 @@ abstract class AbstractValidation
      * @param array<mixed> $length
      * @return void
      * @link https://www.php.net/manual/en/language.types.float.php
+     * @noinspection OffsetOperationsInspection
      */
     public function hasFloatLength(
         float $value,

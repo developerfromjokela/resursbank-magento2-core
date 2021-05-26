@@ -114,6 +114,7 @@ class PaymentMethods extends AbstractHelper
      * @throws ValidatorException
      * @throws JsonException
      * @noinspection BadExceptionsProcessingInspection
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function sync(
         CredentialsModel $credentials
@@ -344,7 +345,7 @@ class PaymentMethods extends AbstractHelper
         )->setActive(
             true
         )->setSpecificCountry(
-            $credentials->getCountry()
+            $country
         );
 
         return $method;
@@ -375,7 +376,7 @@ class PaymentMethods extends AbstractHelper
      *
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return array
+     * @return array<PaymentMethodInterface>
      * @throws ValidatorException
      */
     public function getMethodsByCredentials(
@@ -412,7 +413,7 @@ class PaymentMethods extends AbstractHelper
      * instance.
      *
      * @param PaymentMethodInterface $method
-     * @return array
+     * @return array<string>
      */
     public function getCustomerTypes(
         PaymentMethodInterface $method
@@ -438,7 +439,7 @@ class PaymentMethods extends AbstractHelper
      * Retrieve decoded raw value.
      *
      * @param PaymentMethodInterface $method
-     * @return array
+     * @return array<mixed>
      */
     public function getRaw(
         PaymentMethodInterface $method
@@ -446,8 +447,8 @@ class PaymentMethods extends AbstractHelper
         $result = [];
 
         try {
-            $rawValue = $method->getRaw('');
-            $result = $rawValue !== '' ?
+            $rawValue = $method->getRaw();
+            $result = $rawValue !== null ?
                 json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];
         } catch (Exception $e) {

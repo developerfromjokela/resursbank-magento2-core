@@ -59,6 +59,7 @@ class Resursbank extends Adapter
      * setTitle above when this instance is created.
      *
      * @inheritdoc
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getTitle(): string
     {

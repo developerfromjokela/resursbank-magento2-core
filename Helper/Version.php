@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use Resursbank\Core\Exception\InvalidDataException;
 use function is_string;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -63,11 +64,18 @@ class Version extends AbstractHelper
     ): string {
         $result = 'unknown';
 
+        /** @noinspection BadExceptionsProcessingInspection */
         try {
             $path = $this->componentRegistrar->getPath(
                 ComponentRegistrar::MODULE,
                 $module
             );
+            
+            if ($path === null) {
+                throw new InvalidDataException(
+                    __('Failed to resolve module path.')
+                );
+            }
 
             $raw = (array) json_decode(
                 $this->readFactory->create($path)->readFile('composer.json'),

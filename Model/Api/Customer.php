@@ -78,7 +78,6 @@ class Customer
     /**
      * @see Customer::$governmentId
      * @return string
-     * @noinspection PhpUnused
      */
     public function getGovernmentId(): string
     {

@@ -34,14 +34,14 @@ class Authorize implements CommandInterface
     }
 
     /**
-     * @param array<mixed> $subject
+     * @param array<mixed> $commandSubject
      * @return ResultInterface|null
      */
     public function execute(
-        array $subject
+        array $commandSubject
     ): ?ResultInterface {
         try {
-            $data = SubjectReader::readPayment($subject);
+            $data = SubjectReader::readPayment($commandSubject);
 
             /** @phpstan-ignore-next-line */
             $data->getPayment()

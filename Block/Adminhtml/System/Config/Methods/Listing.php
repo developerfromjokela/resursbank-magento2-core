@@ -19,6 +19,7 @@ use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Scope;
+use function in_array;
 
 /**
  * List payment methods and relevant metadata on config page.
@@ -56,7 +57,7 @@ class Listing extends Field
      * @param PriceCurrencyInterface $priceCurrency
      * @param RequestInterface $request
      * @param Scope $scope
-     * @param array $data
+     * @param array<mixed> $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
@@ -132,11 +133,12 @@ class Listing extends Field
 
     /**
      * @param PaymentMethodInterface $method
-     * @return String
+     * @return string
+     * @phpstan-ignore-next-line
      */
     public function getMin(
         PaymentMethodInterface $method
-    ): String {
+    ): string {
         return $this->showMinMax($method)
             ? $this->formatPrice((float) $method->getMinOrderTotal())
             : '';
@@ -144,11 +146,12 @@ class Listing extends Field
 
     /**
      * @param PaymentMethodInterface $method
-     * @return String
+     * @return string
+     * @phpstan-ignore-next-line
      */
     public function getMax(
         PaymentMethodInterface $method
-    ): String {
+    ): string {
         return $this->showMinMax($method)
             ? $this->formatPrice((float) $method->getMaxOrderTotal())
             : '';
@@ -164,7 +167,7 @@ class Listing extends Field
     public function showMinMax(
         PaymentMethodInterface $method
     ): bool {
-        return !\in_array(
+        return !in_array(
             $method->getType(),
             ['CARD', 'PAYMENT_PROVIDER']
         );

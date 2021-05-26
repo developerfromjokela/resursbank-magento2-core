@@ -9,12 +9,9 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Api\Payment\Converter;
 
 use Exception;
-use Magento\Sales\Model\ResourceModel\Order\Tax\Item as TaxItemResource;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
 use function is_array;
@@ -76,7 +73,6 @@ abstract class AbstractConverter implements ConverterInterface
 
         if ($this->includeShippingData($method, $amount)) {
             /** @noinspection PhpUndefinedMethodInspection */
-            /** @var ShippingItem $item */
             $item = $this->shippingItemFactory->create(compact([
                 'method',
                 'description',
@@ -103,7 +99,6 @@ abstract class AbstractConverter implements ConverterInterface
 
         if ($this->includeDiscountData($amount)) {
             /** @noinspection PhpUndefinedMethodInspection */
-            /** @var DiscountItem $item */
             $item = $this->discountItemFactory->create(compact([
                 'couponCode',
                 'amount',
@@ -147,7 +142,6 @@ abstract class AbstractConverter implements ConverterInterface
     ): array {
         $result = [];
 
-        /** @var PaymentItem $item */
         foreach ($items as $item) {
             $result[] = $item->toArray();
         }
@@ -170,7 +164,6 @@ abstract class AbstractConverter implements ConverterInterface
         $result = 0.0;
 
         /** @noinspection PhpUndefinedMethodInspection */
-        /** @var TaxItemResource $taxItem */
         $taxItem = $this->taxResourceFactory->create();
         $collection = $taxItem->getTaxItemsByOrderId($orderId);
 

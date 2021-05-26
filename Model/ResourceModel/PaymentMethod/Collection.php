@@ -18,6 +18,7 @@ class Collection extends AbstractCollection
      * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @noinspection MagicMethodsValidityInspection
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function _construct(): void
     {

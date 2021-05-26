@@ -16,6 +16,7 @@ class Flow extends Options
      *
      * @inheritDoc
      * @noinspection SenselessMethodDuplicationInspection
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function toArray(): array
     {
