@@ -15,18 +15,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Methods to handle and manipulate shopping cart.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Cart extends AbstractHelper
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepo;
-
     /**
      * @var CartRepositoryInterface
      */
@@ -38,18 +34,15 @@ class Cart extends AbstractHelper
     private $checkoutSession;
 
     /**
-     * @param OrderRepositoryInterface $orderRepo
      * @param CartRepositoryInterface $quoteRepo
      * @param Context $context
      * @param Session $checkoutSession
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepo,
         CartRepositoryInterface $quoteRepo,
         Context $context,
         Session $checkoutSession
     ) {
-        $this->orderRepo = $orderRepo;
         $this->quoteRepo = $quoteRepo;
         $this->checkoutSession = $checkoutSession;
 
@@ -66,11 +59,11 @@ class Cart extends AbstractHelper
     public function rebuildCart(
         OrderInterface $order
     ): bool {
-        $quote = $this->quoteRepo->get($order->getQuoteId());
+        $quote = $this->quoteRepo->get((int) $order->getQuoteId());
         $result = false;
 
         if ($quote instanceof Quote) {
-            $quote->setIsActive(1);
+            $quote->setIsActive(true);
 
             $this->checkoutSession->replaceQuote($quote);
             $this->quoteRepo->save($quote);

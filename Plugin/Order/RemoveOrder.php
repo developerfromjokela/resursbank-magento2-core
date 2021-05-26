@@ -24,6 +24,8 @@ use Resursbank\Core\Helper\PaymentMethods;
 /**
  * Remove old order when an error occurs during the checkout process (to avoid
  * dangling, cancelled, orders).
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RemoveOrder
 {

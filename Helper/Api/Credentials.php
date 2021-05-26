@@ -18,7 +18,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
-use Resursbank\RBEcomPHP\ResursBank;
 
 /**
  * Business logic for corresponding data model Model\Api\Credentials.

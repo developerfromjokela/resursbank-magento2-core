@@ -52,6 +52,7 @@ abstract class AbstractItem implements ItemInterface
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,

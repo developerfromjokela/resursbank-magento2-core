@@ -19,6 +19,7 @@ class Environment extends Options
     /**
      * @inheritDoc
      * @return array<int, Phrase>
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function toArray(): array
     {

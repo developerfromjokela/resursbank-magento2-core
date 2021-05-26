@@ -18,15 +18,15 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Button;
 class Sync extends Button
 {
     /**
-     * Retrieve button HTML.
-     *
      * @param AbstractElement $element
      * @return string
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    protected function _getElementHtml(AbstractElement $element): string
-    {
+    protected function _getElementHtml(
+        AbstractElement $element
+    ): string {
         return $this->create(
             $element,
             'Sync methods now',

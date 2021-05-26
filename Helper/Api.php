@@ -12,7 +12,6 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -111,10 +110,9 @@ class Api extends AbstractHelper
      *
      * @param OrderInterface $order
      * @return stdClass|null
+     * @throws InvalidDataException
      * @throws ResursException
      * @throws ValidatorException
-     * @throws InvalidDataException
-     * @throws NoSuchEntityException
      */
     public function getPayment(
         OrderInterface $order
@@ -172,7 +170,6 @@ class Api extends AbstractHelper
      * @throws InvalidDataException
      * @throws ResursException
      * @throws ValidatorException
-     * @throws NoSuchEntityException
      */
     public function paymentExists(
         OrderInterface $order

@@ -18,7 +18,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Error implements ArgumentInterface
 {
     /**
-     * @var Request
+     * @var RequestInterface
      */
     private $request;
 

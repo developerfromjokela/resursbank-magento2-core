@@ -18,6 +18,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
@@ -179,7 +180,13 @@ class RebuildCart
         OrderInterface $order
     ): void {
         try {
-            $this->orderRepository->save($order->cancel());
+            if ($order instanceof Order) {
+                $this->orderRepository->save($order->cancel());
+            } else {
+                throw new InvalidDataException(
+                    __('Failed to cancel order. Unexpected type.')
+                );
+            }
         } catch (Exception $e) {
             $this->log->exception($e);
         }
