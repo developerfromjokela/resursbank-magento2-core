@@ -55,7 +55,7 @@
                 </group>
                 <group id="methods" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Payment Methods</label>
-                    <field id="sync" type="button" sortOrder="0" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="sync" type="button" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync payment methods</label>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
                         <config_path>resursbank/methods/sync</config_path>
