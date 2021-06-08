@@ -104,7 +104,7 @@ class RemapConfigPaths implements DataPatchInterface
             'api/password_prod' => 'api/password_0',
             'debug/enabled' => 'api/debug',
             'advanced/round_tax_percentage' => 'api/round_tax_percentage',
-            'methods/auto_sync_method' => 'methods/auto_sync_method'
+            'methods/auto_sync_method' => 'api/auto_sync_data'
         ];
 
         $result = [];

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Controller\Adminhtml\Methods;
+namespace Resursbank\Core\Controller\Adminhtml\Data;
 
 use Exception;
 use Magento\Backend\Model\View\Result\Redirect;

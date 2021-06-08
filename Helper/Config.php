@@ -156,13 +156,13 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return bool
      */
-    public function autoSyncPaymentMethods(
+    public function autoSyncData(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->isEnabled(
-            self::METHODS_GROUP,
-            'auto_sync_method',
+            self::API_GROUP,
+            'auto_sync_data',
             $scopeCode,
             $scopeType
         );

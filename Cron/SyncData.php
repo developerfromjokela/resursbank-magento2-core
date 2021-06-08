@@ -16,9 +16,9 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 
 /**
- * Automatically sync payment methods for all configured accounts.
+ * Automatically sync Resurs Bank data for all configured accounts.
  */
-class SyncPaymentMethods
+class SyncData
 {
     /**
      * @var Config
@@ -78,7 +78,7 @@ class SyncPaymentMethods
     {
         $storeCode = $this->storeManager->getStore()->getCode();
 
-        if ($this->config->autoSyncPaymentMethods($storeCode)) {
+        if ($this->config->autoSyncData($storeCode)) {
             try {
                 $this->paymentMethods->deactivateMethods();
 
