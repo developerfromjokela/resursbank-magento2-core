@@ -58,7 +58,7 @@
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
                         <config_path>resursbank/api/sync</config_path>
                     </field>
-                    <field id="auto_sync_data" type="select" sortOrder="4" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="auto_sync_data" type="select" sortOrder="5" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Automatically sync data</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>resursbank/api/auto_sync_data</config_path>
