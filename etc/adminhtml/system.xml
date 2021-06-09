@@ -52,19 +52,20 @@
                             <field id="environment">0</field>
                         </depends>
                     </field>
+                    <field id="sync" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Sync data</label>
+                        <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>
+                        <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
+                        <config_path>resursbank/api/sync</config_path>
+                    </field>
+                    <field id="auto_sync_data" type="select" sortOrder="5" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Automatically sync data</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/api/auto_sync_data</config_path>
+                    </field>
                 </group>
                 <group id="methods" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Payment Methods</label>
-                    <field id="sync" type="button" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Sync payment methods</label>
-                        <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
-                        <config_path>resursbank/methods/sync</config_path>
-                    </field>
-                    <field id="auto_sync_method" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
-                        <label>Automatically sync payment methods</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>resursbank/methods/auto_sync_method</config_path>
-                    </field>
                     <field id="listing" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing</frontend_model>
                         <config_path>resursbank/methods/listing</config_path>
