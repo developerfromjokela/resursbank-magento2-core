@@ -153,10 +153,32 @@ class PaymentMethods extends AbstractHelper
             $method->setSortOrder($sortOrder+=10);
 
             // Overwrite data on method model instance and update db entry.
-            $this->repository->save(
+            $this->syncMethodData(
+                $credentials,
                 $this->fill($method, $data, $credentials)
             );
         }
+    }
+
+    /**
+     * Sync method to database. This method will be utilised by submodules to
+     * execute processes related to syncing payment methods. This is also the
+     * reason we include the CredentialsModel instance, to allow for submodules
+     * to more easily interact with the API utilising the Credentials associated
+     * with the payment method.
+     *
+     * @param CredentialsModel $credentials
+     * @param PaymentMethodInterface $method
+     * @return PaymentMethodInterface
+     * @throws AlreadyExistsException
+     * @noinspection PhpUnusedParameterInspection
+     */
+    public function syncMethodData(
+        CredentialsModel $credentials,
+        PaymentMethodInterface $method
+    ): PaymentMethodInterface {
+        // Update / insert method data in database.
+        return $this->repository->save($method);
     }
 
     /**
