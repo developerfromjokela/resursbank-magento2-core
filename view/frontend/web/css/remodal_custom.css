@@ -1,0 +1,128 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+/*
+    Custom fonts.
+*/
+@font-face {
+    font-family: 'ResursSans-Regular';
+    src: url('../font/ResursSans-Regular.woff2') format('woff2'),
+    url('../font/ResursSans-Regular.woff') format('woff'),
+    url('../font/ResursSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'ResursSans-Bold';
+    src: url('../font/ResursSans-Bold.woff2') format('woff2'),
+    url('../font/ResursSans-Bold.woff') format('woff'),
+    url('../font/ResursSans-Bold.ttf') format('truetype');
+}
+
+.remodal-wrapper .remodal {
+    text-align: left;
+}
+
+.resursbank-modal {
+    width: 100%;
+    max-width: 1024px;
+}
+
+/*  <p> that couldn't be reached otherwise and needed som space. */
+.resursbank-modal .main-container .main .col-main p {
+    margin-top: 10px;
+}
+
+/*  Text above and below the table.
+    ------------------------------------------------------------ */
+.resursbank-modal .headText,
+.resursbank-modal .tailText {
+    display: inline-block;
+}
+
+.resursbank-modal .headText {
+    margin-bottom: 10px;
+}
+
+.resursbank-modal .tailText {
+    margin-top: 10px;
+    font-style: italic;
+    font-weight: 500;
+}
+
+/*  The table.
+    ------------------------------------------------------------ */
+.resursbank-modal table.priceTable {
+    width: 100%;
+}
+
+.resursbank-modal table.priceTable tbody tr td {
+    padding: 15px 0px;
+}
+
+/*  First column in table. */
+.resursbank-modal table.priceTable tbody tr td.header {
+    padding-left: 15px;
+}
+
+.resursbank-modal .oddRow {
+    background-color: #F4F4F4;
+}
+
+
+.resursbank-loader {
+    border: 0px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #3498db; /* Blue */
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    animation: resursbank_spin 1s linear infinite;
+}
+
+@keyframes resursbank_spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes resursbank_fade_out {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.resursbank-hide {
+    display: none;
+}
+
+/**
+    The main part payment element.
+ */
+.resursbank-partpayment-product,
+.resursbank-partpayment-checkout {
+    margin: 10px 0;
+    font-size: 1.5rem;
+    font-family: 'ResursSans-Regular', Arial, sans-serif;
+}
+
+/**
+    The information about the part payment.
+ */
+.resursbank-partpayment-product > .info-container,
+.resursbank-partpayment-checkout > .info-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+/**
+    The link that fetches additional part payment information.
+ */
+.resursbank-partpayment-product > .info-container > .read-more,
+.resursbank-partpayment-checkout > .info-container > .read-more {
+    margin-top: 10px;
+}
+
+#checkoutSteps > .resursbank-partpayment-checkout {
+    padding: 0 15px;
+}

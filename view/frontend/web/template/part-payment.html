@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<div class="info-container">
+    <div data-bind="i18n: 'Pay in installments with Resurs Bank'"></div>
+    <div>
+        <span data-bind="text: partPaymentLabel"></span>
+    </div>
+    <div class="read-more">
+        <a
+            style="cursor:pointer; font-weight:bold;"
+            data-bind="attr: {'data-remodal-target': remodalId},
+                  event: {click: bindRemodal},
+                  text: linkTitle">
+        </a>
+    </div>
+</div>
+<!-- ko foreach: getRegion('remodal') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->
