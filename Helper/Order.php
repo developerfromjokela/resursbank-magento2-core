@@ -11,6 +11,9 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order as OrderModel;
 use Magento\Sales\Model\OrderRepository;
@@ -19,6 +22,20 @@ use function is_string;
 
 class Order extends AbstractHelper
 {
+    /**
+     * Custom order status reflecting credit denied result during checkout.
+     *
+     * @var string
+     */
+    public const CREDIT_DENIED_CODE = 'resursbank_credit_denied';
+
+    /**
+     * Label for custom order status explained above.
+     *
+     * @var string
+     */
+    public const CREDIT_DENIED_LABEL = 'Resurs Bank - Credit Denied';
+
     /**
      * @var SearchCriteriaBuilder
      */
@@ -114,5 +131,21 @@ class Order extends AbstractHelper
         }
 
         return $result;
+    }
+
+    /**
+     * Apply "Credit Denied" status to supplied order.
+     *
+     * @param OrderModel $order
+     * @throws AlreadyExistsException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function setCreditDeniedStatus(
+        OrderInterface $order
+    ): void {
+        $this->orderRepository->save(
+            $order->setStatus(self::CREDIT_DENIED_CODE)
+        );
     }
 }
