@@ -53,7 +53,9 @@ define(
                 linkTitle: '',
                 modalTitle: '',
                 methodCode: '',
-                partPaymentLabel: ''
+                partPaymentLabel: '',
+                modalComponent: '',
+                requestFn: null
             },
 
             initialize: function () {
@@ -112,14 +114,13 @@ define(
                     parent: me.name,
                     name: me.name + '.remodal',
                     displayArea: 'remodal',
-                    component: typeof window.checkoutConfig === 'undefined' ?
-                        'Resursbank_Core/js/view/remodal-product' :
-                        'Resursbank_Core/js/view/remodal-checkout',
+                    component: me.modalComponent,
                     config: {
                         modalTitle: me.modalTitle,
                         methodCode: me.methodCode,
                         remodalId: me.remodalId,
-                        openModal: me.openModal
+                        openModal: me.openModal,
+                        requestFn: me.requestFn
                     }
                 }]);
             }

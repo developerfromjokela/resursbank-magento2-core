@@ -46,7 +46,8 @@ define(
                 methodCode: '',
                 modalTitle: '',
                 remodalId: '',
-                openModal: null
+                openModal: null,
+                requestFn: null
             },
 
             initialize: function () {
@@ -142,46 +143,56 @@ define(
                 /**
                  * Fetches updated part payment information from the server and
                  * updates the remodal content with it.
-                 *
-                 * @param {number} [price]
                  */
-                me.updateRemodalWindow = function (price) {
+                me.updateRemodalWindow = function () {
                     var request;
+
+                    if (typeof me.requestFn !== 'function') {
+                        throw Error(
+                            'Fetch function for part payment information is ' +
+                            'not supplied.'
+                        );
+                    }
 
                     $(remodalContent).hide();
                     $(remodalLoader).show();
                     Model.isFetchingData(true);
 
-                    request = PartPaymentLib.getCostOfPurchase(
-                        typeof price === 'number' ? price : Model.finalPrice(),
-                        me.methodCode
-                    );
+                    request = me.requestFn();
 
-                    request.done(function (response) {
+                    if (request !== undefined) {
+                        request.done(function (response) {
+                            $(remodalLoader).fadeOut(1000, function () {
+                                if (response.hasOwnProperty('html')) {
+                                    me.remodalData(response.html);
+                                } else if (response.hasOwnProperty('error')) {
+                                    me.remodalData(status.error);
+                                } else {
+                                    me.remodalData(
+                                        $t('An unknown error occurred.')
+                                    );
+                                }
+
+                                me.totalsHasChanged = false;
+
+                                $(remodalContent).fadeIn(1000);
+                            });
+                        }).fail(function (error) {
+                            $(remodalLoader).fadeOut(1000, function () {
+                                me.remodalData(error);
+
+                                me.totalsHasChanged = false;
+
+                                $(remodalContent).fadeIn(1000);
+                            });
+                        }).always(function () {
+                            Model.isFetchingData(false);
+                        });
+                    } else {
                         $(remodalLoader).fadeOut(1000, function () {
-                            if (response.hasOwnProperty('html')) {
-                                me.remodalData(response.html);
-                            } else if (response.hasOwnProperty('error')) {
-                                me.remodalData(status.error);
-                            } else {
-                                me.remodalData($t('An unknown error occurred.'));
-                            }
-
-                            me.totalsHasChanged = false;
-
                             $(remodalContent).fadeIn(1000);
                         });
-                    }).fail(function (error) {
-                        $(remodalLoader).fadeOut(1000, function () {
-                            me.remodalData(error);
-
-                            me.totalsHasChanged = false;
-
-                            $(remodalContent).fadeIn(1000);
-                        });
-                    }).always(function () {
-                        Model.isFetchingData(false);
-                    });
+                    }
                 }
 
                 me.openModal.subscribe(function () {

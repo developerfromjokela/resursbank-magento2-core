@@ -37,21 +37,6 @@ define(
 
                 me._super();
 
-                var ogUpdateRemodalWindow = me.updateRemodalWindow;
-
-                /**
-                 * Fetches updated part payment information from the server and
-                 * updates the remodal content with it.
-                 */
-                me.updateRemodalWindow = function () {
-                    var method = Quote.paymentMethod();
-                    var gt = parseFloat(Quote.totals().base_grand_total);
-
-                    if (method !== null && !Number.isNaN(gt)) {
-                        ogUpdateRemodalWindow(gt);
-                    }
-                }
-
                 Quote.totals.subscribe(function () {
                     me.totalsHasChanged = true;
                 });

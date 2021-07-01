@@ -53,7 +53,7 @@ define(
                 var deferred = $.Deferred();
                 var call = new $.ajax({
                     method: 'GET',
-                    url: Url.build('resursbank_partpayment/frontend/html'),
+                    url: Url.build('resursbank_core/frontend/partpaymenthtml'),
                     data: {
                         form_key: Model.formKey(),
                         code: methodCode,
