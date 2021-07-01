@@ -17,7 +17,6 @@ define(
         'Resursbank_Core/js/model/part-payment',
         'Resursbank_Core/js/remodal'
     ],
-
     /**
      * @param $
      * @param ko
@@ -107,7 +106,7 @@ define(
                     // Prevent link from adding a hashtag to the URL as it will
                     // cause Magento to redirect from checkout.
                     event.preventDefault();
-                    me.openModal(!me.openModal());
+                    me.openModal(true);
                 };
 
                 Layout([{
@@ -117,9 +116,11 @@ define(
                     component: me.modalComponent,
                     config: {
                         modalTitle: me.modalTitle,
-                        methodCode: me.methodCode,
-                        remodalId: me.remodalId,
-                        openModal: me.openModal,
+                        id: me.remodalId,
+                        open: me.openModal,
+                        onClose: function () {
+                            me.openModal(false);
+                        },
                         requestFn: me.requestFn
                     }
                 }]);

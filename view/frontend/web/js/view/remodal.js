@@ -40,17 +40,57 @@ define(
     ) {
         'use strict';
 
+        /**
+         * @namespace RbC.View
+         */
+
+        /**
+         * @namespace RbC.View.Remodal
+         * @memberOf RbC.View
+         */
+
+        /**
+         * @typedef {object} RbC.View.Remodal.Props
+         * @memberOf RbC.View.Remodal
+         * @property {string} modalTitle
+         * @property {string} id - ID of the remodal window.
+         * @property {RbC.Ko.Boolean} open - Whether the modal can be opened.
+         * @property {RbC.Ko.Boolean} update - Whether the modal is allowed to
+         * update. If no data has been previously fetched, it will fetch
+         * regardless of the flag's state. If data exists, it will only update
+         * if this flag set to "true".
+         * @property {function} requestFn
+         * @property {function} onClose
+         * @property {function} onOpen
+         */
+
+        /**
+         * @typedef {object} RbC.View.Remodal.I
+         * @memberOf RbC.View.Remodal
+         * @property {RbC.Ko.String} content
+         */
+
+        /**
+         * @typedef {
+         * RbC.View.Remodal.Props & RbC.View.Remodal.I
+         * } RbC.View.Remodal.Interface
+         * @memberOf RbC.View.Remodal
+         */
+
         return Component.extend({
             defaults: {
                 template: 'Resursbank_Core/remodal',
-                methodCode: '',
-                modalTitle: '',
-                remodalId: '',
-                openModal: null,
-                requestFn: null
+                modalTitle: 'Resurs Bank - ' + $t('Part Payment'),
+                id: '',
+                open: null,
+                requestFn: null,
+                onClose: null
             },
 
             initialize: function () {
+                /**
+                 * @type {RbC.View.Remodal.Interface}
+                 */
                 var me = this;
 
                 /**
@@ -66,52 +106,36 @@ define(
                  *
                  * @type {jQuery}
                  */
-                var remodalLoader;
+                var loaderEl;
 
                 /**
                  * The content for the "Read more" links.
                  *
                  * @type {jQuery}
                  */
-                var remodalContent;
+                var contentEl;
 
                 me._super();
 
                 /**
-                 * A flag that states whether the cart's totals has changed. If
-                 * they do we need to fetch new data when clicking "Read more".
-                 *
-                 * @type {boolean}
+                 * @type {RbC.Ko.String}
                  */
-                me.totalsHasChanged = false;
+                me.content = ko.observable('');
 
                 /**
                  * @type {string}
                  */
-                me.modalTitle = 'Resurs Bank - ' + $t('Part Payment');
-
-                /**
-                 * @type {Simplified.Observable.String}
-                 */
-                me.modalContent = ko.observable('');
+                me.loaderId = me.id + '-loader';
 
                 /**
                  * @type {string}
                  */
-                me.remodalLoaderId = me.remodalId + '-loader';
+                me.contentId = me.id + '-content';
 
                 /**
-                 * @type {string}
+                 * @type {RbC.Ko.Boolean}
                  */
-                me.remodalContentId = me.remodalId + '-content';
-
-                /**
-                 * HTML string with data to be displayed in the "Read more"
-                 * modal window.
-                 *
-                 * @type {Function} ko.observable() - string.
-                 */
-                me.remodalData = ko.observable(null);
+                me.update = ko.observable(false);
 
                 /**
                  * Initialize the Remodal window.
@@ -120,12 +144,16 @@ define(
                  */
                 function initRemodal()
                 {
-                    remodalLoader = RemodalLib.getLoader(me.remodalLoaderId);
-                    remodalContent = RemodalLib.getContent(me.remodalContentId);
-                    remodalInstance = RemodalLib.getRemodalInstance(me.remodalId)
+                    loaderEl = RemodalLib.getLoader(me.loaderId);
+                    contentEl = RemodalLib.getContent(me.contentId);
+                    remodalInstance = RemodalLib.getRemodalInstance(me.id)
                         .remodal({
                             hashTracking: false
                         });
+
+                    $(document).on('closed', '.remodal', function () {
+                        me.onClose(me.content);
+                    });
                 }
 
                 /**
@@ -135,7 +163,7 @@ define(
                 {
                     remodalInstance.open();
 
-                    if (me.remodalData() === null || me.totalsHasChanged) {
+                    if (me.content() === '' || me.update()) {
                         me.updateRemodalWindow();
                     }
                 }
@@ -154,53 +182,55 @@ define(
                         );
                     }
 
-                    $(remodalContent).hide();
-                    $(remodalLoader).show();
+                    $(contentEl).hide();
+                    $(loaderEl).show();
                     Model.isFetchingData(true);
 
                     request = me.requestFn();
 
                     if (request !== undefined) {
                         request.done(function (response) {
-                            $(remodalLoader).fadeOut(1000, function () {
+                            $(loaderEl).fadeOut(1000, function () {
                                 if (response.hasOwnProperty('html')) {
-                                    me.remodalData(response.html);
+                                    me.content(response.html);
                                 } else if (response.hasOwnProperty('error')) {
-                                    me.remodalData(status.error);
+                                    me.content(status.error);
                                 } else {
-                                    me.remodalData(
+                                    me.content(
                                         $t('An unknown error occurred.')
                                     );
                                 }
 
-                                me.totalsHasChanged = false;
+                                me.update(false);
 
-                                $(remodalContent).fadeIn(1000);
+                                $(contentEl).fadeIn(1000);
                             });
                         }).fail(function (error) {
-                            $(remodalLoader).fadeOut(1000, function () {
-                                me.remodalData(error);
+                            $(loaderEl).fadeOut(1000, function () {
+                                me.content(error);
 
-                                me.totalsHasChanged = false;
+                                me.update(false);
 
-                                $(remodalContent).fadeIn(1000);
+                                $(contentEl).fadeIn(1000);
                             });
                         }).always(function () {
                             Model.isFetchingData(false);
                         });
                     } else {
-                        $(remodalLoader).fadeOut(1000, function () {
-                            $(remodalContent).fadeIn(1000);
+                        $(loaderEl).fadeOut(1000, function () {
+                            $(contentEl).fadeIn(1000);
                         });
                     }
                 }
 
-                me.openModal.subscribe(function () {
-                    if (remodalInstance === null) {
-                        initRemodal();
-                    }
+                me.open.subscribe(function (value) {
+                    if (value === true) {
+                        if (remodalInstance === null) {
+                            initRemodal();
+                        }
 
-                    openRemodalWindow();
+                        openRemodalWindow();
+                    }
                 });
             }
         });

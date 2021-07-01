@@ -9,9 +9,9 @@
 <div class="remodal-bg">
     <div
         class="remodal resursbank-modal"
-        data-bind="attr: {'data-remodal-id': remodalId}">
+        data-bind="attr: {'data-remodal-id': id}">
         <button
-            data-bind="attr: {'data-remodal-id': remodalId + '-close-btn'}"
+            data-bind="attr: {'data-remodal-id': id + '-close-btn'}"
             data-remodal-action="close"
             class="remodal-close">
         </button>
@@ -19,11 +19,11 @@
         <div>
             <div
                 class="resursbank-loader"
-                data-bind="attr: {id: remodalLoaderId}">
+                data-bind="attr: {id: loaderId}">
             </div>
             <div
-                bindHtml="remodalData"
-                data-bind="attr: {id: remodalContentId}">
+                bindHtml="content"
+                data-bind="attr: {id: contentId}">
             </div>
         </div>
     </div>

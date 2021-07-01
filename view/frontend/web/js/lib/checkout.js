@@ -13,6 +13,33 @@ define(
         'use strict';
 
         /**
+         * KnockoutJS.
+         * 
+         * This namespace is required if we want to have better type info about
+         * our KnockoutJS variables.
+         * 
+         * @namespace RbC.Ko
+         */
+
+        /**
+         * @callback RbC.Ko.String
+         * @param {string} [value]
+         * @return {string}
+         */
+
+        /**
+         * @callback RbC.Ko.Boolean
+         * @param {boolean} [value]
+         * @return {boolean}
+         */
+
+        /**
+         * @callback RbC.Ko.Number
+         * @param {number} [value]
+         * @return {number}
+         */
+
+        /**
          * @constant
          * @namespace RbC.Lib.Checkout
          */

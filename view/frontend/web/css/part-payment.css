@@ -1,0 +1,30 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+/**
+    The main part payment element.
+ */
+.resursbank-pp {
+    font-size: 1.5rem;
+    font-family: 'ResursSans-Regular', Arial, sans-serif;
+    margin: 20px 0;
+}
+
+/**
+    The information about the part payment.
+ */
+.resursbank-pp > .info-container,
+.resursbank-pp > .info-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+/**
+    The link that fetches additional part payment information.
+ */
+.resursbank-pp > .info-container > .read-more {
+    margin-top: 10px;
+}

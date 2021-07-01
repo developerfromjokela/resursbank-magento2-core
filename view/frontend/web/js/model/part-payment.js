@@ -41,22 +41,22 @@ define(
          * @type {object}
          */
         var PRIVATE = {
-            /** @type {Simplified.Observable.Number} */
+            /** @type {RbC.Ko.Number} */
             duration: ko.observable(0),
 
-            /** @type {Simplified.Observable.String} */
+            /** @type {RbC.Ko.String} */
             formKey: ko.observable(''),
 
-            /** @type {Simplified.Observable.Number} */
+            /** @type {RbC.Ko.Number} */
             suggestedPrice: ko.observable(0),
 
-            /** @type {Simplified.Observable.String} */
+            /** @type {RbC.Ko.String} */
             productType: ko.observable(''),
 
-            /** @type {Simplified.Observable.Boolean} */
+            /** @type {RbC.Ko.Boolean} */
             isFetchingData: ko.observable(false),
 
-            /** @type {Simplified.Observable.Number} */
+            /** @type {RbC.Ko.Number} */
             finalPrice: ko.observable(0)
         };
 
@@ -90,7 +90,7 @@ define(
              * How many months the customer is expected to make regular payments
              * for the purchased product.
              *
-             * @type {Simplified.Observable.Number}
+             * @type {RbC.Ko.Number}
              */
             duration: ko.computed({
                 read: function () {
@@ -107,7 +107,7 @@ define(
             /**
              * Form key supplied in AJAX calls.
              *
-             * @type {Simplified.Observable.String}
+             * @type {RbC.Ko.String}
              */
             formKey: ko.computed(function () {
                 return PRIVATE.formKey();
@@ -117,7 +117,7 @@ define(
              * The calculated price the customer is expected to pay each month
              * for the entirety of the duration.
              *
-             * @type {Simplified.Observable.Number}
+             * @type {RbC.Ko.Number}
              */
             suggestedPrice: ko.computed({
                 read: function () {
@@ -135,7 +135,7 @@ define(
              * The type (simple, bundle etc.) of the product that the customer
              * is currently viewing.
              *
-             * @type {Simplified.Observable.String}
+             * @type {RbC.Ko.String}
              */
             productType: ko.computed({
                 read: function () {
@@ -146,7 +146,7 @@ define(
             /**
              * Whether the model is currently fetching data.
              *
-             * @type {Simplified.Observable.Boolean}
+             * @type {RbC.Ko.Boolean}
              */
             isFetchingData: ko.computed({
                 read: function () {
@@ -164,7 +164,7 @@ define(
              * Observes the final price. Returns a number when read, accepts
              * only numbers when written to.
              *
-             * @type {Simplified.Observable.Number}
+             * @type {RbC.Ko.Number}
              */
             finalPrice: ko.computed({
                 read: function () {
