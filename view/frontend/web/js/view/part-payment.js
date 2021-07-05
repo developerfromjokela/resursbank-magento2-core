@@ -52,7 +52,8 @@ define(
                 linkTitle: '',
                 modalTitle: '',
                 methodCode: '',
-                partPaymentLabel: '',
+                label: ko.observable(null),
+                info: ko.observable(null),
                 modalComponent: '',
                 requestFn: null
             },
@@ -82,6 +83,20 @@ define(
                 me.remodalId = me.remodalId = RemodalLib.createId(
                     me.methodCode
                 );
+
+                /**
+                 * @type {RbC.Ko.Boolean}
+                 */
+                me.hasLabel = ko.computed(function () {
+                    return typeof me.label() === 'string';
+                });
+
+                /**
+                 * @type {RbC.Ko.Boolean}
+                 */
+                me.hasInfo = ko.computed(function () {
+                    return typeof me.info() === 'string';
+                });
 
                 /**
                  * Whether or not the modal should open. It is passed down to

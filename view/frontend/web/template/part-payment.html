@@ -5,10 +5,12 @@
  */
 -->
 <div class="info-container">
-    <div data-bind="i18n: 'Pay in installments with Resurs Bank'"></div>
-    <div>
-        <span data-bind="text: partPaymentLabel"></span>
-    </div>
+    <!-- ko if: hasLabel -->
+        <div data-bind="text: label"></div>
+    <!-- /ko -->
+    <!-- ko if: hasInfo -->
+        <div data-bind="text: info"></div>
+    <!-- /ko -->
     <div class="read-more">
         <a
             style="cursor:pointer; font-weight:bold;"
