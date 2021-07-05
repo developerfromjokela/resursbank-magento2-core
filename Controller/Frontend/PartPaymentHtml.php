@@ -34,37 +34,37 @@ class PartPaymentHtml implements HttpGetActionInterface
     /**
      * @var LogInterface
      */
-    private $log;
+    protected $log;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    protected $request;
 
     /**
      * @var ResultFactory
      */
-    private $resultFactory;
+    protected $resultFactory;
 
     /**
      * @var PaymentMethodRepository
      */
-    private $methodRepository;
+    protected $methodRepository;
 
     /**
      * @var Api
      */
-    private $api;
+    protected $api;
 
     /**
      * @var Credentials
      */
-    private $credentials;
+    protected $credentials;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     /**
      * @param LogInterface $log

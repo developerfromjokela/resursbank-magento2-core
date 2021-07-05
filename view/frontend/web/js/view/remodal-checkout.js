@@ -38,7 +38,7 @@ define(
                 me._super();
 
                 Quote.totals.subscribe(function () {
-                    me.totalsHasChanged = true;
+                    me.update(true);
                 });
             }
         });
