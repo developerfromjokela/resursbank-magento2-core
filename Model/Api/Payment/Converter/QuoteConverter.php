@@ -65,20 +65,21 @@ class QuoteConverter extends AbstractConverter
     public function convert(
         Quote $entity
     ): array {
-        $address = $entity->getShippingAddress();
+        $shippingAddress = $entity->getShippingAddress();
+        $billingAddress = $entity->getBillingAddress();
 
         return array_merge(
             array_merge(
                 $this->getShippingData(
-                    (string) $address->getShippingMethod(),
-                    (string) $address->getShippingDescription(),
-                    (float) $address->getShippingInclTax(),
-                    $this->getShippingVatPct($address)
+                    (string) $shippingAddress->getShippingMethod(),
+                    (string) $shippingAddress->getShippingDescription(),
+                    (float) $shippingAddress->getShippingInclTax(),
+                    $this->getShippingVatPct($shippingAddress)
                 ),
                 $this->getDiscountData(
                     (string) $entity->getCouponCode(),
-                    (float) $address->getDiscountAmount(),
-                    (float) $address->getDiscountTaxCompensationAmount()
+                    $this->getDiscountAmount($shippingAddress, $billingAddress),
+                    $this->getDiscountTax($shippingAddress, $billingAddress)
                 )
             ),
             $this->getProductData($entity)
@@ -185,5 +186,41 @@ class QuoteConverter extends AbstractConverter
             $product->getParentItem() instanceof Item &&
             $product->getParentItem()->getProductType() === 'configurable'
         );
+    }
+
+    /**
+     * Unless you have a shopping cart consisting of only downloadable products
+     * the discount data will be associated with your shipping address.
+     * Otherwise it will be associated with your billing address instead, even
+     * though there is a separate shipping address entity. This appears to be
+     * a bug we cannot do much about at the time of writing.
+     *
+     * @param Address $shipping
+     * @param Address $billing
+     * @return float
+     */
+    private function getDiscountAmount(
+        Address $shipping,
+        Address $billing
+    ): float {
+        return (float) $shipping->getDiscountAmount() < 0.0 ?
+            (float) $shipping->getDiscountAmount() :
+            (float) $billing->getDiscountAmount();
+    }
+
+    /**
+     * Please refer to the docblock of getDiscountAmount for an explanation.
+     *
+     * @param Address $shipping
+     * @param Address $billing
+     * @return float
+     */
+    private function getDiscountTax(
+        Address $shipping,
+        Address $billing
+    ): float {
+        return (float) $shipping->getDiscountTaxCompensationAmount() > 0.0 ?
+            (float) $shipping->getDiscountTaxCompensationAmount() :
+            (float) $billing->getDiscountTaxCompensationAmount();
     }
 }
