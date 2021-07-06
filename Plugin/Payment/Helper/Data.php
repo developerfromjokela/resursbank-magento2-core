@@ -91,6 +91,9 @@ class Data
                     $result[$code] = $result[Method::CODE];
                     $result[$code]['title'] = $method->getTitle();
                     $result[$code]['sort_order'] = $method->getSortOrder();
+                    $result[$code]['can_sale'] = $this->isAutoDebitMethod(
+                        $method
+                    );
                 }
             }
         } catch (Exception $e) {
@@ -229,5 +232,26 @@ class Data
         }
 
         return $this->methodList;
+    }
+
+    /**
+     * Check whether or not the payment method will debit automatically. This
+     * method is utilised to resolve various flags for our payment methods.
+     * These flags are booleans, but are interpreted as strings by Magento.
+     * Returning a string here is for complete compliance.
+     *
+     * @param PaymentMethodInterface $method
+     * @return string
+     */
+    private function isAutoDebitMethod(
+        PaymentMethodInterface $method
+    ): string {
+        return (
+            $method->getType() === 'PAYMENT_PROVIDER' &&
+            (
+                $method->getSpecificType() === 'INTERNET' ||
+                $method->getSpecificType() === 'SWISH'
+            )
+        ) ? '1' : '0';
     }
 }
