@@ -52,7 +52,7 @@ define(
         /**
          * @typedef {object} RbC.View.Remodal.Props
          * @memberOf RbC.View.Remodal
-         * @property {string} modalTitle
+         * @property {string} title
          * @property {string} id - ID of the remodal window.
          * @property {RbC.Ko.Boolean} open - Whether the modal can be opened.
          * @property {RbC.Ko.Boolean} update - Whether the modal is allowed to
@@ -80,7 +80,7 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Resursbank_Core/remodal',
-                modalTitle: 'Resurs Bank - ' + $t('Part Payment'),
+                title: '',
                 id: '',
                 open: null,
                 requestFn: null,
@@ -136,6 +136,11 @@ define(
                  * @type {RbC.Ko.Boolean}
                  */
                 me.update = ko.observable(false);
+
+                /**
+                 * @type {RbC.Ko.Boolean}
+                 */
+                me.hasTitle = ko.observable(me.title !== '');
 
                 /**
                  * Initialize the Remodal window.

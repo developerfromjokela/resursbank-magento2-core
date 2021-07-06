@@ -41,6 +41,25 @@ define(
          */
         var EXPORT = {
             /**
+             * Calculate suggested price.
+             *
+             * @param {number} price
+             * @param {number} factor
+             * @returns {number}
+             */
+            getSuggestedPrice: function (price, factor) {
+                var result = 0;
+                var value = 0;
+
+                if (factor > 0) {
+                    value = ((price * factor) * 100);
+                    result = Math.ceil(Math.round(value) / 100);
+                }
+
+                return result;
+            },
+
+            /**
              * Get the final price of the current product.
              *
              * @param {string} productType

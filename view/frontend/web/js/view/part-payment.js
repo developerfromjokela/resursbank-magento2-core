@@ -50,7 +50,7 @@ define(
             defaults: {
                 template: 'Resursbank_Core/part-payment',
                 linkTitle: '',
-                modalTitle: '',
+                modalTitle: 'Resurs Bank - ' + $t('Part Payment'),
                 methodCode: '',
                 label: ko.observable(null),
                 info: ko.observable(null),
@@ -69,13 +69,6 @@ define(
                 me.linkTitle = me.linkTitle === '' ?
                     $t('Read More') :
                     me.linkTitle;
-
-                /**
-                 * @type {string}
-                 */
-                me.modalTitle = me.modalTitle === '' ?
-                    'Resurs Bank - ' + $t('Part Payment') :
-                    me.modalTitle;
 
                 /**
                  * @type {string}
@@ -130,7 +123,7 @@ define(
                     displayArea: 'remodal',
                     component: me.modalComponent,
                     config: {
-                        modalTitle: me.modalTitle,
+                        title: me.modalTitle,
                         id: me.remodalId,
                         open: me.openModal,
                         onClose: function () {
