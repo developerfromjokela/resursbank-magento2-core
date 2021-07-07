@@ -1,0 +1,25 @@
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<div class="info-container">
+    <!-- ko if: hasLabel -->
+        <div data-bind="text: label"></div>
+    <!-- /ko -->
+    <!-- ko if: hasInfo -->
+        <div data-bind="text: info"></div>
+    <!-- /ko -->
+    <div class="read-more">
+        <a
+            style="cursor:pointer; font-weight:bold;"
+            data-bind="attr: {'data-remodal-target': remodalId},
+                  event: {click: bindRemodal},
+                  text: linkTitle">
+        </a>
+    </div>
+</div>
+<!-- ko foreach: getRegion('remodal') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->

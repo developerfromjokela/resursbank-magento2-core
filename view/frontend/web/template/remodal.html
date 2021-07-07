@@ -1,0 +1,30 @@
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<div class="remodal-bg">
+    <div
+        class="remodal resursbank-modal"
+        data-bind="attr: {'data-remodal-id': id}">
+        <button
+            data-bind="attr: {'data-remodal-id': id + '-close-btn'}"
+            data-remodal-action="close"
+            class="remodal-close">
+        </button>
+        <!-- ko if: hasTitle -->
+            <h1 data-bind="text: title"></h1>
+        <!-- /ko -->
+        <div>
+            <div
+                class="resursbank-loader"
+                data-bind="attr: {id: loaderId}">
+            </div>
+            <div
+                bindHtml="content"
+                data-bind="attr: {id: contentId}">
+            </div>
+        </div>
+    </div>
+</div>
