@@ -72,7 +72,6 @@ abstract class AbstractConverter implements ConverterInterface
         $result = [];
 
         if ($this->includeShippingData($method, $amount)) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $item = $this->shippingItemFactory->create(compact([
                 'method',
                 'description',
@@ -98,7 +97,6 @@ abstract class AbstractConverter implements ConverterInterface
         $result = [];
 
         if ($this->includeDiscountData($amount)) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $item = $this->discountItemFactory->create(compact([
                 'couponCode',
                 'amount',
@@ -163,7 +161,6 @@ abstract class AbstractConverter implements ConverterInterface
     ): float {
         $result = 0.0;
 
-        /** @noinspection PhpUndefinedMethodInspection */
         $taxItem = $this->taxResourceFactory->create();
         $collection = $taxItem->getTaxItemsByOrderId($orderId);
 
