@@ -14,7 +14,6 @@ define(
         'Resursbank_Core/js/lib/remodal',
         'Resursbank_Core/js/lib/checkout',
         'Resursbank_Core/js/lib/product',
-        'Resursbank_Core/js/model/part-payment',
         'Resursbank_Core/js/remodal'
     ],
     /**
@@ -27,7 +26,6 @@ define(
      * @param {RbC.Lib.Remodal} RemodalLib
      * @param {RbC.Lib.Checkout} CheckoutLib
      * @param {RbC.Lib.Product} ProductLib
-     * @param {RbPp.Model} Model
      * @param Remodal
      * @returns {*}
      */
@@ -41,16 +39,15 @@ define(
         RemodalLib,
         CheckoutLib,
         ProductLib,
-        Model,
         Remodal
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                template: 'Resursbank_Core/part-payment',
+                template: 'Resursbank_Core/read-more',
                 linkTitle: '',
-                modalTitle: 'Resurs Bank - ' + $t('Part Payment'),
+                modalTitle: '',
                 methodCode: '',
                 label: ko.observable(null),
                 info: ko.observable(null),

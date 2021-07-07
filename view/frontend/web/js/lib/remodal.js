@@ -58,7 +58,7 @@ define(
              * @returns {string}
              */
             createId: function (id) {
-                return 'resursbank-part-payment-remodal' +
+                return 'resursbank-read-more-remodal' +
                     (id === '' ? '' : '-' + id);
             }
         };

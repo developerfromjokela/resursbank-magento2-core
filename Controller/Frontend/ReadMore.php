@@ -24,12 +24,11 @@ use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
-use ResursException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PartPaymentHtml implements HttpGetActionInterface
+class ReadMore implements HttpGetActionInterface
 {
     /**
      * @var LogInterface
@@ -124,7 +123,6 @@ class PartPaymentHtml implements HttpGetActionInterface
      * @return string
      * @throws NoSuchEntityException
      * @throws ValidatorException
-     * @throws ResursException
      * @throws InvalidDataException
      * @throws Exception
      */
@@ -147,29 +145,20 @@ class PartPaymentHtml implements HttpGetActionInterface
     }
 
     /**
-     * Retrieve payment method to base
+     * Retrieve payment method to base API query on.
      *
      * @return PaymentMethodInterface
-     * @throws InvalidDataException
      * @throws NoSuchEntityException
      */
     protected function getMethod(): PaymentMethodInterface
     {
-        $code = $this->request->getParam('code');
-
-        $method = $this->methodRepository->getByCode($code);
-
-        if ($method === null) {
-            throw new InvalidDataException(
-                __('Unable to obtain payment method.')
-            );
-        }
-
-        return $method;
+        return $this->methodRepository->getByCode(
+            $this->request->getParam('code')
+        );
     }
 
     /**
-     * Get price to base retrieved HTML on.
+     * Retrieve price to base API query on
      *
      * @return int
      */

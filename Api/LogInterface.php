@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Api;
 
-use \Exception;
+use Exception;
 use Monolog\Logger;
 
 interface LogInterface

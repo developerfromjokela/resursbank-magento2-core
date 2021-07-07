@@ -11,8 +11,7 @@ define(
         'uiComponent',
         'Magento_Catalog/js/price-utils',
         'Resursbank_Core/js/lib/remodal',
-        'Resursbank_Core/js/lib/part-payment',
-        'Resursbank_Core/js/model/part-payment',
+        'Resursbank_Core/js/model/read-more',
         'Resursbank_Core/js/remodal'
     ],
     /**
@@ -22,8 +21,7 @@ define(
      * @param Component
      * @param PriceUtils
      * @param {RbC.Lib.Remodal} RemodalLib
-     * @param {RbC.Lib.PartPayment} PartPaymentLib
-     * @param {RbC.Model.PartPayment} Model
+     * @param {RbC.Model.ReadMore} Model
      * @param Remodal
      * @returns {*}
      */
@@ -34,7 +32,6 @@ define(
         Component,
         PriceUtils,
         RemodalLib,
-        PartPaymentLib,
         Model,
         Remodal
     ) {
@@ -174,17 +171,15 @@ define(
                 }
 
                 /**
-                 * Fetches updated part payment information from the server and
-                 * updates the remodal content with it.
+                 * Fires the supplied "requestFn" request function to fetch
+                 * information from the server and updates the remodal content
+                 * with it.
                  */
                 me.updateRemodalWindow = function () {
                     var request;
 
                     if (typeof me.requestFn !== 'function') {
-                        throw Error(
-                            'Fetch function for part payment information is ' +
-                            'not supplied.'
-                        );
+                        throw Error('Request function is not supplied.');
                     }
 
                     $(contentEl).hide();

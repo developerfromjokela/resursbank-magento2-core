@@ -11,8 +11,7 @@ define(
         'mage/url',
         'ko',
         'priceBox',
-        'Magento_Catalog/js/price-options',
-        'Resursbank_Core/js/model/part-payment'
+        'Magento_Catalog/js/price-options'
     ],
     /**
      * @param $
@@ -21,7 +20,6 @@ define(
      * @param ko
      * @param PriceBox
      * @param {Object} PriceOptions
-     * @param {RbPp.Model} Model
      * @returns {Readonly<RbC.Lib.Product>}
      */
     function (
@@ -30,8 +28,7 @@ define(
         Url,
         ko,
         PriceBox,
-        PriceOptions,
-        Model
+        PriceOptions
     ) {
         'use strict';
 

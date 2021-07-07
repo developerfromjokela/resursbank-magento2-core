@@ -29,7 +29,7 @@
     max-width: 1024px;
 }
 
-/*  <p> that couldn't be reached otherwise and needed som space. */
+/*  <p> that couldn't be reached otherwise and needed some space. */
 .resursbank-modal .main-container .main .col-main p {
     margin-top: 10px;
 }
@@ -69,7 +69,6 @@
 .resursbank-modal .oddRow {
     background-color: #F4F4F4;
 }
-
 
 .resursbank-loader {
     border: 0 solid #f3f3f3; /* Light grey */

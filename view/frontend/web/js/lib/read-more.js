@@ -12,7 +12,7 @@ define(
         'ko',
         'priceBox',
         'Magento_Catalog/js/price-options',
-        'Resursbank_Core/js/model/part-payment'
+        'Resursbank_Core/js/model/read-more'
     ],
     /**
      * @param $
@@ -21,8 +21,8 @@ define(
      * @param ko
      * @param PriceBox
      * @param {Object} PriceOptions
-     * @param {RbPp.Model} Model
-     * @returns {Readonly<RbC.Lib.PartPayment>}
+     * @param {RbC.Model.ReadMore} Model
+     * @returns {Readonly<RbC.Lib.ReadMore>}
      */
     function (
         $,
@@ -37,25 +37,22 @@ define(
 
         /**
          * @constant
-         * @namespace RbC.Lib.PartPayment
+         * @namespace RbC.Lib.ReadMore
          */
         var EXPORT = {
             /**
-             * Creates and executes a call to the server that will fetch a table
-             * of part payment information about a given price and payment method.
-             * The table is returned as an HTML string.
-             *
              * @param {number} price - Float.
              * @param {string} methodCode
+             * @param {string} formKey
              * @returns {Deferred}
              */
-            getCostOfPurchase: function (price, methodCode) {
+            getCostOfPurchase: function (price, methodCode, formKey) {
                 var deferred = $.Deferred();
                 var call = new $.ajax({
                     method: 'GET',
-                    url: Url.build('resursbank_core/frontend/partpaymenthtml'),
+                    url: Url.build('resursbank_core/frontend/readmore'),
                     data: {
-                        form_key: Model.formKey(),
+                        form_key: formKey,
                         code: methodCode,
                         price: price
                     }
@@ -66,9 +63,7 @@ define(
                 });
 
                 call.fail(function () {
-                    deferred.reject($t(
-                        'No part payment information exists for this product.'
-                    ));
+                    deferred.reject($t('No information could be found.'));
                 });
 
                 call.always(function () {

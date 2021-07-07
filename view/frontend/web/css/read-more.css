@@ -4,27 +4,27 @@
  */
 
 /**
-    The main part payment element.
+    The main read more element.
  */
-.resursbank-pp {
+.resursbank-read-more {
     font-size: 1.5rem;
     font-family: 'ResursSans-Regular', Arial, sans-serif;
     margin: 20px 0;
 }
 
 /**
-    The information about the part payment.
+    The information about the read more component.
  */
-.resursbank-pp > .info-container,
-.resursbank-pp > .info-container {
+.resursbank-read-more > .info-container,
+.resursbank-read-more > .info-container {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
 }
 
 /**
-    The link that fetches additional part payment information.
+    The link that fetches additional information.
  */
-.resursbank-pp > .info-container > .read-more {
+.resursbank-read-more > .info-container > .read-more {
     margin-top: 10px;
 }
