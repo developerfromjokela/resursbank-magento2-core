@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Payment;
 
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Model\MethodInterface;
 
 class Resursbank extends Adapter
 {
@@ -59,70 +61,81 @@ class Resursbank extends Adapter
     }
 
     /**
-     * Overrides the vanilla method to extract title from this payment method.
-     * Instead of utilising a value handler we return the title applied through
-     * setTitle above when this instance is created.
+     * Resolve payment method title from attached Resurs Bank method model.
      *
      * @inheritdoc
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getTitle(): string
     {
-        return $this->resursModel !== null
+        return ($this->resursModel instanceof PaymentMethodInterface) ?
+            $this->resursModel->getTitle(self::TITLE) :
+            '';
     }
 
     /**
-     * Some implementations will utilise getConfigData directly, thus avoiding
-     * the specified title value handlers and our overriding behaviour to
-     * correct the title of this payment method instance (see setTitle and
-     * getTitle above).
+     * If the selected payment method was automatically debited at Resurs Bank
+     * we want to utilise the "authorize_and_capture" action to automatically
+     * create an invoice in Magento for the purchase.
      *
-     * This payment method was implemented to ensure the correct title is
-     * displayed on the order view:
-     * vendor/magento/module-payment/view/adminhtml/templates/info/default.phtml
+     * @return string
+     */
+    public function getConfigPaymentAction(): string
+    {
+        return $this->isDebited() ?
+            MethodInterface::ACTION_AUTHORIZE_CAPTURE :
+            parent::getConfigPaymentAction();
+    }
+
+    /**
+     * While the base Adapter class implements a getTitle() method this is not
+     * always called to extract the title value. Sometimes the getConfigData
+     * method will instead be called for the same purpose.
+     *
      *
      * @inheritdoc
      */
     public function getConfigData(
         $field,
         $storeId = null
-    ): string {
+    ) {
         return $field === 'title' ?
             $this->getTitle() :
-            (string) parent::getConfigData($field, $storeId);
+            parent::getConfigData($field, $storeId);
     }
 
     /**
-     * Check if payment can be voided. Methods which automatically debit
-     * payments cannot be voided.
+     * Check if payment method can utilise "sale" command to automatically
+     * create an invoice after authorization.
      *
      * @return bool
      */
-    public function canVoid(): bool
+    public function canSale(): bool
     {
-        $result = ($this->resursModel instanceof PaymentMethodInterface) ?
-            !$this->isAutoDebitMethod($this->resursModel) :
-            parent::canVoid();
-
-        return $result;
+        return ($this->resursModel instanceof PaymentMethodInterface) ?
+            $this->isDebited() :
+            parent::canSale();
     }
 
     /**
      * Check whether or not the payment method will debit automatically. This
      * method is utilised to resolve various flags for our payment methods.
      *
-     * @param PaymentMethodInterface $method
      * @return bool
      */
-    private function isAutoDebitMethod(
-        PaymentMethodInterface $method
-    ): bool {
-        return (
-            $method->getType() === 'PAYMENT_PROVIDER' &&
-            (
-                $method->getSpecificType() === 'INTERNET' ||
-                $method->getSpecificType() === 'SWISH'
-            )
-        );
+    private function isDebited(): bool {
+        $result = false;
+
+        if ($this->resursModel instanceof PaymentMethodInterface) {
+            $result = (
+                $this->resursModel->getType() === 'PAYMENT_PROVIDER' &&
+                (
+                    $this->resursModel->getSpecificType() === 'INTERNET' ||
+                    $this->resursModel->getSpecificType() === 'SWISH'
+                )
+            );
+        }
+
+        return $result;
     }
 }

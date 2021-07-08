@@ -55,6 +55,9 @@
                 <item name="authorize" xsi:type="string">
                     Resursbank\Core\Gateway\Command\Authorize
                 </item>
+                <item name="sale" xsi:type="string">
+                    Resursbank\Core\Gateway\Command\Authorize
+                </item>
             </argument>
         </arguments>
     </virtualType>
