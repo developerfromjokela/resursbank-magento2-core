@@ -29,6 +29,7 @@
                 <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <!-- Explicitly specify false values. -->
                 <can_capture_once>0</can_capture_once>
+                <can_sale>0</can_sale>
                 <can_order>0</can_order>
                 <can_use_internal>0</can_use_internal>
                 <can_edit>0</can_edit>

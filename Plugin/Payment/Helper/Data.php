@@ -91,9 +91,6 @@ class Data
                     $result[$code] = $result[Method::CODE];
                     $result[$code]['title'] = $method->getTitle();
                     $result[$code]['sort_order'] = $method->getSortOrder();
-                    $result[$code]['can_sale'] = $this->isAutoDebitMethod(
-                        $method
-                    );
                 }
             }
         } catch (Exception $e) {
@@ -188,29 +185,27 @@ class Data
             ['code' => $code]
         );
 
-        $method->setTitle($this->getTitle($code));
+        $model = $this->getResursModel($code);
+
+        if ($model !== null && $model->getMethodId() !== null) {
+            $method->setResursModel($model);
+        }
 
         return $method;
     }
 
     /**
      * @param string $code
-     * @return string
+     * @return PaymentMethodInterface|null
      */
-    private function getTitle(
+    private function getResursModel(
         string $code
-    ): string {
-        $result = Method::TITLE;
+    ): ?PaymentMethodInterface {
+        $result = null;
 
         try {
             if ($code !== Method::CODE) {
-                $title = $this->repository
-                    ->getByCode($code)
-                    ->getTitle($result);
-
-                if ($title !== null) {
-                    $result = $title;
-                }
+                $result = $this->repository->getByCode($code);
             }
         } catch (Exception $e) {
             $this->log->exception($e);
@@ -232,26 +227,5 @@ class Data
         }
 
         return $this->methodList;
-    }
-
-    /**
-     * Check whether or not the payment method will debit automatically. This
-     * method is utilised to resolve various flags for our payment methods.
-     * These flags are booleans, but are interpreted as strings by Magento.
-     * Returning a string here is for complete compliance.
-     *
-     * @param PaymentMethodInterface $method
-     * @return string
-     */
-    private function isAutoDebitMethod(
-        PaymentMethodInterface $method
-    ): string {
-        return (
-            $method->getType() === 'PAYMENT_PROVIDER' &&
-            (
-                $method->getSpecificType() === 'INTERNET' ||
-                $method->getSpecificType() === 'SWISH'
-            )
-        ) ? '1' : '0';
     }
 }

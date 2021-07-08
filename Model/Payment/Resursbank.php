@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Model\Payment;
 
 use Magento\Payment\Model\Method\Adapter;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 
 class Resursbank extends Adapter
 {
@@ -34,23 +35,27 @@ class Resursbank extends Adapter
     public const CODE = self::CODE_PREFIX . 'default';
 
     /**
-     * @var string
+     * @var PaymentMethodInterface|null
      */
-    protected $title = self::TITLE;
+    private $resursModel;
 
     /**
-     * When we create an instance of this payment method we will set the correct
-     * title immediately (see Plugin/Payment/Helper/Data.php :: getMethod()).
-     * This lets us avoid using a value handler, which isn't always utilised
-     * anyways (see the docblock for getConfigData() below). Utilising a value
-     * handler may also mean overhead database transactions.
+     * When we create an instance of this payment method we will assign an
+     * instance of the Resurs Bank payment method model
+     * (see Plugin/Payment/Helper/Data.php :: getMethod()). We will use this
+     * model instance to collect information such as title and command flags.
      *
-     * @param string $title
+     * NOTE: We could achieve the same thing by dependency inject the repository
+     * in this class, but that would mean we be required to make a complex
+     * relay call to the parent constructor. Since the design pattern for the
+     * payment method adapters keep changing we should avoid that for now.
+     *
+     * @param PaymentMethodInterface $model
      */
-    public function setTitle(
-        string $title
+    public function setResursModel(
+        PaymentMethodInterface $model
     ): void {
-        $this->title = $title;
+        $this->resursModel = $model;
     }
 
     /**
@@ -63,7 +68,7 @@ class Resursbank extends Adapter
      */
     public function getTitle(): string
     {
-        return (string) $this->title;
+        return $this->resursModel !== null
     }
 
     /**
@@ -85,5 +90,39 @@ class Resursbank extends Adapter
         return $field === 'title' ?
             $this->getTitle() :
             (string) parent::getConfigData($field, $storeId);
+    }
+
+    /**
+     * Check if payment can be voided. Methods which automatically debit
+     * payments cannot be voided.
+     *
+     * @return bool
+     */
+    public function canVoid(): bool
+    {
+        $result = ($this->resursModel instanceof PaymentMethodInterface) ?
+            !$this->isAutoDebitMethod($this->resursModel) :
+            parent::canVoid();
+
+        return $result;
+    }
+
+    /**
+     * Check whether or not the payment method will debit automatically. This
+     * method is utilised to resolve various flags for our payment methods.
+     *
+     * @param PaymentMethodInterface $method
+     * @return bool
+     */
+    private function isAutoDebitMethod(
+        PaymentMethodInterface $method
+    ): bool {
+        return (
+            $method->getType() === 'PAYMENT_PROVIDER' &&
+            (
+                $method->getSpecificType() === 'INTERNET' ||
+                $method->getSpecificType() === 'SWISH'
+            )
+        );
     }
 }
