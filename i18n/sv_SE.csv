@@ -32,3 +32,5 @@
 "General","Generellt"
 "Debug","Felsökningsläge"
 "Sync payment methods and other data from Resurs Bank for all API accounts in all store views.","Synka betalmetoder och annan data från Resurs Bank för alla API konton i alla butiksvyer."
+"Something went wrong when fetching the content. Please try again.","Något gick fel när innehållet hämtades. Vänligen försök igen."
+"No information could be found.","Ingen information gick att hitta."

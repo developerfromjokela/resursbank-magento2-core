@@ -17,9 +17,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Resursbank\Core\Api\LogInterface;
 use function is_string;
 
-abstract class AbstractLog extends AbstractHelper
+abstract class AbstractLog extends AbstractHelper implements LogInterface
 {
     /**
      * @var Logger
@@ -72,11 +73,11 @@ abstract class AbstractLog extends AbstractHelper
 
     /**
      * @param Logger $logger
-     * @return $this
+     * @return LogInterface
      */
     public function setLogger(
         Logger $logger
-    ): self {
+    ): LogInterface {
         $this->logger = $logger;
 
         return $this;
@@ -85,12 +86,12 @@ abstract class AbstractLog extends AbstractHelper
     /**
      * @param string $text
      * @param bool $force
-     * @return self
+     * @return LogInterface
      */
     public function info(
         string $text,
         bool $force = false
-    ): self {
+    ): LogInterface {
         if ($force || $this->isEnabled()) {
             $this->logger->info($text);
         }
@@ -101,12 +102,12 @@ abstract class AbstractLog extends AbstractHelper
     /**
      * @param string $text
      * @param bool $force
-     * @return self
+     * @return LogInterface
      */
     public function error(
         string $text,
         bool $force = false
-    ): self {
+    ): LogInterface {
         if ($force || $this->isEnabled()) {
             $this->logger->error($text);
         }
@@ -117,12 +118,12 @@ abstract class AbstractLog extends AbstractHelper
     /**
      * @param Exception $error
      * @param bool $force
-     * @return self
+     * @return LogInterface
      */
     public function exception(
         Exception $error,
         bool $force = false
-    ): self {
+    ): LogInterface {
         /**
          * NOTE: The order of these checks are important, changing them may
          * introduce a circular dependency error (since Log classes need to log

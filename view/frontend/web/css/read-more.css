@@ -1,0 +1,30 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+/**
+    The main read more element.
+ */
+.resursbank-read-more {
+    font-size: 1.5rem;
+    font-family: 'ResursSans-Regular', Arial, sans-serif;
+    margin: 20px 0;
+}
+
+/**
+    The information about the read more component.
+ */
+.resursbank-read-more > .info-container,
+.resursbank-read-more > .info-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+/**
+    The link that fetches additional information.
+ */
+.resursbank-read-more > .info-container > .read-more {
+    margin-top: 10px;
+}

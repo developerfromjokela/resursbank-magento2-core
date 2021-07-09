@@ -66,6 +66,7 @@
     <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
     <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
+    <preference for="Resursbank\Core\Api\LogInterface" type="Resursbank\Core\Helper\Log" />
 
     <!-- Append our payment methods in frontend checkout process. -->
     <type name="Magento\Payment\Helper\Data">
