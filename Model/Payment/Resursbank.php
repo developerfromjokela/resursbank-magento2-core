@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Payment;
 
-use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\Adapter;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Model\MethodInterface;
@@ -51,6 +50,12 @@ class Resursbank extends Adapter
      * in this class, but that would mean we be required to make a complex
      * relay call to the parent constructor. Since the design pattern for the
      * payment method adapters keep changing we should avoid that for now.
+     *
+     * NOTE: We need the Resurs Bank method model applied within the adapter
+     * to reach values otherwise handled by configured value handlers. At the
+     * time of writing the payment method instance nor code is made available to
+     * the value handler. Thus we cannot extract values associated with our
+     * dynamic methods from their table though the value handlers.
      *
      * @param PaymentMethodInterface $model
      */
