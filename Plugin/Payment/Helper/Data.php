@@ -12,6 +12,8 @@ use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
+//use Magento\Payment\Model\Info;
+//use Magento\Payment\Model\Info\Factory as InfoFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
@@ -47,22 +49,30 @@ class Data
      */
     private $methodList;
 
+//    /**
+//     * @var InfoFactory
+//     */
+//    private $infoFactory;
+
     /**
      * @param PaymentMethods $paymentMethods
      * @param Log $log
      * @param MethodFactory $methodFactory
-     * @param Repository $repository
+     * @param Repository $repository ,
+//     * @param InfoFactory $infoFactory
      */
     public function __construct(
         PaymentMethods $paymentMethods,
         Log $log,
         MethodFactory $methodFactory,
         Repository $repository
+//        InfoFactory $infoFactory
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
         $this->methodFactory = $methodFactory;
         $this->repository = $repository;
+//        $this->infoFactory = $infoFactory;
     }
 
     /**
@@ -185,6 +195,11 @@ class Data
             ['code' => $code]
         );
 
+//        $info = $this->infoFactory->create(
+//            Info::class,
+//            ['data' => ['test' => 'testar']]
+//        );
+//
         $model = $this->getResursModel($code);
 
         if ($model !== null && $model->getMethodId() !== null) {

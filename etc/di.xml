@@ -27,7 +27,18 @@
     <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">ResursbankGatewayConfigValueHandler</item>
+                <item name="default" xsi:type="string">
+                    ResursbankGatewayConfigValueHandler
+                </item>
+                <item name="title" xsi:type="string">
+                    Resursbank\Core\Gateway\ValueHandler\Title
+                </item>
+                <item name="payment_action" xsi:type="string">
+                    Resursbank\Core\Gateway\ValueHandler\PaymentAction
+                </item>
+                <item name="can_sale" xsi:type="string">
+                    Resursbank\Core\Gateway\ValueHandler\CanSale
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -35,7 +46,9 @@
     <!-- General value handler. -->
     <virtualType name="ResursbankGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">ResursbankGatewayConfig</argument>
+            <argument name="configInterface" xsi:type="object">
+                ResursbankGatewayConfig
+            </argument>
         </arguments>
     </virtualType>
 

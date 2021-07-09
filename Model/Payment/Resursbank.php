@@ -11,6 +11,8 @@ namespace Resursbank\Core\Model\Payment;
 use Magento\Payment\Model\Method\Adapter;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Model\InfoInterface;
+use Resursbank\Core\Gateway\ValueHandler\Title;
 
 class Resursbank extends Adapter
 {
@@ -65,62 +67,101 @@ class Resursbank extends Adapter
         $this->resursModel = $model;
     }
 
-    /**
-     * Resolve payment method title from attached Resurs Bank method model.
-     *
-     * @inheritdoc
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function getTitle(): string
-    {
-        return ($this->resursModel instanceof PaymentMethodInterface) ?
-            $this->resursModel->getTitle(self::TITLE) :
-            '';
-    }
+//    /**
+//     * Resolve payment method title from attached Resurs Bank method model.
+//     *
+//     * @inheritdoc
+//     * @noinspection PhpMissingParentCallCommonInspection
+//     */
+//    public function getTitle(): string
+//    {
+//        return ($this->resursModel instanceof PaymentMethodInterface) ?
+//            $this->resursModel->getTitle(self::TITLE) :
+//            '';
+//    }
+
+//    /**
+//     * If the selected payment method was automatically debited at Resurs Bank
+//     * we want to utilise the "authorize_and_capture" action to automatically
+//     * create an invoice in Magento for the purchase.
+//     *
+//     * @return string
+//     */
+//    public function getConfigPaymentAction(): string
+//    {
+//        return $this->isDebited() ?
+//            MethodInterface::ACTION_AUTHORIZE_CAPTURE :
+//            parent::getConfigPaymentAction();
+//    }
 
     /**
-     * If the selected payment method was automatically debited at Resurs Bank
-     * we want to utilise the "authorize_and_capture" action to automatically
-     * create an invoice in Magento for the purchase.
+     * We append custom values to the payment info instance later passed to our
+     * value handlers.
      *
-     * @return string
+     * NOTE: some values, like method_title will not be available at the initial
+     * checkout phase.
+     *
+     * @inheridoc
      */
-    public function getConfigPaymentAction(): string
+    public function getInfoInstance()
     {
-        return $this->isDebited() ?
-            MethodInterface::ACTION_AUTHORIZE_CAPTURE :
-            parent::getConfigPaymentAction();
+        $result = parent::getInfoInstance();
+
+        if ($result instanceof InfoInterface &&
+            $this->resursModel instanceof PaymentMethodInterface
+        ) {
+            $result->setAdditionalInformation(
+                'method_title',
+                $this->resursModel->getTitle()
+            );
+
+            $result->setAdditionalInformation(
+                'method_payment_action',
+                (
+                    $this->isDebited() ?
+                    MethodInterface::ACTION_AUTHORIZE_CAPTURE :
+                    MethodInterface::ACTION_AUTHORIZE
+                )
+            );
+
+            $result->setAdditionalInformation(
+                'method_can_sale',
+                $this->isDebited()
+            );
+        }
+
+        return $result;
     }
 
-    /**
-     * While the base Adapter class implements a getTitle() method this is not
-     * always called to extract the title value. Sometimes the getConfigData
-     * method will instead be called for the same purpose.
-     *
-     *
-     * @inheritdoc
-     */
-    public function getConfigData(
-        $field,
-        $storeId = null
-    ) {
-        return $field === 'title' ?
-            $this->getTitle() :
-            parent::getConfigData($field, $storeId);
-    }
+//    /**
+//     * While the base Adapter class implements a getTitle() method this is not
+//     * always called to extract the title value. Sometimes the getConfigData
+//     * method will instead be called for the same purpose.
+//     *
+//     *
+//     * @inheritdoc
+//     */
+//    public function getConfigData(
+//        $field,
+//        $storeId = null
+//    ) {
+//        return $field === 'title' ?
+//            $this->getTitle() :
+//            parent::getConfigData($field, $storeId);
+//    }
 
-    /**
-     * Check if payment method can utilise "sale" command to automatically
-     * create an invoice after authorization.
-     *
-     * @return bool
-     */
-    public function canSale(): bool
-    {
-        return ($this->resursModel instanceof PaymentMethodInterface) ?
-            $this->isDebited() :
-            parent::canSale();
-    }
+//    /**
+//     * Check if payment method can utilise "sale" command to automatically
+//     * create an invoice after authorization.
+//     *
+//     * @return bool
+//     */
+//    public function canSale(): bool
+//    {
+//        return ($this->resursModel instanceof PaymentMethodInterface) ?
+//            $this->isDebited() :
+//            parent::canSale();
+//    }
 
     /**
      * Check whether or not the payment method will debit automatically. This
