@@ -26,10 +26,6 @@ define(
      * @param {RbC.Lib.Remodal} RemodalLib
      * @param {RbC.Lib.Checkout} CheckoutLib
      * @param {RbC.Lib.Product} ProductLib
-<<<<<<< HEAD
-     * @param {RbPp.Model} Model
-=======
->>>>>>> upstream/dev/sprint-7
      * @param Remodal
      * @returns {*}
      */

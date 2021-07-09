@@ -21,11 +21,7 @@ define(
      * @param ko
      * @param PriceBox
      * @param {Object} PriceOptions
-<<<<<<< HEAD
-     * @param {RbPp.Model} Model
-=======
      * @param {RbC.Model.ReadMore} Model
->>>>>>> upstream/dev/sprint-7
      * @returns {Readonly<RbC.Lib.ReadMore>}
      */
     function (
