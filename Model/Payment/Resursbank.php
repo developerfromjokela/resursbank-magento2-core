@@ -8,21 +8,14 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Payment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\Adapter;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\InfoInterface;
-use Resursbank\Core\Gateway\ValueHandler\Title;
 
 class Resursbank extends Adapter
 {
-    /**
-     * Default title.
-     *
-     * @var string
-     */
-    public const TITLE = 'Resurs Bank';
-
     /**
      * Payment method code prefix.
      *
@@ -56,8 +49,9 @@ class Resursbank extends Adapter
      * NOTE: We need the Resurs Bank method model applied within the adapter
      * to reach values otherwise handled by configured value handlers. At the
      * time of writing the payment method instance nor code is made available to
-     * the value handler. Thus we cannot extract values associated with our
-     * dynamic methods from their table though the value handlers.
+     * the value handler, thus we cannot extract values associated with our
+     * dynamic methods from their table through the value handlers (see we do
+     * not know what method we should resolve values for).
      *
      * @param PaymentMethodInterface $model
      */
@@ -71,13 +65,21 @@ class Resursbank extends Adapter
      * We append custom values to the payment info instance later passed to our
      * value handlers.
      *
-     * NOTE: some values, like method_title will not be available at the initial
-     * checkout phase.
+     * NOTE: Some values, like method_title will not be available at the initial
+     * checkout phase but appended later (during debug it will appear as though
+     * title cannot be resolved, though it eventually is).
      *
      * @inheridoc
+     * @throws LocalizedException
      */
     public function getInfoInstance()
     {
+        /**
+         * NOTE: The use of Info Instance is deprecated but there is no clear
+         * replacement procedure described. It seems as though assignData should
+         * be utilised though that simply feeds the info instance object. There
+         * is a separate issue for this.
+         */
         $result = parent::getInfoInstance();
 
         if ($result instanceof InfoInterface &&
@@ -101,7 +103,9 @@ class Resursbank extends Adapter
 
             /**
              * This flag is required in order for payment action
-             * 'authorize_capture' to function properly.
+             * 'authorize_capture' to function properly. Basically 'sale' is the
+             * command utilised for action 'authorize_capture' while the command
+             * 'authorize' is utilised for the payment action 'authorize'.
              */
             $result->setAdditionalInformation(
                 'method_can_sale',
@@ -114,8 +118,8 @@ class Resursbank extends Adapter
 
 
     /**
-     * Check whether or not the payment method will debit automatically. This
-     * method is utilised to resolve various flags for our payment methods.
+     * Check whether the payment method will debit automatically. This method is
+     * utilised to resolve various flags for our payment methods.
      *
      * @return bool
      */

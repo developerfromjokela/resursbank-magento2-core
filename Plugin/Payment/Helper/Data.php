@@ -12,8 +12,6 @@ use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
-//use Magento\Payment\Model\Info;
-//use Magento\Payment\Model\Info\Factory as InfoFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
@@ -49,30 +47,22 @@ class Data
      */
     private $methodList;
 
-//    /**
-//     * @var InfoFactory
-//     */
-//    private $infoFactory;
-
     /**
      * @param PaymentMethods $paymentMethods
      * @param Log $log
      * @param MethodFactory $methodFactory
-     * @param Repository $repository ,
-//     * @param InfoFactory $infoFactory
+     * @param Repository $repository
      */
     public function __construct(
         PaymentMethods $paymentMethods,
         Log $log,
         MethodFactory $methodFactory,
         Repository $repository
-//        InfoFactory $infoFactory
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
         $this->methodFactory = $methodFactory;
         $this->repository = $repository;
-//        $this->infoFactory = $infoFactory;
     }
 
     /**
@@ -112,7 +102,7 @@ class Data
 
     /**
      * This method appends our payment methods to the list compiled by the core
-     * method. The core method will produce a one or two dimensional array with
+     * method. The core method will produce a one or two-dimensional array with
      * options ($code => $title).
      *
      * The native method will read the titles directly from the config, ignoring
@@ -180,7 +170,7 @@ class Data
 
     /**
      * Generate instance of our payment method model and apply the code of the
-     * requested payment method (ie. "resursbank_invoice" or similar).
+     * requested payment method (i.e. "resursbank_invoice" or similar).
      *
      * @param string $code
      * @return MethodInterface
@@ -194,12 +184,7 @@ class Data
             Method::class,
             ['code' => $code]
         );
-
-//        $info = $this->infoFactory->create(
-//            Info::class,
-//            ['data' => ['test' => 'testar']]
-//        );
-//
+        
         $model = $this->getResursModel($code);
 
         if ($model !== null && $model->getMethodId() !== null) {

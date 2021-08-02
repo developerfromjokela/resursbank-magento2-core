@@ -8,54 +8,26 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-use Exception;
-use function is_array;
-use JsonException;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\ValidatorException;
-use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Resursbank\Core\Helper\Api\Credentials;
-use Resursbank\Core\Helper\PaymentMethods\Converter;
-use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
-use Resursbank\Core\Model\Payment\Resursbank as Method;
-use Resursbank\Core\Model\PaymentMethodFactory;
-use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use stdClass;
-use function json_decode;
-use function strlen;
-use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @noinspection EfferentObjectCouplingInspection
+ * Simplifies process to extract dynamic information from payment method
+ * instance attached to an order (we store payment method title and some
+ * specific flags on the instance generated during checkout, so we may access
+ * this data elsewhere, like the admin panel).
  */
 class ValueHandlerSubjectReader extends AbstractHelper
 {
     /**
-     * @var Log
+     * Resolve additional data applied on the payment method instance (see
+     * Resursbank\Core\Model\Payment\Resursbank :: getInfoInstance()).
+     * 
+     * @param array $subject
+     * @param string $key
+     * @return mixed
      */
-    private $log;
-
-    /**
-     * @param Context $context
-     * @param Log $log
-     */
-    public function __construct(
-        Context $context,
-        Log $log
-    ) {
-        $this->log = $log;
-
-        parent::__construct($context);
-    }
-
     public function getAdditional(
         array $subject,
         string $key
