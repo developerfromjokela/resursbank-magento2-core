@@ -65,7 +65,9 @@ class ValueHandlerSubjectReader extends AbstractHelper
         if (isset($subject['payment']) &&
             $subject['payment'] instanceof PaymentDataObject
         ) {
-            $result = $subject['payment']->getPayment()->getAdditionalInformation($key);
+            $result = $subject['payment']
+                ->getPayment()
+                ->getAdditionalInformation($key);
         }
 
         return $result;

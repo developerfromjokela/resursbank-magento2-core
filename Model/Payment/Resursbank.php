@@ -67,33 +67,6 @@ class Resursbank extends Adapter
         $this->resursModel = $model;
     }
 
-//    /**
-//     * Resolve payment method title from attached Resurs Bank method model.
-//     *
-//     * @inheritdoc
-//     * @noinspection PhpMissingParentCallCommonInspection
-//     */
-//    public function getTitle(): string
-//    {
-//        return ($this->resursModel instanceof PaymentMethodInterface) ?
-//            $this->resursModel->getTitle(self::TITLE) :
-//            '';
-//    }
-
-//    /**
-//     * If the selected payment method was automatically debited at Resurs Bank
-//     * we want to utilise the "authorize_and_capture" action to automatically
-//     * create an invoice in Magento for the purchase.
-//     *
-//     * @return string
-//     */
-//    public function getConfigPaymentAction(): string
-//    {
-//        return $this->isDebited() ?
-//            MethodInterface::ACTION_AUTHORIZE_CAPTURE :
-//            parent::getConfigPaymentAction();
-//    }
-
     /**
      * We append custom values to the payment info instance later passed to our
      * value handlers.
@@ -110,11 +83,13 @@ class Resursbank extends Adapter
         if ($result instanceof InfoInterface &&
             $this->resursModel instanceof PaymentMethodInterface
         ) {
+            // Method title.
             $result->setAdditionalInformation(
                 'method_title',
                 $this->resursModel->getTitle()
             );
 
+            // Swish and PSP methods are debited automatically.
             $result->setAdditionalInformation(
                 'method_payment_action',
                 (
@@ -124,6 +99,10 @@ class Resursbank extends Adapter
                 )
             );
 
+            /**
+             * This flag is required in order for payment action
+             * 'authorize_capture' to function properly.
+             */
             $result->setAdditionalInformation(
                 'method_can_sale',
                 $this->isDebited()
@@ -133,35 +112,6 @@ class Resursbank extends Adapter
         return $result;
     }
 
-//    /**
-//     * While the base Adapter class implements a getTitle() method this is not
-//     * always called to extract the title value. Sometimes the getConfigData
-//     * method will instead be called for the same purpose.
-//     *
-//     *
-//     * @inheritdoc
-//     */
-//    public function getConfigData(
-//        $field,
-//        $storeId = null
-//    ) {
-//        return $field === 'title' ?
-//            $this->getTitle() :
-//            parent::getConfigData($field, $storeId);
-//    }
-
-//    /**
-//     * Check if payment method can utilise "sale" command to automatically
-//     * create an invoice after authorization.
-//     *
-//     * @return bool
-//     */
-//    public function canSale(): bool
-//    {
-//        return ($this->resursModel instanceof PaymentMethodInterface) ?
-//            $this->isDebited() :
-//            parent::canSale();
-//    }
 
     /**
      * Check whether or not the payment method will debit automatically. This
