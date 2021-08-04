@@ -27,6 +27,7 @@
                 <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <payment_action>authorize</payment_action>
                 <can_sale>1</can_sale>
+                <can_capture_partial>1</can_capture_partial>
                 <can_order>0</can_order>
                 <can_use_internal>0</can_use_internal>
                 <can_edit>0</can_edit>
