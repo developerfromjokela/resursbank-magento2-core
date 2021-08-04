@@ -257,6 +257,13 @@ interface PaymentMethodInterface
     public function getType(): ?string;
 
     /**
+     * From the raw API response, fetch the method specific (sub) type.
+     *
+     * @return string|null
+     */
+    public function getSpecificType(): ?string;
+
+    /**
      * Get payment method country restriction.
      *
      * @param string|null $default - Value to be returned in the event that

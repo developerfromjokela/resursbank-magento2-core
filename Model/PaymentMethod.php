@@ -116,7 +116,6 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
      */
     public function getActive(?bool $default = null): ?bool
     {
@@ -184,7 +183,6 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
      */
     public function getMinOrderTotal(?float $default = null): ?float
     {
@@ -212,7 +210,6 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
      */
     public function getMaxOrderTotal(?float $default = null): ?float
     {
@@ -296,6 +293,22 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
         );
 
         return $raw['type'] ?? null;
+    }
+
+    /**
+     * @throws JsonException
+     * @inheritdoc
+     */
+    public function getSpecificType(): ?string
+    {
+        $raw = json_decode(
+            (string) $this->getRaw(''),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        return $raw['specificType'] ?? null;
     }
 
     /**

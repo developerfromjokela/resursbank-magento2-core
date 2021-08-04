@@ -102,7 +102,7 @@ class Data
 
     /**
      * This method appends our payment methods to the list compiled by the core
-     * method. The core method will produce a one or two dimensional array with
+     * method. The core method will produce a one or two-dimensional array with
      * options ($code => $title).
      *
      * The native method will read the titles directly from the config, ignoring
@@ -170,7 +170,7 @@ class Data
 
     /**
      * Generate instance of our payment method model and apply the code of the
-     * requested payment method (ie. "resursbank_invoice" or similar).
+     * requested payment method (i.e. "resursbank_invoice" or similar).
      *
      * @param string $code
      * @return MethodInterface
@@ -184,30 +184,28 @@ class Data
             Method::class,
             ['code' => $code]
         );
+        
+        $model = $this->getResursModel($code);
 
-        $method->setTitle($this->getTitle($code));
+        if ($model !== null && $model->getMethodId() !== null) {
+            $method->setResursModel($model);
+        }
 
         return $method;
     }
 
     /**
      * @param string $code
-     * @return string
+     * @return PaymentMethodInterface|null
      */
-    private function getTitle(
+    private function getResursModel(
         string $code
-    ): string {
-        $result = Method::TITLE;
+    ): ?PaymentMethodInterface {
+        $result = null;
 
         try {
             if ($code !== Method::CODE) {
-                $title = $this->repository
-                    ->getByCode($code)
-                    ->getTitle($result);
-
-                if ($title !== null) {
-                    $result = $title;
-                }
+                $result = $this->repository->getByCode($code);
             }
         } catch (Exception $e) {
             $this->log->exception($e);
