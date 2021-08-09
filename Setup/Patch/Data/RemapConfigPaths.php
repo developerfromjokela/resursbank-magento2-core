@@ -133,9 +133,6 @@ class RemapConfigPaths implements DataPatchInterface
         /**
          * NOTE: Some values appear the same, but the section have changed
          * for them from 'resursbank_checkout' to 'resursbank'.
-         *
-         * NOTE: API flow and environment values have shifted from precious
-         * modules, thus updating their paths may cause undesired behaviour.
          */
         return [
             'api/username_test' => 'api/username_1',
