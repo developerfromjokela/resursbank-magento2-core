@@ -9,12 +9,12 @@
     <default>
         <payment>
             <resursbank_default>
+                <!-- Static config values for all dynamic methods. -->
                 <active>1</active>
                 <model>Resursbank\Core\Model\Payment\Resursbank</model>
                 <order_status>pending_payment</order_status>
                 <allowspecific>0</allowspecific>
                 <group>resursbank</group>
-                <title>Resurs Bank</title>
                 <can_use_checkout>1</can_use_checkout>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
@@ -24,16 +24,19 @@
                 <is_gateway>1</is_gateway>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_authorize_and_capture>1</can_authorize_and_capture>
-                <can_fetch_transaction_information>1</can_fetch_transaction_information>
-                <payment_action>authorize</payment_action>
-                <can_sale>1</can_sale>
+                <can_capture_partial>1</can_capture_partial>
+                <can_fetch_transaction_info>0</can_fetch_transaction_info>
                 <can_order>0</can_order>
                 <can_use_internal>0</can_use_internal>
-                <can_edit>0</can_edit>
                 <can_initialize>0</can_initialize>
                 <can_review_payment>0</can_review_payment>
                 <can_use_for_multishipping>0</can_use_for_multishipping>
                 <can_capture_once>0</can_capture_once>
+                <can_edit>0</can_edit>
+                <!-- Defaults which are overriden by value handlers. -->
+                <title>Resurs Bank</title>
+                <payment_action>authorize</payment_action>
+                <can_sale>1</can_sale>
             </resursbank_default>
         </payment>
         <resursbank>

@@ -68,6 +68,7 @@ class RemapConfigPaths implements DataPatchInterface
     {
         $this->moduleDataSetup->getConnection()->startSetup();
 
+        // Update 'path' to match new config layout.
         foreach ($this->getMap() as $old => $new) {
             $this->moduleDataSetup->getConnection()->update(
                 $this->moduleDataSetup->getTable('core_config_data'),
@@ -75,7 +76,7 @@ class RemapConfigPaths implements DataPatchInterface
                 ['path = ?' => $old]
             );
         }
-
+        
         $this->moduleDataSetup->getConnection()->endSetup();
 
         return $this;
@@ -96,20 +97,9 @@ class RemapConfigPaths implements DataPatchInterface
     {
         $oldSection = self::OLD_SECTION;
         $newSection = self::NEW_SECTION;
-        $keys = [
-            'api/environment' => 'api/environment',
-            'api/username_test' => 'api/username_1',
-            'api/username_prod' => 'api/username_0',
-            'api/password_test' => 'api/password_1',
-            'api/password_prod' => 'api/password_0',
-            'debug/enabled' => 'api/debug',
-            'advanced/round_tax_percentage' => 'api/round_tax_percentage',
-            'methods/auto_sync_method' => 'api/auto_sync_data'
-        ];
-
         $result = [];
 
-        foreach ($keys as $old => $new) {
+        foreach ($this->getKeys() as $old => $new) {
             $select = $this->moduleDataSetup->getConnection()->select();
             $select->from('core_config_data', 'path');
 
@@ -131,5 +121,33 @@ class RemapConfigPaths implements DataPatchInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Retrieve path renaming map.
+     *
+     * @return string[]
+     */
+    protected function getKeys(): array
+    {
+        /**
+         * NOTE: Some values appear the same, but the section have changed
+         * for them from 'resursbank_checkout' to 'resursbank'.
+         *
+         * NOTE: API flow and environment values have shifted from precious
+         * modules, thus updating their paths may cause undesired behaviour.
+         */
+        return [
+            'api/username_test' => 'api/username_1',
+            'api/username_prod' => 'api/username_0',
+            'api/password_test' => 'api/password_1',
+            'api/password_prod' => 'api/password_0',
+            'api/environment' => 'api/environment',
+            'api/flow' => 'api/flow',
+            'methods/auto_sync_method' => 'api/auto_sync_data',
+            'debug/enabled' => 'debug/enabled',
+            'advanced/reuse_erroneously_created_orders' => 'advanced/reuse_erroneously_created_orders',
+            'advanced/round_tax_percentage' => 'advanced/round_tax_percentage'
+        ];
     }
 }
