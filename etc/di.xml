@@ -5,15 +5,26 @@
  * See LICENSE for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Payment method configuration. -->
     <type name="Resursbank\Core\Model\Payment\Resursbank">
         <arguments>
-            <argument name="code" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
-            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
-            <argument name="valueHandlerPool" xsi:type="object">ResursbankGatewayValueHandlerPool</argument>
-            <argument name="commandPool" xsi:type="object">ResursbankGatewayCommandPool</argument>
+            <argument name="code" xsi:type="const">
+                Resursbank\Core\Model\Payment\Resursbank::CODE
+            </argument>
+            <argument name="formBlockType" xsi:type="string">
+                Magento\Payment\Block\Form
+            </argument>
+            <argument name="infoBlockType" xsi:type="string">
+                Magento\Payment\Block\Info
+            </argument>
+            <argument name="valueHandlerPool" xsi:type="object">
+                ResursbankGatewayValueHandlerPool
+            </argument>
+            <argument name="commandPool" xsi:type="object">
+                ResursbankGatewayCommandPool
+            </argument>
         </arguments>
     </type>
 
@@ -24,7 +35,9 @@
         "active" flag.
     -->
     <!-- Value handlers -->
-    <virtualType name="ResursbankGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+    <virtualType
+        name="ResursbankGatewayValueHandlerPool"
+        type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">
@@ -44,7 +57,9 @@
     </virtualType>
 
     <!-- General value handler. -->
-    <virtualType name="ResursbankGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+    <virtualType
+        name="ResursbankGatewayConfigValueHandler"
+        type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
             <argument name="configInterface" xsi:type="object">
                 ResursbankGatewayConfig
@@ -53,9 +68,13 @@
     </virtualType>
 
     <!-- Configuration reader. -->
-    <virtualType name="ResursbankGatewayConfig" type="Magento\Payment\Gateway\Config\Config">
+    <virtualType
+        name="ResursbankGatewayConfig"
+        type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Resursbank\Core\Model\Payment\Resursbank::CODE</argument>
+            <argument name="methodCode" xsi:type="const">
+                Resursbank\Core\Model\Payment\Resursbank::CODE
+            </argument>
         </arguments>
     </virtualType>
 
@@ -76,19 +95,31 @@
     </virtualType>
 
     <!-- Payment Method interfaces. -->
-    <preference for="Resursbank\Core\Api\PaymentMethodRepositoryInterface" type="Resursbank\Core\Model\PaymentMethodRepository" />
-    <preference for="Resursbank\Core\Api\Data\PaymentMethodInterface" type="Resursbank\Core\Model\PaymentMethod" />
-    <preference for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface" type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
-    <preference for="Resursbank\Core\Api\LogInterface" type="Resursbank\Core\Helper\Log" />
+    <preference
+        for="Resursbank\Core\Api\PaymentMethodRepositoryInterface"
+        type="Resursbank\Core\Model\PaymentMethodRepository" />
+    <preference
+        for="Resursbank\Core\Api\Data\PaymentMethodInterface"
+        type="Resursbank\Core\Model\PaymentMethod" />
+    <preference
+        for="Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface"
+        type="Resursbank\Core\Model\PaymentMethod\SearchResults" />
+    <preference
+        for="Resursbank\Core\Api\LogInterface"
+        type="Resursbank\Core\Helper\Log" />
 
     <!-- Append our payment methods in frontend checkout process. -->
     <type name="Magento\Payment\Helper\Data">
-        <plugin name="resursbank_core_payment_helper" type="Resursbank\Core\Plugin\Payment\Helper\Data" />
+        <plugin
+            name="resursbank_core_payment_helper"
+            type="Resursbank\Core\Plugin\Payment\Helper\Data" />
     </type>
 
     <!-- Set "resursbank_is_test" flag depending on configured environment. -->
     <type name="Magento\Sales\Model\Order">
-        <plugin name="resursbank_core_set_environment_flag" type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
+        <plugin
+            name="resursbank_core_set_environment_flag"
+            type="Resursbank\Core\Plugin\Order\SetEnvironmentFlag" />
     </type>
 
     <!--
