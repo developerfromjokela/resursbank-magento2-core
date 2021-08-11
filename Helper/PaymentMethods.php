@@ -374,8 +374,8 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * Check if the payment method code starts with "resursbank_" to determine
-     * whether or not it belong to us.
+     * Perform various check on payment method code to confirm it stems from
+     * Resurs Bank.
      *
      * @param string $code
      * @return bool
@@ -384,12 +384,65 @@ class PaymentMethods extends AbstractHelper
         string $code
     ): bool {
         return (
-            $code === 'resursbank_default' ||
+            strpos($code, Method::CODE_PREFIX) === 0 &&
             (
-                strpos($code, Method::CODE_PREFIX) === 0 &&
-                is_numeric($code[strlen($code) - 1])
+                $this->isDefaultMethod($code) ||
+                $this->isCurrentMethod($code) ||
+                $this->isLegacyMethod($code)
             )
         );
+    }
+
+    /**
+     * Check whether method code corresponds to default method code.
+     *
+     * @param string $code
+     * @return bool
+     */
+    private function isDefaultMethod(
+        string $code
+    ): bool {
+        return $code === 'resursbank_default';
+    }
+
+    /**
+     * Checks whether method code corresponds to modern layout pattern.
+     *
+     * NOTE: The difference from legacy methods is that the suffixed environment
+     * value is now replaced with a digit. Which corresponds with the value
+     * utilised in ECom.
+     *
+     * NOTE: This check is important at the time of writing because otherwise
+     * Magento will confuse config sections with payment methods. If memory
+     * serves this is because of a bug which has been reported, thus this may
+     * not be necessary to check in future releases.
+     *
+     * @param string $code
+     * @return bool
+     */
+    private function isCurrentMethod(
+        string $code
+    ): bool {
+        return is_numeric($code[strlen($code) - 1]);
+    }
+
+    /**
+     * Check whether supplied method code corresponds to the layout pattern
+     * utilised in older versions of the module.
+     *
+     * NOTE: This is required to support installations upgrading from older
+     * versions of the module.
+     *
+     *
+     * @param string $code
+     * @return bool
+     */
+    private function isLegacyMethod(
+        string $code
+    ): bool {
+        $env = substr($code, strlen($code)-4);
+
+        return $env === 'test' || $env === 'prod';
     }
 
     /**
