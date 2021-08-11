@@ -433,7 +433,6 @@ class PaymentMethods extends AbstractHelper
      * NOTE: This is required to support installations upgrading from older
      * versions of the module.
      *
-     *
      * @param string $code
      * @return bool
      */
