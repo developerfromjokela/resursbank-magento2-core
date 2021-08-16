@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Plugin\Payment\Helper;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
@@ -130,12 +131,19 @@ class Data
 
                 // Append payment method to resulting list.
                 if ($code !== null) {
-                    $result[$code] = $isMultiDimensional ?
-                        [
+                    if ($isMultiDimensional) {
+                        if (!isset($result['resursbank']['value'])) {
+                            throw new InvalidArgumentException(
+                                'Missing expected groups section resursbank.'
+                            );
+                        }
+                        $result['resursbank']['value'][$code] = [
                             'value' => $code,
                             'label' => $method->getTitle('Resurs Bank')
-                        ] :
-                        $method->getTitle('Resurs Bank');
+                        ];
+                    } else {
+                        $result[$code] = $method->getTitle('Resurs Bank');
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -184,7 +192,7 @@ class Data
             Method::class,
             ['code' => $code]
         );
-        
+
         $model = $this->getResursModel($code);
 
         if ($model !== null && $model->getMethodId() !== null) {
