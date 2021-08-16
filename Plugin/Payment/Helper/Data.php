@@ -137,6 +137,7 @@ class Data
                                 'Missing expected groups section resursbank.'
                             );
                         }
+
                         $result['resursbank']['value'][$code] = [
                             'value' => $code,
                             'label' => $method->getTitle('Resurs Bank')
