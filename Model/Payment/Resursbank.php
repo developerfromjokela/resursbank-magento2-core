@@ -8,11 +8,8 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Payment;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\Adapter;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Magento\Payment\Model\MethodInterface;
-use Magento\Payment\Model\InfoInterface;
 
 class Resursbank extends Adapter
 {
@@ -33,7 +30,7 @@ class Resursbank extends Adapter
     /**
      * @var PaymentMethodInterface|null
      */
-    private $resursModel;
+    private ?PaymentMethodInterface $resursModel;
 
     /**
      * When we create an instance of this payment method we will assign an
@@ -62,80 +59,10 @@ class Resursbank extends Adapter
     }
 
     /**
-     * We append custom values to the payment info instance later passed to our
-     * value handlers.
-     *
-     * NOTE: Some values, like method_title will not be available at the initial
-     * checkout phase but appended later (during debug it will appear as though
-     * title cannot be resolved, though it eventually is).
-     *
-     * @inheridoc
-     * @throws LocalizedException
+     * @return PaymentMethodInterface
      */
-    public function getInfoInstance()
+    public function getResursModel(): PaymentMethodInterface
     {
-        /**
-         * NOTE: The use of Info Instance is deprecated but there is no clear
-         * replacement procedure described. It seems as though assignData should
-         * be utilised though that simply feeds the info instance object. There
-         * is a separate issue for this.
-         */
-        $result = parent::getInfoInstance();
-
-        if ($result instanceof InfoInterface &&
-            $this->resursModel instanceof PaymentMethodInterface
-        ) {
-            // Method title.
-            $result->setAdditionalInformation(
-                'method_title',
-                $this->resursModel->getTitle()
-            );
-
-            // Swish and PSP methods are debited automatically.
-            $result->setAdditionalInformation(
-                'method_payment_action',
-                (
-                    $this->isDebited() ?
-                    MethodInterface::ACTION_AUTHORIZE_CAPTURE :
-                    MethodInterface::ACTION_AUTHORIZE
-                )
-            );
-
-            /**
-             * This flag is required in order for payment action
-             * 'authorize_capture' to function properly. Basically 'sale' is the
-             * command utilised for action 'authorize_capture' while the command
-             * 'authorize' is utilised for the payment action 'authorize'.
-             */
-            $result->setAdditionalInformation(
-                'method_can_sale',
-                $this->isDebited()
-            );
-        }
-
-        return $result;
-    }
-
-
-    /**
-     * Check whether the payment method will debit automatically. This method is
-     * utilised to resolve various flags for our payment methods.
-     *
-     * @return bool
-     */
-    private function isDebited(): bool {
-        $result = false;
-
-        if ($this->resursModel instanceof PaymentMethodInterface) {
-            $result = (
-                $this->resursModel->getType() === 'PAYMENT_PROVIDER' &&
-                (
-                    $this->resursModel->getSpecificType() === 'INTERNET' ||
-                    $this->resursModel->getSpecificType() === 'SWISH'
-                )
-            );
-        }
-
-        return $result;
+        return $this->resursModel;
     }
 }
