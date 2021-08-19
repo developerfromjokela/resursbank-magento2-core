@@ -43,13 +43,6 @@ class Resursbank extends Adapter
      * relay call to the parent constructor. Since the design pattern for the
      * payment method adapters keep changing we should avoid that for now.
      *
-     * NOTE: We need the Resurs Bank method model applied within the adapter
-     * to reach values otherwise handled by configured value handlers. At the
-     * time of writing the payment method instance nor code is made available to
-     * the value handler, thus we cannot extract values associated with our
-     * dynamic methods from their table through the value handlers (so we do
-     * not know what method we should resolve values for).
-     *
      * @param PaymentMethodInterface $model
      */
     public function setResursModel(
