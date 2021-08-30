@@ -58,4 +58,35 @@ class Resursbank extends Adapter
     {
         return $this->resursModel;
     }
+
+    /**
+     * min_order_total and max_order_total need to be read before adapter
+     * information is made available to value handlers. At the time of writing
+     * there is no way for us to resolve these values from our value handlers
+     * when the payment methods are rendered. This is important since we do not
+     * wish to render methods outside the scope of the min / max values.
+     *
+     * NOTE: The values are resolved in
+     * Plugin/Payment/Helper/Data.php :: getResursModel() to support the custom
+     * Swish value override without adding an overriding constructor to this
+     * class (see the notes on setResursModel above for further information).
+     *
+     * @param string $field
+     * @param null $storeId
+     * @return float|mixed|null
+     */
+    public function getConfigData($field, $storeId = null)
+    {
+        $result = parent::getConfigData($field, $storeId);
+
+        if (isset($this->resursModel)) {
+            if ($field === 'min_order_total') {
+                $result = $this->resursModel->getMinOrderTotal();
+            } elseif ($field === 'max_order_total') {
+                $result = $this->resursModel->getMaxOrderTotal();
+            }
+        }
+
+        return $result;
+    }
 }
