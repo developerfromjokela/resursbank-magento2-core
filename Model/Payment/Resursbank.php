@@ -71,9 +71,7 @@ class Resursbank extends Adapter
      * Swish value override without adding an overriding constructor to this
      * class (see the notes on setResursModel above for further information).
      *
-     * @param string $field
-     * @param null $storeId
-     * @return float|mixed|null
+     * @inheridoc
      */
     public function getConfigData($field, $storeId = null)
     {

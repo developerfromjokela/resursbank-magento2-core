@@ -14,15 +14,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use function is_array;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Data
 {
@@ -237,10 +236,9 @@ class Data
 
                 if ($result->getSpecificType() === 'SWISH') {
                     $maxOrderTotal = $this->config->getSwishMaxOrderTotal(
-                        $this->storeManager->getStore()->getCode(),
-                        ScopeInterface::SCOPE_STORES
+                        $this->storeManager->getStore()->getCode()
                     );
-                    
+
                     if ($maxOrderTotal > 0) {
                         $result->setMaxOrderTotal($maxOrderTotal);
                     }
