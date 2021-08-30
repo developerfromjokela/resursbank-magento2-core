@@ -22,7 +22,7 @@ class Authorize implements CommandInterface
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @param Log $log
@@ -43,6 +43,7 @@ class Authorize implements CommandInterface
         try {
             $data = SubjectReader::readPayment($commandSubject);
 
+            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             /** @phpstan-ignore-next-line */
             $data->getPayment()
                 ->setTransactionId($data->getOrder()->getOrderIncrementId())

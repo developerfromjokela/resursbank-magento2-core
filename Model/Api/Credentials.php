@@ -16,22 +16,22 @@ class Credentials
     /**
      * @var string
      */
-    private $username;
+    private string $username;
 
     /**
      * @var string
      */
-    private $password;
+    private string $password;
 
     /**
      * @var int
      */
-    private $environment;
+    private int $environment;
 
     /**
      * @var string
      */
-    private $country;
+    private string $country;
 
     /**
      * @param string $username

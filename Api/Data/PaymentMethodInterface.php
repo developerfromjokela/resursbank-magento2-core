@@ -78,7 +78,7 @@ interface PaymentMethodInterface
     /**
      * Get ID of payment method.
      *
-     * @param int|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return int|null
      */
@@ -95,7 +95,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method identifier.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -112,7 +112,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method code.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -127,16 +127,16 @@ interface PaymentMethodInterface
     public function setCode(string $code): self;
 
     /**
-     * Whether or not the payment method is active.
+     * Whether the payment method is active.
      *
-     * @param bool|null $default - Value to be returned in the event that
+     * @param bool|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return bool|null
      */
     public function getActive(?bool $default = null): ?bool;
 
     /**
-     * Set whether or not payment method is active.
+     * Set whether payment method is active.
      *
      * @param bool $state
      * @return self
@@ -146,7 +146,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method title.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -163,7 +163,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method sort order.
      *
-     * @param int|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return int|null
      */
@@ -181,7 +181,7 @@ interface PaymentMethodInterface
      * Get payment method minimum order total (cart total required to make the
      * payment method available at checkout).
      *
-     * @param float|null $default - Value to be returned in the event that
+     * @param float|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return float|null
      */
@@ -200,7 +200,7 @@ interface PaymentMethodInterface
      * Get payment method maximum order total (cart total limit to make payment
      * method available at checkout).
      *
-     * @param float|null $default - Value to be returned in the event that
+     * @param float|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return float|null
      */
@@ -218,7 +218,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method default order status.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -235,7 +235,7 @@ interface PaymentMethodInterface
     /**
      * Get complete raw API data defining the method at Resurs Bank.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -266,7 +266,7 @@ interface PaymentMethodInterface
     /**
      * Get payment method country restriction.
      *
-     * @param string|null $default - Value to be returned in the event that
+     * @param string|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return string|null
      */
@@ -283,7 +283,7 @@ interface PaymentMethodInterface
     /**
      * Get entry creation time.
      *
-     * @param int|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return int|null
      */
@@ -300,7 +300,7 @@ interface PaymentMethodInterface
     /**
      * Get entry update time.
      *
-     * @param int|null $default - Value to be returned in the event that
+     * @param int|null $default - Value to be returned, in the event that
      * a value couldn't be retrieved from the database.
      * @return int|null
      */

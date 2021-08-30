@@ -25,31 +25,31 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     /**
      * @var Logger
      */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @var DirectoryList
      */
-    private $directories;
+    private DirectoryList $directories;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
-     * Channel name for the Logger (overwritten by child class).
+     * Name of the channel for the Logger (overwritten by child class).
      *
      * @var string
      */
-    protected $loggerName = '';
+    protected string $loggerName = '';
 
     /**
      * Filename where entries are stored (overwritten by child class).
      *
      * @var string
      */
-    protected $file = '';
+    protected string $file = '';
 
     /**
      * @param DirectoryList $directories

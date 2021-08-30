@@ -20,7 +20,7 @@ class Error implements ArgumentInterface
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @param RequestInterface $request

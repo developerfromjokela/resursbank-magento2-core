@@ -39,12 +39,12 @@ class Order extends AbstractHelper
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchBuilder;
+    private SearchCriteriaBuilder $searchBuilder;
 
     /**
      * @var OrderRepository
      */
-    private $orderRepository;
+    private OrderRepository $orderRepository;
 
     /**
      * @param Context $context

@@ -37,17 +37,17 @@ class Api extends AbstractHelper
     /**
      * @var CredentialsHelper
      */
-    private $credentialsHelper;
+    private CredentialsHelper $credentialsHelper;
 
     /**
      * @var Order
      */
-    private $orderHelper;
+    private Order $orderHelper;
 
     /**
      * @var Version
      */
-    private $version;
+    private Version $version;
 
     /**
      * @param Context $context

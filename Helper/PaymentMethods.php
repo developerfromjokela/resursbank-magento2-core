@@ -39,37 +39,37 @@ class PaymentMethods extends AbstractHelper
     /**
      * @var Api
      */
-    private $api;
+    private Api $api;
 
     /**
      * @var PaymentMethodFactory
      */
-    private $methodFactory;
+    private PaymentMethodFactory $methodFactory;
 
     /**
      * @var Converter
      */
-    private $converter;
+    private Converter $converter;
 
     /**
      * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
      * @var Credentials
      */
-    private $credentials;
+    private Credentials $credentials;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchBuilder;
+    private SearchCriteriaBuilder $searchBuilder;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @param Context $context
@@ -147,14 +147,13 @@ class PaymentMethods extends AbstractHelper
             }
 
             /**
-             * Magentos rendering component for the payment method list will
+             * Magento's rendering component for the payment method list will
              * randomly sort the methods incorrectly unless we space them a bit.
              */
             $method->setSortOrder($sortOrder+=10);
 
             // Overwrite data on method model instance and update db entry.
             $this->syncMethodData(
-                $credentials,
                 $this->fill($method, $data, $credentials)
             );
         }
@@ -167,14 +166,11 @@ class PaymentMethods extends AbstractHelper
      * to more easily interact with the API utilising the Credentials associated
      * with the payment method.
      *
-     * @param CredentialsModel $credentials
      * @param PaymentMethodInterface $method
      * @return PaymentMethodInterface
      * @throws AlreadyExistsException
-     * @noinspection PhpUnusedParameterInspection
      */
     public function syncMethodData(
-        CredentialsModel $credentials,
         PaymentMethodInterface $method
     ): PaymentMethodInterface {
         // Update / insert method data in database.

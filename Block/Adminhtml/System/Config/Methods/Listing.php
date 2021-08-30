@@ -29,26 +29,26 @@ class Listing extends Field
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var PriceCurrencyInterface
      */
-    private $priceCurrency;
+    private PriceCurrencyInterface $priceCurrency;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
     /**
      * @var Scope
      */
-    private $scope;
+    private Scope $scope;
 
     /**
      * @param Context $context

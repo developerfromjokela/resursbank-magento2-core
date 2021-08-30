@@ -23,7 +23,7 @@ class Button extends Field
     /**
      * @var Url
      */
-    private $url;
+    private Url $url;
 
     /**
      * @param Url $url

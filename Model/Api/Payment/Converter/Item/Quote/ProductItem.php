@@ -24,7 +24,7 @@ class ProductItem extends AbstractItem
     /**
      * @var QuoteItem
      */
-    protected $product;
+    protected QuoteItem $product;
 
     /**
      * @param Config $config

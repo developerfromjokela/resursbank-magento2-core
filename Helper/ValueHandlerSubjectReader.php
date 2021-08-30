@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 
 /**
@@ -23,7 +22,7 @@ class ValueHandlerSubjectReader extends AbstractHelper
     /**
      * Resolve additional data applied on the payment method instance (see
      * Resursbank\Core\Model\Payment\Resursbank :: getInfoInstance()).
-     * 
+     *
      * @param array $subject
      * @param string $key
      * @return mixed

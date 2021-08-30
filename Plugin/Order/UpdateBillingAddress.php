@@ -34,26 +34,26 @@ class UpdateBillingAddress
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var AddressRepository
      */
-    private $addressRepository;
+    private AddressRepository $addressRepository;
 
     /**
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * @var Order
      */
-    private $order;
+    private Order $order;
     /**
      * @var Api
      */
-    private $api;
+    private Api $api;
 
     /**
      * @param Log $log

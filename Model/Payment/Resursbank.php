@@ -33,7 +33,7 @@ class Resursbank extends Adapter
     /**
      * @var PaymentMethodInterface|null
      */
-    private $resursModel;
+    private ?PaymentMethodInterface $resursModel;
 
     /**
      * When we create an instance of this payment method we will assign an
@@ -116,14 +116,14 @@ class Resursbank extends Adapter
         return $result;
     }
 
-
     /**
      * Check whether the payment method will debit automatically. This method is
      * utilised to resolve various flags for our payment methods.
      *
      * @return bool
      */
-    private function isDebited(): bool {
+    private function isDebited(): bool
+    {
         $result = false;
 
         if ($this->resursModel instanceof PaymentMethodInterface) {

@@ -23,7 +23,7 @@ class CreditDeniedOrderStatus implements DataPatchInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     /**
      * @var StatusResourceModel

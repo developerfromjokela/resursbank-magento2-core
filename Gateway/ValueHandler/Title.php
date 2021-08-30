@@ -12,8 +12,8 @@ use Resursbank\Core\Helper\ValueHandlerSubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 
 /**
- * Magentos core adapter will resolve the title from the database, regardless of
- * what is specified in the array assembled from the XML (see
+ * Magento's core adapter will resolve the title from the database, regardless
+ * of what is specified in the array assembled from the XML (see
  * Resursbank\Core\Plugin\Payment\Helper\Data). Since our payment methods are
  * stored in a separate table (and injecting values into the core_config_data
  * table would create needless overhead prone to failure) we store the title on
@@ -30,7 +30,7 @@ class Title implements ValueHandlerInterface
     /**
      * @var ValueHandlerSubjectReader
      */
-    private $reader;
+    private ValueHandlerSubjectReader $reader;
 
     /**
      * @param ValueHandlerSubjectReader $reader

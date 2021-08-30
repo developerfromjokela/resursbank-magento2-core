@@ -105,17 +105,17 @@ class Item
     /**
      * @var string
      */
-    private $artNo = '';
+    private string $artNo = '';
 
     /**
      * @var string
      */
-    private $description = '';
+    private string $description = '';
 
     /**
      * @var float
      */
-    private $quantity = 0.0;
+    private float $quantity = 0.0;
 
     /**
      * Unit measurement, for example "kg" or "cup".
@@ -125,21 +125,21 @@ class Item
      *
      * @var string
      */
-    private $unitMeasure = self::UNIT_MEASURE;
+    private string $unitMeasure = self::UNIT_MEASURE;
 
     /**
      * Unit price without VAT (excl. tax).
      *
      * @var float
      */
-    private $unitAmountWithoutVat = 0.0;
+    private float $unitAmountWithoutVat = 0.0;
 
     /**
      * Tax percentage.
      *
      * @var int
      */
-    private $vatPct = 0;
+    private int $vatPct = 0;
 
     /**
      * Item type specification.
@@ -150,42 +150,42 @@ class Item
      *
      * @var string
      */
-    private $type = self::TYPE_PRODUCT;
+    private string $type = self::TYPE_PRODUCT;
 
     /**
      * @var ArtNo
      */
-    private $artNoValidator;
+    private ArtNo $artNoValidator;
 
     /**
      * @var Description
      */
-    private $descriptionValidator;
+    private Description $descriptionValidator;
 
     /**
      * @var Quantity
      */
-    private $quantityValidator;
+    private Quantity $quantityValidator;
 
     /**
      * @var UnitMeasure
      */
-    private $unitMeasureValidator;
+    private UnitMeasure $unitMeasureValidator;
 
     /**
      * @var UnitAmountWithoutVat
      */
-    private $amountValidator;
+    private UnitAmountWithoutVat $amountValidator;
 
     /**
      * @var VatPct
      */
-    private $vatPctValidator;
+    private VatPct $vatPctValidator;
 
     /**
      * @var Type
      */
-    private $typeValidator;
+    private Type $typeValidator;
 
     /**
      * @param string $artNo

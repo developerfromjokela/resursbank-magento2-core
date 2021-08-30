@@ -26,7 +26,7 @@ class PaymentAction implements ValueHandlerInterface
     /**
      * @var ValueHandlerSubjectReader
      */
-    private $reader;
+    private ValueHandlerSubjectReader $reader;
 
     /**
      * @param ValueHandlerSubjectReader $reader
