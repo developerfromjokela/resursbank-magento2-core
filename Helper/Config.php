@@ -169,10 +169,10 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Defines whether or not delete orders which were canceled during the
-     * checkout process when an error occurs with the payment (for example if
-     * the client fails to sign using the BankId). This ensures there are no
-     * gaps in the increment id:s of the orders.
+     * Defines whether to delete orders which were canceled during the checkout
+     * process when an error occurs with the payment (for example if the client
+     * fails to sign using the BankId). This ensures there are no gaps in the
+     * increment id:s of the orders.
      *
      * NOTE: Only works if the customer is still in the same session as the
      * canceled order when it was created.
@@ -188,6 +188,25 @@ class Config extends AbstractConfig
         return $this->isEnabled(
             self::ADVANCED_GROUP,
             'reuse_erroneously_created_orders',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * Manually defined maximum transaction amount for Swish.
+     *
+     * @param null|string $scopeCode
+     * @param string $scopeType
+     * @return float
+     */
+    public function getSwishMaxOrderTotal(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): float {
+        return (float) $this->get(
+            self::ADVANCED_GROUP,
+            'swish_max_order_total',
             $scopeCode,
             $scopeType
         );
