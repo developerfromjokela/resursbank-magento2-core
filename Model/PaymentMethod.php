@@ -268,6 +268,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritDoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function setRaw(string $value): PaymentMethodInterface
     {
@@ -282,6 +283,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritdoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getType(): ?string
     {
@@ -298,6 +300,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritdoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getSpecificType(): ?string
     {

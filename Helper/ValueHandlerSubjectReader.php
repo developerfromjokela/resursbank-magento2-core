@@ -27,7 +27,7 @@ class ValueHandlerSubjectReader extends AbstractHelper
      * Resolve additional data applied on the payment method instance (see
      * Resursbank\Core\Model\Payment\Resursbank :: getInfoInstance()).
      *
-     * @param array $subject
+     * @param array<mixed> $subject
      * @param string $key
      * @return mixed
      */

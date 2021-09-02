@@ -32,7 +32,6 @@ use function strlen;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @noinspection EfferentObjectCouplingInspection
  */
 class PaymentMethods extends AbstractHelper
 {
@@ -115,6 +114,7 @@ class PaymentMethods extends AbstractHelper
      * @throws JsonException
      * @noinspection BadExceptionsProcessingInspection
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function sync(
         CredentialsModel $credentials
@@ -518,6 +518,8 @@ class PaymentMethods extends AbstractHelper
 
         try {
             $rawValue = $method->getRaw();
+
+            /** @noinspection PhpComposerExtensionStubsInspection */
             $result = $rawValue !== null ?
                 json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];

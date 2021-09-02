@@ -136,7 +136,7 @@ class Order extends AbstractHelper
     /**
      * Apply "Credit Denied" status to supplied order.
      *
-     * @param OrderModel $order
+     * @param OrderInterface $order
      * @throws AlreadyExistsException
      * @throws InputException
      * @throws NoSuchEntityException

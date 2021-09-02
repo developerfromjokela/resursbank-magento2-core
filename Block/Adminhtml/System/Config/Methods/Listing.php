@@ -132,11 +132,12 @@ class Listing extends Field
     }
 
     /**
+     * Could not use method prefix 'get' because of a magic method signature.
+     *
      * @param PaymentMethodInterface $method
      * @return string
-     * @phpstan-ignore-next-line
      */
-    public function getMin(
+    public function orderMinTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
@@ -145,11 +146,12 @@ class Listing extends Field
     }
 
     /**
+     * Could not use method prefix 'get' because of a magic method signature.
+     *
      * @param PaymentMethodInterface $method
      * @return string
-     * @phpstan-ignore-next-line
      */
-    public function getMax(
+    public function orderMaxTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)

@@ -24,9 +24,6 @@ use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ReadMore implements HttpGetActionInterface
 {
     /**

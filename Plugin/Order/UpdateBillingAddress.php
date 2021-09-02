@@ -61,7 +61,6 @@ class UpdateBillingAddress
      * @param Request $request
      * @param Order $order
      * @param Api $api
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Log $log,

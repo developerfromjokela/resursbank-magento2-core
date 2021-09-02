@@ -67,14 +67,26 @@ class Button extends Field
         string $label,
         string $path
     ): string {
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @phpstan-ignore-next-line */
+        // Must test for magic property.
+        if (!method_exists($this, 'setElement')) {
+            throw new LocalizedException(
+                __('Undefined method setElement() on block class.')
+            );
+        }
+
         $this->setElement($element);
 
-        /** @phpstan-ignore-next-line */
-        return $this->getLayout()
-            ->createBlock(MagentoButton::class)
-            ->setType('button')
+        $block = $this->getLayout()
+            ->createBlock(MagentoButton::class);
+
+        // Must test for magic property.
+        if (!method_exists($block, 'setType')) {
+            throw new LocalizedException(
+                __('Undefined method setType() on block class.')
+            );
+        }
+
+        return $block->setType('button')
             ->setClass('scalable')
             ->setLabel(__($label))
             ->setOnClick(

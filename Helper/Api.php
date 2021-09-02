@@ -30,7 +30,6 @@ use stdClass;
  * API adapter utilising the EComPHP library.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @noinspection EfferentObjectCouplingInspection
  */
 class Api extends AbstractHelper
 {
@@ -96,7 +95,7 @@ class Api extends AbstractHelper
         // Enable usage of PSP methods.
         $connection->setSimplifiedPsp(true);
 
-        // Supply API call with debug information.
+        // Supply an API call with debug information.
         $connection->setUserAgent($this->getUserAgent());
 
         // Deactivate auto debitable types.

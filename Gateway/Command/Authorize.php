@@ -12,11 +12,9 @@ use Exception;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Sales\Model\Order\Payment;
 use Resursbank\Core\Helper\Log;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Authorize implements CommandInterface
 {
     /**
@@ -42,12 +40,15 @@ class Authorize implements CommandInterface
     ): ?ResultInterface {
         try {
             $data = SubjectReader::readPayment($commandSubject);
+            $payment = $data->getPayment();
 
-            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-            /** @phpstan-ignore-next-line */
-            $data->getPayment()
-                ->setTransactionId($data->getOrder()->getOrderIncrementId())
-                ->setIsTransactionClosed(false);
+            if ($payment instanceof Payment) {
+                $payment->setTransactionId(
+                    $data->getOrder()
+                        ->getOrderIncrementId()
+                )
+                    ->setIsTransactionClosed(false);
+            }
         } catch (Exception $e) {
             $this->log->exception($e);
         }

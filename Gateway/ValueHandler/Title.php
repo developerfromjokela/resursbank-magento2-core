@@ -53,6 +53,10 @@ class Title implements ValueHandlerInterface
 
     /**
      * @inheritdoc
+     * @param array<mixed> $subject
+     * @param int|null $storeId
+     * @return string
+     * @inerhitdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(

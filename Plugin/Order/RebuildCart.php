@@ -146,7 +146,7 @@ class RebuildCart
     }
 
     /**
-     * Whether or not this plugin should execute.
+     * Whether this plugin should execute.
      *
      * @param OrderInterface $order
      * @return bool
@@ -180,6 +180,7 @@ class RebuildCart
         OrderInterface $order
     ): void {
         try {
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($order instanceof Order) {
                 $this->orderRepository->save($order->cancel());
             } else {

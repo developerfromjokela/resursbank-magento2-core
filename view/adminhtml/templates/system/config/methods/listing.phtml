@@ -46,11 +46,11 @@ $methods = $block->getMethods();
                 </td>
                 <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
                     <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml($block->getMin($method)) ?>
+                    <?= $escaper->escapeHtml($block->orderMinTotal($method)) ?>
                 </td>
                 <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
                     <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml($block->getMax($method)) ?>
+                    <?= $escaper->escapeHtml($block->orderMaxTotal($method)) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
