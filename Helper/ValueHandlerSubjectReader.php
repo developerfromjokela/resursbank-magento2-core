@@ -9,7 +9,11 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Payment\Model\MethodInterface;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Model\Payment\Resursbank;
 
 /**
  * Simplifies process to extract dynamic information from payment method
@@ -42,5 +46,52 @@ class ValueHandlerSubjectReader extends AbstractHelper
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $subject
+     * @return MethodInterface|null
+     * @throws LocalizedException
+     */
+    public function getMethodInstance(
+        array $subject
+    ):? MethodInterface {
+        return (
+            isset($subject['payment']) &&
+            $subject['payment'] instanceof PaymentDataObject &&
+            $subject['payment']->getPayment()->getMethodInstance() instanceof MethodInterface
+        ) ? $subject['payment']->getPayment()->getMethodInstance() : null;
+    }
+
+    /**
+     * @param array $subject
+     * @return Resursbank|null
+     * @throws LocalizedException
+     */
+    public function getResursModel(
+        array $subject
+    ):? PaymentMethodInterface {
+        $method = $this->getMethodInstance($subject);
+
+        return $method instanceof Resursbank ? $method->getResursModel() : null;
+    }
+
+    /**
+     * Check whether the payment method will debit automatically. This method is
+     * utilised to resolve various flags for our payment methods.
+     *
+     * @param PaymentMethodInterface $method
+     * @return bool
+     */
+    public function isDebited(
+        PaymentMethodInterface $method
+    ): bool {
+        return (
+            $method->getType() === 'PAYMENT_PROVIDER' &&
+            (
+                $method->getSpecificType() === 'INTERNET' ||
+                $method->getSpecificType() === 'SWISH'
+            )
+        );
     }
 }
