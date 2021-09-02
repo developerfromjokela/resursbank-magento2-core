@@ -14,7 +14,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
@@ -49,21 +51,37 @@ class Data
     private ?array $methodList;
 
     /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * @param PaymentMethods $paymentMethods
      * @param Log $log
      * @param MethodFactory $methodFactory
      * @param Repository $repository
+     * @param Config $config
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         PaymentMethods $paymentMethods,
         Log $log,
         MethodFactory $methodFactory,
-        Repository $repository
+        Repository $repository,
+        Config $config,
+        StoreManagerInterface $storeManager
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
         $this->methodFactory = $methodFactory;
         $this->repository = $repository;
+        $this->config = $config;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -215,6 +233,16 @@ class Data
         try {
             if ($code !== Method::CODE) {
                 $result = $this->repository->getByCode($code);
+
+                if ($result->getSpecificType() === 'SWISH') {
+                    $maxOrderTotal = $this->config->getSwishMaxOrderTotal(
+                        $this->storeManager->getStore()->getCode()
+                    );
+
+                    if ($maxOrderTotal > 0) {
+                        $result->setMaxOrderTotal($maxOrderTotal);
+                    }
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);
