@@ -8,8 +8,7 @@ Core part of Magento 2 module.
 
 ## Prerequisites
 
-* [Magento 2](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html) [Supports Magento 2.4.1+]
-* SOAP for your version of PHP (for example php5-soap or php7.0-soap).
+* [Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/bk-install-guide.html) [Supports Magento 2.4.1+]
 
 ---
 
