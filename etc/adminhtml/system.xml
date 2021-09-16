@@ -75,24 +75,19 @@
                     <label>Advanced Settings</label>
                     <group id="general" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>General</label>
-                        <field id="swish_max_order_total" type="text" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Swish Maximum Order Total</label>
-                            <config_path>resursbank/advanced/swish_max_order_total</config_path>
-                            <comment>Maximum cart value allowed for Swish transactions. An empty value, or 0, will result in the utilisation of the value provided by the API.</comment>
-                        </field>
-                        <field id="debug" type="select" sortOrder="1" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <field id="debug" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Debug</label>
                             <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/debug/enabled</config_path>
                         </field>
-                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="1" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Delete aborted orders</label>
                             <comment>Delete order when payment is aborted, to avoid orders with pending payment.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
                         </field>
-                        <field id="round_tax_percentage" type="select" sortOrder="3" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="round_tax_percentage" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Round Item Tax</label>
                             <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
