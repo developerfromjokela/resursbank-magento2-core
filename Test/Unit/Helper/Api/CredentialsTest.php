@@ -8,73 +8,69 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper\Api;
 
-use Magento\Framework\Exception\StateException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Store;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Helper\Api\Credentials as Helper;
-use Resursbank\Core\Model\Api\Credentials as Model;
-use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
+use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Config;
+use Resursbank\RBEcomPHP\ResursBank;
 
-/**
- * Test cases designed for Credentials data model.
- *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class CredentialsTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
+
+    private \Resursbank\Core\Model\Api\Credentials $credentialsModel;
+
+    private Credentials $credentialsHelper;
 
     /**
-     * @var Model
+     * @var MockObject|ScopeConfigInterface
      */
-    private $model;
+    private $scopeConfigInterfaceMock;
 
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Store
-     */
-    private $store;
-
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $objectManager = ObjectManager::getInstance();
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $contextMock = $this->createMock(Context::class);
+        $writerInterfaceMock = $this->createMock(WriterInterface::class);
+        $this->scopeConfigInterfaceMock = $this->createMock(ScopeConfigInterface::class);
+        $resursConfig =  new Config(
+            $this->scopeConfigInterfaceMock,
+            $writerInterfaceMock,
+            $contextMock
+        );
 
-        /** @phpstan-ignore-next-line */
-        $this->model = $this->objectManager->getObject(Model::class);
+        $this->credentialsModel = new \Resursbank\Core\Model\Api\Credentials();
 
-        /** @phpstan-ignore-next-line */
-        $this->helper = $this->objectManager->getObject(Helper::class);
+        $this->credentialsHelper = new Credentials(
+            $contextMock,
+            $resursConfig,
+            $objectManager,
+            $storeManagerMock
+        );
 
-        /** @phpstan-ignore-next-line */
-        $this->store = $this->objectManager->getObject(Store::class);
+        parent::setUp();
     }
 
     /**
-     * Assert that hasCredentials method will result in "true" if a username and
-     * password value have been applied on the Credentials model instance.
+     * Assert that hasCredentials method will result in "true" if username and password
+     * value has been applied on the Credentials model instance.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testHasCredentialsTrueWithUsernameAndPassword(): void
     {
-        $this->model
-            ->setUsername('testing')
-            ->setPassword('secret');
+        $this->credentialsModel->setUsername("username");
+        $this->credentialsModel->setPassword("password");
 
-        static::assertTrue($this->helper->hasCredentials($this->model));
+        self::assertTrue($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
 
     /**
@@ -86,23 +82,23 @@ class CredentialsTest extends TestCase
      */
     public function testHasCredentialsFalseWithoutUsername(): void
     {
-        $this->model->setPassword('secret');
+        $this->credentialsModel->setPassword("password");
 
-        static::assertFalse($this->helper->hasCredentials($this->model));
+        self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
 
     /**
-     * Assert that hasCredentials method will result in "false" if no
-     * password value has been applied on the Credentials model instance.
+     * Assert that hasCredentials method will result in "false" if no password
+     * value has been applied on the Credentials model instance.
      *
      * @return void
      * @throws ValidatorException
      */
     public function testHasCredentialsFalseWithoutPassword(): void
     {
-        $this->model->setUsername('lebowski');
+        $this->credentialsModel->setUsername("username");
 
-        static::assertFalse($this->helper->hasCredentials($this->model));
+        self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
 
     /**
@@ -116,9 +112,9 @@ class CredentialsTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
-        $this->model->setEnvironment(1);
+        $this->credentialsModel->setEnvironment(1);
 
-        $this->helper->getHash($this->model);
+        $this->credentialsHelper->getHash($this->credentialsModel);
     }
 
     /**
@@ -132,9 +128,9 @@ class CredentialsTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
-        $this->model->setUsername('testing');
+        $this->credentialsModel->setUsername('testing');
 
-        $this->helper->getHash($this->model);
+        $this->credentialsHelper->getHash($this->credentialsModel);
     }
 
     /**
@@ -146,13 +142,13 @@ class CredentialsTest extends TestCase
      */
     public function testHashValue(): void
     {
-        $this->model
-            ->setUsername('testaccount')
+        $this->credentialsModel
+            ->setUsername('username')
             ->setEnvironment(1);
 
         static::assertSame(
-            'a8c850514b63b1c6513ddd19599e9235c93ccd0b',
-            $this->helper->getHash($this->model)
+            '031796799e76cf794757b4cd59bd4eb7d0970abb',
+            $this->credentialsHelper->getHash($this->credentialsModel)
         );
     }
 
@@ -170,9 +166,9 @@ class CredentialsTest extends TestCase
             'Failed to resolve method suffix. Missing environment.'
         );
 
-        $this->model->setUsername('janus');
+        $this->credentialsModel->setUsername('username');
 
-        $this->helper->getMethodSuffix($this->model);
+        $this->credentialsHelper->getMethodSuffix($this->credentialsModel);
     }
 
     /**
@@ -190,9 +186,9 @@ class CredentialsTest extends TestCase
             'Failed to resolve method suffix. Missing username.'
         );
 
-        $this->model->setEnvironment(1);
+        $this->credentialsModel->setEnvironment(1);
 
-        $this->helper->getMethodSuffix($this->model);
+        $this->credentialsHelper->getMethodSuffix($this->credentialsModel);
     }
 
     /**
@@ -204,13 +200,13 @@ class CredentialsTest extends TestCase
      */
     public function testMethodSuffixResult(): void
     {
-        $this->model
-            ->setUsername('walter')
+        $this->credentialsModel
+            ->setUsername('username')
             ->setEnvironment(0);
 
         static::assertSame(
-            'walter_' . RESURS_ENVIRONMENTS::PRODUCTION,
-            $this->helper->getMethodSuffix($this->model)
+            'username_' . ResursBank::ENVIRONMENT_PRODUCTION,
+            $this->credentialsHelper->getMethodSuffix($this->credentialsModel)
         );
     }
 
@@ -223,13 +219,61 @@ class CredentialsTest extends TestCase
      */
     public function testMethodSuffixResultIsLowerCase(): void
     {
-        $this->model
-            ->setUsername('BuNNy')
+        $this->credentialsModel
+            ->setUsername('username')
             ->setEnvironment(1);
 
         static::assertSame(
-            'bunny_' . RESURS_ENVIRONMENTS::TEST,
-            $this->helper->getMethodSuffix($this->model)
+            'username_' . ResursBank::ENVIRONMENT_TEST,
+            $this->credentialsHelper->getMethodSuffix($this->credentialsModel)
         );
+    }
+
+
+    /**
+     * Assert that the return value from resolveFromConfig returns the correct instance type
+     *
+     * @return void
+     * @throws ValidatorException
+     */
+    public function testResolveFromConfigReturnsCorrectClass()
+    {
+        $storeCode = 'test_store_view';
+        $scopeType = ScopeInterface::SCOPE_STORE;
+        $this->scopeConfigInterfaceMock->method('getValue')->withConsecutive(
+            ["resursbank/api/environment"],
+            ["resursbank/api/environment"],
+            ["resursbank/api/username_1"],
+            ["resursbank/api/environment"],
+            ["resursbank/api/password_1"],
+            ["general/country/default"]
+        )->willReturnOnConsecutiveCalls("1", "1",  "username", "1", "password", "SE");
+
+        $result = $this->credentialsHelper->resolveFromConfig($storeCode, $scopeType);
+        self::assertTrue($result instanceof  \Resursbank\Core\Model\Api\Credentials);
+    }
+
+    /**
+     * Assert that an exception is thrown if general/country/default returns empty value
+     *
+     * @return void
+     * @throws ValidatorException
+     */
+    public function testResolveFromConfigThrowsExceptionWithoutDefaultCountry()
+    {
+        $this->expectException(ValidatorException::class);
+        $this->expectErrorMessage('Failed to apply country to Credentials instance.');
+        $storeCode = 'test_store_view';
+        $scopeType = ScopeInterface::SCOPE_STORE;
+        $this->scopeConfigInterfaceMock->method('getValue')->withConsecutive(
+            ["resursbank/api/environment"],
+            ["resursbank/api/environment"],
+            ["resursbank/api/username_1"],
+            ["resursbank/api/environment"],
+            ["resursbank/api/password_1"],
+            ["general/country/default"]
+        )->willReturnOnConsecutiveCalls("1", "1",  "username", "1", "password", "");
+
+        $this->credentialsHelper->resolveFromConfig($storeCode, $scopeType);
     }
 }

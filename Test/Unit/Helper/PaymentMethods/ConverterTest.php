@@ -9,28 +9,19 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Unit\Helper\PaymentMethods;
 
 use JsonException;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
 
-/**
- * Tests designed for payment method data conversion.
- *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class ConverterTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var Converter
      */
-    private $converter;
+    private Converter $converter;
 
     /**
      * @var array<string, string>
@@ -48,10 +39,11 @@ class ConverterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $contextMock = $this->createMock(Context::class);
 
-        /** @phpstan-ignore-next-line */
-        $this->converter = $this->objectManager->getObject(Converter::class);
+        $this->converter = new Converter(
+            $contextMock
+        );
 
         $this->apiData = [
             Converter::KEY_ID => 'invoice',
@@ -62,16 +54,16 @@ class ConverterTest extends TestCase
 
         $this->modelData = [
             PaymentMethodInterface::IDENTIFIER => $this->apiData[
-                Converter::KEY_ID
+            Converter::KEY_ID
             ],
             PaymentMethodInterface::TITLE => $this->apiData[
-                Converter::KEY_DESCRIPTION
+            Converter::KEY_DESCRIPTION
             ],
             PaymentMethodInterface::MIN_ORDER_TOTAL => (float) $this->apiData[
-                Converter::KEY_MIN_LIMIT
+            Converter::KEY_MIN_LIMIT
             ],
             PaymentMethodInterface::MAX_ORDER_TOTAL => (float) $this->apiData[
-                Converter::KEY_MAX_LIMIT
+            Converter::KEY_MAX_LIMIT
             ]
         ];
 

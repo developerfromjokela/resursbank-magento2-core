@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Resursbank\Core\Model\Config\Source\Options;
 use PHPUnit\Framework\TestCase;
 
@@ -17,10 +16,6 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionsTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var Options
@@ -32,8 +27,6 @@ class OptionsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         // Mock abstract Option class and whitelist toArray method so we can
         // mock its return value.
         $this->options = $this->getMockBuilder(Options::class)

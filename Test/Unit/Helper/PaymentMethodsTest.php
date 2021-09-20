@@ -10,9 +10,12 @@ namespace Resursbank\Core\Test\Unit\Helper;
 
 use Exception;
 use JsonException;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
@@ -20,11 +23,14 @@ use ReflectionObject;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\Helper\PaymentMethods\Converter;
 use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use Resursbank\Core\Model\PaymentMethod as PaymentMethodModel;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
-use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
+use Resursbank\Core\Model\PaymentMethodFactory;
+use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\RBEcomPHP\ResursBank;
 
 /**
@@ -36,11 +42,6 @@ use Resursbank\RBEcomPHP\ResursBank;
 class PaymentMethodsTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var Api
      */
     private $api;
@@ -48,12 +49,12 @@ class PaymentMethodsTest extends TestCase
     /**
      * @var ResursBank
      */
-    private $connection;
+    private ResursBank $connection;
 
     /**
      * @var CredentialsModel
      */
-    private $credentials;
+    private CredentialsModel $credentialsModelMock;
 
     /**
      * @var array<string, mixed>
@@ -63,12 +64,12 @@ class PaymentMethodsTest extends TestCase
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Credentials
      */
-    private $credentialsHelper;
+    private Credentials $credentialsHelper;
 
     /**
      * @inheritDoc
@@ -76,8 +77,14 @@ class PaymentMethodsTest extends TestCase
      */
     protected function setUp(): void
     {
-        // Prepare object manager.
-        $this->objectManager = new ObjectManager($this);
+        $contextMock = $this->createMock(Context::class);
+        $paymentMethodFactoryMock = $this->createMock(PaymentMethodFactory::class);
+        $paymentMethodRepositoryMock = $this->createMock(PaymentMethodRepository::class);
+        $converterMock = $this->createMock(Converter::class);
+        $searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $logMock = $this->createMock(Log::class);
+        $this->credentialsModelMock = $this->createMock(CredentialsModel::class);
+
 
         // Setup mock of Payment Method data as it would appearing after being
         // converted from an API call.
@@ -110,22 +117,19 @@ class PaymentMethodsTest extends TestCase
         // behaviour of the getMethodSuffix and getCountry methods.
         $this->credentialsHelper = $this->getMockBuilder(Credentials::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getMethodSuffix', 'getCountry'])
+            ->onlyMethods(['getMethodSuffix'])
             ->getMock();
 
-        // Create mocked, empty, instance of Credentials model.
-        /** @phpstan-ignore-next-line */
-        $this->credentials = $this->objectManager
-            ->getObject(CredentialsModel::class);
-
         // Mock of PaymentMethods service class.
-        /** @phpstan-ignore-next-line */
-        $this->paymentMethods = $this->objectManager->getObject(
-            PaymentMethods::class,
-            [
-                'api' => $this->api,
-                'credentials' => $this->credentialsHelper
-            ]
+        $this->paymentMethods = new PaymentMethods(
+            $contextMock,
+            $this->api,
+            $paymentMethodFactoryMock,
+            $converterMock,
+            $paymentMethodRepositoryMock,
+            $this->credentialsHelper,
+            $searchCriteriaBuilderMock,
+            $logMock
         );
     }
 
@@ -150,7 +154,7 @@ class PaymentMethodsTest extends TestCase
                 new Exception('Some connection error.')
             ));
 
-        $this->paymentMethods->fetch($this->credentials);
+        $this->paymentMethods->fetch($this->credentialsModelMock);
     }
 
     /**
@@ -178,7 +182,7 @@ class PaymentMethodsTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connection);
 
-        $this->paymentMethods->fetch($this->credentials);
+        $this->paymentMethods->fetch($this->credentialsModelMock);
     }
 
     /**
@@ -219,15 +223,11 @@ class PaymentMethodsTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connection);
 
-        /** @var PaymentMethods $methods */
-        $methods = $this->objectManager
-            ->getObject(PaymentMethods::class, ['api' => $this->api]);
-
         try {
             // Assert our fetch method does not alter the data retrieved through
             // the API adapter.
-            static::assertSame($methodsData, $methods->fetch(
-                $this->credentials
+            static::assertSame($methodsData, $this->paymentMethods->fetch(
+                $this->credentialsModelMock
             ));
         } catch (IntegrationException $e) {
             static::fail(
@@ -247,7 +247,7 @@ class PaymentMethodsTest extends TestCase
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
-            ->willReturn('batman_' . RESURS_ENVIRONMENTS::TEST);
+            ->willReturn('batman_' . ResursBank::ENVIRONMENT_TEST);
 
         try {
             static::assertSame(
@@ -255,9 +255,9 @@ class PaymentMethodsTest extends TestCase
                     Method::CODE_PREFIX .
                     'invoice_' .
                     'batman_' .
-                    RESURS_ENVIRONMENTS::TEST
+                    ResursBank::ENVIRONMENT_TEST
                 ),
-                $this->paymentMethods->getCode('invoice', $this->credentials)
+                $this->paymentMethods->getCode('invoice', $this->credentialsModelMock)
             );
         } catch (ValidatorException $e) {
             static::fail(
@@ -277,7 +277,7 @@ class PaymentMethodsTest extends TestCase
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
-            ->willReturn('tony_' . RESURS_ENVIRONMENTS::TEST);
+            ->willReturn('tony_' . ResursBank::ENVIRONMENT_TEST);
 
         try {
             static::assertSame(
@@ -285,9 +285,9 @@ class PaymentMethodsTest extends TestCase
                     Method::CODE_PREFIX .
                     'partpay_' .
                     'tony_' .
-                    RESURS_ENVIRONMENTS::TEST
+                    ResursBank::ENVIRONMENT_TEST
                 ),
-                $this->paymentMethods->getCode('PartPAY', $this->credentials)
+                $this->paymentMethods->getCode('PartPAY', $this->credentialsModelMock)
             );
         } catch (ValidatorException $e) {
             static::fail(
@@ -305,7 +305,7 @@ class PaymentMethodsTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
-        $this->paymentMethods->getCode('', $this->credentials);
+        $this->paymentMethods->getCode('', $this->credentialsModelMock);
     }
 
     /**
@@ -635,7 +635,7 @@ class PaymentMethodsTest extends TestCase
     public function testFill(): void
     {
         /** @phpstan-ignore-next-line */
-        $this->credentialsHelper
+        $this->credentialsModelMock
             ->expects(static::once())
             ->method('getCountry')
             ->willReturn('SE');
@@ -644,18 +644,28 @@ class PaymentMethodsTest extends TestCase
         $this->credentialsHelper
             ->expects(static::once())
             ->method('getMethodSuffix')
-            ->willReturn('cassandra_' . RESURS_ENVIRONMENTS::TEST);
+            ->willReturn('cassandra_' . ResursBank::ENVIRONMENT_TEST);
 
-        /** @var PaymentMethodModel $method */
-        $method = $this->objectManager->getObject(
-            PaymentMethodModel::class
+        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $resourceCollectionMock = $this->createMock(AbstractDb::class);
+        $method = new PaymentMethodModel(
+            $contextMock,
+            $registryMock,
+            $resourceMock,
+            $resourceCollectionMock
         );
 
         try {
             // Modify return value of a number of methods involved in the
             // process which fills an instance of the Method data model.
-            $this->credentials
-                ->setEnvironment(RESURS_ENVIRONMENTS::TEST)
+            $this->credentialsModelMock
+                ->setEnvironment(ResursBank::ENVIRONMENT_TEST)
                 ->setUsername('Montana')
                 ->setPassword('dneirfelttilymotollehyas');
 
@@ -664,7 +674,7 @@ class PaymentMethodsTest extends TestCase
                 $this->paymentMethods,
                 $method,
                 $this->convertedMethodData,
-                $this->credentials
+                $this->credentialsModelMock
             );
         } catch (ValidatorException $e) {
             static::fail(
@@ -719,7 +729,7 @@ class PaymentMethodsTest extends TestCase
                 PaymentMethodInterface::IDENTIFIER
                 ] .
                 '_cassandra_' .
-                RESURS_ENVIRONMENTS::TEST
+                ResursBank::ENVIRONMENT_TEST
             ),
             $method->getCode()
         );

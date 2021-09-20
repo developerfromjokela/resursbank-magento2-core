@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Resursbank\Core\Model\Config\Source\Environment;
 use Resursbank\RBEcomPHP\ResursBank;
 use PHPUnit\Framework\TestCase;
@@ -18,26 +17,18 @@ use PHPUnit\Framework\TestCase;
  */
 class EnvironmentTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var Environment
      */
-    private $environment;
+    private Environment $environment;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
-        /** @phpstan-ignore-next-line */
-        $this->environment = $this->objectManager
-            ->getObject(Environment::class);
+        $this->environment = new Environment();
     }
 
     /**

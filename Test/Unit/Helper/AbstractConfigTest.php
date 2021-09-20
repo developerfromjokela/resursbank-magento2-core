@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
@@ -20,23 +19,17 @@ use Resursbank\Core\Helper\AbstractConfig;
  */
 class AbstractConfigTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var AbstractConfig
      */
-    private $config;
+    private AbstractConfig $config;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->config = $this->getMockBuilder(AbstractConfig::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

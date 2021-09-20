@@ -9,8 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Unit\Helper;
 
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\User\Model\User;
+use Magento\Framework\App\Helper\Context;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Admin;
 
@@ -19,29 +18,27 @@ use Resursbank\Core\Helper\Admin;
  */
 class AdminTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
-     * @var Session
+     * @var Admin
      */
-    private $session;
+    private Admin $admin;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
-        // Mock the Session class and whitelist the getUser method so we can
-        // modify its output.
-        $this->session = $this->getMockBuilder(Session::class)
+        $contextMock = $this->createMock(Context::class);
+        $sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->addMethods(['getUser'])
             ->getMock();
+
+        $this->admin = new Admin(
+            $contextMock,
+            $sessionMock
+        );
     }
 
     /**
@@ -52,37 +49,6 @@ class AdminTest extends TestCase
      */
     public function testUsernameWorksWithoutUser(): void
     {
-        // Mock Admin without any User in Session.
-        $admin = $this->objectManager
-            ->getObject(Admin::class, ['session' => $this->session]);
-
-        /** @phpstan-ignore-next-line */
-        static::assertEquals('Anonymous', $admin->getUserName());
-    }
-
-    /**
-     * Assert that the getUser method will return the corresponding username
-     * when there is a user in our session.
-     *
-     * @return void
-     */
-    public function testUsernameWorksWithUser(): void
-    {
-        // Mock a User object.
-        $user = $this->objectManager->getObject(User::class);
-
-        /** @phpstan-ignore-next-line */
-        $user->setUserName('Lebowski');
-
-        // Modify the output of getUser method in Session mock.
-        /** @phpstan-ignore-next-line */
-        $this->session->method('getUser')->willReturn($user);
-
-        // Create a new Admin instance using our mocked Session.
-        $admin = $this->objectManager
-            ->getObject(Admin::class, ['session' => $this->session]);
-
-        /** @phpstan-ignore-next-line */
-        static::assertEquals('Lebowski', $admin->getUserName());
+        static::assertEquals('Anonymous', $this->admin->getUserName());
     }
 }
