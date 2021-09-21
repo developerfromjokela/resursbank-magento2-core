@@ -233,7 +233,7 @@ class PaymentMethodsTest extends TestCase
 
     /**
      * Assert that the getCode method will return a string matching the pattern
-     * [resursbank_][invoice][_][myusername_1]
+     * [resursbank_][invoice][_][myusername_1].
      */
     public function testGetCode(): void
     {

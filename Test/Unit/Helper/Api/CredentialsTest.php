@@ -238,7 +238,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown if general/country/default returns empty value
+     * Assert that an exception is thrown if general/country/default returns empty value.
      *
      * @return void
      * @throws ValidatorException
