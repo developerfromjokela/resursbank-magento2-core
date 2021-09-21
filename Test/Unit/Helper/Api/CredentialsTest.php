@@ -21,17 +21,25 @@ use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Config;
 use Resursbank\RBEcomPHP\ResursBank;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class CredentialsTest extends TestCase
 {
-
+    /**
+     * @var \Resursbank\Core\Model\Api\Credentials
+     */
     private \Resursbank\Core\Model\Api\Credentials $credentialsModel;
 
+    /**
+     * @var Credentials
+     */
     private Credentials $credentialsHelper;
 
     /**
-     * @var MockObject|ScopeConfigInterface
+     * @var ScopeConfigInterface|MockObject
      */
-    private $scopeConfigInterfaceMock;
+    private $scopeConfigMock;
 
     protected function setUp(): void
     {
@@ -39,9 +47,9 @@ class CredentialsTest extends TestCase
         $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $writerInterfaceMock = $this->createMock(WriterInterface::class);
-        $this->scopeConfigInterfaceMock = $this->createMock(ScopeConfigInterface::class);
-        $resursConfig =  new Config(
-            $this->scopeConfigInterfaceMock,
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $resursConfig = new Config(
+            $this->scopeConfigMock,
             $writerInterfaceMock,
             $contextMock
         );
@@ -59,7 +67,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that hasCredentials method will result in "true" if username and password
+     * Assert that hasCredentials method will result in 'true' if username and password
      * value has been applied on the Credentials model instance.
      *
      * @return void
@@ -67,14 +75,14 @@ class CredentialsTest extends TestCase
      */
     public function testHasCredentialsTrueWithUsernameAndPassword(): void
     {
-        $this->credentialsModel->setUsername("username");
-        $this->credentialsModel->setPassword("password");
+        $this->credentialsModel->setUsername('username');
+        $this->credentialsModel->setPassword('password');
 
         self::assertTrue($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
 
     /**
-     * Assert that hasCredentials method will result in "false" if no username
+     * Assert that hasCredentials method will result in 'false' if no username
      * value has been applied on the Credentials model instance.
      *
      * @return void
@@ -82,13 +90,13 @@ class CredentialsTest extends TestCase
      */
     public function testHasCredentialsFalseWithoutUsername(): void
     {
-        $this->credentialsModel->setPassword("password");
+        $this->credentialsModel->setPassword('password');
 
         self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
 
     /**
-     * Assert that hasCredentials method will result in "false" if no password
+     * Assert that hasCredentials method will result in 'false' if no password
      * value has been applied on the Credentials model instance.
      *
      * @return void
@@ -96,7 +104,7 @@ class CredentialsTest extends TestCase
      */
     public function testHasCredentialsFalseWithoutPassword(): void
     {
-        $this->credentialsModel->setUsername("username");
+        $this->credentialsModel->setUsername('username');
 
         self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
     }
@@ -229,50 +237,26 @@ class CredentialsTest extends TestCase
         );
     }
 
-
-    /**
-     * Assert that the return value from resolveFromConfig returns the correct instance type
-     *
-     * @return void
-     * @throws ValidatorException
-     */
-    public function testResolveFromConfigReturnsCorrectClass()
-    {
-        $storeCode = 'test_store_view';
-        $scopeType = ScopeInterface::SCOPE_STORE;
-        $this->scopeConfigInterfaceMock->method('getValue')->withConsecutive(
-            ["resursbank/api/environment"],
-            ["resursbank/api/environment"],
-            ["resursbank/api/username_1"],
-            ["resursbank/api/environment"],
-            ["resursbank/api/password_1"],
-            ["general/country/default"]
-        )->willReturnOnConsecutiveCalls("1", "1",  "username", "1", "password", "SE");
-
-        $result = $this->credentialsHelper->resolveFromConfig($storeCode, $scopeType);
-        self::assertTrue($result instanceof  \Resursbank\Core\Model\Api\Credentials);
-    }
-
     /**
      * Assert that an exception is thrown if general/country/default returns empty value
      *
      * @return void
      * @throws ValidatorException
      */
-    public function testResolveFromConfigThrowsExceptionWithoutDefaultCountry()
+    public function testResolveFromConfigThrowsExceptionWithoutDefaultCountry(): void
     {
         $this->expectException(ValidatorException::class);
         $this->expectErrorMessage('Failed to apply country to Credentials instance.');
         $storeCode = 'test_store_view';
         $scopeType = ScopeInterface::SCOPE_STORE;
-        $this->scopeConfigInterfaceMock->method('getValue')->withConsecutive(
-            ["resursbank/api/environment"],
-            ["resursbank/api/environment"],
-            ["resursbank/api/username_1"],
-            ["resursbank/api/environment"],
-            ["resursbank/api/password_1"],
-            ["general/country/default"]
-        )->willReturnOnConsecutiveCalls("1", "1",  "username", "1", "password", "");
+        $this->scopeConfigMock->method('getValue')->withConsecutive(
+            ['resursbank/api/environment'],
+            ['resursbank/api/environment'],
+            ['resursbank/api/username_1'],
+            ['resursbank/api/environment'],
+            ['resursbank/api/password_1'],
+            ['general/country/default']
+        )->willReturnOnConsecutiveCalls('1', '1', 'username', '1', 'password', '');
 
         $this->credentialsHelper->resolveFromConfig($storeCode, $scopeType);
     }

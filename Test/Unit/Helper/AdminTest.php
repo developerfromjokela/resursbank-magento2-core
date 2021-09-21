@@ -13,12 +13,8 @@ use Magento\Framework\App\Helper\Context;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Admin;
 
-/**
- * Test cases designed for Resursbank\Core\Helper\Admin
- */
 class AdminTest extends TestCase
 {
-
     /**
      * @var Admin
      */
@@ -42,7 +38,7 @@ class AdminTest extends TestCase
     }
 
     /**
-     * Assert that the getUser method will return "Anonymous" if there is no
+     * Assert that the getUser method will return 'Anonymous' if there is no
      * user in the session.
      *
      * @return void

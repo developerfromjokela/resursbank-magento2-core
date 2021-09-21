@@ -11,12 +11,8 @@ namespace Resursbank\Core\Test\Unit\Model\Config\Source;
 use Resursbank\Core\Model\Config\Source\Options;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test cases designed for generic options class.
- */
 class OptionsTest extends TestCase
 {
-
     /**
      * @var Options
      */

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper;
 
+use Exception;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,12 +21,8 @@ use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Version;
 use InvalidArgumentException;
 
-/**
- * Test cases designed for the Api service.
- */
 class ApiTest extends TestCase
 {
-
     /**
      * @var MockObject|Api
      */
@@ -48,7 +45,7 @@ class ApiTest extends TestCase
     {
         $objectManager = ObjectManager::getInstance();
         $contextMock = $this->createMock(Context::class);
-        $StoreManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $orderHelperMock = $this->createMock(Order::class);
         $this->versionHelperMock = $this->createMock(Version::class);
         $this->credentialsModelMock = $this->createMock(\Resursbank\Core\Model\Api\Credentials::class);
@@ -58,7 +55,7 @@ class ApiTest extends TestCase
             $contextMock,
             $resursConfigMock,
             $objectManager,
-            $StoreManagerMock
+            $storeManagerMock
         );
 
         $this->api = new Api(
@@ -70,58 +67,58 @@ class ApiTest extends TestCase
     }
 
     /**
-     * Assert that getUserAgent returns the correct value when specific version is supplied from versionhelper
+     * Assert that getUserAgent returns the correct value when specific version is supplied from versionhelper.
      *
      * @return void
      */
     public function testGetUserAgentReturnsCorrectValue(): void
     {
-        $this->versionHelperMock->method('getComposerVersion')->willReturn("1.0.0");
-        self::assertSame($this->api->getUserAgent(), "Magento 2 | Resursbank_Core 1.0.0");
+        $this->versionHelperMock->method('getComposerVersion')->willReturn('1.0.0');
+        self::assertSame($this->api->getUserAgent(), 'Magento 2 | Resursbank_Core 1.0.0');
     }
 
     /**
-     * Assert that getConnection function throws error if password is missing
+     * Assert that getConnection function throws error if password is missing.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testGetConnectionThrowsExceptionWithMissingPassword()
+    public function testGetConnectionThrowsExceptionWithMissingPassword(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage("Failed to establish API connection, incomplete Credentials.");
-        $this->credentialsModelMock->method("getUsername")->willReturn("username");
-        $this->credentialsModelMock->method("getPassword")->willReturn(null);
-        $this->credentialsModelMock->method("getEnvironment")->willReturn(1);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn('username');
+        $this->credentialsModelMock->method('getPassword')->willReturn(null);
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
         $this->api->getConnection($this->credentialsModelMock);
     }
 
     /**
-     * Assert that getConnection function throws error if username is missing
+     * Assert that getConnection function throws error if username is missing.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testGetConnectionThrowsExceptionWithMissingUsername()
+    public function testGetConnectionThrowsExceptionWithMissingUsername(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage("Failed to establish API connection, incomplete Credentials.");
-        $this->credentialsModelMock->method("getUsername")->willReturn(null);
-        $this->credentialsModelMock->method("getPassword")->willReturn("password");
-        $this->credentialsModelMock->method("getEnvironment")->willReturn(1);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn(null);
+        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
         $this->api->getConnection($this->credentialsModelMock);
     }
 
     /**
-     * Assert that getConnection function throws error if environment is missing
+     * Assert that getConnection function throws error if environment is missing.
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testGetConnectionThrowsExceptionWithMissingEnvironment()
+    public function testGetConnectionThrowsExceptionWithMissingEnvironment(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage("Failed to establish API connection, incomplete Credentials.");
-        $this->credentialsModelMock->method("getUsername")->willReturn("username");
-        $this->credentialsModelMock->method("getPassword")->willReturn("password");
-        $this->credentialsModelMock->method("getEnvironment")->willReturn(null);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn('username');
+        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(null);
         $this->api->getConnection($this->credentialsModelMock);
     }
 }

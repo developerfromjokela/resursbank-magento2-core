@@ -18,7 +18,6 @@ use Resursbank\Core\Helper\Scope;
 
 class ScopeTest extends TestCase
 {
-
     /**
      * @var RequestInterface|MockObject
      */
@@ -40,9 +39,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getTypeParam returns Website value if website param is set
+     * Assert that getTypeParam returns Website value if website param is set.
      */
-    public function testGetTypeParamReturnsWebsite()
+    public function testGetTypeParamReturnsWebsite(): void
     {
         $this->requestMock->expects(self::once())
             ->method('getParam')
@@ -52,9 +51,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getTypeParam returns store value if store param is set
+     * Assert that getTypeParam returns store value if store param is set.
      */
-    public function testGetTypeParamReturnsStore()
+    public function testGetTypeParamReturnsStore(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
@@ -64,9 +63,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getTypeParam returns empty value if neither website nor store param is set
+     * Assert that getTypeParam returns empty value if neither website nor store param is set.
      */
-    public function testGetTypeParamReturnsEmptyValue()
+    public function testGetTypeParamReturnsEmptyValue(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
@@ -76,9 +75,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getType returns Website value if website param is set
+     * Assert that getType returns Website value if website param is set.
      */
-    public function testGetTypeReturnsWebsite()
+    public function testGetTypeReturnsWebsite(): void
     {
         $this->requestMock->expects(self::once())
             ->method('getParam')
@@ -88,9 +87,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getType returns store value if store param is set
+     * Assert that getType returns store value if store param is set.
      */
-    public function testGetTypeReturnsStore()
+    public function testGetTypeReturnsStore(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
@@ -100,9 +99,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that getTypeParam returns default value if neither website nor store param is set
+     * Assert that getTypeParam returns default value if neither website nor store param is set.
      */
-    public function testGetTypeReturnsDefaultValue()
+    public function testGetTypeReturnsDefaultValue(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
@@ -112,9 +111,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that the value returned from getId is a string
+     * Assert that the value returned from getId is a string.
      */
-    public function testGetIdReturnsStringOfNumericParam()
+    public function testGetIdReturnsStringOfNumericParam(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
@@ -125,22 +124,22 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * Assert that the value returned from getId is correct
+     * Assert that the value returned from getId is correct.
      */
-    public function testGetIdReturnsCorrectValue()
+    public function testGetIdReturnsCorrectValue(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['website'])
-            ->willReturn("2", "2");
+            ->willReturn('2', '2');
 
-        self::assertEquals("2",$this->scope->getId());
+        self::assertEquals('2', $this->scope->getId());
     }
 
     /**
-     * Assert that the value returned from getId is null if no params is set
+     * Assert that the value returned from getId is null if no params is set.
      */
-    public function testGetIdReturnsNull()
+    public function testGetIdReturnsNull(): void
     {
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')

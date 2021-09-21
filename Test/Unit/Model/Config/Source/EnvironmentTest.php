@@ -12,12 +12,8 @@ use Resursbank\Core\Model\Config\Source\Environment;
 use Resursbank\RBEcomPHP\ResursBank;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test cases designed for environment options.
- */
 class EnvironmentTest extends TestCase
 {
-
     /**
      * @var Environment
      */
@@ -32,7 +28,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * Assert that environment options include "test".
+     * Assert that environment options include 'test'.
      *
      * @return void
      */
@@ -45,7 +41,7 @@ class EnvironmentTest extends TestCase
     }
 
     /**
-     * Assert that environment options include "production".
+     * Assert that environment options include 'production'.
      *
      * @return void
      */

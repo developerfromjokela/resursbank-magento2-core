@@ -15,9 +15,11 @@ use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\PaymentMethods\Converter;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ConverterTest extends TestCase
 {
-
     /**
      * @var Converter
      */

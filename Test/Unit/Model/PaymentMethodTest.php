@@ -85,21 +85,6 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the method setMethodId will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetMethodIdReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setMethodId(99999)
-        );
-    }
-
-    /**
      * Assert that an instance of ValidatorException is thrown if the
      * setMethodId method is provided with an invalid ID.
      *
@@ -170,20 +155,6 @@ class PaymentMethodTest extends TestCase
         );
     }
 
-    /**
-     * Assert that the setIdentifier method will return an instance of
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetIdentifierReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setIdentifier('INVOICE')
-        );
-    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -255,20 +226,6 @@ class PaymentMethodTest extends TestCase
         );
     }
 
-    /**
-     * Assert that the method setCode will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetCodeReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setCode('test_code')
-        );
-    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -342,20 +299,6 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the method setActive will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     */
-    public function testSetActiveReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setActive(true)
-        );
-    }
-
-    /**
      * Assert that the method getActive will convert its return value to a
      * bool.
      *
@@ -410,20 +353,6 @@ class PaymentMethodTest extends TestCase
         self::assertSame(
             'Test title',
             $this->method->getData(PaymentMethodInterface::TITLE)
-        );
-    }
-
-    /**
-     * Assert that the method setTitle will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     */
-    public function testSetTitleReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setTitle('Test title 1')
         );
     }
 
@@ -483,21 +412,6 @@ class PaymentMethodTest extends TestCase
         static::assertSame(
             123.123,
             $this->method->getData(PaymentMethodInterface::MIN_ORDER_TOTAL)
-        );
-    }
-
-    /**
-     * Assert that the method setMinOrderTotal will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetMinOrderTotalReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setMinOrderTotal(123.8917238917)
         );
     }
 
@@ -572,20 +486,6 @@ class PaymentMethodTest extends TestCase
         );
     }
 
-    /**
-     * Assert that the method setMaxOrderTotal will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetMaxOrderTotalReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setMaxOrderTotal(0.123)
-        );
-    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -658,20 +558,6 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the method setOrderStatus will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     */
-    public function testSetOrderStatusReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setOrderStatus('')
-        );
-    }
-
-    /**
      * Assert that the method getOrderStatus will convert its return value to a
      * string.
      *
@@ -731,24 +617,6 @@ class PaymentMethodTest extends TestCase
         self::assertSame(
             $data,
             $this->method->getData(PaymentMethodInterface::RAW)
-        );
-    }
-
-    /**
-     * Assert that the method setRaw will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     * @throws JsonException
-     */
-    public function testSetRawReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setRaw(json_encode(
-                ['test' => 1],
-                JSON_THROW_ON_ERROR
-            ))
         );
     }
 
@@ -819,21 +687,6 @@ class PaymentMethodTest extends TestCase
         self::assertSame(
             'SE',
             $this->method->getData(PaymentMethodInterface::SPECIFIC_COUNTRY)
-        );
-    }
-
-    /**
-     * Assert that the method setSpecificCountry will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @throws ValidatorException
-     * @return void
-     */
-    public function testSetSpecificCountryReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setSpecificCountry('NO')
         );
     }
 
@@ -935,20 +788,6 @@ class PaymentMethodTest extends TestCase
     }
 
     /**
-     * Assert that the method setCreatedAt will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     */
-    public function testSetCreatedAtReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setCreatedAt(time())
-        );
-    }
-
-    /**
      * Assert that the method getCreatedAt will convert its return value to a
      * string.
      *
@@ -1007,20 +846,6 @@ class PaymentMethodTest extends TestCase
         self::assertSame(
             $timestamp,
             $this->method->getData(PaymentMethodInterface::UPDATED_AT)
-        );
-    }
-
-    /**
-     * Assert that the method setUpdateAt will return an instance of the
-     * PaymentMethod data model.
-     *
-     * @return void
-     */
-    public function testSetUpdatedAtReturnSelf(): void
-    {
-        static::assertInstanceOf(
-            PaymentMethodInterface::class,
-            $this->method->setUpdatedAt(time())
         );
     }
 

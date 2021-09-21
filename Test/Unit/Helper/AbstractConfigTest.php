@@ -8,29 +8,26 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionObject;
 use Resursbank\Core\Helper\AbstractConfig;
 
-/**
- * Test cases designed for Resursbank\Core\Helper\AbstractConfig
- */
 class AbstractConfigTest extends TestCase
 {
-
     /**
-     * @var AbstractConfig
+     * @var AbstractConfig|MockObject
      */
-    private AbstractConfig $config;
+    private $configMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(AbstractConfig::class)
+        $this->configMock = $this->getMockBuilder(AbstractConfig::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
     }
@@ -46,7 +43,7 @@ class AbstractConfigTest extends TestCase
         try {
             static::assertSame(
                 'resursbank/api/flow',
-                $this->getPathMethod()->invoke($this->config, 'api', 'flow')
+                $this->getPathMethod()->invoke($this->configMock, 'api', 'flow')
             );
         } catch (ReflectionException $e) {
             static::fail(
@@ -63,7 +60,7 @@ class AbstractConfigTest extends TestCase
      */
     private function getPathMethod(): ReflectionMethod
     {
-        $obj = new ReflectionObject($this->config);
+        $obj = new ReflectionObject($this->configMock);
         $method = $obj->getMethod('getPath');
         $method->setAccessible(true);
 

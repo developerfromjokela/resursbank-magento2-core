@@ -21,8 +21,6 @@ use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitMeasure;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 
 /**
- * Test cases designed for Payment\Item data model.
- *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)

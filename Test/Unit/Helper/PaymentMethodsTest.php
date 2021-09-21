@@ -16,6 +16,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
@@ -34,27 +35,26 @@ use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\RBEcomPHP\ResursBank;
 
 /**
- * Test cases designed for Resursbank\Core\Helper\PaymentMethods
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class PaymentMethodsTest extends TestCase
 {
     /**
-     * @var Api
+     * @var Api|MockObject
      */
-    private $api;
+    private $apiMock;
 
     /**
-     * @var ResursBank
+     * @var ResursBank|MockObject
      */
-    private ResursBank $connection;
+    private $connectionMock;
 
     /**
-     * @var CredentialsModel
+     * @var CredentialsModel|MockObject
      */
-    private CredentialsModel $credentialsModelMock;
+    private $credentialsModelMock;
 
     /**
      * @var array<string, mixed>
@@ -67,9 +67,9 @@ class PaymentMethodsTest extends TestCase
     private PaymentMethods $paymentMethods;
 
     /**
-     * @var Credentials
+     * @var Credentials|MockObject
      */
-    private Credentials $credentialsHelper;
+    private $credentialsMock;
 
     /**
      * @inheritDoc
@@ -84,7 +84,6 @@ class PaymentMethodsTest extends TestCase
         $searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $logMock = $this->createMock(Log::class);
         $this->credentialsModelMock = $this->createMock(CredentialsModel::class);
-
 
         // Setup mock of Payment Method data as it would appearing after being
         // converted from an API call.
@@ -101,21 +100,21 @@ class PaymentMethodsTest extends TestCase
 
         // Mock the API service class so we can later modify the behaviour of
         // the getConnection method.
-        $this->api = $this->getMockBuilder(Api::class)
+        $this->apiMock = $this->getMockBuilder(Api::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getConnection'])
             ->getMock();
 
         // Mock instance of ResursBank class (API connection) so we can later
         // modify the behaviour of the getPaymentMethods method.
-        $this->connection = $this->getMockBuilder(ResursBank::class)
+        $this->connectionMock = $this->getMockBuilder(ResursBank::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getPaymentMethods'])
             ->getMock();
 
         // Mock the Credentials service class so we can later modify the
         // behaviour of the getMethodSuffix and getCountry methods.
-        $this->credentialsHelper = $this->getMockBuilder(Credentials::class)
+        $this->credentialsMock = $this->getMockBuilder(Credentials::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getMethodSuffix'])
             ->getMock();
@@ -123,11 +122,11 @@ class PaymentMethodsTest extends TestCase
         // Mock of PaymentMethods service class.
         $this->paymentMethods = new PaymentMethods(
             $contextMock,
-            $this->api,
+            $this->apiMock,
             $paymentMethodFactoryMock,
             $converterMock,
             $paymentMethodRepositoryMock,
-            $this->credentialsHelper,
+            $this->credentialsMock,
             $searchCriteriaBuilderMock,
             $logMock
         );
@@ -147,8 +146,7 @@ class PaymentMethodsTest extends TestCase
         $this->expectExceptionMessage('Some connection error.');
 
         // Make the getConnection method on our API adapter toss an Exception.
-        /** @phpstan-ignore-next-line */
-        $this->api->expects(static::once())
+        $this->apiMock->expects(static::once())
             ->method('getConnection')
             ->will(static::throwException(
                 new Exception('Some connection error.')
@@ -172,15 +170,13 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Modify return value of getPaymentMethods method from the API class.
-        /** @phpstan-ignore-next-line */
-        $this->connection->method('getPaymentMethods')
+        $this->connectionMock->method('getPaymentMethods')
             ->willReturn('This is not an array.');
 
         // Make sure our API adapter returns our mocked API class instance.
-        /** @phpstan-ignore-next-line */
-        $this->api->expects(static::once())
+        $this->apiMock->expects(static::once())
             ->method('getConnection')
-            ->willReturn($this->connection);
+            ->willReturn($this->connectionMock);
 
         $this->paymentMethods->fetch($this->credentialsModelMock);
     }
@@ -210,18 +206,16 @@ class PaymentMethodsTest extends TestCase
         ];
 
         // Modify return value of getPaymentMethods method from the API class.
-        /** @phpstan-ignore-next-line */
-        $this->connection->expects(static::once())
+        $this->connectionMock->expects(static::once())
             ->method('getPaymentMethods')
             ->willReturn(
                 $methodsData
             );
 
         // Make sure our API adapter returns our mocked API class instance.
-        /** @phpstan-ignore-next-line */
-        $this->api->expects(static::once())
+        $this->apiMock->expects(static::once())
             ->method('getConnection')
-            ->willReturn($this->connection);
+            ->willReturn($this->connectionMock);
 
         try {
             // Assert our fetch method does not alter the data retrieved through
@@ -243,8 +237,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCode(): void
     {
-        /** @phpstan-ignore-next-line */
-        $this->credentialsHelper
+        $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
             ->willReturn('batman_' . ResursBank::ENVIRONMENT_TEST);
@@ -273,8 +266,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCodeWillLowercaseMethodIdentifier(): void
     {
-        /** @phpstan-ignore-next-line */
-        $this->credentialsHelper
+        $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
             ->willReturn('tony_' . ResursBank::ENVIRONMENT_TEST);
@@ -634,14 +626,12 @@ class PaymentMethodsTest extends TestCase
      */
     public function testFill(): void
     {
-        /** @phpstan-ignore-next-line */
         $this->credentialsModelMock
             ->expects(static::once())
             ->method('getCountry')
             ->willReturn('SE');
 
-        /** @phpstan-ignore-next-line */
-        $this->credentialsHelper
+        $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
             ->willReturn('cassandra_' . ResursBank::ENVIRONMENT_TEST);

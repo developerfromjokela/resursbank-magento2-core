@@ -13,9 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\RBEcomPHP\ResursBank;
 
-/**
- * Test cases designed for Credentials data model.
- */
 class CredentialsTest extends TestCase
 {
     /**
@@ -112,7 +109,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that applying an environment value of less than "0" results in an
+     * Assert that applying an environment value of less than '0' results in an
      * instance of ValidatorException.
      *
      * @return void
@@ -125,7 +122,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that applying an environment value of more than "1" results in an
+     * Assert that applying an environment value of more than '1' results in an
      * instance of ValidatorException.
      *
      * @return void
