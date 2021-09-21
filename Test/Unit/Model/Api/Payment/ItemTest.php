@@ -10,7 +10,6 @@ namespace Resursbank\Core\Test\Unit\Model\Api\Payment;
 
 use Exception;
 use InvalidArgumentException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\ArtNo;
@@ -22,8 +21,6 @@ use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitMeasure;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 
 /**
- * Test cases designed for Payment\Item data model.
- *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -31,14 +28,9 @@ use Resursbank\Core\Model\Api\Payment\Item\Validation\VatPct;
 class ItemTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var Item
      */
-    private $item;
+    private Item $item;
 
     /**
      * @var array<string, mixed>
@@ -54,85 +46,36 @@ class ItemTest extends TestCase
     ];
 
     /**
-     * @var object
-     */
-    private $artNoValidator;
-
-    /**
-     * @var object
-     */
-    private $descriptionValidator;
-
-    /**
-     * @var object
-     */
-    private $quantityValidator;
-
-    /**
-     * @var object
-     */
-    private $unitMeasureValidator;
-
-    /**
-     * @var object
-     */
-    private $amountValidator;
-
-    /**
-     * @var object
-     */
-    private $vatPctValidator;
-
-    /**
-     * @var object
-     */
-    private $typeValidator;
-
-    /**
      * @inheritDoc
+     * @throws Exception
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
 
-        // Mock properties validators (for validation tests later).
-        $this->artNoValidator = $this->objectManager->getObject(
-            ArtNo::class
-        );
-        $this->descriptionValidator = $this->objectManager->getObject(
-            Description::class
-        );
-        $this->quantityValidator = $this->objectManager->getObject(
-            Quantity::class
-        );
-        $this->unitMeasureValidator = $this->objectManager->getObject(
-            UnitMeasure::class
-        );
-        $this->amountValidator = $this->objectManager->getObject(
-            UnitAmountWithoutVat::class
-        );
-        $this->vatPctValidator = $this->objectManager->getObject(
-            VatPct::class
-        );
-        $this->typeValidator = $this->objectManager->getObject(
-            Type::class
-        );
+        $artNoValidator = new ArtNo();
+        $descriptionValidator = new Description();
+        $quantityValidator = new Quantity();
+        $unitMeasureValidator = new UnitMeasure();
+        $amountValidator = new UnitAmountWithoutVat();
+        $vatPctValidator = new VatPct();
+        $typeValidator = new Type();
 
-        /** @phpstan-ignore-next-line */
-        $this->item = $this->objectManager->getObject(
-            Item::class,
-            array_merge(
-                $this->data,
-                [
-                    'artNoValidator' => $this->artNoValidator,
-                    'descriptionValidator' => $this->descriptionValidator,
-                    'quantityValidator' => $this->quantityValidator,
-                    'unitMeasureValidator' => $this->unitMeasureValidator,
-                    'amountValidator' => $this->amountValidator,
-                    'vatPctValidator' => $this->vatPctValidator,
-                    'typeValidator' => $this->typeValidator,
-                ]
-            )
+
+        $this->item = new Item(
+            $this->data[Item::KEY_ART_NO],
+            $this->data[Item::KEY_DESCRIPTION],
+            $this->data[Item::KEY_QUANTITY],
+            $this->data[Item::KEY_UNIT_MEASURE],
+            $this->data[Item::KEY_UNIT_AMOUNT_WITHOUT_VAT],
+            $this->data[Item::KEY_VAT_PCT],
+            $this->data[Item::KEY_TYPE],
+            $artNoValidator,
+            $descriptionValidator,
+            $quantityValidator,
+            $unitMeasureValidator,
+            $amountValidator,
+            $vatPctValidator,
+            $typeValidator
         );
     }
 

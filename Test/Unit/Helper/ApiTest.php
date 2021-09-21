@@ -8,98 +8,117 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Exception;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionObject;
 use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Config;
+use Resursbank\Core\Helper\Order;
+use Resursbank\Core\Helper\Version;
+use InvalidArgumentException;
 
-/**
- * Test cases designed for the Api service.
- */
 class ApiTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var Api
+     * @var MockObject|Api
      */
     private $api;
+
+    /**
+     * @var MockObject|Version
+     */
+    private $versionHelperMock;
+
+    /**
+     * @var MockObject|\Resursbank\Core\Model\Api\Credentials
+     */
+    private $credentialsModelMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $objectManager = ObjectManager::getInstance();
+        $contextMock = $this->createMock(Context::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $orderHelperMock = $this->createMock(Order::class);
+        $this->versionHelperMock = $this->createMock(Version::class);
+        $this->credentialsModelMock = $this->createMock(\Resursbank\Core\Model\Api\Credentials::class);
+        $resursConfigMock = $this->createMock(Config::class);
 
-        /** @phpstan-ignore-next-line */
-        $this->api = $this->objectManager->getObject(Api::class);
+        $credentialsHelper = new Credentials(
+            $contextMock,
+            $resursConfigMock,
+            $objectManager,
+            $storeManagerMock
+        );
+
+        $this->api = new Api(
+            $contextMock,
+            $credentialsHelper,
+            $orderHelperMock,
+            $this->versionHelperMock
+        );
     }
 
     /**
-     * Assert that getUserAgent returns default value when no custom value is
-     * supplied.
+     * Assert that getUserAgent returns the correct value when specific version is supplied from versionhelper.
      *
      * @return void
      */
-    public function testGetUserAgentReturnsWithoutCustom(): void
+    public function testGetUserAgentReturnsCorrectValue(): void
     {
-        try {
-            static::assertSame(
-                'Mage 2',
-                $this->getGetUserAgentMethod($this->api)->invoke($this->api, '')
-            );
-        } catch (ReflectionException $e) {
-            static::fail(
-                'Failed to resolve getUserAgent method mock: ' .
-                $e->getMessage()
-            );
-        }
+        $this->versionHelperMock->method('getComposerVersion')->willReturn('1.0.0');
+        self::assertSame($this->api->getUserAgent(), 'Magento 2 | Resursbank_Core 1.0.0');
     }
 
     /**
-     * Assert that the getUserAgent method include provided custom string in
-     * output.
+     * Assert that getConnection function throws error if password is missing.
      *
-     * @return void
+     * @throws Exception
      */
-    public function testGetUserAgentReturnsWithCustom(): void
+    public function testGetConnectionThrowsExceptionWithMissingPassword(): void
     {
-        try {
-            static::assertSame(
-                'Mage 2 + Some custom action value',
-                $this->getGetUserAgentMethod($this->api)->invoke(
-                    $this->api,
-                    'Some custom action value'
-                )
-            );
-        } catch (ReflectionException $e) {
-            static::fail(
-                'Failed to resolve getUserAgent method mock: ' .
-                $e->getMessage()
-            );
-        }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn('username');
+        $this->credentialsModelMock->method('getPassword')->willReturn(null);
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
+        $this->api->getConnection($this->credentialsModelMock);
     }
 
     /**
-     * Retrieve accessible getUserAgent method mock.
+     * Assert that getConnection function throws error if username is missing.
      *
-     * @param Api $obj
-     * @return ReflectionMethod
-     * @throws ReflectionException
+     * @throws Exception
      */
-    private function getGetUserAgentMethod(
-        Api $obj
-    ): ReflectionMethod {
-        $obj = new ReflectionObject($obj);
-        $method = $obj->getMethod('getUserAgent');
-        $method->setAccessible(true);
+    public function testGetConnectionThrowsExceptionWithMissingUsername(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn(null);
+        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
+        $this->api->getConnection($this->credentialsModelMock);
+    }
 
-        return $method;
+    /**
+     * Assert that getConnection function throws error if environment is missing.
+     *
+     * @throws Exception
+     */
+    public function testGetConnectionThrowsExceptionWithMissingEnvironment(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->credentialsModelMock->method('getUsername')->willReturn('username');
+        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        $this->credentialsModelMock->method('getEnvironment')->willReturn(null);
+        $this->api->getConnection($this->credentialsModelMock);
     }
 }
