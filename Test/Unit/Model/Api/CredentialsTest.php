@@ -9,44 +9,75 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Unit\Model\Api;
 
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Model\Api\Credentials;
+use Resursbank\RBEcomPHP\ResursBank;
 
-/**
- * Test cases designed for Credentials data model.
- */
 class CredentialsTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var Credentials
      */
-    private $credentials;
-
-    /**
-     * @var Store
-     */
-    private $store;
+    private Credentials $credentials;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $this->credentials = new Credentials();
+    }
 
-        /** @phpstan-ignore-next-line */
-        $this->credentials = $this->objectManager
-            ->getObject(Credentials::class);
 
-        /** @phpstan-ignore-next-line */
-        $this->store = $this->objectManager->getObject(Store::class);
+    /**
+     * Assert that the username method will assign a value to the username prop.
+     *
+     * @return void
+     * @throws ValidatorException
+     */
+    public function testSetUsername(): void
+    {
+        $this->credentials->setUsername('lorem');
+
+        self::assertSame('lorem', $this->credentials->getUsername());
+    }
+
+    /**
+     * Assert that the password method will assign a value to the password prop.
+     *
+     * @return void
+     * @throws ValidatorException
+     */
+    public function testSetPassword(): void
+    {
+        $this->credentials->setPassword('ipsum');
+
+        self::assertSame('ipsum', $this->credentials->getPassword());
+    }
+
+    /**
+     * Assert that the password method will assign a value to the password prop.
+     *
+     * @return void
+     */
+    public function testSetCountry(): void
+    {
+        $this->credentials->setCountry('SE');
+
+        self::assertSame('SE', $this->credentials->getCountry());
+    }
+
+    /**
+     * Assert that the password method will assign a value to the password prop.
+     *
+     * @return void
+     * @throws ValidatorException
+     */
+    public function testSetEnvironment(): void
+    {
+        $this->credentials->setEnvironment(ResursBank::ENVIRONMENT_PRODUCTION);
+
+        self::assertSame(ResursBank::ENVIRONMENT_PRODUCTION, $this->credentials->getEnvironment());
     }
 
     /**
@@ -78,7 +109,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that applying an environment value of less than "0" results in an
+     * Assert that applying an environment value of less than '0' results in an
      * instance of ValidatorException.
      *
      * @return void
@@ -91,7 +122,7 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that applying an environment value of more than "1" results in an
+     * Assert that applying an environment value of more than '1' results in an
      * instance of ValidatorException.
      *
      * @return void
@@ -101,18 +132,6 @@ class CredentialsTest extends TestCase
         $this->expectException(ValidatorException::class);
 
         $this->credentials->setEnvironment(2);
-    }
-
-    /**
-     * Assert the country setter works.
-     *
-     * @return void
-     */
-    public function testSetCountry(): void
-    {
-        $this->credentials->setCountry('SE');
-
-        static::assertSame('SE', $this->credentials->getCountry());
     }
 
     /**
