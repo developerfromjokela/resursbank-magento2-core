@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway\ValueHandler;
 
+use Exception;
 use Resursbank\Core\Helper\ValueHandlerSubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
+use Resursbank\Core\Helper\Log;
 
 /**
  * Magentos core adapter will resolve the title from the database, regardless of
@@ -30,29 +32,49 @@ class Title implements ValueHandlerInterface
     /**
      * @var ValueHandlerSubjectReader
      */
-    private $reader;
+    private ValueHandlerSubjectReader $reader;
+
+    /**
+     * @var Log
+     */
+    private Log $log;
 
     /**
      * @param ValueHandlerSubjectReader $reader
+     * @param Log $log
      */
     public function __construct(
-        ValueHandlerSubjectReader $reader
+        ValueHandlerSubjectReader $reader,
+        Log $log
     ) {
         $this->reader = $reader;
+        $this->log = $log;
     }
 
     /**
-     * @inerhitdoc
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(
         array $subject,
         $storeId = null
-    ) {
-        $title = $this->reader->getAdditional($subject, 'method_title');
+    ): string {
+        $result = self::DEFAULT_TITLE;
 
-        return $title !== null ?
-            sprintf('%s (%s)', self::DEFAULT_TITLE, $title):
-            self::DEFAULT_TITLE;
+        try {
+            $method = $this->reader->getResursModel($subject);
+            
+            if ($method !== null) {
+                $result = sprintf(
+                    '%s (%s)',
+                    self::DEFAULT_TITLE,
+                    $method->getTitle()
+                );
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
     }
 }

@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway\ValueHandler;
 
+use Exception;
 use Resursbank\Core\Helper\ValueHandlerSubjectReader;
+use Resursbank\Core\Helper\Log;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 
 /**
@@ -22,15 +24,23 @@ class CanSale implements ValueHandlerInterface
     /**
      * @var ValueHandlerSubjectReader
      */
-    private $reader;
+    private ValueHandlerSubjectReader $reader;
+
+    /**
+     * @var Log
+     */
+    private Log $log;
 
     /**
      * @param ValueHandlerSubjectReader $reader
+     * @param Log $log
      */
     public function __construct(
-        ValueHandlerSubjectReader $reader
+        ValueHandlerSubjectReader $reader,
+        Log $log
     ) {
         $this->reader = $reader;
+        $this->log = $log;
     }
 
     /**
@@ -40,10 +50,17 @@ class CanSale implements ValueHandlerInterface
     public function handle(
         array $subject,
         $storeId = null
-    ) {
-        return $this->reader->getAdditional(
-            $subject,
-            'method_can_sale'
-        ) ?? false;
+    ): bool {
+        $result = false;
+
+        try {
+            $method = $this->reader->getResursModel($subject);
+
+            $result = ($method !== null && $this->reader->isDebited($method));
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
     }
 }

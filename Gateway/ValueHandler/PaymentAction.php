@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway\ValueHandler;
 
+use Exception;
 use Resursbank\Core\Helper\ValueHandlerSubjectReader;
+use Resursbank\Core\Helper\Log;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Model\MethodInterface;
 
@@ -26,15 +28,23 @@ class PaymentAction implements ValueHandlerInterface
     /**
      * @var ValueHandlerSubjectReader
      */
-    private $reader;
+    private ValueHandlerSubjectReader $reader;
+
+    /**
+     * @var Log
+     */
+    private Log $log;
 
     /**
      * @param ValueHandlerSubjectReader $reader
+     * @param Log $log
      */
     public function __construct(
-        ValueHandlerSubjectReader $reader
+        ValueHandlerSubjectReader $reader,
+        Log $log
     ) {
         $this->reader = $reader;
+        $this->log = $log;
     }
 
     /**
@@ -44,10 +54,19 @@ class PaymentAction implements ValueHandlerInterface
     public function handle(
         array $subject,
         $storeId = null
-    ) {
-        return $this->reader->getAdditional(
-            $subject,
-            'method_payment_action'
-        ) ?? MethodInterface::ACTION_AUTHORIZE;
+    ): string {
+        $result = MethodInterface::ACTION_AUTHORIZE;
+
+        try {
+            $method = $this->reader->getResursModel($subject);
+
+            if ($method !== null && $this->reader->isDebited($method)) {
+                $result = MethodInterface::ACTION_AUTHORIZE_CAPTURE;
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
     }
 }

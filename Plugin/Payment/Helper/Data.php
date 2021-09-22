@@ -178,6 +178,26 @@ class Data
     }
 
     /**
+     * @param string $code
+     * @return PaymentMethodInterface|null
+     */
+    public function getResursModel(
+        string $code
+    ): ?PaymentMethodInterface {
+        $result = null;
+
+        try {
+            if ($code !== Method::CODE) {
+                $result = $this->repository->getByCode($code);
+            }
+        } catch (Exception $e) {
+            $this->log->exception($e);
+        }
+
+        return $result;
+    }
+    
+    /**
      * Generate instance of our payment method model and apply the code of the
      * requested payment method (i.e. "resursbank_invoice" or similar).
      *
@@ -201,26 +221,6 @@ class Data
         }
 
         return $method;
-    }
-
-    /**
-     * @param string $code
-     * @return PaymentMethodInterface|null
-     */
-    private function getResursModel(
-        string $code
-    ): ?PaymentMethodInterface {
-        $result = null;
-
-        try {
-            if ($code !== Method::CODE) {
-                $result = $this->repository->getByCode($code);
-            }
-        } catch (Exception $e) {
-            $this->log->exception($e);
-        }
-
-        return $result;
     }
 
     /**
