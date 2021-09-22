@@ -46,7 +46,7 @@ class CanSale implements ValueHandlerInterface
     /**
      * @param array<mixed> $subject
      * @param int|null $storeId
-     * @return mixed
+     * @return bool
      * @inheridoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

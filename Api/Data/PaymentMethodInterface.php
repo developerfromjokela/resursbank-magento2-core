@@ -133,7 +133,7 @@ interface PaymentMethodInterface
      * a value couldn't be retrieved from the database.
      * @return bool|null
      */
-    public function getActive(?bool $default = null): ?bool;
+    public function active(?bool $default = null): ?bool;
 
     /**
      * Set whether payment method is active.
@@ -185,7 +185,7 @@ interface PaymentMethodInterface
      * a value couldn't be retrieved from the database.
      * @return float|null
      */
-    public function getMinOrderTotal(?float $default = null): ?float;
+    public function minOrderTotal(?float $default = null): ?float;
 
     /**
      * Set payment method minimum order total (cart total required to make
@@ -204,7 +204,7 @@ interface PaymentMethodInterface
      * a value couldn't be retrieved from the database.
      * @return float|null
      */
-    public function getMaxOrderTotal(?float $default = null): ?float;
+    public function maxOrderTotal(?float $default = null): ?float;
 
     /**
      * Set payment method maximum order total (cart total limit to make payment

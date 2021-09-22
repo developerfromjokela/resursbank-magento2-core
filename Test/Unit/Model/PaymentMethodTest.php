@@ -349,7 +349,7 @@ class PaymentMethodTest extends TestCase
     public function testActiveTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, 123);
-        static::assertTrue($this->method->getActive());
+        static::assertTrue($this->method->active());
     }
 
     /**
@@ -361,8 +361,8 @@ class PaymentMethodTest extends TestCase
     public function testActiveDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE);
-        static::assertTrue($this->method->getActive(true));
-        static::assertNull($this->method->getActive());
+        static::assertTrue($this->method->active(true));
+        static::assertNull($this->method->active());
     }
 
     /**
@@ -374,8 +374,8 @@ class PaymentMethodTest extends TestCase
     public function testActiveExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, true);
-        static::assertTrue($this->method->getActive(false));
-        static::assertTrue($this->method->getActive());
+        static::assertTrue($this->method->active(false));
+        static::assertTrue($this->method->active());
     }
 
     /**
@@ -507,7 +507,7 @@ class PaymentMethodTest extends TestCase
     public function testGetMinOrderTotalTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL, '123.123');
-        static::assertSame(123.123, $this->method->getMinOrderTotal());
+        static::assertSame(123.123, $this->method->minOrderTotal());
     }
 
     /**
@@ -519,8 +519,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMinOrderTotalDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL);
-        static::assertSame(321.321, $this->method->getMinOrderTotal(321.321));
-        static::assertNull($this->method->getMinOrderTotal());
+        static::assertSame(321.321, $this->method->minOrderTotal(321.321));
+        static::assertNull($this->method->minOrderTotal());
     }
 
     /**
@@ -532,8 +532,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMinOrderTotalExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL, 123.123);
-        self::assertSame(123.123, $this->method->getMinOrderTotal(0.1));
-        self::assertSame(123.123, $this->method->getMinOrderTotal());
+        self::assertSame(123.123, $this->method->minOrderTotal(0.1));
+        self::assertSame(123.123, $this->method->minOrderTotal());
     }
 
     /**
@@ -593,7 +593,7 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalTypeConversionReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, '12.14');
-        self::assertSame(12.14, $this->method->getMaxOrderTotal());
+        self::assertSame(12.14, $this->method->maxOrderTotal());
     }
 
     /**
@@ -605,8 +605,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL);
-        self::assertSame(4476.321, $this->method->getMaxOrderTotal(4476.321));
-        self::assertNull($this->method->getMaxOrderTotal());
+        self::assertSame(4476.321, $this->method->maxOrderTotal(4476.321));
+        self::assertNull($this->method->maxOrderTotal());
     }
 
     /**
@@ -618,8 +618,8 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, 0.1);
-        self::assertSame(0.1, $this->method->getMaxOrderTotal(321.321));
-        self::assertSame(0.1, $this->method->getMaxOrderTotal());
+        self::assertSame(0.1, $this->method->maxOrderTotal(321.321));
+        self::assertSame(0.1, $this->method->maxOrderTotal());
     }
 
     /**

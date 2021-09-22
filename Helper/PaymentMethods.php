@@ -154,7 +154,8 @@ class PaymentMethods extends AbstractHelper
 
             // Overwrite data on method model instance and update db entry.
             $this->syncMethodData(
-                $this->fill($method, $data, $credentials)
+                $this->fill($method, $data, $credentials),
+                $credentials
             );
         }
     }
@@ -167,11 +168,14 @@ class PaymentMethods extends AbstractHelper
      * with the payment method.
      *
      * @param PaymentMethodInterface $method
+     * @param CredentialsModel $credentials
      * @return PaymentMethodInterface
      * @throws AlreadyExistsException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function syncMethodData(
-        PaymentMethodInterface $method
+        PaymentMethodInterface $method,
+        CredentialsModel $credentials /** @phpstan-ignore-line */
     ): PaymentMethodInterface {
         // Update / insert method data in database.
         return $this->repository->save($method);
@@ -519,7 +523,6 @@ class PaymentMethods extends AbstractHelper
         try {
             $rawValue = $method->getRaw();
 
-            /** @noinspection PhpComposerExtensionStubsInspection */
             $result = $rawValue !== null ?
                 json_decode($rawValue, true, 512, JSON_THROW_ON_ERROR) :
                 [];

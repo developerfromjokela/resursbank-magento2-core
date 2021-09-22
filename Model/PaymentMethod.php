@@ -115,9 +115,12 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
      */
-    public function getActive(?bool $default = null): ?bool
+    public function active(?bool $default = null): ?bool
     {
         $result = $this->getData(self::ACTIVE);
 
@@ -182,9 +185,12 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
      */
-    public function getMinOrderTotal(?float $default = null): ?float
+    public function minOrderTotal(?float $default = null): ?float
     {
         $result = $this->getData(self::MIN_ORDER_TOTAL);
 
@@ -209,9 +215,12 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
      */
-    public function getMaxOrderTotal(?float $default = null): ?float
+    public function maxOrderTotal(?float $default = null): ?float
     {
         $result = $this->getData(self::MAX_ORDER_TOTAL);
 

@@ -12,6 +12,7 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -25,6 +26,8 @@ use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 use Resursbank\RBEcomPHP\ResursBank;
 use ResursException;
 use stdClass;
+use TorneLIB\Exception\ExceptionHandler;
+use function method_exists;
 
 /**
  * API adapter utilising the EComPHP library.
@@ -110,8 +113,9 @@ class Api extends AbstractHelper
      * @param OrderInterface $order
      * @return stdClass|null
      * @throws InvalidDataException
-     * @throws ResursException
+     * @throws LocalizedException
      * @throws ValidatorException
+     * @throws ExceptionHandler|ResursException
      */
     public function getPayment(
         OrderInterface $order
@@ -166,7 +170,9 @@ class Api extends AbstractHelper
      *
      * @param OrderInterface $order
      * @return bool
+     * @throws ExceptionHandler
      * @throws InvalidDataException
+     * @throws LocalizedException
      * @throws ResursException
      * @throws ValidatorException
      */
@@ -181,7 +187,7 @@ class Api extends AbstractHelper
      *
      * @param OrderInterface $order
      * @return Credentials
-     * @throws ValidatorException
+     * @throws ValidatorException | LocalizedException
      */
     public function getCredentialsFromOrder(
         OrderInterface $order
@@ -191,7 +197,10 @@ class Api extends AbstractHelper
             ScopeInterface::SCOPE_STORES
         );
 
-        /** @phpstan-ignore-next-line */
+        if (!method_exists($order, 'getData')) {
+            throw new LocalizedException(__('Undefined method: getData().'));
+        }
+
         $env = (bool) $order->getData('resursbank_is_test');
 
         $credentials->setEnvironment(

@@ -46,7 +46,7 @@ class Data
     /**
      * @var PaymentMethodInterface[]|null
      */
-    private ?array $methodList;
+    private ?array $methodList = null;
 
     /**
      * @param PaymentMethods $paymentMethods

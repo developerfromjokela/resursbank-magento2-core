@@ -141,7 +141,7 @@ class Listing extends Field
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
-            ? $this->formatPrice((float) $method->getMinOrderTotal())
+            ? $this->formatPrice((float) $method->minOrderTotal())
             : '';
     }
 
@@ -155,7 +155,7 @@ class Listing extends Field
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
-            ? $this->formatPrice((float) $method->getMaxOrderTotal())
+            ? $this->formatPrice((float) $method->maxOrderTotal())
             : '';
     }
 

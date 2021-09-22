@@ -11,52 +11,48 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
 
 /** @var Listing $block */
 /** @var Escaper $escaper */
-/** @phpstan-ignore-next-line */
-$methods = $block->getMethods();
+
+if (isset($block)) {
+    $methods = $block->getMethods();
+}
 ?>
 
-<?php if (!empty($methods)): ?>
-    <h2 style="margin-top: 25px;">
-        <?php /** @phpstan-ignore-next-line */ ?>
-        <?= $escaper->escapeHtml(__('Synced payment methods')) ?>
-    </h2>
-    <table style="width: 100%;">
-        <thead>
-            <tr>
-                <th style="width: 55%; padding: .75rem 0; text-align: left; border-bottom: 2px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml(__('Name')) ?>
-                </th>
-                <th style="width: 20%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml(__('Min total')) ?>
-                </th>
-                <th style="width: 25%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml(__('Max total')) ?>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($methods as $method): ?>
-            <tr>
-                <td style="padding: .75rem 0; border-bottom: 1px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml($method->getTitle()) ?>
-                </td>
-                <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml($block->orderMinTotal($method)) ?>
-                </td>
-                <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
-                    <?php /** @phpstan-ignore-next-line */ ?>
-                    <?= $escaper->escapeHtml($block->orderMaxTotal($method)) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <?php /** @phpstan-ignore-next-line */ ?>
-    <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
+<?php if (isset($escaper, $block)): ?>
+    <?php if (!empty($methods)): ?>
+        <h2 style="margin-top: 25px;">
+            <?= $escaper->escapeHtml(__('Synced payment methods')) ?>
+        </h2>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 55%; padding: .75rem 0; text-align: left; border-bottom: 2px solid #dee2e6;">
+                        <?= $escaper->escapeHtml(__('Name')) ?>
+                    </th>
+                    <th style="width: 20%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;">
+                        <?= $escaper->escapeHtml(__('Min total')) ?>
+                    </th>
+                    <th style="width: 25%; padding: .75rem 0; text-align: right; border-bottom: 2px solid #dee2e6;">
+                        <?= $escaper->escapeHtml(__('Max total')) ?>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($methods as $method): ?>
+                <tr>
+                    <td style="padding: .75rem 0; border-bottom: 1px solid #dee2e6;">
+                        <?= $escaper->escapeHtml($method->getTitle()) ?>
+                    </td>
+                    <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
+                        <?= $escaper->escapeHtml($block->orderMinTotal($method)) ?>
+                    </td>
+                    <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
+                        <?= $escaper->escapeHtml($block->orderMaxTotal($method)) ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
+    <?php endif; ?>
 <?php endif; ?>
