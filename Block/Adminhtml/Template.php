@@ -11,8 +11,7 @@ namespace Resursbank\Core\Block\Adminhtml;
 use Magento\Backend\Block\Template as BlockTemplate;
 
 /**
- * Used to describe methods that are considered "undefined" for a PHTML
- * templates.
+ * Used to describe methods that are considered "undefined" for templates.
  *
  * @method getViewModel()
  */

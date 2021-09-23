@@ -694,7 +694,7 @@ class PaymentMethodsTest extends TestCase
             (float) $this->convertedMethodData[
             PaymentMethodInterface::MIN_ORDER_TOTAL
             ],
-            $method->getMinOrderTotal(),
+            $method->minOrderTotal(),
         );
 
         // Assert property max_order_total was assigned the expected value.
@@ -702,7 +702,7 @@ class PaymentMethodsTest extends TestCase
             (float) $this->convertedMethodData[
             PaymentMethodInterface::MAX_ORDER_TOTAL
             ],
-            $method->getMaxOrderTotal(),
+            $method->maxOrderTotal(),
         );
 
         // Assert property raw was assigned the expected value.
@@ -725,7 +725,7 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Assert property active was assigned the expected value.
-        static::assertTrue($method->getActive());
+        static::assertTrue($method->active());
 
         // Assert property specific_country was assigned the expected value.
         static::assertSame(

@@ -17,6 +17,8 @@ use Resursbank\Core\Helper\Url;
 
 /**
  * Centralised code for buttons in admin config.
+ *
+ * @method setElement(AbstractElement $element)
  */
 class Button extends Field
 {
@@ -67,25 +69,15 @@ class Button extends Field
         string $label,
         string $path
     ): string {
-        // Must test for magic property.
-        if (!method_exists($this, 'setElement')) {
-            throw new LocalizedException(
-                __('Undefined method setElement() on block class.')
-            );
-        }
-
         $this->setElement($element);
 
         $block = $this->getLayout()
             ->createBlock(MagentoButton::class);
 
-        // Must test for magic property.
-        if (!method_exists($block, 'setType')) {
-            throw new LocalizedException(
-                __('Undefined method setType() on block class.')
-            );
-        }
-
+        /**
+         * @noinspection PhpPossiblePolymorphicInvocationInspection
+         * @phpstan-ignore-next-line
+         */
         return $block->setType('button')
             ->setClass('scalable')
             ->setLabel(__($label))

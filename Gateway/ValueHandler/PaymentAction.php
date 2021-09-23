@@ -50,7 +50,7 @@ class PaymentAction implements ValueHandlerInterface
     /**
      * @param array<mixed> $subject
      * @param int|null $storeId
-     * @return mixed
+     * @return string
      * @inheridoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

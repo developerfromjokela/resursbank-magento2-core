@@ -11,8 +11,8 @@ namespace Resursbank\Core\Api;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface as MagentoValueHandlerInterface;
 
 /**
- * This interface exists only to give type hinting for methods that haven't been
- * properly described by Magento.
+ * This interface exists only to give type annotations for methods that haven't
+ * been properly described by Magento.
  */
 interface ValueHandlerInterface extends MagentoValueHandlerInterface
 {

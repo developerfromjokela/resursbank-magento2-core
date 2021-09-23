@@ -134,6 +134,7 @@ class RebuildCart
 
             // Because the message bag is not rendered on the failure page.
             /** @noinspection PhpUndefinedMethodInspection */
+            /** @phpstan-ignore-next-line */
             $this->checkoutSession->setErrorMessage(__(
                 'The payment failed and the cart could not be rebuilt. ' .
                 'Please add the items back to your cart manually and try ' .
@@ -180,7 +181,6 @@ class RebuildCart
         OrderInterface $order
     ): void {
         try {
-            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if ($order instanceof Order) {
                 $this->orderRepository->save($order->cancel());
             } else {

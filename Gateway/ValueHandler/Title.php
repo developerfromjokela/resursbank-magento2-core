@@ -10,7 +10,7 @@ namespace Resursbank\Core\Gateway\ValueHandler;
 
 use Exception;
 use Resursbank\Core\Helper\ValueHandlerSubjectReader;
-use Magento\Payment\Gateway\Config\ValueHandlerInterface;
+use Resursbank\Core\Api\ValueHandlerInterface;
 use Resursbank\Core\Helper\Log;
 
 /**
@@ -53,10 +53,9 @@ class Title implements ValueHandlerInterface
 
     /**
      * @inheritdoc
-     * @param array<mixed> $subject
+     * @param array<string, mixed> $subject
      * @param int|null $storeId
      * @return string
-     * @inerhitdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(

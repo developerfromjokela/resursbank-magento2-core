@@ -29,10 +29,9 @@ class SearchResults extends FrameworkSearchResults implements PaymentMethodSearc
      */
     public function getItems(): array
     {
-        /** @var PaymentMethodInterface[]|null $result */
+        /** @var PaymentMethodInterface[]|mixed $result */
         $result = parent::getItems();
 
-        /** @phpstan-ignore-next-line */
         return is_array($result) ? $result : [];
     }
 
