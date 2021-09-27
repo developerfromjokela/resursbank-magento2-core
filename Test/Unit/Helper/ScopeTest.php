@@ -36,6 +36,8 @@ class ScopeTest extends TestCase
             $contextMock,
             $this->requestMock
         );
+        
+        parent::setUp();
     }
 
     /**
@@ -43,6 +45,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeParamReturnsWebsite(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::once())
             ->method('getParam')
             ->with('website')
@@ -55,6 +58,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeParamReturnsStore(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['store'])
@@ -67,6 +71,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeParamReturnsEmptyValue(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['store'])
@@ -79,6 +84,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeReturnsWebsite(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::once())
             ->method('getParam')
             ->with('website')
@@ -91,6 +97,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeReturnsStore(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['store'])
@@ -103,6 +110,7 @@ class ScopeTest extends TestCase
      */
     public function testGetTypeReturnsDefaultValue(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['store'])
@@ -115,6 +123,7 @@ class ScopeTest extends TestCase
      */
     public function testGetIdReturnsStringOfNumericParam(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['website'])
@@ -128,6 +137,7 @@ class ScopeTest extends TestCase
      */
     public function testGetIdReturnsCorrectValue(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['website'])
@@ -141,6 +151,7 @@ class ScopeTest extends TestCase
      */
     public function testGetIdReturnsNull(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->requestMock->expects(self::exactly(2))
             ->method('getParam')
             ->withConsecutive(['website'], ['store'])

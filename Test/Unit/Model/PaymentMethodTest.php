@@ -9,13 +9,9 @@ declare(strict_types=1);
 namespace Resursbank\Core\Test\Unit\Model;
 
 use JsonException;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Model\PaymentMethod;
 
 /**
@@ -33,28 +29,17 @@ class PaymentMethodTest extends TestCase
     /**
      * @var PaymentMethod
      */
-    private PaymentMethod $method;
+    private $method;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $contextMock = $this->createMock(Context::class);
-        $registryMock = $this->createMock(Registry::class);
-        $resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName'])
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $resourceCollectionMock = $this->createMock(AbstractDb::class);
+        $objectManager = new ObjectManager($this);
 
-        $this->method = new PaymentMethod(
-            $contextMock,
-            $registryMock,
-            $resourceMock,
-            $resourceCollectionMock
-        );
+        /** @phpstan-ignore-next-line */
+        $this->method = $objectManager->getObject(PaymentMethod::class);
     }
 
     /**
@@ -67,20 +52,35 @@ class PaymentMethodTest extends TestCase
     public function testSetMethodId(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::METHOD_ID)
+            $this->method->getData(PaymentMethod::METHOD_ID)
         );
 
         $this->method->setMethodId(1);
 
         self::assertSame(
             1,
-            $this->method->getData(PaymentMethodInterface::METHOD_ID)
+            $this->method->getData(PaymentMethod::METHOD_ID)
         );
 
         $this->method->setMethodId(null);
 
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::METHOD_ID)
+            $this->method->getData(PaymentMethod::METHOD_ID)
+        );
+    }
+
+    /**
+     * Assert that the method setMethodId will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetMethodIdReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setMethodId(99999)
         );
     }
 
@@ -104,7 +104,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMethodIdTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::METHOD_ID, '');
+        $this->method->setData(PaymentMethod::METHOD_ID, '');
         self::assertSame(0, $this->method->getMethodId());
     }
 
@@ -116,7 +116,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMethodIdDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::METHOD_ID);
+        $this->method->setData(PaymentMethod::METHOD_ID);
         self::assertSame(999, $this->method->getMethodId(999));
         self::assertNull($this->method->getMethodId());
     }
@@ -129,7 +129,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMethodIdExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::METHOD_ID, 111111111111);
+        $this->method->setData(PaymentMethod::METHOD_ID, 111111111111);
         self::assertSame(111111111111, $this->method->getMethodId(321));
         self::assertSame(111111111111, $this->method->getMethodId());
     }
@@ -144,17 +144,31 @@ class PaymentMethodTest extends TestCase
     public function testSetIdentifier(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::IDENTIFIER)
+            $this->method->getData(PaymentMethod::IDENTIFIER)
         );
 
         $this->method->setIdentifier('Test');
 
         static::assertSame(
             'Test',
-            $this->method->getData(PaymentMethodInterface::IDENTIFIER)
+            $this->method->getData(PaymentMethod::IDENTIFIER)
         );
     }
 
+    /**
+     * Assert that the setIdentifier method will return an instance of
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetIdentifierReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setIdentifier('INVOICE')
+        );
+    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -176,7 +190,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetIdentifierTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::IDENTIFIER, 123);
+        $this->method->setData(PaymentMethod::IDENTIFIER, 123);
         static::assertSame('123', $this->method->getIdentifier());
     }
 
@@ -188,7 +202,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetIdentifierDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::IDENTIFIER);
+        $this->method->setData(PaymentMethod::IDENTIFIER);
         self::assertSame('PARTPAY', $this->method->getIdentifier('PARTPAY'));
         self::assertNull($this->method->getIdentifier());
     }
@@ -201,7 +215,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testIdentifierExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::IDENTIFIER, 'DLE');
+        $this->method->setData(PaymentMethod::IDENTIFIER, 'DLE');
         self::assertSame('DLE', $this->method->getIdentifier('321'));
         self::assertSame('DLE', $this->method->getIdentifier());
     }
@@ -215,17 +229,31 @@ class PaymentMethodTest extends TestCase
     public function testSetCode(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::CODE)
+            $this->method->getData(PaymentMethod::CODE)
         );
 
         $this->method->setCode('Test');
 
         static::assertSame(
             'Test',
-            $this->method->getData(PaymentMethodInterface::CODE)
+            $this->method->getData(PaymentMethod::CODE)
         );
     }
 
+    /**
+     * Assert that the method setCode will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetCodeReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setCode('test_code')
+        );
+    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -246,7 +274,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testCodeTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::CODE, 'kalle_prod_part');
+        $this->method->setData(PaymentMethod::CODE, 'kalle_prod_part');
         self::assertSame('kalle_prod_part', $this->method->getCode());
     }
 
@@ -258,7 +286,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testCodeDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::CODE);
+        $this->method->setData(PaymentMethod::CODE);
         self::assertSame(
             'lars_test_invoice',
             $this->method->getCode('lars_test_invoice')
@@ -274,7 +302,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testCodeExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::CODE, '123');
+        $this->method->setData(PaymentMethod::CODE, '123');
         static::assertSame('123', $this->method->getCode('321'));
         static::assertSame('123', $this->method->getCode());
     }
@@ -288,13 +316,27 @@ class PaymentMethodTest extends TestCase
     public function testSetActive(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::ACTIVE)
+            $this->method->getData(PaymentMethod::ACTIVE)
         );
 
         $this->method->setActive(true);
 
         static::assertTrue(
-            $this->method->getData(PaymentMethodInterface::ACTIVE)
+            $this->method->getData(PaymentMethod::ACTIVE)
+        );
+    }
+
+    /**
+     * Assert that the method setActive will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     */
+    public function testSetActiveReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setActive(true)
         );
     }
 
@@ -306,7 +348,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testActiveTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ACTIVE, 123);
+        $this->method->setData(PaymentMethod::ACTIVE, 123);
         static::assertTrue($this->method->getActive());
     }
 
@@ -318,7 +360,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testActiveDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ACTIVE);
+        $this->method->setData(PaymentMethod::ACTIVE);
         static::assertTrue($this->method->getActive(true));
         static::assertNull($this->method->getActive());
     }
@@ -331,7 +373,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testActiveExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ACTIVE, true);
+        $this->method->setData(PaymentMethod::ACTIVE, true);
         static::assertTrue($this->method->getActive(false));
         static::assertTrue($this->method->getActive());
     }
@@ -345,14 +387,28 @@ class PaymentMethodTest extends TestCase
     public function testSetTitle(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::TITLE)
+            $this->method->getData(PaymentMethod::TITLE)
         );
 
         $this->method->setTitle('Test title');
 
         self::assertSame(
             'Test title',
-            $this->method->getData(PaymentMethodInterface::TITLE)
+            $this->method->getData(PaymentMethod::TITLE)
+        );
+    }
+
+    /**
+     * Assert that the method setTitle will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     */
+    public function testSetTitleReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setTitle('Test title 1')
         );
     }
 
@@ -364,7 +420,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testTitleTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::TITLE, 123);
+        $this->method->setData(PaymentMethod::TITLE, 123);
         static::assertSame('123', $this->method->getTitle());
     }
 
@@ -376,7 +432,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testTitleDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::TITLE);
+        $this->method->setData(PaymentMethod::TITLE);
         static::assertSame('321', $this->method->getTitle('321'));
         static::assertNull($this->method->getTitle());
     }
@@ -389,7 +445,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testTitleExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::TITLE, '123');
+        $this->method->setData(PaymentMethod::TITLE, '123');
         static::assertSame('123', $this->method->getTitle('321'));
         static::assertSame('123', $this->method->getTitle());
     }
@@ -404,14 +460,29 @@ class PaymentMethodTest extends TestCase
     public function testSetMinOrderTotal(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::MIN_ORDER_TOTAL)
+            $this->method->getData(PaymentMethod::MIN_ORDER_TOTAL)
         );
 
         $this->method->setMinOrderTotal(123.123);
 
         static::assertSame(
             123.123,
-            $this->method->getData(PaymentMethodInterface::MIN_ORDER_TOTAL)
+            $this->method->getData(PaymentMethod::MIN_ORDER_TOTAL)
+        );
+    }
+
+    /**
+     * Assert that the method setMinOrderTotal will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetMinOrderTotalReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setMinOrderTotal(123.8917238917)
         );
     }
 
@@ -435,7 +506,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMinOrderTotalTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MIN_ORDER_TOTAL, '123.123');
+        $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL, '123.123');
         static::assertSame(123.123, $this->method->getMinOrderTotal());
     }
 
@@ -447,7 +518,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMinOrderTotalDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MIN_ORDER_TOTAL);
+        $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL);
         static::assertSame(321.321, $this->method->getMinOrderTotal(321.321));
         static::assertNull($this->method->getMinOrderTotal());
     }
@@ -460,7 +531,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMinOrderTotalExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MIN_ORDER_TOTAL, 123.123);
+        $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL, 123.123);
         self::assertSame(123.123, $this->method->getMinOrderTotal(0.1));
         self::assertSame(123.123, $this->method->getMinOrderTotal());
     }
@@ -475,17 +546,31 @@ class PaymentMethodTest extends TestCase
     public function testSetMaxOrderTotal(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::MAX_ORDER_TOTAL)
+            $this->method->getData(PaymentMethod::MAX_ORDER_TOTAL)
         );
 
         $this->method->setMaxOrderTotal(123);
 
         self::assertSame(
             123.0,
-            $this->method->getData(PaymentMethodInterface::MAX_ORDER_TOTAL)
+            $this->method->getData(PaymentMethod::MAX_ORDER_TOTAL)
         );
     }
 
+    /**
+     * Assert that the method setMaxOrderTotal will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetMaxOrderTotalReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setMaxOrderTotal(0.123)
+        );
+    }
 
     /**
      * Assert that an instance of ValidatorException is thrown if the
@@ -507,7 +592,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMaxOrderTotalTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MAX_ORDER_TOTAL, '12.14');
+        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, '12.14');
         self::assertSame(12.14, $this->method->getMaxOrderTotal());
     }
 
@@ -519,7 +604,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MAX_ORDER_TOTAL);
+        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL);
         self::assertSame(4476.321, $this->method->getMaxOrderTotal(4476.321));
         self::assertNull($this->method->getMaxOrderTotal());
     }
@@ -532,7 +617,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetMaxOrderTotalExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::MAX_ORDER_TOTAL, 0.1);
+        $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, 0.1);
         self::assertSame(0.1, $this->method->getMaxOrderTotal(321.321));
         self::assertSame(0.1, $this->method->getMaxOrderTotal());
     }
@@ -546,14 +631,28 @@ class PaymentMethodTest extends TestCase
     public function testSetOrderStatus(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::ORDER_STATUS)
+            $this->method->getData(PaymentMethod::ORDER_STATUS)
         );
 
         $this->method->setOrderStatus('ORDER_STATUS');
 
         self::assertSame(
             'ORDER_STATUS',
-            $this->method->getData(PaymentMethodInterface::ORDER_STATUS)
+            $this->method->getData(PaymentMethod::ORDER_STATUS)
+        );
+    }
+
+    /**
+     * Assert that the method setOrderStatus will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     */
+    public function testSetOrderStatusReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setOrderStatus('')
         );
     }
 
@@ -565,7 +664,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testOrderStatusTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ORDER_STATUS, -123);
+        $this->method->setData(PaymentMethod::ORDER_STATUS, -123);
         self::assertSame('-123', $this->method->getOrderStatus());
     }
 
@@ -577,7 +676,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testOrderStatusDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ORDER_STATUS);
+        $this->method->setData(PaymentMethod::ORDER_STATUS);
         self::assertSame('STATUS', $this->method->getOrderStatus('STATUS'));
         self::assertNull($this->method->getOrderStatus());
     }
@@ -590,7 +689,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testOrderStatusExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::ORDER_STATUS, 'pending_payment');
+        $this->method->setData(PaymentMethod::ORDER_STATUS, 'pending_payment');
         self::assertSame(
             'pending_payment',
             $this->method->getOrderStatus('cancelled')
@@ -607,7 +706,7 @@ class PaymentMethodTest extends TestCase
     public function testSetRaw(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::RAW)
+            $this->method->getData(PaymentMethod::RAW)
         );
 
         $data = json_encode(['test_false' => false], JSON_THROW_ON_ERROR);
@@ -616,7 +715,25 @@ class PaymentMethodTest extends TestCase
 
         self::assertSame(
             $data,
-            $this->method->getData(PaymentMethodInterface::RAW)
+            $this->method->getData(PaymentMethod::RAW)
+        );
+    }
+
+    /**
+     * Assert that the method setRaw will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     * @throws JsonException
+     */
+    public function testSetRawReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setRaw(json_encode(
+                ['test' => 1],
+                JSON_THROW_ON_ERROR
+            ))
         );
     }
 
@@ -639,7 +756,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetRawTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::RAW, 123);
+        $this->method->setData(PaymentMethod::RAW, 123);
         static::assertSame('123', $this->method->getRaw());
     }
 
@@ -651,7 +768,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetRawDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::RAW);
+        $this->method->setData(PaymentMethod::RAW);
         self::assertSame('testing', $this->method->getRaw('testing'));
         self::assertNull($this->method->getRaw());
     }
@@ -664,7 +781,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetRawExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::RAW, 'Testing_value');
+        $this->method->setData(PaymentMethod::RAW, 'Testing_value');
         self::assertSame('Testing_value', $this->method->getRaw('321'));
         self::assertSame('Testing_value', $this->method->getRaw());
     }
@@ -679,14 +796,29 @@ class PaymentMethodTest extends TestCase
     public function testSetSpecificCountry(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::SPECIFIC_COUNTRY)
+            $this->method->getData(PaymentMethod::SPECIFIC_COUNTRY)
         );
 
         $this->method->setSpecificCountry('SE');
 
         self::assertSame(
             'SE',
-            $this->method->getData(PaymentMethodInterface::SPECIFIC_COUNTRY)
+            $this->method->getData(PaymentMethod::SPECIFIC_COUNTRY)
+        );
+    }
+
+    /**
+     * Assert that the method setSpecificCountry will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @throws ValidatorException
+     * @return void
+     */
+    public function testSetSpecificCountryReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setSpecificCountry('NO')
         );
     }
 
@@ -735,7 +867,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetSpecificCountryTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::SPECIFIC_COUNTRY, 1.123);
+        $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, 1.123);
         self::assertSame('1.123', $this->method->getSpecificCountry());
     }
 
@@ -747,7 +879,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetSpecificCountryDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::SPECIFIC_COUNTRY);
+        $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY);
         self::assertSame('FI', $this->method->getSpecificCountry('FI'));
         self::assertNull($this->method->getSpecificCountry());
     }
@@ -760,7 +892,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetSpecificCountryExpectedReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::SPECIFIC_COUNTRY, 'SV');
+        $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, 'SV');
         self::assertSame('SV', $this->method->getSpecificCountry('SV'));
         self::assertSame('SV', $this->method->getSpecificCountry());
     }
@@ -774,7 +906,7 @@ class PaymentMethodTest extends TestCase
     public function testSetCreatedAt(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::CREATED_AT)
+            $this->method->getData(PaymentMethod::CREATED_AT)
         );
 
         $timestamp = time();
@@ -783,7 +915,21 @@ class PaymentMethodTest extends TestCase
 
         self::assertSame(
             $timestamp,
-            $this->method->getData(PaymentMethodInterface::CREATED_AT)
+            $this->method->getData(PaymentMethod::CREATED_AT)
+        );
+    }
+
+    /**
+     * Assert that the method setCreatedAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     */
+    public function testSetCreatedAtReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setCreatedAt(time())
         );
     }
 
@@ -795,7 +941,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetCreatedAtTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::CREATED_AT, '66543');
+        $this->method->setData(PaymentMethod::CREATED_AT, '66543');
         self::assertSame(66543, $this->method->getCreatedAt());
     }
 
@@ -807,7 +953,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetCreatedAtDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::CREATED_AT);
+        $this->method->setData(PaymentMethod::CREATED_AT);
         self::assertSame(7769943, $this->method->getCreatedAt(7769943));
         self::assertNull($this->method->getCreatedAt());
     }
@@ -822,7 +968,7 @@ class PaymentMethodTest extends TestCase
     {
         $timestamp = time();
 
-        $this->method->setData(PaymentMethodInterface::CREATED_AT, $timestamp);
+        $this->method->setData(PaymentMethod::CREATED_AT, $timestamp);
         self::assertSame($timestamp, $this->method->getCreatedAt(6563544564));
         self::assertSame($timestamp, $this->method->getCreatedAt());
     }
@@ -836,7 +982,7 @@ class PaymentMethodTest extends TestCase
     public function testSetUpdatedAt(): void
     {
         static::assertNull(
-            $this->method->getData(PaymentMethodInterface::UPDATED_AT)
+            $this->method->getData(PaymentMethod::UPDATED_AT)
         );
 
         $timestamp = time();
@@ -845,7 +991,21 @@ class PaymentMethodTest extends TestCase
 
         self::assertSame(
             $timestamp,
-            $this->method->getData(PaymentMethodInterface::UPDATED_AT)
+            $this->method->getData(PaymentMethod::UPDATED_AT)
+        );
+    }
+
+    /**
+     * Assert that the method setUpdateAt will return an instance of the
+     * PaymentMethod data model.
+     *
+     * @return void
+     */
+    public function testSetUpdatedAtReturnSelf(): void
+    {
+        static::assertInstanceOf(
+            PaymentMethod::class,
+            $this->method->setUpdatedAt(time())
         );
     }
 
@@ -857,7 +1017,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtTypeConversionReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::UPDATED_AT, '1234567');
+        $this->method->setData(PaymentMethod::UPDATED_AT, '1234567');
         self::assertSame(1234567, $this->method->getUpdatedAt());
     }
 
@@ -869,7 +1029,7 @@ class PaymentMethodTest extends TestCase
      */
     public function testGetUpdatedAtDefaultReturn(): void
     {
-        $this->method->setData(PaymentMethodInterface::UPDATED_AT);
+        $this->method->setData(PaymentMethod::UPDATED_AT);
         self::assertSame(4345, $this->method->getUpdatedAt(4345));
         self::assertNull($this->method->getUpdatedAt());
     }
@@ -884,7 +1044,7 @@ class PaymentMethodTest extends TestCase
     {
         $timestamp = time();
 
-        $this->method->setData(PaymentMethodInterface::UPDATED_AT, $timestamp);
+        $this->method->setData(PaymentMethod::UPDATED_AT, $timestamp);
         self::assertSame($timestamp, $this->method->getUpdatedAt(6657));
         self::assertSame($timestamp, $this->method->getUpdatedAt());
     }

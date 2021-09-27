@@ -15,7 +15,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order as OrderModel;
 use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
@@ -197,7 +197,7 @@ class Api extends AbstractHelper
             ScopeInterface::SCOPE_STORES
         );
 
-        if (!($order instanceof Order)) {
+        if (!($order instanceof OrderModel)) {
             throw new LocalizedException(__('Unexptected Order instance.'));
         }
 

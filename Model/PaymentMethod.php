@@ -119,8 +119,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      * that is int|string and returns an int|string.
      *
      * @inheritDoc
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function active(?bool $default = null): ?bool
+    public function getActive(?bool $default = null): ?bool
     {
         $result = $this->getData(self::ACTIVE);
 
@@ -189,8 +190,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      * that is int|string and returns an int|string.
      *
      * @inheritDoc
+     * @phpstan-ignore-next-line
      */
-    public function minOrderTotal(?float $default = null): ?float
+    public function getMinOrderTotal(?float $default = null): ?float
     {
         $result = $this->getData(self::MIN_ORDER_TOTAL);
 
@@ -219,8 +221,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      * that is int|string and returns an int|string.
      *
      * @inheritDoc
+     * @phpstan-ignore-next-line
      */
-    public function maxOrderTotal(?float $default = null): ?float
+    public function getMaxOrderTotal(?float $default = null): ?float
     {
         $result = $this->getData(self::MAX_ORDER_TOTAL);
 

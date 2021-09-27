@@ -15,18 +15,19 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Api;
-use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Version;
+use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 use InvalidArgumentException;
 
 class ApiTest extends TestCase
 {
     /**
-     * @var MockObject|Api
+     * @var Api
      */
-    private $api;
+    private Api $api;
 
     /**
      * @var MockObject|Version
@@ -34,7 +35,7 @@ class ApiTest extends TestCase
     private $versionHelperMock;
 
     /**
-     * @var MockObject|\Resursbank\Core\Model\Api\Credentials
+     * @var MockObject|CredentialsModel
      */
     private $credentialsModelMock;
 
@@ -45,13 +46,17 @@ class ApiTest extends TestCase
     {
         $objectManager = ObjectManager::getInstance();
         $contextMock = $this->createMock(Context::class);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(
+            StoreManagerInterface::class
+        );
         $orderHelperMock = $this->createMock(Order::class);
         $this->versionHelperMock = $this->createMock(Version::class);
-        $this->credentialsModelMock = $this->createMock(\Resursbank\Core\Model\Api\Credentials::class);
+        $this->credentialsModelMock = $this->createMock(
+            CredentialsModel::class
+        );
         $resursConfigMock = $this->createMock(Config::class);
 
-        $credentialsHelper = new Credentials(
+        $credentialsHelper = new CredentialsHelper(
             $contextMock,
             $resursConfigMock,
             $objectManager,
@@ -64,17 +69,26 @@ class ApiTest extends TestCase
             $orderHelperMock,
             $this->versionHelperMock
         );
+
+        parent::setUp();
     }
 
     /**
-     * Assert that getUserAgent returns the correct value when specific version is supplied from versionhelper.
+     * Assert that getUserAgent returns the correct value when specific version
+     * is supplied from version helper.
      *
      * @return void
      */
     public function testGetUserAgentReturnsCorrectValue(): void
     {
-        $this->versionHelperMock->method('getComposerVersion')->willReturn('1.0.0');
-        self::assertSame($this->api->getUserAgent(), 'Magento 2 | Resursbank_Core 1.0.0');
+        /** @phpstan-ignore-next-line Undefined method */
+        $this->versionHelperMock->method('getComposerVersion')
+            ->willReturn('1.0.0');
+
+        self::assertSame(
+            $this->api->getUserAgent(),
+            'Magento 2 | Resursbank_Core 1.0.0'
+        );
     }
 
     /**
@@ -85,10 +99,17 @@ class ApiTest extends TestCase
     public function testGetConnectionThrowsExceptionWithMissingPassword(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
-        $this->credentialsModelMock->method('getUsername')->willReturn('username');
+        $this->expectErrorMessage(
+            'Failed to establish API connection, incomplete Credentials.'
+        );
+        /** @phpstan-ignore-next-line Undefined method */
+        $this->credentialsModelMock->method('getUsername')
+            ->willReturn('username');
+        /** @phpstan-ignore-next-line Undefined method */
         $this->credentialsModelMock->method('getPassword')->willReturn(null);
+        /** @phpstan-ignore-next-line Undefined method */
         $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->api->getConnection($this->credentialsModelMock);
     }
 
@@ -100,10 +121,17 @@ class ApiTest extends TestCase
     public function testGetConnectionThrowsExceptionWithMissingUsername(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
+        $this->expectErrorMessage(
+            'Failed to establish API connection, incomplete Credentials.'
+        );
+        /** @phpstan-ignore-next-line Undefined method */
         $this->credentialsModelMock->method('getUsername')->willReturn(null);
-        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        /** @phpstan-ignore-next-line Undefined method */
+        $this->credentialsModelMock->method('getPassword')
+            ->willReturn('password');
+        /** @phpstan-ignore-next-line Undefined method */
         $this->credentialsModelMock->method('getEnvironment')->willReturn(1);
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->api->getConnection($this->credentialsModelMock);
     }
 
@@ -115,10 +143,18 @@ class ApiTest extends TestCase
     public function testGetConnectionThrowsExceptionWithMissingEnvironment(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Failed to establish API connection, incomplete Credentials.');
-        $this->credentialsModelMock->method('getUsername')->willReturn('username');
-        $this->credentialsModelMock->method('getPassword')->willReturn('password');
+        $this->expectErrorMessage(
+            'Failed to establish API connection, incomplete Credentials.'
+        );
+        /** @phpstan-ignore-next-line Undefined method */
+        $this->credentialsModelMock->method('getUsername')
+            ->willReturn('username');
+        /** @phpstan-ignore-next-line Undefined method */
+        $this->credentialsModelMock->method('getPassword')
+            ->willReturn('password');
+        /** @phpstan-ignore-next-line Undefined method */
         $this->credentialsModelMock->method('getEnvironment')->willReturn(null);
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->api->getConnection($this->credentialsModelMock);
     }
 }

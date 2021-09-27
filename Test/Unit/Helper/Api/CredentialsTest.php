@@ -17,9 +17,10 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Resursbank\Core\Helper\Api\Credentials;
+use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
 use Resursbank\Core\Helper\Config;
 use Resursbank\RBEcomPHP\ResursBank;
+use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -27,14 +28,14 @@ use Resursbank\RBEcomPHP\ResursBank;
 class CredentialsTest extends TestCase
 {
     /**
-     * @var \Resursbank\Core\Model\Api\Credentials
+     * @var CredentialsModel
      */
-    private \Resursbank\Core\Model\Api\Credentials $credentialsModel;
+    private CredentialsModel $credentialsModel;
 
     /**
-     * @var Credentials
+     * @var CredentialsHelper
      */
-    private Credentials $credentialsHelper;
+    private CredentialsHelper $credentialsHelper;
 
     /**
      * @var ScopeConfigInterface|MockObject
@@ -44,7 +45,9 @@ class CredentialsTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(
+            StoreManagerInterface::class
+        );
         $contextMock = $this->createMock(Context::class);
         $writerInterfaceMock = $this->createMock(WriterInterface::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -54,9 +57,9 @@ class CredentialsTest extends TestCase
             $contextMock
         );
 
-        $this->credentialsModel = new \Resursbank\Core\Model\Api\Credentials();
+        $this->credentialsModel = new CredentialsModel();
 
-        $this->credentialsHelper = new Credentials(
+        $this->credentialsHelper = new CredentialsHelper(
             $contextMock,
             $resursConfig,
             $objectManager,
@@ -67,8 +70,8 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that hasCredentials method will result in 'true' if username and password
-     * value has been applied on the Credentials model instance.
+     * Assert that hasCredentials method will result in 'true' if username and
+     * password value has been applied on the Credentials model instance.
      *
      * @return void
      * @throws ValidatorException
@@ -78,7 +81,9 @@ class CredentialsTest extends TestCase
         $this->credentialsModel->setUsername('username');
         $this->credentialsModel->setPassword('password');
 
-        self::assertTrue($this->credentialsHelper->hasCredentials($this->credentialsModel));
+        self::assertTrue(
+            $this->credentialsHelper->hasCredentials($this->credentialsModel)
+        );
     }
 
     /**
@@ -92,7 +97,9 @@ class CredentialsTest extends TestCase
     {
         $this->credentialsModel->setPassword('password');
 
-        self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
+        self::assertFalse(
+            $this->credentialsHelper->hasCredentials($this->credentialsModel)
+        );
     }
 
     /**
@@ -106,7 +113,9 @@ class CredentialsTest extends TestCase
     {
         $this->credentialsModel->setUsername('username');
 
-        self::assertFalse($this->credentialsHelper->hasCredentials($this->credentialsModel));
+        self::assertFalse(
+            $this->credentialsHelper->hasCredentials($this->credentialsModel)
+        );
     }
 
     /**
@@ -238,7 +247,8 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * Assert that an exception is thrown if general/country/default returns empty value.
+     * Assert that an exception is thrown if general/country/default returns
+     * empty value.
      *
      * @return void
      * @throws ValidatorException
@@ -246,9 +256,13 @@ class CredentialsTest extends TestCase
     public function testResolveFromConfigThrowsExceptionWithoutDefaultCountry(): void
     {
         $this->expectException(ValidatorException::class);
-        $this->expectErrorMessage('Failed to apply country to Credentials instance.');
+        $this->expectErrorMessage(
+            'Failed to apply country to Credentials instance.'
+        );
         $storeCode = 'test_store_view';
         $scopeType = ScopeInterface::SCOPE_STORE;
+
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->scopeConfigMock->method('getValue')->withConsecutive(
             ['resursbank/api/environment'],
             ['resursbank/api/environment'],
@@ -256,7 +270,14 @@ class CredentialsTest extends TestCase
             ['resursbank/api/environment'],
             ['resursbank/api/password_1'],
             ['general/country/default']
-        )->willReturnOnConsecutiveCalls('1', '1', 'username', '1', 'password', '');
+        )->willReturnOnConsecutiveCalls(
+            '1',
+            '1',
+            'username',
+            '1',
+            'password',
+            ''
+        );
 
         $this->credentialsHelper->resolveFromConfig($storeCode, $scopeType);
     }

@@ -43,10 +43,10 @@ if (isset($block)) {
                         <?= $escaper->escapeHtml($method->getTitle()) ?>
                     </td>
                     <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
-                        <?= $escaper->escapeHtml($block->orderMinTotal($method)) ?>
+                        <?= $escaper->escapeHtml($block->getOrderMinTotal($method)) ?>
                     </td>
                     <td style="padding: .75rem 0; text-align: right; border-bottom: 1px solid #dee2e6;">
-                        <?= $escaper->escapeHtml($block->orderMaxTotal($method)) ?>
+                        <?= $escaper->escapeHtml($block->getOrderMaxTotal($method)) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -136,12 +136,13 @@ class Listing extends Field
      *
      * @param PaymentMethodInterface $method
      * @return string
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function orderMinTotal(
+    public function getOrderMinTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
-            ? $this->formatPrice((float) $method->minOrderTotal())
+            ? $this->formatPrice((float) $method->getMinOrderTotal())
             : '';
     }
 
@@ -150,12 +151,13 @@ class Listing extends Field
      *
      * @param PaymentMethodInterface $method
      * @return string
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function orderMaxTotal(
+    public function getOrderMaxTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
-            ? $this->formatPrice((float) $method->maxOrderTotal())
+            ? $this->formatPrice((float) $method->getMaxOrderTotal())
             : '';
     }
 
