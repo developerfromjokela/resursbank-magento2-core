@@ -115,7 +115,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
     public function getActive(?bool $default = null): ?bool
     {
@@ -182,7 +186,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
+     * @phpstan-ignore-next-line
      */
     public function getMinOrderTotal(?float $default = null): ?float
     {
@@ -209,7 +217,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * Not prefixed with "get". Magento expects that getters accept an argument
+     * that is int|string and returns an int|string.
+     *
      * @inheritDoc
+     * @phpstan-ignore-next-line
      */
     public function getMaxOrderTotal(?float $default = null): ?float
     {
@@ -268,6 +280,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritDoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function setRaw(string $value): PaymentMethodInterface
     {
@@ -282,6 +295,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritdoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getType(): ?string
     {
@@ -298,6 +312,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @throws JsonException
      * @inheritdoc
+     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getSpecificType(): ?string
     {

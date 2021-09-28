@@ -24,22 +24,22 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var ShippingItemFactory
      */
-    private $shippingItemFactory;
+    private ShippingItemFactory $shippingItemFactory;
 
     /**
      * @var DiscountItemFactory
      */
-    private $discountItemFactory;
+    private DiscountItemFactory $discountItemFactory;
 
     /**
      * @var TaxItemResourceFactory
      */
-    private $taxResourceFactory;
+    private TaxItemResourceFactory $taxResourceFactory;
 
     /**
      * @param Log $log

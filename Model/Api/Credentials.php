@@ -16,22 +16,22 @@ class Credentials
     /**
      * @var string
      */
-    private $username;
+    private string $username;
 
     /**
      * @var string
      */
-    private $password;
+    private string $password;
 
     /**
      * @var int
      */
-    private $environment;
+    private int $environment;
 
     /**
      * @var string
      */
-    private $country;
+    private string $country;
 
     /**
      * @param string $username
@@ -57,7 +57,7 @@ class Credentials
      */
     public function getUsername(): ?string
     {
-        return $this->username;
+        return $this->username ?? null;
     }
 
     /**
@@ -84,7 +84,7 @@ class Credentials
      */
     public function getPassword(): ?string
     {
-        return $this->password;
+        return $this->password ?? null;
     }
 
     /**
@@ -116,7 +116,7 @@ class Credentials
      */
     public function getEnvironment(): ?int
     {
-        return $this->environment;
+        return $this->environment ?? null;
     }
 
     /**
@@ -136,6 +136,6 @@ class Credentials
      */
     public function getCountry(): ?string
     {
-        return $this->country;
+        return $this->country ?? null;
     }
 }

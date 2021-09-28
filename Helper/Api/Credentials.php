@@ -27,17 +27,17 @@ class Credentials extends AbstractHelper
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param Context $context

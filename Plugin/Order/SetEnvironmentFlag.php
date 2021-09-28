@@ -24,17 +24,17 @@ class SetEnvironmentFlag
     /**
      * @var OrderHelper
      */
-    private $orderHelper;
+    private OrderHelper $orderHelper;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @param OrderHelper $orderHelper

@@ -28,32 +28,32 @@ class Sync implements HttpGetActionInterface
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Credentials
      */
-    private $credentials;
+    private Credentials $credentials;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var ResultFactory
      */
-    private $resultFactory;
+    private ResultFactory $resultFactory;
 
     /**
      * @var RedirectInterface
      */
-    private $redirect;
+    private RedirectInterface $redirect;
 
     /**
      * @var ManagerInterface
      */
-    private $message;
+    private ManagerInterface $message;
 
     /**
      * @param PaymentMethods $paymentMethods
@@ -83,7 +83,7 @@ class Sync implements HttpGetActionInterface
      * Synchronize payment methods.
      *
      * NOTE: We deactivate all methods currently in our table before we sync
-     * from the API. Methods needs to be retained locally, to ensure the
+     * from the API. The methods need to be retained locally, to ensure the
      * functionality of past orders utilising expired methods.
      */
     public function execute(): ResultInterface

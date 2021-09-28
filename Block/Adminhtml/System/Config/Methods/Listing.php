@@ -29,26 +29,26 @@ class Listing extends Field
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var PriceCurrencyInterface
      */
-    private $priceCurrency;
+    private PriceCurrencyInterface $priceCurrency;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
     /**
      * @var Scope
      */
-    private $scope;
+    private Scope $scope;
 
     /**
      * @param Context $context
@@ -132,11 +132,13 @@ class Listing extends Field
     }
 
     /**
+     * Could not use method prefix 'get' because of a magic method signature.
+     *
      * @param PaymentMethodInterface $method
      * @return string
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function getMin(
+    public function getOrderMinTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)
@@ -145,11 +147,13 @@ class Listing extends Field
     }
 
     /**
+     * Could not use method prefix 'get' because of a magic method signature.
+     *
      * @param PaymentMethodInterface $method
      * @return string
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function getMax(
+    public function getOrderMaxTotal(
         PaymentMethodInterface $method
     ): string {
         return $this->showMinMax($method)

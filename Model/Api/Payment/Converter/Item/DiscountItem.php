@@ -23,17 +23,17 @@ class DiscountItem extends AbstractItem
     /**
      * @var string
      */
-    private $couponCode;
+    private string $couponCode;
 
     /**
      * @var float
      */
-    private $amount;
+    private float $amount;
 
     /**
      * @var float
      */
-    private $taxAmount;
+    private float $taxAmount;
 
     /**
      * @param Config $config
@@ -118,12 +118,12 @@ class DiscountItem extends AbstractItem
      * price (for more on this, please refer to the docblock of
      * ConverterItemInterface). Since we cannot safely obtain the applied tax
      * percentage value for discounts we will need to calculate it using the
-     * excl. / incl. tax values of the discount. However this will leave us with
-     * a value like '24.966934532%' since Magento rounds the excl. / incl. tax
-     * discount prices. So, we round of the tax percentage value, and we will
-     * later use our correct tax percentage to re-calculate the accurate excl.
-     * tax price. This ensures the prices will be the same both in Magento and
-     * at Resurs Bank.
+     * excl. / incl. tax values of the discount. However, this will leave us
+     * with a value like '24.966934532%' since Magento rounds the excl. / incl.
+     * tax discount prices. So, we round of the tax percentage value, and we
+     * will later use our correct tax percentage to re-calculate the accurate
+     * excl. tax price. This ensures the prices will be the same both in Magento
+     * and at Resurs Bank.
      *
      * @inheritDoc
      * @throws Exception

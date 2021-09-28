@@ -23,27 +23,27 @@ class SyncData
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var Credentials
      */
-    private $credentials;
+    private Credentials $credentials;
 
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param Config $config
@@ -68,7 +68,7 @@ class SyncData
 
     /**
      * NOTE: We deactivate all methods currently in our table before we sync
-     * from the API. Methods needs to be retained locally, to ensure the
+     * from the API. The methods need to be retained locally, to ensure the
      * functionality of past orders utilising expired methods.
      *
      * @return void

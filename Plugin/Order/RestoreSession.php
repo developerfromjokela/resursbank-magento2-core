@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
-use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\Session\SuccessValidator;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Request;
+use Resursbank\Core\ViewModel\Session\Checkout as Session;
 
 /**
  * Restores the checkout session based on relevant values gathered from a quote
@@ -87,8 +87,6 @@ class RestoreSession implements ArgumentInterface
                 $quoteId = $this->request->getQuoteId();
                 $order = $this->order->getOrderByQuoteId($quoteId);
 
-                /** @noinspection PhpUndefinedMethodInspection */
-                /** @phpstan-ignore-next-line */
                 $this->session
                     ->setLastQuoteId($quoteId)
                     ->setLastSuccessQuoteId($quoteId)

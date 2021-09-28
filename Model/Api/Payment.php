@@ -18,29 +18,29 @@ class Payment
      *
      * @var string
      */
-    private $paymentId;
+    private string $paymentId;
 
     /**
      * @var string
      */
-    private $bookPaymentStatus;
+    private string $bookPaymentStatus;
 
     /**
      * @var float
      */
-    private $approvedAmount;
+    private float $approvedAmount;
 
     /**
      * Gateway URL for payment client will be redirected to when placing order.
      *
      * @var string
      */
-    private $signingUrl;
+    private string $signingUrl;
 
     /**
      * @var Customer
      */
-    private $customer;
+    private Customer $customer;
 
     /**
      * @param string $paymentId

@@ -22,17 +22,17 @@ class Version extends AbstractHelper
     /**
      * @var ComponentRegistrarInterface
      */
-    private $componentRegistrar;
+    private ComponentRegistrarInterface $componentRegistrar;
 
     /**
      * @var ReadFactory
      */
-    private $readFactory;
+    private ReadFactory $readFactory;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @param Context $context
@@ -70,7 +70,7 @@ class Version extends AbstractHelper
                 ComponentRegistrar::MODULE,
                 $module
             );
-            
+
             if ($path === null) {
                 throw new InvalidDataException(
                     __('Failed to resolve module path.')

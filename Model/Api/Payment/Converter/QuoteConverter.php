@@ -28,7 +28,7 @@ class QuoteConverter extends AbstractConverter
     /**
      * @var ProductItemFactory
      */
-    private $productItemFactory;
+    private ProductItemFactory $productItemFactory;
 
     /**
      * @param Log $log

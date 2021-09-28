@@ -17,29 +17,29 @@ class Customer
     /**
      * @var string
      */
-    private $governmentId;
+    private string $governmentId;
 
     /**
      * @var string
      */
-    private $phone;
+    private string $phone;
 
     /**
      * @var string
      */
-    private $email;
+    private string $email;
 
     /**
      * Customer type (NATURAL (private) | LEGAL (company)).
      *
      * @var string
      */
-    private $type;
+    private string $type;
 
     /**
      * @var Address
      */
-    private $address;
+    private Address $address;
 
     /**
      * @param string $governmentId

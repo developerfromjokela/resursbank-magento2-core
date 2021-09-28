@@ -31,22 +31,22 @@ abstract class AbstractItem implements ItemInterface
     /**
      * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
      * @var ItemFactory
      */
-    private $itemFactory;
+    private ItemFactory $itemFactory;
 
     /**
      * @var Log
      */
-    protected $log;
+    protected Log $log;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param Config $config
@@ -94,7 +94,7 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
-     * Whether or not to round tax percentage values.
+     * Whether to round tax percentage values.
      *
      * NOTE: This currently only applies to payment lines with type DISCOUNT,
      * or ORDER_LINE lines including payment fee information.

@@ -52,7 +52,7 @@ interface ConverterInterface
     ): array;
 
     /**
-     * Whether or not to include shipping data in payment payload.
+     * Whether to include shipping data in payment payload.
      *
      * @param string $method
      * @param float $amount
@@ -64,7 +64,7 @@ interface ConverterInterface
     ): bool;
 
     /**
-     * Whether or not to include discount data in payment payload.
+     * Whether to include discount data in payment payload.
      *
      * @param float $amount
      * @return bool

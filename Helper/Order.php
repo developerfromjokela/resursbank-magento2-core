@@ -39,12 +39,12 @@ class Order extends AbstractHelper
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchBuilder;
+    private SearchCriteriaBuilder $searchBuilder;
 
     /**
      * @var OrderRepository
      */
-    private $orderRepository;
+    private OrderRepository $orderRepository;
 
     /**
      * @param Context $context
@@ -136,7 +136,7 @@ class Order extends AbstractHelper
     /**
      * Apply "Credit Denied" status to supplied order.
      *
-     * @param OrderModel $order
+     * @param OrderInterface $order
      * @throws AlreadyExistsException
      * @throws InputException
      * @throws NoSuchEntityException

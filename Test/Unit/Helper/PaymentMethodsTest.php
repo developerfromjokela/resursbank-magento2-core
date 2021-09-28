@@ -78,6 +78,8 @@ class PaymentMethodsTest extends TestCase
     protected function setUp(): void
     {
         $contextMock = $this->createMock(Context::class);
+
+        /** @phpstan-ignore-next-line Class not found. */
         $paymentMethodFactoryMock = $this->createMock(PaymentMethodFactory::class);
         $paymentMethodRepositoryMock = $this->createMock(PaymentMethodRepository::class);
         $converterMock = $this->createMock(Converter::class);
@@ -130,6 +132,8 @@ class PaymentMethodsTest extends TestCase
             $searchCriteriaBuilderMock,
             $logMock
         );
+
+        parent::setUp();
     }
 
     /**
@@ -146,19 +150,21 @@ class PaymentMethodsTest extends TestCase
         $this->expectExceptionMessage('Some connection error.');
 
         // Make the getConnection method on our API adapter toss an Exception.
+        /** @phpstan-ignore-next-line */
         $this->apiMock->expects(static::once())
             ->method('getConnection')
             ->will(static::throwException(
                 new Exception('Some connection error.')
             ));
 
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->paymentMethods->fetch($this->credentialsModelMock);
     }
 
     /**
      * Assert that the fetch method throws an instance of IntegrationException
-     * when ECom relies anything that isn't an array from an API call to fetch a
-     * list of available payment methods.
+     * when ECom relies on anything that isn't an array from an API call to
+     * fetch a list of available payment methods.
      *
      * @return void
      */
@@ -170,14 +176,17 @@ class PaymentMethodsTest extends TestCase
         );
 
         // Modify return value of getPaymentMethods method from the API class.
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->connectionMock->method('getPaymentMethods')
             ->willReturn('This is not an array.');
 
         // Make sure our API adapter returns our mocked API class instance.
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->apiMock->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->paymentMethods->fetch($this->credentialsModelMock);
     }
 
@@ -206,6 +215,7 @@ class PaymentMethodsTest extends TestCase
         ];
 
         // Modify return value of getPaymentMethods method from the API class.
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->connectionMock->expects(static::once())
             ->method('getPaymentMethods')
             ->willReturn(
@@ -213,6 +223,7 @@ class PaymentMethodsTest extends TestCase
             );
 
         // Make sure our API adapter returns our mocked API class instance.
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->apiMock->expects(static::once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -220,6 +231,7 @@ class PaymentMethodsTest extends TestCase
         try {
             // Assert our fetch method does not alter the data retrieved through
             // the API adapter.
+            /** @phpstan-ignore-next-line Wrong parameter type. */
             static::assertSame($methodsData, $this->paymentMethods->fetch(
                 $this->credentialsModelMock
             ));
@@ -237,6 +249,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCode(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
@@ -250,6 +263,7 @@ class PaymentMethodsTest extends TestCase
                     'batman_' .
                     ResursBank::ENVIRONMENT_TEST
                 ),
+                /** @phpstan-ignore-next-line Wrong parameter type. */
                 $this->paymentMethods->getCode('invoice', $this->credentialsModelMock)
             );
         } catch (ValidatorException $e) {
@@ -266,6 +280,7 @@ class PaymentMethodsTest extends TestCase
      */
     public function testGetCodeWillLowercaseMethodIdentifier(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
@@ -279,7 +294,11 @@ class PaymentMethodsTest extends TestCase
                     'tony_' .
                     ResursBank::ENVIRONMENT_TEST
                 ),
-                $this->paymentMethods->getCode('PartPAY', $this->credentialsModelMock)
+                /** @phpstan-ignore-next-line Wrong parameter type. */
+                $this->paymentMethods->getCode(
+                    'PartPAY',
+                    $this->credentialsModelMock
+                )
             );
         } catch (ValidatorException $e) {
             static::fail(
@@ -297,6 +316,7 @@ class PaymentMethodsTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
+        /** @phpstan-ignore-next-line Wrong parameter type. */
         $this->paymentMethods->getCode('', $this->credentialsModelMock);
     }
 
@@ -626,11 +646,13 @@ class PaymentMethodsTest extends TestCase
      */
     public function testFill(): void
     {
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->credentialsModelMock
             ->expects(static::once())
             ->method('getCountry')
             ->willReturn('SE');
 
+        /** @phpstan-ignore-next-line Undefined method. */
         $this->credentialsMock
             ->expects(static::once())
             ->method('getMethodSuffix')
@@ -654,6 +676,7 @@ class PaymentMethodsTest extends TestCase
         try {
             // Modify return value of a number of methods involved in the
             // process which fills an instance of the Method data model.
+            /** @phpstan-ignore-next-line Undefined method. */
             $this->credentialsModelMock
                 ->setEnvironment(ResursBank::ENVIRONMENT_TEST)
                 ->setUsername('Montana')

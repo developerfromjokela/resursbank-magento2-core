@@ -22,22 +22,22 @@ class ShippingItem extends AbstractItem
     /**
      * @var string
      */
-    private $method;
+    private string $method;
 
     /**
      * @var string
      */
-    private $description;
+    private string $description;
 
     /**
      * @var float
      */
-    private $amount;
+    private float $amount;
 
     /**
      * @var int
      */
-    private $vatPct;
+    private int $vatPct;
 
     /**
      * @param Config $config

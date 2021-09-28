@@ -20,50 +20,46 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\LogInterface;
-use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ReadMore implements HttpGetActionInterface
 {
     /**
      * @var LogInterface
      */
-    protected $log;
+    protected LogInterface $log;
 
     /**
      * @var RequestInterface
      */
-    protected $request;
+    protected RequestInterface $request;
 
     /**
      * @var ResultFactory
      */
-    protected $resultFactory;
+    protected ResultFactory $resultFactory;
 
     /**
      * @var PaymentMethodRepository
      */
-    protected $methodRepository;
+    protected PaymentMethodRepository $methodRepository;
 
     /**
      * @var Api
      */
-    protected $api;
+    protected Api $api;
 
     /**
      * @var Credentials
      */
-    protected $credentials;
+    protected Credentials $credentials;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
 
     /**
      * @param LogInterface $log
@@ -123,7 +119,6 @@ class ReadMore implements HttpGetActionInterface
      * @return string
      * @throws NoSuchEntityException
      * @throws ValidatorException
-     * @throws InvalidDataException
      * @throws Exception
      */
     private function getHtml(): string

@@ -169,10 +169,10 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Defines whether to delete orders which were canceled during the checkout
-     * process when an error occurs with the payment (for example if the client
-     * fails to sign using the BankId). This ensures there are no gaps in the
-     * increment id:s of the orders.
+     * Whether to delete orders which were canceled during the checkout process
+     * when an error occurs with the payment (for example if the client fails to
+     * sign using the BankId). This ensures there are no gaps in the increment
+     * id:s of the orders.
      *
      * NOTE: Only works if the customer is still in the same session as the
      * canceled order when it was created.

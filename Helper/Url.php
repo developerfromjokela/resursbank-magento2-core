@@ -18,12 +18,12 @@ class Url extends AbstractHelper
     /**
      * @var AdminUrlInterface
      */
-    private $adminUrl;
+    private AdminUrlInterface $adminUrl;
 
     /**
      * @var UrlInterface
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
      * @param Context $context
@@ -66,7 +66,7 @@ class Url extends AbstractHelper
      *
      * NOTE: We include quote id to support intermediate browser change during
      * signing. For example, if the client signs their payment using BankID on a
-     * smart phone the redirect URL may be opened in the OS default browser
+     * smartphone the redirect URL may be opened in the OS default browser
      * instead of the browser utilised by the customer to perform their
      * purchase. This means the session data is lost and the order will fail.
      * By including this parameter we can load the data back into the session

@@ -40,7 +40,7 @@ class MigrateEnvironment implements DataPatchInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup
@@ -105,7 +105,7 @@ class MigrateEnvironment implements DataPatchInterface
              * assign value NULL to column "resursbank_is_test".
              *
              * NOTE: Magento will automatically assign value "0" to column
-             * "resursbank_is_test" when its created. Thus we are required to
+             * "resursbank_is_test" when its created. Thus, we are required to
              * clear it manually this way.
              */
             $this->moduleDataSetup

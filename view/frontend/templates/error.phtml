@@ -13,15 +13,22 @@ use Resursbank\Core\ViewModel\Error;
 /** @var Template $block */
 /** @var Error $viewModel */
 /** @var Escaper $escaper */
-/** @noinspection PhpUndefinedMethodInspection */
-/** @phpstan-ignore-next-line */
-$viewModel = $block->getViewModel();
+
+if (isset($block)) {
+    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+    $viewModel = $block->getViewModel();
+}
+
 ?>
-<?php if ($viewModel->paymentFailed()): ?>
-<script>
-    alert('<?= $escaper->escapeHtml(__(
-        'The payment failed. Please confirm the cart content and try a ' .
-         'different payment method.'
-    )) ?>');
-</script>
+
+<?php // Didn't combine if-blocks because PHPStan will complain unnecessarily. ?>
+<?php if (isset($escaper, $viewModel)): ?>
+    <?php if ($viewModel->paymentFailed()): ?>
+        <script>
+            alert('<?= $escaper->escapeHtml(__(
+                'The payment failed. Please confirm the cart content and try a ' .
+                'different payment method.'
+            )) ?>');
+        </script>
+    <?php endif; ?>
 <?php endif; ?>

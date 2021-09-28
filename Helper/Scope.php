@@ -22,7 +22,7 @@ class Scope extends AbstractHelper
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @param Context $context

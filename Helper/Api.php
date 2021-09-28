@@ -12,8 +12,10 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order as OrderModel;
 use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api\Credentials as CredentialsHelper;
@@ -25,29 +27,29 @@ use Resursbank\RBEcomPHP\RESURS_ENVIRONMENTS;
 use Resursbank\RBEcomPHP\ResursBank;
 use ResursException;
 use stdClass;
+use TorneLIB\Exception\ExceptionHandler;
 
 /**
  * API adapter utilising the EComPHP library.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @noinspection EfferentObjectCouplingInspection
  */
 class Api extends AbstractHelper
 {
     /**
      * @var CredentialsHelper
      */
-    private $credentialsHelper;
+    private CredentialsHelper $credentialsHelper;
 
     /**
      * @var Order
      */
-    private $orderHelper;
+    private Order $orderHelper;
 
     /**
      * @var Version
      */
-    private $version;
+    private Version $version;
 
     /**
      * @param Context $context
@@ -96,7 +98,7 @@ class Api extends AbstractHelper
         // Enable usage of PSP methods.
         $connection->setSimplifiedPsp(true);
 
-        // Supply API call with debug information.
+        // Supply an API call with debug information.
         $connection->setUserAgent($this->getUserAgent());
 
         // Deactivate auto debitable types.
@@ -111,8 +113,9 @@ class Api extends AbstractHelper
      * @param OrderInterface $order
      * @return stdClass|null
      * @throws InvalidDataException
-     * @throws ResursException
+     * @throws LocalizedException
      * @throws ValidatorException
+     * @throws ExceptionHandler|ResursException
      */
     public function getPayment(
         OrderInterface $order
@@ -167,7 +170,9 @@ class Api extends AbstractHelper
      *
      * @param OrderInterface $order
      * @return bool
+     * @throws ExceptionHandler
      * @throws InvalidDataException
+     * @throws LocalizedException
      * @throws ResursException
      * @throws ValidatorException
      */
@@ -182,7 +187,7 @@ class Api extends AbstractHelper
      *
      * @param OrderInterface $order
      * @return Credentials
-     * @throws ValidatorException
+     * @throws ValidatorException | LocalizedException
      */
     public function getCredentialsFromOrder(
         OrderInterface $order
@@ -192,7 +197,10 @@ class Api extends AbstractHelper
             ScopeInterface::SCOPE_STORES
         );
 
-        /** @phpstan-ignore-next-line */
+        if (!($order instanceof OrderModel)) {
+            throw new LocalizedException(__('Unexptected Order instance.'));
+        }
+
         $env = (bool) $order->getData('resursbank_is_test');
 
         $credentials->setEnvironment(

@@ -52,9 +52,9 @@ class Resursbank extends Adapter
     }
 
     /**
-     * @return PaymentMethodInterface
+     * @return PaymentMethodInterface|null
      */
-    public function getResursModel(): PaymentMethodInterface
+    public function getResursModel(): ?PaymentMethodInterface
     {
         return $this->resursModel;
     }
@@ -72,6 +72,9 @@ class Resursbank extends Adapter
      * class (see the notes on setResursModel above for further information).
      *
      * @inheridoc
+     * @param string $field
+     * @param int|null $storeId
+     * @return mixed
      */
     public function getConfigData($field, $storeId = null)
     {

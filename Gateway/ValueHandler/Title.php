@@ -10,12 +10,12 @@ namespace Resursbank\Core\Gateway\ValueHandler;
 
 use Exception;
 use Resursbank\Core\Helper\ValueHandlerSubjectReader;
-use Magento\Payment\Gateway\Config\ValueHandlerInterface;
+use Resursbank\Core\Api\ValueHandlerInterface;
 use Resursbank\Core\Helper\Log;
 
 /**
- * Magentos core adapter will resolve the title from the database, regardless of
- * what is specified in the array assembled from the XML (see
+ * Magento's core adapter will resolve the title from the database, regardless
+ * of what is specified in the array assembled from the XML (see
  * Resursbank\Core\Plugin\Payment\Helper\Data). Since our payment methods are
  * stored in a separate table (and injecting values into the core_config_data
  * table would create needless overhead prone to failure) we store the title on
@@ -53,6 +53,9 @@ class Title implements ValueHandlerInterface
 
     /**
      * @inheritdoc
+     * @param array<string, mixed> $subject
+     * @param int|null $storeId
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(

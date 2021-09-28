@@ -30,27 +30,27 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     /**
      * @var PaymentMethodInterfaceFactory
      */
-    protected $methodFactory;
+    protected PaymentMethodInterfaceFactory $methodFactory;
 
     /**
      * @var PaymentMethodSearchResultsInterfaceFactory
      */
-    protected $searchResultsFactory;
+    protected PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
      * @var ResourceModel
      */
-    protected $resourceModel;
+    protected ResourceModel $resourceModel;
 
     /**
      * @var CollectionFactory
      */
-    private $collectionFactory;
+    private CollectionFactory $collectionFactory;
 
     /**
      * @var FilterProcessor
      */
-    private $filterProcessor;
+    private FilterProcessor $filterProcessor;
 
     /**
      * @param ResourceModel $resourceModel
@@ -119,7 +119,6 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function get(
         int $methodId
     ): PaymentMethodInterface {
-        /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -141,7 +140,6 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function getByCode(
         string $code
     ): PaymentMethodInterface {
-        /** @noinspection PhpUndefinedMethodInspection */
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -166,15 +164,12 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function getList(
         SearchCriteriaInterface $searchCriteria
     ): PaymentMethodSearchResultsInterface {
-        /** @noinspection PhpUndefinedMethodInspection */
         $collection = $this->collectionFactory->create();
 
         $this->filterProcessor->process($searchCriteria, $collection);
 
         $collection->load();
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @noinspection PhpParamsInspection */
         return $this->searchResultsFactory->create()
             ->setSearchCriteria($searchCriteria)
             ->setItems($collection->getItems())

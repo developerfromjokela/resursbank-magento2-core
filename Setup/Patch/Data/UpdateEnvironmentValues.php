@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Setup\Patch\Data;
 
-use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Resursbank\RBEcomPHP\ResursBank;
@@ -22,7 +21,7 @@ class UpdateEnvironmentValues implements DataPatchInterface
     /**
      * @var ModuleDataSetupInterface
      */
-    private $moduleDataSetup;
+    private ModuleDataSetupInterface $moduleDataSetup;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup

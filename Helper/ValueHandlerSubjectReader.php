@@ -27,7 +27,7 @@ class ValueHandlerSubjectReader extends AbstractHelper
      * Resolve additional data applied on the payment method instance (see
      * Resursbank\Core\Model\Payment\Resursbank :: getInfoInstance()).
      *
-     * @param array $subject
+     * @param array<mixed> $subject
      * @param string $key
      * @return mixed
      */
@@ -49,13 +49,13 @@ class ValueHandlerSubjectReader extends AbstractHelper
     }
 
     /**
-     * @param array $subject
+     * @param array<mixed> $subject
      * @return MethodInterface|null
      * @throws LocalizedException
      */
     public function getMethodInstance(
         array $subject
-    ):? MethodInterface {
+    ): ?MethodInterface {
         return (
             isset($subject['payment']) &&
             $subject['payment'] instanceof PaymentDataObject &&
@@ -64,13 +64,13 @@ class ValueHandlerSubjectReader extends AbstractHelper
     }
 
     /**
-     * @param array $subject
-     * @return Resursbank|null
+     * @param array<mixed> $subject
+     * @return PaymentMethodInterface|null
      * @throws LocalizedException
      */
     public function getResursModel(
         array $subject
-    ):? PaymentMethodInterface {
+    ): ?PaymentMethodInterface {
         $method = $this->getMethodInstance($subject);
 
         return $method instanceof Resursbank ? $method->getResursModel() : null;

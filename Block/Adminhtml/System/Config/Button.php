@@ -17,13 +17,15 @@ use Resursbank\Core\Helper\Url;
 
 /**
  * Centralised code for buttons in admin config.
+ *
+ * @method setElement(AbstractElement $element)
  */
 class Button extends Field
 {
     /**
      * @var Url
      */
-    private $url;
+    private Url $url;
 
     /**
      * @param Url $url
@@ -67,14 +69,16 @@ class Button extends Field
         string $label,
         string $path
     ): string {
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @phpstan-ignore-next-line */
         $this->setElement($element);
 
-        /** @phpstan-ignore-next-line */
-        return $this->getLayout()
-            ->createBlock(MagentoButton::class)
-            ->setType('button')
+        $block = $this->getLayout()
+            ->createBlock(MagentoButton::class);
+
+        /**
+         * @noinspection PhpPossiblePolymorphicInvocationInspection
+         * @phpstan-ignore-next-line
+         */
+        return $block->setType('button')
             ->setClass('scalable')
             ->setLabel(__($label))
             ->setOnClick(

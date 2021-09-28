@@ -26,27 +26,27 @@ class Data
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var MethodFactory
      */
-    private $methodFactory;
+    private MethodFactory $methodFactory;
 
     /**
      * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
      * @var PaymentMethodInterface[]|null
      */
-    private $methodList;
+    private ?array $methodList = null;
 
     /**
      * @param PaymentMethods $paymentMethods

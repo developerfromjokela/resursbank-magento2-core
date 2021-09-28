@@ -26,7 +26,7 @@ class Address
      *
      * @var bool
      */
-    private $isCompany;
+    private bool $isCompany;
 
     /**
      * What the full name represents depends on the customer type. If the
@@ -35,49 +35,49 @@ class Address
      *
      * @var string
      */
-    private $fullName;
+    private string $fullName;
 
     /**
      * @var string
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @var string
      */
-    private $lastName;
+    private string $lastName;
 
     /**
      * @var string
      */
-    private $addressRow1;
+    private string $addressRow1;
 
     /**
      * @var string
      */
-    private $addressRow2;
+    private string $addressRow2;
 
     /**
      * City.
      *
      * @var string
      */
-    private $postalArea;
+    private string $postalArea;
 
     /**
      * @var string
      */
-    private $postalCode;
+    private string $postalCode;
 
     /**
      * @var string
      */
-    private $country;
+    private string $country;
 
     /**
      * @var string
      */
-    private $telephone;
+    private string $telephone;
 
     /**
      * @param bool $isCompany

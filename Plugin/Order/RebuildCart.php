@@ -35,42 +35,42 @@ class RebuildCart
     /**
      * @var Url
      */
-    private $url;
+    private Url $url;
 
     /**
      * @var Log
      */
-    private $log;
+    private Log $log;
 
     /**
      * @var RedirectFactory
      */
-    private $redirectFactory;
+    private RedirectFactory $redirectFactory;
 
     /**
      * @var Session
      */
-    private $checkoutSession;
+    private Session $checkoutSession;
 
     /**
      * @var CartHelper
      */
-    private $cartHelper;
+    private CartHelper $cartHelper;
 
     /**
      * @var PaymentMethods
      */
-    private $paymentMethods;
+    private PaymentMethods $paymentMethods;
 
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @param Log $log
@@ -134,6 +134,7 @@ class RebuildCart
 
             // Because the message bag is not rendered on the failure page.
             /** @noinspection PhpUndefinedMethodInspection */
+            /** @phpstan-ignore-next-line */
             $this->checkoutSession->setErrorMessage(__(
                 'The payment failed and the cart could not be rebuilt. ' .
                 'Please add the items back to your cart manually and try ' .
@@ -146,7 +147,7 @@ class RebuildCart
     }
 
     /**
-     * Whether or not this plugin should execute.
+     * Whether this plugin should execute.
      *
      * @param OrderInterface $order
      * @return bool
