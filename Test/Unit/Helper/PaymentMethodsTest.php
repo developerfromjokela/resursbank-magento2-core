@@ -150,7 +150,7 @@ class PaymentMethodsTest extends TestCase
         $this->expectExceptionMessage('Some connection error.');
 
         // Make the getConnection method on our API adapter toss an Exception.
-//        /** @phpstan-ignore-next-line */
+        /** @phpstan-ignore-next-line */
         $this->apiMock->expects(static::once())
             ->method('getConnection')
             ->will(static::throwException(
