@@ -21,6 +21,10 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  * @method setData(string $key, mixed $value)
  * @method unsetData(string|string[] $key)
  * @method setLastQuoteId(int $id)
+ * @method setResursFailureRedirectUrl(string $url)
+ * @method getResursFailureRedirectUrl()
+ * @method setResursBankPaymentFailed(bool $value)
+ * @method getResursBankPaymentFailed()
  */
 class Checkout extends Session implements ArgumentInterface
 {

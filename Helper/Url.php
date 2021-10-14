@@ -106,14 +106,13 @@ class Url extends AbstractHelper
     /**
      * Retrieve the URL we redirect clients to after rebuilding the cart (after
      * they reach the failure page).
+     * Override is used when a customer has a different checkout url than magento standard.
      *
+     * @param string|null $override
      * @return string
      */
-    public function getCheckoutRebuildRedirectUrl(): string
+    public function getCheckoutRebuildRedirectUrl(?string $override): string
     {
-        return $this->url->getUrl(
-            'checkout',
-            ['resursbank_payment_failed' => 1]
-        );
+        return $this->url->getUrl($override ?? 'checkout');
     }
 }

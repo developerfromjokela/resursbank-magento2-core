@@ -10,7 +10,9 @@ namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
 use Magento\Checkout\Model\Session\SuccessValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Request;
@@ -82,6 +84,7 @@ class RestoreSession implements ArgumentInterface
      */
     public function beforeExecute(): void
     {
+//        throw new Exception("test");
         try {
             if (!$this->successValidator->isValid()) {
                 $quoteId = $this->request->getQuoteId();
