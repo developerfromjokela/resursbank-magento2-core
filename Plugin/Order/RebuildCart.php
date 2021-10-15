@@ -10,7 +10,6 @@ namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
 use Magento\Checkout\Controller\Onepage\Failure;
-use Magento\Checkout\Model\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\Page;
@@ -24,6 +23,7 @@ use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
 use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 
 /**
  * Cancel the previous order, rebuild the cart and redirect to the cart.
@@ -48,9 +48,9 @@ class RebuildCart
     private RedirectFactory $redirectFactory;
 
     /**
-     * @var Session
+     * @var CheckoutSession
      */
-    private Session $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
     /**
      * @var CartHelper
@@ -76,7 +76,7 @@ class RebuildCart
      * @param Log $log
      * @param Url $url
      * @param RedirectFactory $redirectFactory
-     * @param Session $checkoutSession
+     * @param CheckoutSession $checkoutSession
      * @param CartHelper $cartHelper
      * @param PaymentMethods $paymentMethods
      * @param RequestInterface $request
@@ -86,7 +86,7 @@ class RebuildCart
         Log $log,
         Url $url,
         RedirectFactory $redirectFactory,
-        Session $checkoutSession,
+        CheckoutSession $checkoutSession,
         CartHelper $cartHelper,
         PaymentMethods $paymentMethods,
         RequestInterface $request,
@@ -124,9 +124,12 @@ class RebuildCart
                 // Rebuild cart.
                 $this->cartHelper->rebuildCart($order);
 
+                // Set payment failure in session
+                $this->checkoutSession->setResursBankPaymentFailed(true);
+
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
-                    $this->url->getCheckoutRebuildRedirectUrl()
+                    $this->url->getCheckoutRebuildRedirectUrl($this->checkoutSession->getResursFailureRedirectUrl())
                 );
             }
         } catch (Exception $e) {

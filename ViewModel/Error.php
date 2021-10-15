@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\ViewModel;
 
+use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
@@ -18,17 +19,17 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Error implements ArgumentInterface
 {
     /**
-     * @var RequestInterface
+     * @var CheckoutSession
      */
-    private RequestInterface $request;
+    private CheckoutSession $checkoutSession;
 
     /**
-     * @param RequestInterface $request
+     * @param CheckoutSession $checkoutSession
      */
     public function __construct(
-        RequestInterface $request
+        CheckoutSession $checkoutSession
     ) {
-        $this->request = $request;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -38,8 +39,12 @@ class Error implements ArgumentInterface
      */
     public function paymentFailed(): bool
     {
-        return (int) $this->request->getParam(
-            'resursbank_payment_failed'
-        ) === 1;
+        // Check if true (can be null)
+        $result = $this->checkoutSession->getResursBankPaymentFailed() === true;
+        if ($result === true) {
+            // Unset the failure to avoid showing the message more than once
+            $this->checkoutSession->setResursBankPaymentFailed(false);
+        }
+        return $result;
     }
 }

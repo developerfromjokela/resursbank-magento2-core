@@ -6,13 +6,11 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Resursbank\Core\ViewModel\Error;
 
 /** @var Template $block */
 /** @var Error $viewModel */
-/** @var Escaper $escaper */
 
 if (isset($block)) {
     /** @noinspection PhpPossiblePolymorphicInvocationInspection */
@@ -22,13 +20,14 @@ if (isset($block)) {
 ?>
 
 <?php // Didn't combine if-blocks because PHPStan will complain unnecessarily. ?>
-<?php if (isset($escaper, $viewModel)): ?>
+<?php if (isset($viewModel)): ?>
     <?php if ($viewModel->paymentFailed()): ?>
         <script>
-            alert('<?= $escaper->escapeHtml(__(
-                'The payment failed. Please confirm the cart content and try a ' .
-                'different payment method.'
-            )) ?>');
+            require(['Magento_Ui/js/model/messageList', 'mage/translate'], function(messages, $t) {
+                messages.addErrorMessage({
+                    'message': $t('The payment failed. Please confirm the cart content and try a different payment method')
+                })
+            });
         </script>
     <?php endif; ?>
 <?php endif; ?>
