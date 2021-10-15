@@ -84,7 +84,6 @@ class RestoreSession implements ArgumentInterface
      */
     public function beforeExecute(): void
     {
-//        throw new Exception("test");
         try {
             if (!$this->successValidator->isValid()) {
                 $quoteId = $this->request->getQuoteId();
