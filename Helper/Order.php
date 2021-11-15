@@ -11,12 +11,11 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order as OrderModel;
-use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use function is_string;
 
@@ -42,22 +41,30 @@ class Order extends AbstractHelper
     private SearchCriteriaBuilder $searchBuilder;
 
     /**
-     * @var OrderRepository
+     * @var OrderRepositoryInterface
      */
-    private OrderRepository $orderRepository;
+    private OrderRepositoryInterface $orderRepo;
+
+    /**
+     * @var OrderItemRepositoryInterface
+     */
+    private OrderItemRepositoryInterface $orderItemRepo;
 
     /**
      * @param Context $context
      * @param SearchCriteriaBuilder $searchBuilder
-     * @param OrderRepository $orderRepository
+     * @param OrderRepositoryInterface $orderRepo
+     * @param OrderItemRepositoryInterface $orderItemRepo
      */
     public function __construct(
         Context $context,
         SearchCriteriaBuilder $searchBuilder,
-        OrderRepository $orderRepository
+        OrderRepositoryInterface $orderRepo,
+        OrderItemRepositoryInterface $orderItemRepo
     ) {
         $this->searchBuilder = $searchBuilder;
-        $this->orderRepository = $orderRepository;
+        $this->orderRepo = $orderRepo;
+        $this->orderItemRepo = $orderItemRepo;
 
         parent::__construct($context);
     }
@@ -88,7 +95,7 @@ class Order extends AbstractHelper
     public function getOrderByQuoteId(
         int $quoteId
     ): OrderInterface {
-        $orderList = $this->orderRepository->getList(
+        $orderList = $this->orderRepo->getList(
             $this->searchBuilder
                 ->addFilter('quote_id', $quoteId)
                 ->create()
@@ -137,15 +144,36 @@ class Order extends AbstractHelper
      * Apply "Credit Denied" status to supplied order.
      *
      * @param OrderInterface $order
-     * @throws AlreadyExistsException
-     * @throws InputException
-     * @throws NoSuchEntityException
      */
     public function setCreditDeniedStatus(
         OrderInterface $order
     ): void {
-        $this->orderRepository->save(
+        $this->orderRepo->save(
             $order->setStatus(self::CREDIT_DENIED_CODE)
         );
+    }
+
+    /**
+     * Cancels both the order and all of its items to support item reservation.
+     *
+     * @param OrderInterface $order
+     * @throws InvalidDataException
+     */
+    public function cancelOrder(
+        OrderInterface $order
+    ): void {
+        if (!($order instanceof OrderModel)) {
+            throw new InvalidDataException(__('$order is not an Order.'));
+        }
+    
+        foreach ($order->getItems() as $item) {
+            if (!($item instanceof Item)) {
+                throw new InvalidDataException(__('$item is not an Item.'));
+            }
+            
+            $this->orderItemRepo->save($item->cancel());
+        }
+
+        $this->orderRepo->save($order->cancel());
     }
 }
