@@ -16,12 +16,11 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
+use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 
@@ -58,6 +57,11 @@ class RebuildCart
     private CartHelper $cartHelper;
 
     /**
+     * @var OrderHelper
+     */
+    private OrderHelper $orderHelper;
+
+    /**
      * @var PaymentMethods
      */
     private PaymentMethods $paymentMethods;
@@ -68,11 +72,6 @@ class RebuildCart
     private RequestInterface $request;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private OrderRepositoryInterface $orderRepository;
-
-    /**
      * @param Log $log
      * @param Url $url
      * @param RedirectFactory $redirectFactory
@@ -80,7 +79,7 @@ class RebuildCart
      * @param CartHelper $cartHelper
      * @param PaymentMethods $paymentMethods
      * @param RequestInterface $request
-     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderHelper $orderHelper
      */
     public function __construct(
         Log $log,
@@ -90,7 +89,7 @@ class RebuildCart
         CartHelper $cartHelper,
         PaymentMethods $paymentMethods,
         RequestInterface $request,
-        OrderRepositoryInterface $orderRepository
+        OrderHelper $orderHelper
     ) {
         $this->log = $log;
         $this->url = $url;
@@ -99,7 +98,7 @@ class RebuildCart
         $this->cartHelper = $cartHelper;
         $this->paymentMethods = $paymentMethods;
         $this->request = $request;
-        $this->orderRepository = $orderRepository;
+        $this->orderHelper = $orderHelper;
     }
 
     /**
@@ -119,7 +118,7 @@ class RebuildCart
 
             if ($this->isEnabled($order)) {
                 // Cancel order since payment failed.
-                $this->cancelOrder($order);
+                $this->orderHelper->cancelOrder($order);
 
                 // Rebuild cart.
                 $this->cartHelper->rebuildCart($order);
@@ -129,7 +128,9 @@ class RebuildCart
 
                 // Redirect to cart page.
                 $result = $this->redirectFactory->create()->setPath(
-                    $this->url->getCheckoutRebuildRedirectUrl($this->checkoutSession->getResursFailureRedirectUrl())
+                    $this->url->getCheckoutRebuildRedirectUrl(
+                        $this->checkoutSession->getResursFailureRedirectUrl()
+                    )
                 );
             }
         } catch (Exception $e) {
@@ -172,27 +173,5 @@ class RebuildCart
             (int) $this->request->getParam('disable_rebuild_cart') !== 1 &&
             $this->paymentMethods->isResursBankMethod($payment->getMethod())
         );
-    }
-
-    /**
-     * Cancel request order.
-     *
-     * @param OrderInterface $order
-     * @return void
-     */
-    private function cancelOrder(
-        OrderInterface $order
-    ): void {
-        try {
-            if ($order instanceof Order) {
-                $this->orderRepository->save($order->cancel());
-            } else {
-                throw new InvalidDataException(
-                    __('Failed to cancel order. Unexpected type.')
-                );
-            }
-        } catch (Exception $e) {
-            $this->log->exception($e);
-        }
     }
 }
