@@ -20,6 +20,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
+use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -73,6 +74,11 @@ class RebuildCart
     private OrderRepositoryInterface $orderRepository;
 
     /**
+     * @var OrderHelper
+     */
+    private OrderHelper $orderHelper;
+
+    /**
      * @param Log $log
      * @param Url $url
      * @param RedirectFactory $redirectFactory
@@ -81,6 +87,7 @@ class RebuildCart
      * @param PaymentMethods $paymentMethods
      * @param RequestInterface $request
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderHelper $orderHelper
      */
     public function __construct(
         Log $log,
@@ -90,7 +97,8 @@ class RebuildCart
         CartHelper $cartHelper,
         PaymentMethods $paymentMethods,
         RequestInterface $request,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        OrderHelper $orderHelper
     ) {
         $this->log = $log;
         $this->url = $url;
@@ -100,6 +108,7 @@ class RebuildCart
         $this->paymentMethods = $paymentMethods;
         $this->request = $request;
         $this->orderRepository = $orderRepository;
+        $this->orderHelper = $orderHelper;
     }
 
     /**
@@ -115,7 +124,7 @@ class RebuildCart
         $result
     ) {
         try {
-            $order = $this->checkoutSession->getLastRealOrder();
+            $order = $this->orderHelper->resolveOrderFromRequest();
 
             if ($this->isEnabled($order)) {
                 // Cancel order since payment failed.
