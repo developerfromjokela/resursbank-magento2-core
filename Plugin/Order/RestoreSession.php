@@ -10,12 +10,9 @@ namespace Resursbank\Core\Plugin\Order;
 
 use Exception;
 use Magento\Checkout\Model\Session\SuccessValidator;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
-use Resursbank\Core\Helper\Request;
 use Resursbank\Core\ViewModel\Session\Checkout as Session;
 
 /**
@@ -34,11 +31,6 @@ use Resursbank\Core\ViewModel\Session\Checkout as Session;
  */
 class RestoreSession implements ArgumentInterface
 {
-    /**
-     * @var Request
-     */
-    private Request $request;
-
     /**
      * @var Log
      */
@@ -60,20 +52,17 @@ class RestoreSession implements ArgumentInterface
 
     /**
      * @param Log $log
-     * @param Request $request
      * @param Order $order
      * @param Session $session
      * @param SuccessValidator $successValidator
      */
     public function __construct(
         Log $log,
-        Request $request,
         Order $order,
         Session $session,
         SuccessValidator $successValidator
     ) {
         $this->log = $log;
-        $this->request = $request;
         $this->order = $order;
         $this->session = $session;
         $this->successValidator = $successValidator;
@@ -86,8 +75,8 @@ class RestoreSession implements ArgumentInterface
     {
         try {
             if (!$this->successValidator->isValid()) {
-                $quoteId = $this->request->getQuoteId();
-                $order = $this->order->getOrderByQuoteId($quoteId);
+                $order = $this->order->resolveOrderFromRequest();
+                $quoteId = $order->getQuoteId();
 
                 $this->session
                     ->setLastQuoteId($quoteId)
