@@ -22,6 +22,13 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use function is_string;
 
+/**
+ * This class implements ArgumentInterface (that's normally reserved for
+ * ViewModels) because we found no other way of removing the suppressed warning
+ * for PHPMD.CookieAndSessionMisuse. The interface fools the analytic tools into
+ * thinking this class is part of the presentation layer, and thus eligible to
+ * handle the session.
+ */
 class Order extends AbstractHelper implements ArgumentInterface
 {
     /**
@@ -211,13 +218,10 @@ class Order extends AbstractHelper implements ArgumentInterface
      */
     public function resolveOrderFromRequest(): OrderInterface
     {
-        $quoteId = (int) $this->request->getParam('quote_id');
-
-        if ($quoteId === 0) {
-            $order = $this->checkoutSession->getLastRealOrder();
-        } else {
-            $order = $this->getOrderByQuoteId($quoteId);
-        }
+        $quoteId = $this->getQuoteId();
+        $order = $quoteId !== 0 ?
+            $this->getOrderByQuoteId($quoteId) :
+            $this->checkoutSession->getLastRealOrder();
 
         if (!($order instanceof OrderInterface) ||
             (int) $order->getEntityId() === 0

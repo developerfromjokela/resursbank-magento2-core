@@ -14,6 +14,13 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\App\Response\Redirect as RedirectResponse;
 use Resursbank\Core\ViewModel\Session\Checkout;
 
+/**
+ * This class implements ArgumentInterface (that's normally reserved for
+ * ViewModels) because we found no other way of removing the suppressed warning
+ * for PHPMD.CookieAndSessionMisuse. The interface fools the analytic tools into
+ * thinking this class is part of the presentation layer, and thus eligible to
+ * handle the session.
+ */
 class Session extends AbstractHelper implements ArgumentInterface
 {
     /**
@@ -44,6 +51,9 @@ class Session extends AbstractHelper implements ArgumentInterface
 
     /**
      * Will use the referer URL to set the Resurs Bank failure redirect URL.
+     * We avoid using a static URL such as checkout/onepage/failure to ensure
+     * redirects back from the gateway will function correctly with third
+     * party extensions that override the checkout process.
      *
      * @return void
      */
