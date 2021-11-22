@@ -19,7 +19,6 @@ use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
-use Resursbank\Core\Helper\Request;
 use Resursbank\Core\Model\Api\Payment as PaymentModel;
 
 /**
@@ -42,11 +41,6 @@ class UpdateBillingAddress
     private AddressRepository $addressRepository;
 
     /**
-     * @var Request
-     */
-    private Request $request;
-
-    /**
      * @var Order
      */
     private Order $order;
@@ -58,22 +52,18 @@ class UpdateBillingAddress
     /**
      * @param Log $log
      * @param AddressRepository $addressRepository
-     * @param Request $request
      * @param Order $order
      * @param Api $api
      */
     public function __construct(
         Log $log,
         AddressRepository $addressRepository,
-        Request $request,
         Order $order,
         Api $api
     ) {
         $this->log = $log;
-        $this->request = $request;
         $this->addressRepository = $addressRepository;
         $this->order = $order;
-        $this->request = $request;
         $this->api = $api;
     }
 
@@ -93,9 +83,7 @@ class UpdateBillingAddress
     ): ResultInterface {
         /** @noinspection BadExceptionsProcessingInspection */
         try {
-            $order = $this->order->getOrderByQuoteId(
-                $this->request->getQuoteId()
-            );
+            $order = $this->order->resolveOrderFromRequest();
 
             $paymentData = $this->api->getPayment($order);
 
@@ -107,10 +95,7 @@ class UpdateBillingAddress
             }
 
             $payment = $this->api->toPayment($paymentData);
-
-            if ($payment instanceof PaymentModel) {
-                $this->overrideBillingAddress($payment, $order);
-            }
+            $this->overrideBillingAddress($payment, $order);
         } catch (Exception $e) {
             $this->log->exception($e);
         }

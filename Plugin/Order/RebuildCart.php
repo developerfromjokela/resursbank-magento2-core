@@ -18,9 +18,9 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
+use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
-use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 
@@ -114,7 +114,7 @@ class RebuildCart
         $result
     ) {
         try {
-            $order = $this->checkoutSession->getLastRealOrder();
+            $order = $this->orderHelper->resolveOrderFromRequest();
 
             if ($this->isEnabled($order)) {
                 // Cancel order since payment failed.
