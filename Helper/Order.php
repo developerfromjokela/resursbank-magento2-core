@@ -176,11 +176,12 @@ class Order extends AbstractHelper implements ArgumentInterface
      * Cancels both the order and all of its items to support item reservation.
      *
      * @param OrderInterface $order
+     * @return OrderInterface
      * @throws InvalidDataException
      */
     public function cancelOrder(
         OrderInterface $order
-    ): void {
+    ): OrderInterface {
         if (!($order instanceof OrderModel)) {
             throw new InvalidDataException(__('$order is not an Order.'));
         }
@@ -194,6 +195,8 @@ class Order extends AbstractHelper implements ArgumentInterface
         }
 
         $this->orderRepo->save($order->cancel());
+
+        return $order;
     }
 
     /**
