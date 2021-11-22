@@ -9,17 +9,16 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order as OrderModel;
-use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
+use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use function is_string;
 
 /**
@@ -61,36 +60,44 @@ class Order extends AbstractHelper implements ArgumentInterface
     private OrderRepositoryInterface $orderRepo;
 
     /**
-     * @var OrderItemRepositoryInterface
-     */
-    private OrderItemRepositoryInterface $orderItemRepo;
-
-    /**
      * @var CheckoutSession
      */
     private CheckoutSession $checkoutSession;
 
     /**
+     * @var OrderManagementInterface
+     */
+    private OrderManagementInterface $orderManagement;
+
+    /**
+     * @var Log
+     */
+    private Log $log;
+
+    /**
      * @param Context $context
      * @param SearchCriteriaBuilder $searchBuilder
      * @param OrderRepositoryInterface $orderRepo
-     * @param OrderItemRepositoryInterface $orderItemRepo
      * @param RequestInterface $request
      * @param CheckoutSession $checkoutSession
+     * @param OrderManagementInterface $orderManagement
+     * @param Log $log
      */
     public function __construct(
         Context $context,
         SearchCriteriaBuilder $searchBuilder,
         OrderRepositoryInterface $orderRepo,
-        OrderItemRepositoryInterface $orderItemRepo,
         RequestInterface $request,
-        CheckoutSession $checkoutSession
+        CheckoutSession $checkoutSession,
+        OrderManagementInterface $orderManagement,
+        Log $log
     ) {
         $this->searchBuilder = $searchBuilder;
         $this->orderRepo = $orderRepo;
-        $this->orderItemRepo = $orderItemRepo;
         $this->request = $request;
         $this->checkoutSession = $checkoutSession;
+        $this->orderManagement = $orderManagement;
+        $this->log = $log;
 
         parent::__construct($context);
     }
@@ -184,24 +191,12 @@ class Order extends AbstractHelper implements ArgumentInterface
      *
      * @param OrderInterface $order
      * @return OrderInterface
-     * @throws InvalidDataException
      */
     public function cancelOrder(
         OrderInterface $order
     ): OrderInterface {
-        if (!($order instanceof OrderModel)) {
-            throw new InvalidDataException(__('$order is not an Order.'));
-        }
-
-        foreach ($order->getItems() as $item) {
-            if (!($item instanceof Item)) {
-                throw new InvalidDataException(__('$item is not an Item.'));
-            }
-
-            $this->orderItemRepo->save($item->cancel());
-        }
-
-        $this->orderRepo->save($order->cancel());
+        $this->orderManagement->cancel($order->getEntityId());
+        $this->log->info('Canceled order #' . $order->getIncrementId());
 
         return $order;
     }
