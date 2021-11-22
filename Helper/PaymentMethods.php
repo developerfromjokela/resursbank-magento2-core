@@ -177,6 +177,9 @@ class PaymentMethods extends AbstractHelper
         PaymentMethodInterface $method,
         CredentialsModel $credentials /** @phpstan-ignore-line */
     ): PaymentMethodInterface {
+        $this->log->info(
+            'Synced payment method "' . $method->getRaw() . '"'
+        );
         // Update / insert method data in database.
         return $this->repository->save($method);
     }
@@ -287,7 +290,7 @@ class PaymentMethods extends AbstractHelper
     /**
      * Validate converted payment method data.
      *
-     * @param array<mixed> $data
+     * @param array $data
      * @throws ValidatorException
      */
     private function validateData(
@@ -331,7 +334,7 @@ class PaymentMethods extends AbstractHelper
      * using the validateData method.
      *
      * @param PaymentMethodInterface $method
-     * @param array<mixed> $data
+     * @param array $data
      * @param CredentialsModel $credentials
      * @return PaymentMethodInterface
      * @throws ValidatorException
@@ -513,7 +516,7 @@ class PaymentMethods extends AbstractHelper
      * Retrieve decoded raw value.
      *
      * @param PaymentMethodInterface $method
-     * @return array<mixed>
+     * @return array
      */
     public function getRaw(
         PaymentMethodInterface $method
