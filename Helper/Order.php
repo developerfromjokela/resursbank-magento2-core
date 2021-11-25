@@ -222,6 +222,7 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order,
         ?bool $value
     ): OrderInterface {
+        /** @phpstan-ignore-next-line Undefined method. */
         $order->setData(
             'resursbank_result',
             $value === null ? $value : (string)(int) $value
@@ -242,6 +243,7 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function getResursbankResult(
         OrderInterface $order
     ): ?bool {
+        /** @phpstan-ignore-next-line Undefined method. */
         $value = $order->getData('resursbank_result');
 
         return $value !== null ? (bool) $value : null;
