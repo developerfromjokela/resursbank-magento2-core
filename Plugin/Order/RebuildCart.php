@@ -115,8 +115,9 @@ class RebuildCart
     ) {
         try {
             $order = $this->orderHelper->resolveOrderFromRequest();
+            $rbResult = $this->orderHelper->getResursbankResult($order);
 
-            if ($this->isEnabled($order)) {
+            if ($rbResult === null && $this->isEnabled($order)) {
                 // Cancel order since payment failed.
                 $this->orderHelper->cancelOrder($order);
 
