@@ -207,6 +207,47 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
+     * Sets the "resursbank_result" column in the "order_sales" table, which
+     * says whether the customer has arrived to the success or failure page.
+     *
+     * true = Success.
+     * false = Failure.
+     * null = Not decided.
+     *
+     * @param OrderInterface $order
+     * @param bool|null $value
+     * @return OrderInterface
+     */
+    public function setResursbankResult(
+        OrderInterface $order,
+        ?bool $value
+    ): OrderInterface {
+        $order->setData(
+            'resursbank_result',
+            $value === null ? $value : (string)(int) $value
+        );
+
+        $this->orderRepo->save($order);
+
+        return $order;
+    }
+
+    /**
+     * Gets the value from "resursbank_result" column of an order.
+     *
+     * @see setResursbankResult
+     * @param OrderInterface $order
+     * @return bool|null
+     */
+    public function getResursbankResult(
+        OrderInterface $order
+    ): ?bool {
+        $value = $order->getData('resursbank_result');
+
+        return $value !== null ? (bool) $value : null;
+    }
+
+    /**
      * Resolve the active order from a request with a "quote_id" parameter. If
      * a quote id cannot be found, then the order will be resolved from the
      * session. If both fail, an exception will be raised.

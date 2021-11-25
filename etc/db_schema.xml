@@ -35,5 +35,6 @@
         Setup/Patch/Schema/ResursbankIsTest
     -->
     <column xsi:type="boolean" name="resursbank_is_test" nullable="true" comment="Whether the purchase was conducted in test."/>
+    <column xsi:type="boolean" name="resursbank_result" nullable="true" comment="Whether the order failed or succeeded."/>
   </table>
 </schema>
