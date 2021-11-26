@@ -18,7 +18,7 @@ use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Log;
 
 /**
- * Book the payment at Resurs Bank after signing it (i.e. create payment).
+ * Marks whether client reached success or failure page in Magento.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -61,17 +61,10 @@ class SetResursbankResult
             $order = $this->order->resolveOrderFromRequest();
 
             if ($this->order->getResursbankResult($order) === null) {
-                if ($subject instanceof Success) {
-                    $this->order->setResursbankResult(
-                        $this->order->resolveOrderFromRequest(),
-                        true
-                    );
-                } else {
-                    $this->order->setResursbankResult(
-                        $this->order->resolveOrderFromRequest(),
-                        false
-                    );
-                }
+                $this->order->setResursbankResult(
+                    $this->order->resolveOrderFromRequest(),
+                    ($subject instanceof Success)
+                );
             }
         } catch (Exception $e) {
             $this->log->exception($e);

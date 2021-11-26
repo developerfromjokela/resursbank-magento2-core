@@ -212,21 +212,20 @@ class Order extends AbstractHelper implements ArgumentInterface
      *
      * true = Success.
      * false = Failure.
-     * null = Not decided.
      *
      * @param OrderInterface $order
-     * @param bool|null $value
+     * @param bool $value
      * @return OrderInterface
      */
     public function setResursbankResult(
         OrderInterface $order,
-        ?bool $value
+        bool $value
     ): OrderInterface {
         /** @phpstan-ignore-next-line Undefined method. */
-        $order->setData(
-            'resursbank_result',
-            $value === null ? $value : (string)(int) $value
-        );
+        /** @noinspection PhpUndefinedMethodInspection */
+        /* Type-cast:ed twice because we need an integer typed as a string,
+           otherwise the value won't be properly saved if it's 0|false */
+        $order->setData('resursbank_result', (string)(int) $value);
 
         $this->orderRepo->save($order);
 
@@ -246,7 +245,7 @@ class Order extends AbstractHelper implements ArgumentInterface
         /** @phpstan-ignore-next-line Undefined method. */
         $value = $order->getData('resursbank_result');
 
-        return $value !== null ? (bool) $value : null;
+        return $value !== null ? $value === '1' : null;
     }
 
     /**
