@@ -221,10 +221,10 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order,
         bool $value
     ): OrderInterface {
-        /** @phpstan-ignore-next-line Undefined method. */
         /** @noinspection PhpUndefinedMethodInspection */
         /* Type-cast:ed twice because we need an integer typed as a string,
            otherwise the value won't be properly saved if it's 0|false */
+        /** @phpstan-ignore-next-line Undefined method. */
         $order->setData('resursbank_result', (string)(int) $value);
 
         $this->orderRepo->save($order);
@@ -243,7 +243,8 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order
     ): ?bool {
         /** @phpstan-ignore-next-line Undefined method. */
-        $value = $order->getData('resursbank_result');
+        $value = $this->orderRepo->get($order->getEntityId())
+            ->getData('resursbank_result');
 
         return $value !== null ? $value === '1' : null;
     }
