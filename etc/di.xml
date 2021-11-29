@@ -143,6 +143,11 @@
             name="resursbank_core_order_update_billing_address"
             type="Resursbank\Core\Plugin\Order\UpdateBillingAddress"
             sortOrder="100"/>
+
+        <plugin
+            name="resursbank_core_order_success_set_result"
+            type="Resursbank\Core\Plugin\Order\SetResursbankResult"
+            sortOrder="9999"/>
     </type>
 
     <!-- Checkout failure page. -->
@@ -160,6 +165,11 @@
             name="resursbank_core_rebuild_cart"
             type="Resursbank\Core\Plugin\Order\RebuildCart"
             sortOrder="1"/>
+
+        <plugin
+            name="resursbank_core_order_failure_set_result"
+            type="Resursbank\Core\Plugin\Order\SetResursbankResult"
+            sortOrder="9999"/>
     </type>
 
     <!-- Handle orders for failed payments. -->
