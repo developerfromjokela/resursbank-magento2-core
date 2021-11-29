@@ -17,3 +17,7 @@ Core part of Magento 2 module.
 #### 1.2.1
 
 * Moved filter of Swish payment method to Simplified Flow module.
+
+#### 1.2.2
+
+* Updated composer metadata.
