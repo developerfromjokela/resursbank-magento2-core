@@ -28,6 +28,7 @@
                 <can_fetch_transaction_info>0</can_fetch_transaction_info>
                 <can_order>0</can_order>
                 <can_use_internal>0</can_use_internal>
+                <!-- When using initialization payment actions are not triggered. -->
                 <can_initialize>0</can_initialize>
                 <can_review_payment>0</can_review_payment>
                 <can_use_for_multishipping>0</can_use_for_multishipping>
