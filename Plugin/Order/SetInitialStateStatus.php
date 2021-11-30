@@ -56,6 +56,8 @@ class SetInitialStateStatus
      * @param mixed $amount
      * @param OrderInterface $order
      * @return Phrase
+     * @noinspection PhpUnusedParameterInspection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         AuthorizeCommand $subject,
@@ -73,7 +75,14 @@ class SetInitialStateStatus
                 $status = 'pending_payment';
             }
 
-            $order->setState(Order::STATE_NEW)->setStatus($status);
+            /* Magento will later validate and overwrite the status based on
+            what statuses are allowed for which states. In order to use
+            "pending_payment" as order status, the state most be the same, it
+            will otherwise be overwritten with "pending". See
+            vendor/magento/module-sales/Model/Order/Payment.php :: place() */
+            $order->setState(
+                $status === 'pending_payment' ? $status : Order::STATE_NEW
+            )->setStatus($status);
         } catch (Exception $e) {
             $this->log->exception($e);
         }
