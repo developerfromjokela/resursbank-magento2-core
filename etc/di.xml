@@ -178,4 +178,11 @@
             name="resursbank_core_remove_order"
             type="Resursbank\Core\Plugin\Order\RemoveOrder" />
     </type>
+
+    <!-- Set initial order state and status. -->
+    <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
+        <plugin
+            name="resursbank_core_set_initial_order_state_status"
+            type="Resursbank\Core\Plugin\Order\SetInitialStateStatus" />
+    </type>
 </config>
