@@ -123,7 +123,7 @@ class RebuildCart
                 // Rebuild cart.
                 $this->cartHelper->rebuildCart($order);
 
-                // Set payment failure in session
+                // Set payment failure in session.
                 $this->checkoutSession->setResursBankPaymentFailed(true);
 
                 // Redirect to cart page.
