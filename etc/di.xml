@@ -46,12 +46,6 @@
                 <item name="title" xsi:type="string">
                     Resursbank\Core\Gateway\ValueHandler\Title
                 </item>
-                <item name="payment_action" xsi:type="string">
-                    Resursbank\Core\Gateway\ValueHandler\PaymentAction
-                </item>
-                <item name="can_sale" xsi:type="string">
-                    Resursbank\Core\Gateway\ValueHandler\CanSale
-                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -85,9 +79,6 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="authorize" xsi:type="string">
-                    Resursbank\Core\Gateway\Command\Authorize
-                </item>
-                <item name="sale" xsi:type="string">
                     Resursbank\Core\Gateway\Command\Authorize
                 </item>
             </argument>

@@ -24,7 +24,7 @@
                 <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_capture_partial>0</can_capture_partial>
                 <is_gateway>1</is_gateway>
-                <can_authorize_and_capture>1</can_authorize_and_capture>
+                <can_authorize_and_capture>0</can_authorize_and_capture>
                 <can_fetch_transaction_info>0</can_fetch_transaction_info>
                 <can_order>0</can_order>
                 <can_use_internal>0</can_use_internal>
@@ -37,7 +37,6 @@
                 <!-- Defaults which are overriden by value handlers. -->
                 <title>Resurs Bank</title>
                 <payment_action>authorize</payment_action>
-                <can_sale>1</can_sale>
             </resursbank_default>
         </payment>
         <resursbank>
