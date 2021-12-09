@@ -194,7 +194,6 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function setPendingPaymentState(
         OrderInterface $order
     ): void {
-        // Apply custom status.
         $this->orderRepo->save(
             $order->setState(OrderModel::STATE_PENDING_PAYMENT)
         );
