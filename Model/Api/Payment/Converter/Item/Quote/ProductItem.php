@@ -66,9 +66,7 @@ class ProductItem extends AbstractItem
      */
     public function getQuantity(): float
     {
-        return $this->isBundle() ?
-            (float) $this->product->getQty() :
-            0.0;
+        return (float) $this->product->getQty();
     }
 
     /**
@@ -97,9 +95,11 @@ class ProductItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        return $this->isBundle() && !$this->hasFixedPrice() ?
+        return $this->sanitizeUnitAmountWithoutVat(
+            $this->isBundle() && !$this->hasFixedPrice() ?
             0.0 :
-            (float)$this->product->getConvertedPrice();
+            (float)$this->product->getConvertedPrice()
+        );
     }
 
     /**
