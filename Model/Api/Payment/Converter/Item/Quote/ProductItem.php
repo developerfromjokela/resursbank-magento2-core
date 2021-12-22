@@ -66,30 +66,73 @@ class ProductItem extends AbstractItem
      */
     public function getQuantity(): float
     {
-        return $this->product->getProductType() !== 'bundle' ?
-            (float) $this->product->getQty() :
-            0.0;
+        return (float) $this->product->getQty();
     }
 
     /**
+     * Retrieves the price without tax from a product, and returns it. The type
+     * of the product, whether it has a parent or children, and how the price
+     * is calculated determines the returned value. The point is that a payment
+     * entry should mirror the order in Magento as closely as possible, which
+     * is what the following examples will try to illustrate.
+     *
+     * A: If the product is a bundle, and the price calculation is set to
+     * fixed, then the price of the bundle is determined by the fixed price of
+     * the bundle plus the overriding prices of the children as dictated by
+     * the bundle. 0.0 will be returned for every child product.
+     *
+     * B: If the product is a bundle, and the price calculation is set to
+     * dynamic, then the price of the bundle is determined by the original
+     * prices of its children, and the bundle will have a price of 0.0
+     * returned. The children on the other hand will have their original prices
+     * returned which will make up the entire cost of the bundle.
+     *
+     * C: If the product is a configurable, its children will have 0.0
+     * returned, while the configurable parent will have the entire price
+     * returned.
+     *
      * @inheritDoc
      */
     public function getUnitAmountWithoutVat(): float
     {
-        return $this->product->getProductType() !== 'bundle' ?
-            $this->sanitizeUnitAmountWithoutVat(
-                (float) $this->product->getConvertedPrice()
-            ) : 0.0;
+        return $this->sanitizeUnitAmountWithoutVat(
+            $this->isBundle() && !$this->hasFixedPrice() ?
+            0.0 :
+            (float)$this->product->getConvertedPrice()
+        );
     }
 
     /**
+     * Retrieve the VAT percentage of a product. The type of the product,
+     * whether it has a parent or children, and how the price is calculated
+     * determines the returned value. The point is that a payment entry should
+     * mirror the order in Magento as closely as possible, which is what the
+     * following examples will try to illustrate.
+     *
+     * A: Children of a bundled product with fixed price calculation does not
+     * have VAT percentage values. The value is supplied directly by the bundle.
+     *
+     * B: Children of a configurable product does not have VAT percentage
+     * values. The value is supplied directly by the configurable product.
+     *
+     * C: All other product types have their own VAT percentages values.
+     *
      * @inheritDoc
      */
     public function getVatPct(): int
     {
-        return $this->product->getProductType() !== 'bundle' ?
-            (int) round($this->product->getTaxPercent()) :
-            0;
+        if ($this->isBundle()) {
+            $result = $this->hasFixedPrice() ?
+                (float)(
+                    $this->product->getTaxAmount() /
+                    $this->product->getConvertedPrice()
+                ) * 100 :
+                0.0;
+        } else {
+            $result = (float) $this->product->getTaxPercent();
+        }
+
+        return (int)round($result);
     }
 
     /**
@@ -98,5 +141,24 @@ class ProductItem extends AbstractItem
     public function getType(): string
     {
         return Item::TYPE_PRODUCT;
+    }
+
+    /**
+     * Checks if the product has fixed pricing by its parent's product options.
+     * If a parent can't be found the product itself will be checked.
+     *
+     * @return bool
+     */
+    public function hasFixedPrice(): bool
+    {
+        return !$this->product->isChildrenCalculated();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBundle(): bool
+    {
+        return $this->product->getProductType() === 'bundle';
     }
 }

@@ -30,7 +30,7 @@ class Resursbank extends Adapter
     /**
      * @var PaymentMethodInterface|null
      */
-    private ?PaymentMethodInterface $resursModel;
+    private ?PaymentMethodInterface $resursModel = null;
 
     /**
      * When we create an instance of this payment method we will assign an
