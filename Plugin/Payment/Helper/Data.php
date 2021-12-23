@@ -19,7 +19,6 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use function is_array;
 
 class Data
 {
@@ -114,35 +113,49 @@ class Data
      * order grid.
      *
      * @param Subject $subject
-     * @param array<mixed> $result
-     * @return array<mixed>
+     * @param array $result
+     * @param bool $sorted
+     * @param bool $asLabelValue
+     * @param bool $withGroups
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpUnusedParameterInspection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterGetPaymentMethodList(
         Subject $subject,
-        array $result
+        array $result,
+        bool $sorted = true,
+        bool $asLabelValue = false,
+        bool $withGroups = false
     ): array {
         try {
-            $isMultiDimensional = is_array(reset($result));
+            if ($asLabelValue &&
+                $withGroups &&
+                !isset($result['resursbank']['value'])
+            ) {
+                throw new InvalidArgumentException(
+                    'Missing expected group section "resursbank" in payment ' .
+                    'method list.'
+                );
+            }
 
             foreach ($this->getMethodList() as $method) {
                 $code = $method->getCode();
 
                 // Append payment method to resulting list.
                 if ($code !== null) {
-                    if ($isMultiDimensional) {
-                        if (!isset($result['resursbank']['value'])) {
-                            throw new InvalidArgumentException(
-                                'Missing expected groups section resursbank.'
-                            );
-                        }
-
+                    if ($asLabelValue && $withGroups) {
                         $result['resursbank']['value'][$code] = [
                             'value' => $code,
                             'label' => $method->getTitle('Resurs Bank')
                         ];
-                    } else {
+                    } elseif ($asLabelValue) {
+                        $result[$code] = [
+                            'value' => $code,
+                            'label' => $method->getTitle('Resurs Bank')
+                        ];
+                    } elseif (!$withGroups) {
                         $result[$code] = $method->getTitle('Resurs Bank');
                     }
                 }
@@ -196,7 +209,7 @@ class Data
 
         return $result;
     }
-    
+
     /**
      * Generate instance of our payment method model and apply the code of the
      * requested payment method (i.e. "resursbank_invoice" or similar).
