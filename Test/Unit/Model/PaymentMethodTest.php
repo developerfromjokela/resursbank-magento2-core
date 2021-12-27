@@ -117,7 +117,6 @@ class PaymentMethodTest extends TestCase
     public function testGetMethodIdDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::METHOD_ID);
-        self::assertSame(999, $this->method->getMethodId(999));
         self::assertNull($this->method->getMethodId());
     }
 
@@ -130,7 +129,6 @@ class PaymentMethodTest extends TestCase
     public function testGetMethodIdExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::METHOD_ID, 111111111111);
-        self::assertSame(111111111111, $this->method->getMethodId(321));
         self::assertSame(111111111111, $this->method->getMethodId());
     }
 
@@ -203,7 +201,6 @@ class PaymentMethodTest extends TestCase
     public function testGetIdentifierDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER);
-        self::assertSame('PARTPAY', $this->method->getIdentifier('PARTPAY'));
         self::assertNull($this->method->getIdentifier());
     }
 
@@ -216,7 +213,6 @@ class PaymentMethodTest extends TestCase
     public function testIdentifierExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::IDENTIFIER, 'DLE');
-        self::assertSame('DLE', $this->method->getIdentifier('321'));
         self::assertSame('DLE', $this->method->getIdentifier());
     }
 
@@ -287,10 +283,6 @@ class PaymentMethodTest extends TestCase
     public function testCodeDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE);
-        self::assertSame(
-            'lars_test_invoice',
-            $this->method->getCode('lars_test_invoice')
-        );
         self::assertNull($this->method->getCode());
     }
 
@@ -303,7 +295,6 @@ class PaymentMethodTest extends TestCase
     public function testCodeExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::CODE, '123');
-        static::assertSame('123', $this->method->getCode('321'));
         static::assertSame('123', $this->method->getCode());
     }
 
@@ -361,7 +352,6 @@ class PaymentMethodTest extends TestCase
     public function testActiveDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE);
-        static::assertTrue($this->method->getActive(true));
         static::assertNull($this->method->getActive());
     }
 
@@ -374,7 +364,6 @@ class PaymentMethodTest extends TestCase
     public function testActiveExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::ACTIVE, true);
-        static::assertTrue($this->method->getActive(false));
         static::assertTrue($this->method->getActive());
     }
 
@@ -519,7 +508,6 @@ class PaymentMethodTest extends TestCase
     public function testGetMinOrderTotalDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::MIN_ORDER_TOTAL);
-        static::assertSame(321.321, $this->method->getMinOrderTotal(321.321));
         static::assertNull($this->method->getMinOrderTotal());
     }
 
@@ -605,7 +593,6 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL);
-        self::assertSame(4476.321, $this->method->getMaxOrderTotal(4476.321));
         self::assertNull($this->method->getMaxOrderTotal());
     }
 
@@ -618,7 +605,6 @@ class PaymentMethodTest extends TestCase
     public function testGetMaxOrderTotalExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::MAX_ORDER_TOTAL, 0.1);
-        self::assertSame(0.1, $this->method->getMaxOrderTotal(321.321));
         self::assertSame(0.1, $this->method->getMaxOrderTotal());
     }
 
@@ -677,7 +663,6 @@ class PaymentMethodTest extends TestCase
     public function testOrderStatusDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::ORDER_STATUS);
-        self::assertSame('STATUS', $this->method->getOrderStatus('STATUS'));
         self::assertNull($this->method->getOrderStatus());
     }
 
@@ -690,10 +675,6 @@ class PaymentMethodTest extends TestCase
     public function testOrderStatusExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::ORDER_STATUS, 'pending_payment');
-        self::assertSame(
-            'pending_payment',
-            $this->method->getOrderStatus('cancelled')
-        );
         self::assertSame('pending_payment', $this->method->getOrderStatus());
     }
 
@@ -769,7 +750,6 @@ class PaymentMethodTest extends TestCase
     public function testGetRawDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::RAW);
-        self::assertSame('testing', $this->method->getRaw('testing'));
         self::assertNull($this->method->getRaw());
     }
 
@@ -782,7 +762,6 @@ class PaymentMethodTest extends TestCase
     public function testGetRawExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::RAW, 'Testing_value');
-        self::assertSame('Testing_value', $this->method->getRaw('321'));
         self::assertSame('Testing_value', $this->method->getRaw());
     }
 
@@ -880,7 +859,6 @@ class PaymentMethodTest extends TestCase
     public function testGetSpecificCountryDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY);
-        self::assertSame('FI', $this->method->getSpecificCountry('FI'));
         self::assertNull($this->method->getSpecificCountry());
     }
 
@@ -893,7 +871,6 @@ class PaymentMethodTest extends TestCase
     public function testGetSpecificCountryExpectedReturn(): void
     {
         $this->method->setData(PaymentMethod::SPECIFIC_COUNTRY, 'SV');
-        self::assertSame('SV', $this->method->getSpecificCountry('SV'));
         self::assertSame('SV', $this->method->getSpecificCountry());
     }
 
@@ -954,7 +931,6 @@ class PaymentMethodTest extends TestCase
     public function testGetCreatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::CREATED_AT);
-        self::assertSame(7769943, $this->method->getCreatedAt(7769943));
         self::assertNull($this->method->getCreatedAt());
     }
 
@@ -969,7 +945,6 @@ class PaymentMethodTest extends TestCase
         $timestamp = time();
 
         $this->method->setData(PaymentMethod::CREATED_AT, $timestamp);
-        self::assertSame($timestamp, $this->method->getCreatedAt(6563544564));
         self::assertSame($timestamp, $this->method->getCreatedAt());
     }
 
@@ -1030,7 +1005,6 @@ class PaymentMethodTest extends TestCase
     public function testGetUpdatedAtDefaultReturn(): void
     {
         $this->method->setData(PaymentMethod::UPDATED_AT);
-        self::assertSame(4345, $this->method->getUpdatedAt(4345));
         self::assertNull($this->method->getUpdatedAt());
     }
 
@@ -1045,7 +1019,6 @@ class PaymentMethodTest extends TestCase
         $timestamp = time();
 
         $this->method->setData(PaymentMethod::UPDATED_AT, $timestamp);
-        self::assertSame($timestamp, $this->method->getUpdatedAt(6657));
         self::assertSame($timestamp, $this->method->getUpdatedAt());
     }
 }

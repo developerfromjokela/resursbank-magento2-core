@@ -78,11 +78,9 @@ interface PaymentMethodInterface
     /**
      * Get ID of payment method.
      *
-     * @param int|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return int|null
      */
-    public function getMethodId(?int $default = null): ?int;
+    public function getMethodId(): ?int;
 
     /**
      * Set ID of payment method.
@@ -95,11 +93,9 @@ interface PaymentMethodInterface
     /**
      * Get payment method identifier.
      *
-     * @param string|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return string|null
      */
-    public function getIdentifier(?string $default = null): ?string;
+    public function getIdentifier(): ?string;
 
     /**
      * Set payment method identifier.
@@ -112,11 +108,9 @@ interface PaymentMethodInterface
     /**
      * Get payment method code.
      *
-     * @param string|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return string|null
      */
-    public function getCode(?string $default = null): ?string;
+    public function getCode(): ?string;
 
     /**
      * Set payment method code.
@@ -129,11 +123,9 @@ interface PaymentMethodInterface
     /**
      * Whether the payment method is active.
      *
-     * @param bool|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return bool|null
      */
-    public function getActive(?bool $default = null): ?bool;
+    public function getActive(): ?bool;
 
     /**
      * Set whether payment method is active.
@@ -178,11 +170,9 @@ interface PaymentMethodInterface
     public function setSortOrder(int $order): self;
 
     /**
-     * @param float|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return float|null
      */
-    public function getMinOrderTotal(?float $default = null): ?float;
+    public function getMinOrderTotal(): ?float;
 
     /**
      * Set payment method minimum order total (cart total required to make
@@ -194,11 +184,9 @@ interface PaymentMethodInterface
     public function setMinOrderTotal(float $total): self;
 
     /**
-     * @param float|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return float|null
      */
-    public function getMaxOrderTotal(?float $default = null): ?float;
+    public function getMaxOrderTotal(): ?float;
 
     /**
      * Set payment method maximum order total (cart total limit to make payment
@@ -212,11 +200,9 @@ interface PaymentMethodInterface
     /**
      * Get payment method default order status.
      *
-     * @param string|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return string|null
      */
-    public function getOrderStatus(?string $default = null): ?string;
+    public function getOrderStatus(): ?string;
 
     /**
      * Set payment method default order status.
@@ -229,11 +215,9 @@ interface PaymentMethodInterface
     /**
      * Get complete raw API data defining the method at Resurs Bank.
      *
-     * @param string|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return string|null
      */
-    public function getRaw(?string $default = null): ?string;
+    public function getRaw(): ?string;
 
     /**
      * Set complete raw API data defining the method at Resurs Bank.
@@ -260,11 +244,9 @@ interface PaymentMethodInterface
     /**
      * Get payment method country restriction.
      *
-     * @param string|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return string|null
      */
-    public function getSpecificCountry(?string $default = null): ?string;
+    public function getSpecificCountry(): ?string;
 
     /**
      * Set payment method country restriction.
@@ -277,11 +259,9 @@ interface PaymentMethodInterface
     /**
      * Get entry creation time.
      *
-     * @param int|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return int|null
      */
-    public function getCreatedAt(?int $default = null): ?int;
+    public function getCreatedAt(): ?int;
 
     /**
      * Set entry creation time.
@@ -294,11 +274,9 @@ interface PaymentMethodInterface
     /**
      * Get entry update time.
      *
-     * @param int|null $default - Value to be returned, in the event that
-     * a value couldn't be retrieved from the database.
      * @return int|null
      */
-    public function getUpdatedAt(?int $default = null): ?int;
+    public function getUpdatedAt(): ?int;
 
     /**
      * Set entry update time.

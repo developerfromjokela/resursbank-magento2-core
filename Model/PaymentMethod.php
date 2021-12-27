@@ -35,11 +35,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getMethodId(?int $default = null): ?int
+    public function getMethodId(): ?int
     {
         $result = $this->getData(self::METHOD_ID);
 
-        return $result === null ? $default : (int)$result;
+        return $result === null ? null : (int)$result;
     }
 
     /**
@@ -63,11 +63,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getIdentifier(?string $default = null): ?string
+    public function getIdentifier(): ?string
     {
         $result = $this->getData(self::IDENTIFIER);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? null : (string)$result;
     }
 
     /**
@@ -90,11 +90,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getCode(?string $default = null): ?string
+    public function getCode(): ?string
     {
         $result = $this->getData(self::CODE);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? null : (string)$result;
     }
 
     /**
@@ -115,17 +115,14 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * Not prefixed with "get". Magento expects that getters accept an argument
-     * that is int|string and returns an int|string.
-     *
      * @inheritDoc
      * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function getActive(?bool $default = null): ?bool
+    public function getActive(): ?bool
     {
         $result = $this->getData(self::ACTIVE);
 
-        return $result === null ? $default : (bool)$result;
+        return $result === null ? null : (bool)$result;
     }
 
     /**
@@ -186,17 +183,14 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * Not prefixed with "get". Magento expects that getters accept an argument
-     * that is int|string and returns an int|string.
-     *
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function getMinOrderTotal(?float $default = null): ?float
+    public function getMinOrderTotal(): ?float
     {
         $result = $this->getData(self::MIN_ORDER_TOTAL);
 
-        return $result === null ? $default : (float)$result;
+        return $result === null ? null : (float)$result;
     }
 
     /**
@@ -217,17 +211,14 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * Not prefixed with "get". Magento expects that getters accept an argument
-     * that is int|string and returns an int|string.
-     *
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
-    public function getMaxOrderTotal(?float $default = null): ?float
+    public function getMaxOrderTotal(): ?float
     {
         $result = $this->getData(self::MAX_ORDER_TOTAL);
 
-        return $result === null ? $default : (float)$result;
+        return $result === null ? null : (float)$result;
     }
 
     /**
@@ -250,11 +241,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getOrderStatus(?string $default = null): ?string
+    public function getOrderStatus(): ?string
     {
         $result = $this->getData(self::ORDER_STATUS);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? null : (string)$result;
     }
 
     /**
@@ -270,11 +261,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getRaw(?string $default = null): ?string
+    public function getRaw(): ?string
     {
         $result = $this->getData(self::RAW);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? null : (string)$result;
     }
 
     /**
@@ -300,7 +291,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     public function getType(): ?string
     {
         $raw = json_decode(
-            (string) $this->getRaw(''),
+            (string) $this->getRaw(),
             true,
             512,
             JSON_THROW_ON_ERROR
@@ -317,7 +308,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     public function getSpecificType(): ?string
     {
         $raw = json_decode(
-            (string) $this->getRaw(''),
+            (string) $this->getRaw(),
             true,
             512,
             JSON_THROW_ON_ERROR
@@ -329,11 +320,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getSpecificCountry(?string $default = null): ?string
+    public function getSpecificCountry(): ?string
     {
         $result = $this->getData(self::SPECIFIC_COUNTRY);
 
-        return $result === null ? $default : (string)$result;
+        return $result === null ? null : (string)$result;
     }
 
     /**
@@ -358,11 +349,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getCreatedAt(?int $default = null): ?int
+    public function getCreatedAt(): ?int
     {
         $result = $this->getData(self::CREATED_AT);
 
-        return $result === null ? $default : (int)$result;
+        return $result === null ? null : (int)$result;
     }
 
     /**
@@ -378,11 +369,11 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     /**
      * @inheritDoc
      */
-    public function getUpdatedAt(?int $default = null): ?int
+    public function getUpdatedAt(): ?int
     {
         $result = $this->getData(self::UPDATED_AT);
 
-        return $result === null ? $default : (int)$result;
+        return $result === null ? null : (int)$result;
     }
 
     /**
