@@ -12,6 +12,7 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -52,20 +53,28 @@ class Api extends AbstractHelper
     private Version $version;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private ProductMetadataInterface $productMetadata;
+
+    /**
      * @param Context $context
      * @param CredentialsHelper $credentialsHelper
      * @param Order $orderHelper
      * @param Version $version
+     * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
         Context $context,
         CredentialsHelper $credentialsHelper,
         Order $orderHelper,
-        Version $version
+        Version $version,
+        ProductMetadataInterface $productMetadata
     ) {
         $this->credentialsHelper = $credentialsHelper;
         $this->orderHelper = $orderHelper;
         $this->version = $version;
+        $this->productMetadata = $productMetadata;
 
         parent::__construct($context);
     }
@@ -350,7 +359,9 @@ class Api extends AbstractHelper
     public function getUserAgent(): string
     {
         return sprintf(
-            'Magento 2 | Resursbank_Core %s',
+            'PHP version %s | Magento %s | Resursbank_Core %s',
+            PHP_VERSION,
+            $this->productMetadata->getVersion(),
             $this->version->getComposerVersion('Resursbank_Core')
         );
     }
