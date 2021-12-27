@@ -106,8 +106,7 @@ class Sync implements HttpGetActionInterface
             } else {
                 $this->message->addNoticeMessage(
                     (string)__(
-                        'There are no credentials to sync data from ' .
-                        'Resurs Bank with.'
+                        'There are no credentials to sync data from Resurs Bank.'
                     )
                 );
             }
