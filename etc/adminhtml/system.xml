@@ -31,9 +31,10 @@
                         <config_path>resursbank/api/username_1</config_path>
                         <depends><field id="environment">1</field></depends>
                     </field>
-                    <field id="password_1" type="password" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="password_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Password</label>
                         <config_path>resursbank/api/password_1</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">1</field>
                         </depends>
@@ -45,9 +46,10 @@
                             <field id="environment">0</field>
                         </depends>
                     </field>
-                    <field id="password_0" type="password" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="password_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Password</label>
                         <config_path>resursbank/api/password_0</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">0</field>
                         </depends>

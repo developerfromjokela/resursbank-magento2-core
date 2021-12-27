@@ -9,7 +9,10 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
@@ -36,6 +39,22 @@ class Config extends AbstractConfig
      * @var string
      */
     public const DEBUG_GROUP = 'debug';
+
+    /**
+     * @var EncryptorInterface
+     */
+    private EncryptorInterface $encryptor;
+
+    public function __construct(
+        EncryptorInterface $encryptor,
+        ScopeConfigInterface $reader,
+        WriterInterface $writer,
+        Context $context
+    ) {
+        $this->encryptor = $encryptor;
+
+        parent::__construct($reader, $writer, $context);
+    }
 
     /**
      * @param string|null $scopeCode
@@ -97,11 +116,13 @@ class Config extends AbstractConfig
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
-        return (string) $this->get(
-            self::API_GROUP,
-            'password_' . $this->getEnvironment($scopeCode, $scopeType),
-            $scopeCode,
-            $scopeType
+        return $this->encryptor->decrypt(
+            (string) $this->get(
+                self::API_GROUP,
+                'password_' . $this->getEnvironment($scopeCode, $scopeType),
+                $scopeCode,
+                $scopeType
+            )
         );
     }
 
