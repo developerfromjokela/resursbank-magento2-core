@@ -175,7 +175,7 @@ class ReadMore implements HttpGetActionInterface
         PaymentMethodInterface $method
     ): string {
         return $method->getSpecificCountry() !== 'DK' ?
-            (string) $method->getIdentifier('') :
+            (string)$method->getIdentifier() :
             '';
     }
 }
