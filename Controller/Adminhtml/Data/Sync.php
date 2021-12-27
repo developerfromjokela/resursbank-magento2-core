@@ -99,12 +99,14 @@ class Sync implements HttpGetActionInterface
                 }
 
                 $this->message->addSuccessMessage(
-                    (string)__('Successfully synchronized payment methods.')
+                    (string)__(
+                        'Successfully synchronized data from Resurs Bank.'
+                    )
                 );
             } else {
                 $this->message->addNoticeMessage(
                     (string)__(
-                        'There are no credentials to sync payment methods.'
+                        'There are no credentials to sync data from Resurs Bank.'
                     )
                 );
             }
