@@ -45,6 +45,12 @@ class Config extends AbstractConfig
      */
     private EncryptorInterface $encryptor;
 
+    /**
+     * @param EncryptorInterface $encryptor
+     * @param ScopeConfigInterface $reader
+     * @param WriterInterface $writer
+     * @param Context $context
+     */
     public function __construct(
         EncryptorInterface $encryptor,
         ScopeConfigInterface $reader,
