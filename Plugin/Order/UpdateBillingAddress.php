@@ -84,18 +84,21 @@ class UpdateBillingAddress
         /** @noinspection BadExceptionsProcessingInspection */
         try {
             $order = $this->order->resolveOrderFromRequest();
+            $rbResult = $this->order->getResursbankResult($order);
 
-            $paymentData = $this->api->getPayment($order);
+            if ($rbResult === null) {
+                $paymentData = $this->api->getPayment($order);
 
-            if ($paymentData === null) {
-                throw new InvalidDataException(__(
-                    'Payment data does not exist for ' .
-                    $this->order->getIncrementId($order)
-                ));
+                if ($paymentData === null) {
+                    throw new InvalidDataException(__(
+                        'Payment data does not exist for ' .
+                        $this->order->getIncrementId($order)
+                    ));
+                }
+
+                $payment = $this->api->toPayment($paymentData);
+                $this->overrideBillingAddress($payment, $order);
             }
-
-            $payment = $this->api->toPayment($paymentData);
-            $this->overrideBillingAddress($payment, $order);
         } catch (Exception $e) {
             $this->log->exception($e);
         }
