@@ -90,7 +90,7 @@
                             <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
                         </field>
                         <field id="round_tax_percentage" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Round Item Tax</label>
+                            <label>Round item tax</label>
                             <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/round_tax_percentage</config_path>
