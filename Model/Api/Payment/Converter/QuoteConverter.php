@@ -117,7 +117,7 @@ class QuoteConverter extends AbstractConverter
     }
 
     /**
-     * Whether or not to include product data in payment payload.
+     * Whether to include product data in payment payload.
      *
      * @param Quote $entity
      * @return bool
