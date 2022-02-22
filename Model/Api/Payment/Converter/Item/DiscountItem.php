@@ -71,6 +71,8 @@ class DiscountItem extends AbstractItem
             $result .= $this->couponCode;
         }
 
+        $result .= time();
+
         return $this->sanitizeArtNo($result);
     }
 
