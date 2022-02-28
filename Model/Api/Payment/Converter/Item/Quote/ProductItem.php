@@ -123,10 +123,10 @@ class ProductItem extends AbstractItem
     {
         if ($this->isBundle()) {
             $result = $this->hasFixedPrice() ?
-                (float)(
+                ((float)(
                     $this->product->getTaxAmount() /
                     $this->product->getConvertedPrice()
-                ) * 100 :
+                ) * 100) / $this->getQuantity() :
                 0.0;
         } else {
             $result = (float) $this->product->getTaxPercent();
