@@ -113,6 +113,12 @@ class Api extends AbstractHelper
         // Deactivate auto debitable types.
         $connection->setAutoDebitableTypes(false);
 
+        // Deactivate getPayment validation on aftershop features.
+        $connection->setGetPaymentValidation(false);
+
+        // Deactivate order line validation on bookPayment features.
+        $connection->setBookPaymentValidation(false);
+
         return $connection;
     }
 
