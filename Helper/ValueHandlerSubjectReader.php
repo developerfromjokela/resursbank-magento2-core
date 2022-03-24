@@ -56,9 +56,12 @@ class ValueHandlerSubjectReader extends AbstractHelper
     public function getMethodInstance(
         array $subject
     ): ?MethodInterface {
+
         return (
             isset($subject['payment']) &&
             $subject['payment'] instanceof PaymentDataObject &&
+            $subject['payment']->getPayment() &&
+            $subject['payment']->getPayment()->getMethod() &&
             $subject['payment']->getPayment()->getMethodInstance() instanceof MethodInterface
         ) ? $subject['payment']->getPayment()->getMethodInstance() : null;
     }
