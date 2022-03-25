@@ -1,3 +1,4 @@
+
 # Resurs Bank - Magento 2 module - Core
 
 ## Description
@@ -14,10 +15,6 @@ Core part of Magento 2 module.
 
 ## Changelog
 
-#### 1.2.1
+#### 1.6.1
 
-* Moved filter of Swish payment method to Simplified Flow module.
-
-#### 1.2.2
-
-* Updated composer metadata.
+* Fixed Exception in gateway value handler.
