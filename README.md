@@ -18,3 +18,8 @@ Core part of Magento 2 module.
 #### 1.6.1
 
 * Fixed Exception in gateway value handler.
+
+#### 1.6.3
+
+* Replaced logotypes.
+* Added support for PHP 8.1 
