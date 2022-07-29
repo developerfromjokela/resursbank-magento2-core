@@ -85,6 +85,8 @@ class Resursbank extends Adapter
                 $result = $this->resursModel->getMinOrderTotal();
             } elseif ($field === 'max_order_total') {
                 $result = $this->resursModel->getMaxOrderTotal();
+            } elseif ($field === 'sort_order') {
+                $result = $this->resursModel->getSortOrder();
             }
         }
 
