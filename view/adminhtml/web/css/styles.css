@@ -23,3 +23,31 @@
     width: 49%;
     display: inline-block;
 }
+
+/* Payment methods table */
+#row_payment_other_resursbank_section_methods_listing .label {
+    display:none;
+    border-color: #dee2e6;
+}
+
+#rb-methods {
+    width: 100%;
+    text-align: left;
+}
+
+#rb-methods th {
+    font-weight: bold;
+}
+
+#rb-methods th, #rb-methods td {
+    border: 1px dashed #c0c0c0;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+#rb-methods .rb-method-col-min-limit,
+#rb-methods .rb-methods-max-limit
+{
+    width: 100px;
+}
+
