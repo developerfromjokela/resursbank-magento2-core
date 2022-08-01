@@ -119,8 +119,18 @@ class PaymentMethods extends AbstractHelper
     public function sync(
         CredentialsModel $credentials
     ): void {
-        // Payment method sort order.
-        $sortOrder = 0;
+        /**
+         * Payment method sort order.
+         *
+         * NOTE: At the time of writing some method sorting through won't
+         * work properly if we start our sort_order at a value lower than
+         * 20. I assigned 100 as the starting value since I cannot find the
+         * root cause of the problem at the moment. Sorting sis done in
+         * magento/module-payment/Model/PaymentMethodList.php ~ 50. At that
+         * point all is well, but on frontend all of our methods with a
+         * sort_order value of < 20 will be forced to render first.
+         */
+        $sortOrder = 100;
 
         // Fetch methods from the API and store them in our db.
         foreach ($this->fetch($credentials) as $methodData) {
@@ -147,18 +157,10 @@ class PaymentMethods extends AbstractHelper
             }
 
             /**
-             * Magento's rendering component for the payment method list will
+             * Magentos rendering component for the payment method list will
              * randomly sort the methods incorrectly unless we space them a bit.
-             *
-             * NOTE: At the time of writing some method sorting through won't
-             * work properly if we start our sort_order at a value lower than
-             * 20. I assigned 100 as the starting value since I cannot find the
-             * root cause of the problem at the moment. Sorting is done in
-             * magento/module-payment/Model/PaymentMethodList.php ~ 50. At that
-             * point all is well, but on frontend all of our methods with a
-             * sort_order value of < 20 will be forced to render first.
              */
-            $method->setSortOrder($sortOrder+=100);
+            $method->setSortOrder($sortOrder+=10);
 
             // Overwrite data on method model instance and update db entry.
             $this->syncMethodData(
