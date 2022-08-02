@@ -23,3 +23,9 @@ Core part of Magento 2 module.
 
 * Replaced logotypes.
 * Added support for PHP 8.1 
+
+#### 1.6.6
+
+* Sort order of payment methods changed to adhere to change in Magento.
+* Added sort order to payment methods table in configuration.
+* Re-designed payment methods table.
