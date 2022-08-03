@@ -35,3 +35,4 @@
 "Something went wrong when fetching the content. Please try again.","Något gick fel när innehållet hämtades. Vänligen försök igen."
 "No information could be found.","Ingen information gick att hitta."
 "Sort order","Sortering"
+"<b>Attention!</b> API credentials are required for this extension to function properly.","<b>Obs!</b> API uppgifter krävs för att denna modul skall fungera som förväntat."

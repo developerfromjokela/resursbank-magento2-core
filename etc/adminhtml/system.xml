@@ -20,6 +20,7 @@
                         <label>Checkout type</label>
                         <source_model>Resursbank\Core\Model\Config\Source\Flow</source_model>
                         <config_path>resursbank/api/flow</config_path>
+                        <comment><![CDATA[<b>Attention!</b> API credentials are required for this extension to function properly.]]></comment>
                     </field>
                     <field id="environment" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Environment</label>
