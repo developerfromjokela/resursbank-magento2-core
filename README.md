@@ -29,3 +29,7 @@ Core part of Magento 2 module.
 * Sort order of payment methods changed to adhere to change in Magento.
 * Added sort order to payment methods table in configuration.
 * Re-designed payment methods table.
+
+#### 1.6.7
+
+* Added additional documentation to configuration page.
