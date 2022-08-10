@@ -8,9 +8,13 @@ namespace Resursbank\Core\Test\Unit\Helper;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\OrderRepository;
 use PHPUnit\Framework\TestCase;
+use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
+use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 
 class OrderTest extends TestCase
 {
@@ -24,11 +28,19 @@ class OrderTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $criteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $orderRepositoryMock = $this->createMock(OrderRepository::class);
+        $requestInterfaceMock = $this->createMock(originalClassName: RequestInterface::class);
+        $checkoutSessionMock = $this->createMock(originalClassName: CheckoutSession::class);
+        $orderManagementInterfaceMock = $this->createMock(originalClassName: OrderManagementInterface::class);
+        $logMock = $this->createMock(originalClassName: Log::class);
 
         $this->orderHelper = new Order(
             $contextMock,
             $criteriaBuilderMock,
-            $orderRepositoryMock
+            $orderRepositoryMock,
+            $requestInterfaceMock,
+            $checkoutSessionMock,
+            $orderManagementInterfaceMock,
+            $logMock
         );
     }
 
