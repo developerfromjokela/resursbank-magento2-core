@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Helper\Config;
@@ -30,11 +29,6 @@ class Credentials extends AbstractHelper
     private Config $config;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    private ObjectManagerInterface $objectManager;
-
-    /**
      * @var StoreManagerInterface
      */
     private StoreManagerInterface $storeManager;
@@ -42,17 +36,14 @@ class Credentials extends AbstractHelper
     /**
      * @param Context $context
      * @param Config $config
-     * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
         Config $config,
-        ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
-        $this->objectManager = $objectManager;
         $this->storeManager = $storeManager;
 
         parent::__construct($context);
@@ -138,7 +129,7 @@ class Credentials extends AbstractHelper
         ?string $scopeCode,
         string $scopeType
     ): CredentialsModel {
-        $credentials = $this->objectManager->create(CredentialsModel::class);
+        $credentials = new CredentialsModel();
 
         $credentials->setEnvironment(
             $this->config->getEnvironment($scopeCode, $scopeType)
