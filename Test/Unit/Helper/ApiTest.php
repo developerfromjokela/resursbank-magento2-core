@@ -10,7 +10,7 @@ namespace Resursbank\Core\Test\Unit\Helper;
 
 use Exception;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -44,7 +44,6 @@ class ApiTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = ObjectManager::getInstance();
         $contextMock = $this->createMock(Context::class);
         $storeManagerMock = $this->getMockForAbstractClass(
             StoreManagerInterface::class
@@ -59,15 +58,16 @@ class ApiTest extends TestCase
         $credentialsHelper = new CredentialsHelper(
             $contextMock,
             $resursConfigMock,
-            $objectManager,
             $storeManagerMock
         );
 
+        $productMetadataInterfaceMock = $this->createMock(originalClassName: ProductMetadataInterface::class);
         $this->api = new Api(
             $contextMock,
             $credentialsHelper,
             $orderHelperMock,
-            $this->versionHelperMock
+            $this->versionHelperMock,
+            $productMetadataInterfaceMock
         );
 
         parent::setUp();

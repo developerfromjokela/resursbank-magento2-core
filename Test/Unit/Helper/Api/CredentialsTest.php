@@ -11,7 +11,7 @@ namespace Resursbank\Core\Test\Unit\Helper\Api;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -44,14 +44,15 @@ class CredentialsTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = ObjectManager::getInstance();
         $storeManagerMock = $this->getMockForAbstractClass(
             StoreManagerInterface::class
         );
         $contextMock = $this->createMock(Context::class);
         $writerInterfaceMock = $this->createMock(WriterInterface::class);
+        $encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $resursConfig = new Config(
+            $encryptorInterfaceMock,
             $this->scopeConfigMock,
             $writerInterfaceMock,
             $contextMock
@@ -62,7 +63,6 @@ class CredentialsTest extends TestCase
         $this->credentialsHelper = new CredentialsHelper(
             $contextMock,
             $resursConfig,
-            $objectManager,
             $storeManagerMock
         );
 
