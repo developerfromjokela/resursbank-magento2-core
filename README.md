@@ -33,3 +33,7 @@ Core part of Magento 2 module.
 #### 1.6.7
 
 * Added additional documentation to configuration page.
+
+#### 1.6.8
+
+* Removed deprecated implementation of ObjectManager.
