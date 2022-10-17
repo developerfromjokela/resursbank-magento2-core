@@ -104,13 +104,17 @@ class DiscountItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        $vatPct = $this->getVatPct();
+        return $this->sanitizeUnitAmountWithoutVat(
+            $this->amount + $this->taxAmount
+        );
 
-        $result = ($this->amount < 0 && $vatPct > 0) ?
-            ($this->amount / (1 + ($vatPct / 100))) :
-            $this->amount;
-
-        return $this->sanitizeUnitAmountWithoutVat($result);
+//        $vatPct = $this->getVatPct();
+//
+//        $result = ($this->amount < 0 && $vatPct > 0) ?
+//            ($this->amount / (1 + ($vatPct / 100))) :
+//            $this->amount;
+//
+//        return $this->sanitizeUnitAmountWithoutVat($result);
     }
 
     /**
@@ -132,18 +136,19 @@ class DiscountItem extends AbstractItem
      */
     public function getVatPct(): int
     {
-        $exclTax = abs($this->amount) - $this->taxAmount;
-
-        $result = ($exclTax > 0 && $this->taxAmount > 0) ?
-            (($this->taxAmount / $exclTax) * 100) :
-            0.0;
-
-        // VAT percentage should always be an int, unless explicitly configured.
-        if ($this->roundTaxPercentage()) {
-            $result = round($result);
-        }
-
-        return (int) $result;
+        return 0;
+//        $exclTax = abs($this->amount) - $this->taxAmount;
+//
+//        $result = ($exclTax > 0 && $this->taxAmount > 0) ?
+//            (($this->taxAmount / $exclTax) * 100) :
+//            0.0;
+//
+//        // VAT percentage should always be an int, unless explicitly configured.
+//        if ($this->roundTaxPercentage()) {
+//            $result = round($result);
+//        }
+//
+//        return (int) $result;
     }
 
     /**
