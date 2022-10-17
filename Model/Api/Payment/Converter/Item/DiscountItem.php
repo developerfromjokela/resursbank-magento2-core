@@ -104,9 +104,7 @@ class DiscountItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        return $this->sanitizeUnitAmountWithoutVat(
-            $this->amount + $this->taxAmount
-        );
+        return $this->sanitizeUnitAmountWithoutVat($this->amount);
 
 //        $vatPct = $this->getVatPct();
 //
