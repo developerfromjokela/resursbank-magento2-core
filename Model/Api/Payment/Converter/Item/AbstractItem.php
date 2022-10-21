@@ -6,161 +6,217 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Model\Api\Payment\Converter\Item;
+namespace Resursbank\Core\Model\Api\Payment\Converter;
 
 use Exception;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Store\Model\StoreManagerInterface;
-use Resursbank\Core\Helper\Config;
+use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Model\Api\Payment\Item;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\ArtNo;
-use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitAmountWithoutVat;
-use Resursbank\Core\Model\Api\Payment\ItemFactory;
-use function strlen;
+use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
+use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
+use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
+use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
+use function is_array;
 
 /**
- * Convert an item entity, such as an Order Item, into an object prepared for a
- * payment payload.
+ * Basic data conversion class for payment payload.
  */
-abstract class AbstractItem implements ItemInterface
+abstract class AbstractConverter implements ConverterInterface
 {
-    /**
-     * @var Config
-     */
-    protected Config $config;
-
-    /**
-     * @var ItemFactory
-     */
-    private ItemFactory $itemFactory;
-
     /**
      * @var Log
      */
-    protected Log $log;
+    private Log $log;
 
     /**
-     * @var StoreManagerInterface
+     * @var ShippingItemFactory
      */
-    private StoreManagerInterface $storeManager;
+    private ShippingItemFactory $shippingItemFactory;
 
     /**
-     * @param Config $config
-     * @param ItemFactory $itemFactory
+     * @var DiscountItemFactory
+     */
+    private DiscountItemFactory $discountItemFactory;
+
+    /**
+     * @var TaxItemResourceFactory
+     */
+    private TaxItemResourceFactory $taxResourceFactory;
+
+    /**
      * @param Log $log
-     * @param StoreManagerInterface $storeManager
+     * @param TaxItemResourceFactory $taxResourceFactory
+     * @param ShippingItemFactory $shippingItemFactory
+     * @param DiscountItemFactory $discountItemFactory
      */
     public function __construct(
-        Config $config,
-        ItemFactory $itemFactory,
         Log $log,
-        StoreManagerInterface $storeManager
+        TaxItemResourceFactory $taxResourceFactory,
+        ShippingItemFactory $shippingItemFactory,
+        DiscountItemFactory $discountItemFactory
     ) {
-        $this->config = $config;
-        $this->itemFactory = $itemFactory;
         $this->log = $log;
-        $this->storeManager = $storeManager;
+        $this->shippingItemFactory = $shippingItemFactory;
+        $this->discountItemFactory = $discountItemFactory;
+        $this->taxResourceFactory = $taxResourceFactory;
     }
 
     /**
-     * @return Item
+     * @inheritDoc
      * @throws Exception
      */
-    public function getItem(): Item
-    {
-        return $this->itemFactory->create([
-            Item::KEY_ART_NO => $this->getArtNo(),
-            Item::KEY_DESCRIPTION => $this->getDescription(),
-            Item::KEY_QUANTITY => $this->getQuantity(),
-            Item::KEY_UNIT_MEASURE => $this->getUnitMeasure(),
-            Item::KEY_UNIT_AMOUNT_WITHOUT_VAT => $this->getUnitAmountWithoutVat(),
-            Item::KEY_VAT_PCT => $this->getVatPct(),
-            Item::KEY_TYPE => $this->getType()
-        ]);
-    }
+    public function getShippingData(
+        string $method,
+        string $description,
+        float $amount,
+        float $vatPct
+    ): array {
+        $result = [];
 
-    /**
-     * Unit measurement configuration value.
-     *
-     * @return string
-     */
-    public function getUnitMeasure(): string
-    {
-        return Item::UNIT_MEASURE;
-    }
+        if ($this->includeShippingData($method, $amount)) {
+            $item = $this->shippingItemFactory->create(compact([
+                'method',
+                'description',
+                'amount',
+                'vatPct'
+            ]));
 
-    /**
-     * Whether to round tax percentage values.
-     *
-     * NOTE: This currently only applies to payment lines with type DISCOUNT,
-     * or ORDER_LINE lines including payment fee information.
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function roundTaxPercentage(): bool
-    {
-        $result = false;
-
-        try {
-            $result = $this->config->roundTaxPercentage(
-                $this->storeManager->getStore()->getCode()
-            );
-        } catch (Exception $e) {
-            $this->log->exception($e);
+            $result[] = $item->getItem();
         }
 
         return $result;
     }
 
     /**
-     * Removes all illegal characters for the "artNo" property. String length
-     * may not exceed 100 characters. Please refer to the linked documentation
-     * for further information.
-     *
-     * @param string $artNo
-     * @return string
-     * @link https://test.resurs.com/docs/display/ecom/Hosted+payment+flow+data
+     * @inheritDoc
+     * @throws Exception
      */
-    public function sanitizeArtNo(
-        string $artNo
-    ): string {
-        $result = (string) preg_replace(ArtNo::REGEX, '', strtolower($artNo));
+    public function getDiscountData(
+        float $amount,
+        float $taxAmount
+    ): array {
+        $result = [];
 
-        if (strlen($result) > ArtNo::MAX_LENGTH) {
-            $result = substr($result, 0, ArtNo::MAX_LENGTH);
+        if ($this->includeDiscountData($amount)) {
+            $item = $this->discountItemFactory->create(compact([
+                'amount',
+                'taxAmount'
+            ]));
+
+            $result[] = $item->getItem();
         }
 
         return $result;
     }
 
     /**
-     * The "unitAmountWithoutVat" property may not include more than 5 decimals.
-     * Please refer to the linked documentation for further information.
+     * Resolve array of discount items made unique by their VAT percentage.
      *
-     * @param float $amount
-     * @return float
-     * @link https://test.resurs.com/docs/display/ecom/Hosted+payment+flow+data
+     * @param array $items
+     * @return array
+     * @throws Exception
      */
-    public function sanitizeUnitAmountWithoutVat(
+    public function mergeDiscountItems(
+        array $items
+    ): array {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item instanceof DiscountItem) {
+                $vat = $item->getVatPct();
+
+                if (isset($result[$vat])) {
+                    $result[$vat]->addAmount(
+                        $item->getUnitAmountWithoutVat() * $item->getQuantity()
+                    );
+                } else {
+                    $result[$vat] = $item;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function includeShippingData(
+        string $method,
         float $amount
-    ): float {
-        return round($amount, UnitAmountWithoutVat::MAX_DECIMAL_LENGTH);
+    ): bool {
+        return ($method !== '' && $amount > 0);
     }
 
     /**
-     * @param CreditmemoItem|OrderItem|QuoteItem|AbstractModel $item
-     * @return mixed
+     * @inheritDoc
      */
-    public function getOrderId(
-        AbstractModel $item
-    ) {
-        return ($item instanceof OrderItem) ?
-            $item->getId() :
-            $item->getOrderId(); /** @phpstan-ignore-line */
+    public function includeDiscountData(
+        float $amount
+    ): bool {
+        return ($amount < 0);
+    }
+
+    /**
+     * Convert all PaymentItem instances to simple arrays the API can
+     * understand.
+     *
+     * @param PaymentItem[] $items
+     * @return array<array>
+     */
+    public function convertItemsToArrays(
+        array $items
+    ): array {
+        $result = [];
+
+        foreach ($items as $item) {
+            $result[] = $item->toArray();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Retrieve applied tax percentage from order entity by type (product,
+     * shipping etc.).
+     *
+     * @param int $orderId
+     * @param string $type
+     * @return float
+     */
+    public function getTaxPercentage(
+        int $orderId,
+        string $type
+    ): float {
+        $result = 0.0;
+
+        $taxItem = $this->taxResourceFactory->create();
+        $collection = $taxItem->getTaxItemsByOrderId($orderId);
+
+        $match = false;
+
+        /** @var array<mixed> $item */
+        foreach ($collection as $item) {
+            if (is_array($item) &&
+                isset($item['taxable_item_type']) &&
+                $item['taxable_item_type'] === $type
+            ) {
+                $match = true;
+
+                $result = isset($item['tax_percent']) ?
+                    (float) $item['tax_percent'] :
+                    0.0;
+
+                break;
+            }
+        }
+
+        if (!$match) {
+            $this->log->info(
+                'Could not find matching tax item type ' . $type . ' on ' .
+                'order entity ' . $orderId
+            );
+        }
+
+        return $result;
     }
 }

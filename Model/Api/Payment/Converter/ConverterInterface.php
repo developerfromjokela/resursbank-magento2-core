@@ -40,13 +40,11 @@ interface ConverterInterface
     /**
      * Extract discount information from $subject entity.
      *
-     * @param string $couponCode
      * @param float $amount Price incl. tax.
      * @param float $taxAmount Tax amount.
      * @return PaymentItem[]
      */
     public function getDiscountData(
-        string $couponCode,
         float $amount,
         float $taxAmount
     ): array;

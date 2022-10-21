@@ -90,7 +90,6 @@ abstract class AbstractConverter implements ConverterInterface
      * @throws Exception
      */
     public function getDiscountData(
-        string $couponCode,
         float $amount,
         float $taxAmount
     ): array {
@@ -98,7 +97,6 @@ abstract class AbstractConverter implements ConverterInterface
 
         if ($this->includeDiscountData($amount)) {
             $item = $this->discountItemFactory->create(compact([
-                'couponCode',
                 'amount',
                 'taxAmount'
             ]));

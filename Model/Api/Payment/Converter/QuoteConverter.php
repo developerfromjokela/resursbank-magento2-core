@@ -66,7 +66,6 @@ class QuoteConverter extends AbstractConverter
         Quote $entity
     ): array {
         $shippingAddress = $entity->getShippingAddress();
-        $billingAddress = $entity->getBillingAddress();
 
         return array_merge(
             array_merge(
@@ -75,11 +74,6 @@ class QuoteConverter extends AbstractConverter
                     (string) $shippingAddress->getShippingDescription(),
                     (float) $shippingAddress->getShippingInclTax(),
                     $this->getShippingVatPct($shippingAddress)
-                ),
-                $this->getDiscountData(
-                    (string) $entity->getCouponCode(),
-                    $this->getDiscountAmount($shippingAddress, $billingAddress),
-                    $this->getDiscountTax($shippingAddress, $billingAddress)
                 )
             ),
             $this->getProductData($entity)
@@ -97,6 +91,7 @@ class QuoteConverter extends AbstractConverter
         Quote $entity
     ): array {
         $result = [];
+        $discountItems = [];
 
         if ($this->includeProductData($entity)) {
             /** @var Item $product */
@@ -109,11 +104,21 @@ class QuoteConverter extends AbstractConverter
                     ]);
 
                     $result[] = $item->getItem();
+
+                    if ($product->getDiscountAmount() > 0) {
+                        $discountItems[] = $this->getDiscountData(
+                            $product->getDiscountAmount(),
+                            $product->getDiscountTaxCompensationAmount()
+                        );
+                    }
                 }
             }
         }
 
-        return $result;
+        return array_merge(
+            $result,
+            $this->mergeDiscountItems($discountItems)
+        );
     }
 
     /**
@@ -165,8 +170,8 @@ class QuoteConverter extends AbstractConverter
         foreach ($items as $item) {
             if ($item instanceof PaymentItem) {
                 $result += (
-                    $item->getUnitAmountWithoutVat() * $item->getQuantity()
-                ) * (1 + $item->getVatPct() / 100);
+                        $item->getUnitAmountWithoutVat() * $item->getQuantity()
+                    ) * (1 + $item->getVatPct() / 100);
             }
         }
 
@@ -186,41 +191,5 @@ class QuoteConverter extends AbstractConverter
             $product->getParentItem() instanceof Item &&
             $product->getParentItem()->getProductType() === 'configurable'
         );
-    }
-
-    /**
-     * Unless you have a shopping cart consisting of only downloadable products
-     * the discount data will be associated with your shipping address.
-     * Otherwise it will be associated with your billing address instead, even
-     * though there is a separate shipping address entity. This appears to be
-     * a bug we cannot do much about at the time of writing.
-     *
-     * @param Address $shipping
-     * @param Address $billing
-     * @return float
-     */
-    private function getDiscountAmount(
-        Address $shipping,
-        Address $billing
-    ): float {
-        return (float) $shipping->getDiscountAmount() < 0.0 ?
-            (float) $shipping->getDiscountAmount() :
-            (float) $billing->getDiscountAmount();
-    }
-
-    /**
-     * Please refer to the docblock of getDiscountAmount for an explanation.
-     *
-     * @param Address $shipping
-     * @param Address $billing
-     * @return float
-     */
-    private function getDiscountTax(
-        Address $shipping,
-        Address $billing
-    ): float {
-        return (float) $shipping->getDiscountTaxCompensationAmount() > 0.0 ?
-            (float) $shipping->getDiscountTaxCompensationAmount() :
-            (float) $billing->getDiscountTaxCompensationAmount();
     }
 }
