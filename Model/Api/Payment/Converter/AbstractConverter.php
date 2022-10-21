@@ -11,6 +11,7 @@ namespace Resursbank\Core\Model\Api\Payment\Converter;
 use Exception;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
@@ -102,6 +103,35 @@ abstract class AbstractConverter implements ConverterInterface
             ]));
 
             $result[] = $item->getItem();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Resolve array of discount items made unique by their VAT percentage.
+     *
+     * @param array $items
+     * @return array
+     * @throws Exception
+     */
+    public function mergeDiscountItems(
+        array $items
+    ): array {
+        $result = [];
+
+        foreach ($items as $item) {
+            if ($item instanceof DiscountItem) {
+                $vat = $item->getVatPct();
+
+                if (isset($result[$vat])) {
+                    $result[$vat]->addAmount(
+                        $item->getUnitAmountWithoutVat() * $item->getQuantity()
+                    );
+                } else {
+                    $result[$vat] = $item;
+                }
+            }
         }
 
         return $result;
