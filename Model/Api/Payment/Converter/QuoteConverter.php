@@ -105,20 +105,17 @@ class QuoteConverter extends AbstractConverter
 
                     $result[] = $item->getItem();
 
-                    if ($product->getDiscountAmount() > 0) {
-                        $discountItems[] = $this->getDiscountData(
-                            $product->getDiscountAmount(),
-                            $product->getDiscountTaxCompensationAmount()
-                        );
-                    }
+                    $this->addDiscountItem(
+                        (float) $product->getDiscountAmount(),
+                        $product->getDiscountTaxCompensationAmount() > 0 ? (int) $product->getTaxPercent() : 0,
+                        (float) $product->getQty(),
+                        $discountItems
+                    );
                 }
             }
         }
 
-        return array_merge(
-            $result,
-            $this->mergeDiscountItems($discountItems)
-        );
+        return array_merge($result, $discountItems);
     }
 
     /**

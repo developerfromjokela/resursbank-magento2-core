@@ -25,7 +25,7 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @var Log
      */
-    private Log $log;
+    protected Log $log;
 
     /**
      * @var ShippingItemFactory
@@ -35,7 +35,7 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @var DiscountItemFactory
      */
-    private DiscountItemFactory $discountItemFactory;
+    public DiscountItemFactory $discountItemFactory;
 
     /**
      * @var TaxItemResourceFactory
@@ -90,6 +90,28 @@ abstract class AbstractConverter implements ConverterInterface
      * @inheritDoc
      * @throws Exception
      */
+    public function getDiscountItem(
+        float $amount,
+        float $taxAmount
+    ): array {
+        $result = [];
+
+        if ($this->includeDiscountData($amount)) {
+            $item = $this->discountItemFactory->create(compact([
+                'amount',
+                'taxAmount'
+            ]));
+
+            $result[] = $item->getItem();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
     public function getDiscountData(
         float $amount,
         float $taxAmount
@@ -121,14 +143,18 @@ abstract class AbstractConverter implements ConverterInterface
         $result = [];
 
         foreach ($items as $item) {
+            $this->log->info('Merging items......');
             if ($item instanceof DiscountItem) {
+                $this->log->info('Found one....');
                 $vat = $item->getVatPct();
 
                 if (isset($result[$vat])) {
+                    $this->log->info('Same item found....');
                     $result[$vat]->addAmount(
                         $item->getUnitAmountWithoutVat() * $item->getQuantity()
                     );
                 } else {
+                    $this->log->info('New item found....');
                     $result[$vat] = $item;
                 }
             }
@@ -218,5 +244,63 @@ abstract class AbstractConverter implements ConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Append discount item to passed array. We pass an array this way to
+     * combine discount items, resulting in one item for each VAT percentage.
+     *
+     * @param float $amount
+     * @param int $taxPercent
+     * @param float $productQty
+     * @param array $items
+     * @return void
+     */
+    public function addDiscountItem(
+        float $amount,
+        int $taxPercent,
+        float $productQty,
+        array &$items
+    ): void {
+        if ($amount > 0) {
+            if ($taxPercent > 0) {
+                $amount /= (1 + ($taxPercent / 100));
+            }
+
+            // When applying a complex payment context, such as a percentage
+            // based discount in combination with percentage based shipping
+            // prices or certain tax settings, the discount amount can be
+            // subject to a rounding error of 0.01. We can safely mitigate this
+            // if a customer purchase specifically one product by removing the
+            // fractions after the first two decimals.
+            if ($productQty === 1.0) {
+                $amount = (float) number_format($amount, 2, '.', '');
+            }
+
+            $item = $this->discountItemFactory->create(
+                [
+                    'amount' => 0 - $amount,
+                    'taxPercent' => $taxPercent
+                ]
+            );
+
+            $discountItem = $item->getItem();
+            $found = false;
+
+            foreach ($items as $existingItem) {
+                if ($existingItem->getVatPct() === $discountItem->getVatPct()) {
+                    $existingItem->setUnitAmountWithoutVat(
+                        $existingItem->getUnitAmountWithoutVat() +
+                        $discountItem->getUnitAmountWithoutVat()
+                    );
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $items[] = $discountItem;
+            }
+        }
     }
 }

@@ -25,17 +25,22 @@ class DiscountItem extends AbstractItem
      */
     private float $amount;
 
+//    /**
+//     * @var float
+//     */
+//    private float $taxAmount;
+
     /**
-     * @var float
+     * @var int
      */
-    private float $taxAmount;
+    private int $taxPercent;
 
     /**
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
      * @param float $amount Amount incl. tax.
-     * @param float $taxAmount Tax amount.
+     * @param int $taxPercent Tax amount.
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -43,24 +48,14 @@ class DiscountItem extends AbstractItem
         ItemFactory $itemFactory,
         Log $log,
         float $amount,
-        float $taxAmount,
+//        float $taxAmount,
+        int $taxPercent,
         StoreManagerInterface $storeManager
     ) {
         $this->amount = $amount;
-        $this->taxAmount = $taxAmount;
+        $this->taxPercent = $taxPercent;
 
         parent::__construct($config, $itemFactory, $log, $storeManager);
-    }
-
-    /**
-     * Add supplied amount to this item.
-     *
-     * @param float $amount
-     * @return void
-     */
-    public function addAmount(float $amount): void
-    {
-        $this->amount += $amount;
     }
 
     /**
@@ -98,13 +93,7 @@ class DiscountItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        $vatPct = $this->getVatPct();
-
-        $result = ($this->amount < 0 && $vatPct > 0) ?
-            ($this->amount / (1 + ($vatPct / 100))) :
-            $this->amount;
-
-        return $this->sanitizeUnitAmountWithoutVat($result);
+        return $this->sanitizeUnitAmountWithoutVat($this->amount);
     }
 
     /**
@@ -126,18 +115,7 @@ class DiscountItem extends AbstractItem
      */
     public function getVatPct(): int
     {
-        $exclTax = abs($this->amount) - $this->taxAmount;
-
-        $result = ($exclTax > 0 && $this->taxAmount > 0) ?
-            (($this->taxAmount / $exclTax) * 100) :
-            0.0;
-
-        // VAT percentage should always be an int, unless explicitly configured.
-        if ($this->roundTaxPercentage()) {
-            $result = round($result);
-        }
-
-        return (int) $result;
+        return $this->taxPercent;
     }
 
     /**
