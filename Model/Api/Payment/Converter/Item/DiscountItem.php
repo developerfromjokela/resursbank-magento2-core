@@ -25,11 +25,6 @@ class DiscountItem extends AbstractItem
      */
     private float $amount;
 
-//    /**
-//     * @var float
-//     */
-//    private float $taxAmount;
-
     /**
      * @var int
      */
@@ -48,7 +43,6 @@ class DiscountItem extends AbstractItem
         ItemFactory $itemFactory,
         Log $log,
         float $amount,
-//        float $taxAmount,
         int $taxPercent,
         StoreManagerInterface $storeManager
     ) {

@@ -25,7 +25,7 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @var Log
      */
-    protected Log $log;
+    private Log $log;
 
     /**
      * @var ShippingItemFactory
@@ -35,7 +35,7 @@ abstract class AbstractConverter implements ConverterInterface
     /**
      * @var DiscountItemFactory
      */
-    public DiscountItemFactory $discountItemFactory;
+    private DiscountItemFactory $discountItemFactory;
 
     /**
      * @var TaxItemResourceFactory
@@ -88,98 +88,12 @@ abstract class AbstractConverter implements ConverterInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
-     */
-    public function getDiscountItem(
-        float $amount,
-        float $taxAmount
-    ): array {
-        $result = [];
-
-        if ($this->includeDiscountData($amount)) {
-            $item = $this->discountItemFactory->create(compact([
-                'amount',
-                'taxAmount'
-            ]));
-
-            $result[] = $item->getItem();
-        }
-
-        return $result;
-    }
-
-    /**
-     * @inheritDoc
-     * @throws Exception
-     */
-    public function getDiscountData(
-        float $amount,
-        float $taxAmount
-    ): array {
-        $result = [];
-
-        if ($this->includeDiscountData($amount)) {
-            $item = $this->discountItemFactory->create(compact([
-                'amount',
-                'taxAmount'
-            ]));
-
-            $result[] = $item->getItem();
-        }
-
-        return $result;
-    }
-
-    /**
-     * Resolve array of discount items made unique by their VAT percentage.
-     *
-     * @param array $items
-     * @return array
-     * @throws Exception
-     */
-    public function mergeDiscountItems(
-        array $items
-    ): array {
-        $result = [];
-
-        foreach ($items as $item) {
-            $this->log->info('Merging items......');
-            if ($item instanceof DiscountItem) {
-                $this->log->info('Found one....');
-                $vat = $item->getVatPct();
-
-                if (isset($result[$vat])) {
-                    $this->log->info('Same item found....');
-                    $result[$vat]->addAmount(
-                        $item->getUnitAmountWithoutVat() * $item->getQuantity()
-                    );
-                } else {
-                    $this->log->info('New item found....');
-                    $result[$vat] = $item;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @inheritDoc
      */
     public function includeShippingData(
         string $method,
         float $amount
     ): bool {
         return ($method !== '' && $amount > 0);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function includeDiscountData(
-        float $amount
-    ): bool {
-        return ($amount < 0);
     }
 
     /**
