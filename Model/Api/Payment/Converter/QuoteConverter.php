@@ -107,7 +107,7 @@ class QuoteConverter extends AbstractConverter
 
                     $this->addDiscountItem(
                         (float) $product->getDiscountAmount(),
-                        $product->getDiscountTaxCompensationAmount() > 0 ? (int) $item->getItem()->getVatPct() : 0,
+                        $product->getDiscountTaxCompensationAmount() > 0 ? $item->getItem()->getVatPct() : 0,
                         (float) $product->getQty(),
                         $discountItems
                     );
