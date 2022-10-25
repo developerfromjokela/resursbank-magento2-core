@@ -187,9 +187,9 @@ abstract class AbstractConverter implements ConverterInterface
             // subject to a rounding error of 0.01. We can safely mitigate this
             // if a customer purchase specifically one product by removing the
             // fractions after the first two decimals.
-            if ($productQty === 1.0) {
-                $amount = (float) number_format($amount, 2, '.', '');
-            }
+//            if ($productQty === 1.0) {
+//                $amount = (float) number_format($amount, 2, '.', '');
+//            }
 
             $item = $this->discountItemFactory->create(
                 [
