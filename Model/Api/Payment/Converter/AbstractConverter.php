@@ -181,16 +181,6 @@ abstract class AbstractConverter implements ConverterInterface
                 $amount /= (1 + ($taxPercent / 100));
             }
 
-            // When applying a complex payment context, such as a percentage
-            // based discount in combination with percentage based shipping
-            // prices or certain tax settings, the discount amount can be
-            // subject to a rounding error of 0.01. We can safely mitigate this
-            // if a customer purchase specifically one product by removing the
-            // fractions after the first two decimals.
-//            if ($productQty === 1.0) {
-//                $amount = (float) number_format($amount, 2, '.', '');
-//            }
-
             $item = $this->discountItemFactory->create(
                 [
                     'amount' => 0 - $amount,
