@@ -38,20 +38,6 @@ interface ConverterInterface
     ): array;
 
     /**
-     * Extract discount information from $subject entity.
-     *
-     * @param string $couponCode
-     * @param float $amount Price incl. tax.
-     * @param float $taxAmount Tax amount.
-     * @return PaymentItem[]
-     */
-    public function getDiscountData(
-        string $couponCode,
-        float $amount,
-        float $taxAmount
-    ): array;
-
-    /**
      * Whether to include shipping data in payment payload.
      *
      * @param string $method
@@ -60,16 +46,6 @@ interface ConverterInterface
      */
     public function includeShippingData(
         string $method,
-        float $amount
-    ): bool;
-
-    /**
-     * Whether to include discount data in payment payload.
-     *
-     * @param float $amount
-     * @return bool
-     */
-    public function includeDiscountData(
         float $amount
     ): bool;
 }

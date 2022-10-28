@@ -21,56 +21,44 @@ use Resursbank\Core\Model\Api\Payment\ItemFactory;
 class DiscountItem extends AbstractItem
 {
     /**
-     * @var string
-     */
-    private string $couponCode;
-
-    /**
      * @var float
      */
     private float $amount;
 
     /**
-     * @var float
+     * @var int
      */
-    private float $taxAmount;
+    private int $taxPercent;
 
     /**
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
-     * @param string $couponCode
      * @param float $amount Amount incl. tax.
-     * @param float $taxAmount Tax amount.
+     * @param int $taxPercent Tax amount.
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,
         ItemFactory $itemFactory,
         Log $log,
-        string $couponCode,
         float $amount,
-        float $taxAmount,
+        int $taxPercent,
         StoreManagerInterface $storeManager
     ) {
-        $this->couponCode = $couponCode;
         $this->amount = $amount;
-        $this->taxAmount = $taxAmount;
+        $this->taxPercent = $taxPercent;
 
         parent::__construct($config, $itemFactory, $log, $storeManager);
     }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function getArtNo(): string
     {
-        $result = 'discount';
-
-        if ($this->couponCode !== '') {
-            $result .= $this->couponCode;
-        }
-
+        $result = 'discount_' . $this->getVatPct();
         $result .= time();
 
         return $this->sanitizeArtNo($result);
@@ -78,16 +66,11 @@ class DiscountItem extends AbstractItem
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function getDescription(): string
     {
-        $result = 'Discount';
-
-        if ($this->couponCode !== '') {
-            $result .= " ({$this->couponCode})";
-        }
-
-        return $result;
+        return 'Discount ' . $this->getVatPct() . '%';
     }
 
     /**
@@ -105,14 +88,6 @@ class DiscountItem extends AbstractItem
     public function getUnitAmountWithoutVat(): float
     {
         return $this->sanitizeUnitAmountWithoutVat($this->amount);
-
-//        $vatPct = $this->getVatPct();
-//
-//        $result = ($this->amount < 0 && $vatPct > 0) ?
-//            ($this->amount / (1 + ($vatPct / 100))) :
-//            $this->amount;
-//
-//        return $this->sanitizeUnitAmountWithoutVat($result);
     }
 
     /**
@@ -134,19 +109,7 @@ class DiscountItem extends AbstractItem
      */
     public function getVatPct(): int
     {
-        return 0;
-//        $exclTax = abs($this->amount) - $this->taxAmount;
-//
-//        $result = ($exclTax > 0 && $this->taxAmount > 0) ?
-//            (($this->taxAmount / $exclTax) * 100) :
-//            0.0;
-//
-//        // VAT percentage should always be an int, unless explicitly configured.
-//        if ($this->roundTaxPercentage()) {
-//            $result = round($result);
-//        }
-//
-//        return (int) $result;
+        return $this->taxPercent;
     }
 
     /**

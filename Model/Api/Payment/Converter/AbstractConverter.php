@@ -11,6 +11,7 @@ namespace Resursbank\Core\Model\Api\Payment\Converter;
 use Exception;
 use Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory as TaxItemResourceFactory;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItemFactory;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItemFactory;
 use Resursbank\Core\Model\Api\Payment\Item as PaymentItem;
@@ -87,45 +88,12 @@ abstract class AbstractConverter implements ConverterInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
-     */
-    public function getDiscountData(
-        string $couponCode,
-        float $amount,
-        float $taxAmount
-    ): array {
-        $result = [];
-
-        if ($this->includeDiscountData($amount)) {
-            $item = $this->discountItemFactory->create(compact([
-                'couponCode',
-                'amount',
-                'taxAmount'
-            ]));
-
-            $result[] = $item->getItem();
-        }
-
-        return $result;
-    }
-
-    /**
-     * @inheritDoc
      */
     public function includeShippingData(
         string $method,
         float $amount
     ): bool {
         return ($method !== '' && $amount > 0);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function includeDiscountData(
-        float $amount
-    ): bool {
-        return ($amount < 0);
     }
 
     /**
@@ -190,5 +158,53 @@ abstract class AbstractConverter implements ConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Append discount item to passed array. We pass an array this way to
+     * combine discount items, resulting in one item for each VAT percentage.
+     *
+     * @param float $amount
+     * @param int $taxPercent
+     * @param float $productQty
+     * @param array $items
+     * @return void
+     */
+    public function addDiscountItem(
+        float $amount,
+        int $taxPercent,
+        float $productQty,
+        array &$items
+    ): void {
+        if ($amount > 0) {
+            if ($taxPercent > 0) {
+                $amount /= (1 + ($taxPercent / 100));
+            }
+
+            $item = $this->discountItemFactory->create(
+                [
+                    'amount' => 0 - $amount,
+                    'taxPercent' => $taxPercent
+                ]
+            );
+
+            $discountItem = $item->getItem();
+            $found = false;
+
+            foreach ($items as $existingItem) {
+                if ($existingItem->getVatPct() === $discountItem->getVatPct()) {
+                    $existingItem->setUnitAmountWithoutVat(
+                        $existingItem->getUnitAmountWithoutVat() +
+                        $discountItem->getUnitAmountWithoutVat()
+                    );
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $items[] = $discountItem;
+            }
+        }
     }
 }

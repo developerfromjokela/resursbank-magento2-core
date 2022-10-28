@@ -97,8 +97,8 @@ class ProductItem extends AbstractItem
     {
         return $this->sanitizeUnitAmountWithoutVat(
             $this->isBundle() && !$this->hasFixedPrice() ?
-            0.0 :
-            (float)$this->product->getConvertedPrice()
+                0.0 :
+                (float) $this->product->getPriceInclTax() / (1 + ((float) $this->product->getTaxPercent() / 100))
         );
     }
 
@@ -124,9 +124,9 @@ class ProductItem extends AbstractItem
         if ($this->isBundle()) {
             $result = $this->hasFixedPrice() ?
                 ((float)(
-                    $this->product->getTaxAmount() /
-                    $this->product->getConvertedPrice()
-                ) * 100) / $this->getQuantity() :
+                        $this->product->getTaxAmount() /
+                        $this->product->getConvertedPrice()
+                    ) * 100) / $this->getQuantity() :
                 0.0;
         } else {
             $result = (float) $this->product->getTaxPercent();
