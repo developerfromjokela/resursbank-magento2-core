@@ -37,3 +37,8 @@ Core part of Magento 2 module.
 #### 1.6.8
 
 * Removed deprecated implementation of ObjectManager.
+
+#### 1.6.9
+
+* Discount items are now handled on product level and each discount percentage is assigned too a separate row.
+* Revamped product tax calculations to support more.
