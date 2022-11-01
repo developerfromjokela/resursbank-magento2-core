@@ -79,10 +79,10 @@ class RestoreSession implements ArgumentInterface
         try {
             if (!$this->successValidator->isValid()) {
                 $order = $this->order->resolveOrderFromRequest();
-                $resursbankResult = $this->order->getResursbankResult(order: $order);
+                $resursbankResult = $this->order->getResursbankResult($order);
 
                 if (!$order->getPayment()) {
-                    throw new Exception(message: 'Payment is null');
+                    throw new Exception('Payment is null');
                 }
                 $isResursMethod = $this->paymentMethods->isResursBankMethod(
                     code: $order->getPayment()->getMethod()
