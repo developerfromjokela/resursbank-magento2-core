@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Session\SuccessValidator;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
+use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\ViewModel\Session\Checkout as Session;
 
 /**
@@ -60,12 +61,14 @@ class RestoreSession implements ArgumentInterface
         Log $log,
         Order $order,
         Session $session,
-        SuccessValidator $successValidator
+        SuccessValidator $successValidator,
+        PaymentMethods $paymentMethods
     ) {
         $this->log = $log;
         $this->order = $order;
         $this->session = $session;
         $this->successValidator = $successValidator;
+        $this->paymentMethods = $paymentMethods;
     }
 
     /**
@@ -76,13 +79,23 @@ class RestoreSession implements ArgumentInterface
         try {
             if (!$this->successValidator->isValid()) {
                 $order = $this->order->resolveOrderFromRequest();
-                $quoteId = $order->getQuoteId();
+                $resursbankResult = $this->order->getResursbankResult($order);
 
-                $this->session
-                    ->setLastQuoteId($quoteId)
-                    ->setLastSuccessQuoteId($quoteId)
-                    ->setLastOrderId($order->getEntityId())
-                    ->setLastRealOrderId($order->getIncrementId());
+                if (!$order->getPayment()) {
+                    throw new Exception('Payment is null');
+                }
+                $isResursMethod = $this->paymentMethods->isResursBankMethod(
+                    code: $order->getPayment()->getMethod()
+                );
+
+                if (!$resursbankResult && $isResursMethod) {
+                    $quoteId = $order->getQuoteId();
+                    $this->session
+                        ->setLastQuoteId($quoteId)
+                        ->setLastSuccessQuoteId($quoteId)
+                        ->setLastOrderId($order->getEntityId())
+                        ->setLastRealOrderId($order->getIncrementId());
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);
