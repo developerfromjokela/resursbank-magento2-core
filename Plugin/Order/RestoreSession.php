@@ -84,9 +84,7 @@ class RestoreSession implements ArgumentInterface
                 if (!$order->getPayment()) {
                     throw new Exception('Payment is null');
                 }
-                $isResursMethod = $this->paymentMethods->isResursBankMethod(
-                    code: $order->getPayment()->getMethod()
-                );
+                $isResursMethod = $this->paymentMethods->isResursBankMethod($order->getPayment()->getMethod());
 
                 if (!$resursbankResult && $isResursMethod) {
                     $quoteId = $order->getQuoteId();
