@@ -70,7 +70,7 @@ class DiscountItem extends AbstractItem
      */
     public function getDescription(): string
     {
-        return 'Discount ' . $this->getVatPct() . '%';
+        return 'Discount';
     }
 
     /**
