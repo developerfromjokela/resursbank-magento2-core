@@ -11,6 +11,7 @@ namespace Resursbank\Core\Plugin\Order;
 use Exception;
 use Magento\Checkout\Model\Session\SuccessValidator;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -79,14 +80,8 @@ class RestoreSession implements ArgumentInterface
         try {
             if (!$this->successValidator->isValid()) {
                 $order = $this->order->resolveOrderFromRequest();
-                $resursbankResult = $this->order->getResursbankResult($order);
 
-                if (!$order->getPayment()) {
-                    throw new Exception('Payment is null');
-                }
-                $isResursMethod = $this->paymentMethods->isResursBankMethod($order->getPayment()->getMethod());
-
-                if (!$resursbankResult && $isResursMethod) {
+                if ($this->isEnabled($order)) {
                     $quoteId = $order->getQuoteId();
                     $this->session
                         ->setLastQuoteId($quoteId)
@@ -98,5 +93,19 @@ class RestoreSession implements ArgumentInterface
         } catch (Exception $e) {
             $this->log->exception($e);
         }
+    }
+
+    /**
+     * Check if this plugin is enabled.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function isEnabled(OrderInterface $order): bool
+    {
+        return (
+            !$this->order->getResursbankResult($order) &&
+            $this->paymentMethods->isResursBankOrder($order)
+        );
     }
 }

@@ -115,9 +115,8 @@ class RebuildCart
     ) {
         try {
             $order = $this->orderHelper->resolveOrderFromRequest();
-            $rbResult = $this->orderHelper->getResursbankResult($order);
 
-            if ($rbResult === null && $this->isEnabled($order)) {
+            if ($this->isEnabled($order)) {
                 // Cancel order since payment failed.
                 $this->orderHelper->cancelOrder($order);
 
@@ -156,23 +155,14 @@ class RebuildCart
      *
      * @param OrderInterface $order
      * @return bool
-     * @throws InvalidDataException
      */
     private function isEnabled(
         OrderInterface $order
     ): bool {
-        $payment = $order->getPayment();
-
-        if (!($payment instanceof OrderPaymentInterface)) {
-            throw new InvalidDataException(__(
-                'Payment does not exist for order %1',
-                $order->getIncrementId()
-            ));
-        }
-
         return (
-            (int) $this->request->getParam('disable_rebuild_cart') !== 1 &&
-            $this->paymentMethods->isResursBankMethod($payment->getMethod())
+            $this->orderHelper->getResursbankResult($order) === null &&
+            $this->paymentMethods->isResursBankOrder($order) &&
+            (int) $this->request->getParam('disable_rebuild_cart') !== 1
         );
     }
 }
