@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Exception;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Resursbank\Core\Exception\InvalidDataException;
 use function is_array;
 use JsonException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -403,6 +406,22 @@ class PaymentMethods extends AbstractHelper
                 $this->isCurrentMethod($code) ||
                 $this->isLegacyMethod($code)
             )
+        );
+    }
+
+    /**
+     * Shorthand method to check if an order was paid using Resurs Bank.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    public function isResursBankOrder(OrderInterface $order)
+    {
+        $payment = $order->getPayment();
+
+        return (
+            $payment instanceof OrderPaymentInterface &&
+            $this->isResursBankMethod($payment->getMethod())
         );
     }
 

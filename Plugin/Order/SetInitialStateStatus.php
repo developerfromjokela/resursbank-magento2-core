@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\State\AuthorizeCommand;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Helper\PaymentMethods;
 
 /**
  * Change order state to "new" and status to "pending_payment" after authorize
@@ -38,14 +39,22 @@ class SetInitialStateStatus
     private Log $log;
 
     /**
+     * @var PaymentMethods
+     */
+    private PaymentMethods $paymentMethods;
+
+    /**
      * @param PaymentHelper $paymentHelper
+     * @param PaymentMethods $paymentMethods
      * @param Log $log
      */
     public function __construct(
         PaymentHelper $paymentHelper,
+        PaymentMethods $paymentMethods,
         Log $log
     ) {
         $this->paymentHelper = $paymentHelper;
+        $this->paymentMethods = $paymentMethods;
         $this->log = $log;
     }
 
@@ -67,6 +76,10 @@ class SetInitialStateStatus
         OrderInterface $order
     ): Phrase {
         try {
+            if (!$this->paymentMethods->isResursBankMethod($payment->getMethod())) {
+                return $result;
+            }
+
             $status = $this->paymentHelper
                 ->getMethodInstance($payment->getMethod())
                 ->getConfigData('order_status');

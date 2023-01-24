@@ -123,22 +123,12 @@ class RemoveOrder implements ArgumentInterface
     private function isEnabled(
         OrderInterface $order
     ): bool {
-        $reservedOrderId = $this->session->getQuote()->getReservedOrderId();
-        $payment = $order->getPayment();
-
-        if (!($payment instanceof OrderPaymentInterface)) {
-            throw new InvalidDataException(__(
-                'Payment does not exist for order %1',
-                $order->getIncrementId()
-            ));
-        }
-
-        $storeCode = $this->storeManager->getStore()->getCode();
-
         return (
-            $this->config->isReuseErroneouslyCreatedOrdersEnabled($storeCode) &&
-            $this->paymentMethods->isResursBankMethod($payment->getMethod()) &&
-            $order->getIncrementId() === $reservedOrderId
+            $this->paymentMethods->isResursBankOrder($order) &&
+            $this->config->isReuseErroneouslyCreatedOrdersEnabled(
+                $this->storeManager->getStore()->getCode()
+            ) &&
+            $order->getIncrementId() === $this->session->getQuote()->getReservedOrderId()
         );
     }
 }

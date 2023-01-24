@@ -19,6 +19,7 @@ use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
+use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Api\Payment as PaymentModel;
 
 /**
@@ -50,21 +51,29 @@ class UpdateBillingAddress
     private Api $api;
 
     /**
+     * @var PaymentMethods
+     */
+    private PaymentMethods $paymentMethods;
+
+    /**
      * @param Log $log
      * @param AddressRepository $addressRepository
      * @param Order $order
      * @param Api $api
+     * @param PaymentMethods $paymentMethods
      */
     public function __construct(
         Log $log,
         AddressRepository $addressRepository,
         Order $order,
-        Api $api
+        Api $api,
+        PaymentMethods $paymentMethods
     ) {
         $this->log = $log;
         $this->addressRepository = $addressRepository;
         $this->order = $order;
         $this->api = $api;
+        $this->paymentMethods = $paymentMethods;
     }
 
     /**
@@ -84,9 +93,8 @@ class UpdateBillingAddress
         /** @noinspection BadExceptionsProcessingInspection */
         try {
             $order = $this->order->resolveOrderFromRequest();
-            $rbResult = $this->order->getResursbankResult($order);
 
-            if ($rbResult === null) {
+            if ($this->isEnabled($order)) {
                 $paymentData = $this->api->getPayment($order);
 
                 if ($paymentData === null) {
@@ -104,6 +112,20 @@ class UpdateBillingAddress
         }
 
         return $result;
+    }
+
+    /**
+     * Check if this plugin is enabled.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function isEnabled(OrderInterface $order): bool
+    {
+        return (
+            $this->paymentMethods->isResursBankOrder($order) &&
+            $this->order->getResursbankResult($order) === null
+        );
     }
 
     /**

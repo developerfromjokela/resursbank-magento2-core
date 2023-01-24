@@ -14,8 +14,10 @@ use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\View\Result\Page;
+use Magento\Sales\Api\Data\OrderInterface;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Helper\PaymentMethods;
 
 /**
  * Marks whether client reached success or failure page in Magento.
@@ -35,16 +37,24 @@ class SetResursbankResult
     private Log $log;
 
     /**
+     * @var PaymentMethods
+     */
+    private PaymentMethods $paymentMethods;
+
+    /**
      * @param Log $log
      * @param Order $order
+     * @param PaymentMethods $paymentMethods
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Log $log,
-        Order $order
+        Order $order,
+        PaymentMethods $paymentMethods
     ) {
         $this->log = $log;
         $this->order = $order;
+        $this->paymentMethods = $paymentMethods;
     }
 
     /**
@@ -60,9 +70,9 @@ class SetResursbankResult
         try {
             $order = $this->order->resolveOrderFromRequest();
 
-            if ($this->order->getResursbankResult($order) === null) {
+            if ($this->isEnabled($order)) {
                 $this->order->setResursbankResult(
-                    $this->order->resolveOrderFromRequest(),
+                    $order,
                     ($subject instanceof Success)
                 );
             }
@@ -71,5 +81,19 @@ class SetResursbankResult
         }
 
         return $result;
+    }
+
+    /**
+     * Check if this plugin is enabled.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    private function isEnabled(OrderInterface $order): bool
+    {
+        return (
+            $this->paymentMethods->isResursBankOrder($order) &&
+            $this->order->getResursbankResult($order) === null
+        );
     }
 }
