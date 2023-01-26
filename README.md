@@ -42,3 +42,7 @@ Core part of Magento 2 module.
 
 * Discount items are now handled on product level and each discount percentage is assigned too a separate row.
 * Revamped product tax calculations to support more.
+
+#### 1.7.0
+
+* Added saftey checks, ensuring code doesn't execute when not applicable to the payment method applied on an order.
