@@ -72,7 +72,7 @@ class RemapConfigPaths implements DataPatchInterface
         foreach ($this->getMap() as $old => $new) {
             $this->moduleDataSetup->getConnection()->update(
                 $this->moduleDataSetup->getTable('core_config_data'),
-                ['path' => new Expression("'${new}'")],
+                ['path' => new Expression("'{$new}'")],
                 ['path = ?' => $old]
             );
         }
@@ -106,7 +106,7 @@ class RemapConfigPaths implements DataPatchInterface
             $this->moduleDataSetup
                 ->getConnection()
                 ->select()
-                ->exists($select, "path = '${oldSection}/${old}'");
+                ->exists($select, "path = '{$oldSection}/{$old}'");
 
             $statement = $select->assemble();
 
@@ -116,7 +116,7 @@ class RemapConfigPaths implements DataPatchInterface
 
             // If old path exists, map it to its new path.
             if (is_array($fetch) && !empty($fetch)) {
-                $result["${oldSection}/${old}"] = "${newSection}/${new}";
+                $result["{$oldSection}/{$old}"] = "{$newSection}/{$new}";
             }
         }
 
