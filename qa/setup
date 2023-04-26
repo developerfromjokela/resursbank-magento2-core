@@ -37,9 +37,7 @@ cat <<EOT >> $HOOK_FILE
 ERRORS=0
 
 echo "==========================================================="
-echo "#                                                         #"
 echo "#             APPLYING AUTOMATIC ADJUSTMENTS              #"
-echo "#                                                         #"
 echo "==========================================================="
 
 SRC_FILES=""
@@ -53,20 +51,13 @@ done
 
 if [ -n "\$SRC_FILES" ]; then
     echo "---==( Automatically adjusting files using phpcbf )==---"
-    for file in \$SRC_FILES
-    do
-        echo \$file
-        $phpCmd $mageDir/vendor/bin/phpcbf --extensions=php --standard=PSR12,Magento2 \$SRC_FILES
-        $phpCmd git add \$file
-    done
+    $phpCmd $mageDir/vendor/bin/phpcbf --extensions=php --standard=PSR12,Magento2 \$SRC_FILES
 else
     echo "No fixable errors found."
 fi
 
 echo "==========================================================="
-echo "#                                                         #"
 echo "#                  SCANNING SOURCE FILES                  #"
-echo "#                                                         #"
 echo "==========================================================="
 
 if [ -n "\$SRC_FILES" ]; then
@@ -82,7 +73,7 @@ if ! $phpCmd $mageDir/vendor/bin/phpmd $dir text $mageDir/dev/tests/static/tests
 fi
 
 echo "--==( Executing phpstan source files. )==---"
-if ! $phpCmd $mageDir/vendor/bin/phpstan analyse -c $mageDir/dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon $dir; then
+if ! $phpCmd $mageDir/vendor/bin/phpstan analyse -l 1 -c $mageDir/dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon $dir; then
     ERRORS=1
 fi
 
