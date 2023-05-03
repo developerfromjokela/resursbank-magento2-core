@@ -213,7 +213,7 @@ class Config extends AbstractConfig
             'auto_sync_data',
             $scopeCode,
             $scopeType
-        );
+        ) && !$this->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType);
     }
 
     /**
