@@ -18,6 +18,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Resursbank\Core\Api\LogInterface;
+use Throwable;
 use function is_string;
 
 abstract class AbstractLog extends AbstractHelper implements LogInterface
@@ -116,12 +117,12 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
-     * @param Exception $error
+     * @param Throwable $error
      * @param bool $force
      * @return LogInterface
      */
     public function exception(
-        Exception $error,
+        Throwable $error,
         bool $force = false
     ): LogInterface {
         /**
