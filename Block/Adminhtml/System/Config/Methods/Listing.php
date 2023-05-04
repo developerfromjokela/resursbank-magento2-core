@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -15,10 +16,16 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Scope;
+use Resursbank\Ecom\Config as EcomConfig;
+use Resursbank\Ecom\Module\PaymentMethod\Widget\PaymentMethods as PaymentMethodsWidget;
+use Resursbank\Ecom\Module\PaymentMethod\Repository;
+
 use function in_array;
 
 /**
@@ -50,6 +57,9 @@ class Listing extends Field
      */
     private Scope $scope;
 
+    /** @var Config  */
+    private Config $config;
+
     /**
      * @param Context $context
      * @param PaymentMethods $paymentMethods
@@ -57,6 +67,7 @@ class Listing extends Field
      * @param PriceCurrencyInterface $priceCurrency
      * @param RequestInterface $request
      * @param Scope $scope
+     * @param Config $config
      * @param array<mixed> $data
      * @param SecureHtmlRenderer|null $secureRenderer
      */
@@ -67,6 +78,7 @@ class Listing extends Field
         PriceCurrencyInterface $priceCurrency,
         RequestInterface $request,
         Scope $scope,
+        Config $config,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
@@ -75,6 +87,7 @@ class Listing extends Field
         $this->priceCurrency = $priceCurrency;
         $this->request = $request;
         $this->scope = $scope;
+        $this->config = $config;
 
         $this->setTemplate('system/config/methods/listing.phtml');
 
@@ -205,6 +218,18 @@ class Listing extends Field
     protected function _getElementHtml(
         AbstractElement $element
     ): string {
+        if (
+            $this->config->isMapiActive(
+                scopeType: $this->scope->getType(),
+                scopeCode: $this->scope->getId()
+            )
+        ) {
+            $widget = new PaymentMethodsWidget(
+                paymentMethods: Repository::getPaymentMethods(
+                    storeId: 123 // @todo fix this once MMA-27 is done
+                )
+            );
+        }
         return $this->_toHtml();
     }
 }
