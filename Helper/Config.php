@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -39,6 +40,9 @@ class Config extends AbstractConfig
      * @var string
      */
     public const DEBUG_GROUP = 'debug';
+
+    /** @var string  */
+    public const API_FLOW_OPTION_MAPI = 'mapi';
 
     /**
      * @var EncryptorInterface
@@ -146,6 +150,23 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Checks if MAPI flow is active.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isMapiActive(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): bool {
+        return $this->getFlow(
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        ) === self::API_FLOW_OPTION_MAPI;
+    }
+
+    /**
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
@@ -192,7 +213,7 @@ class Config extends AbstractConfig
             'auto_sync_data',
             $scopeCode,
             $scopeType
-        );
+        ) && !$this->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType);
     }
 
     /**

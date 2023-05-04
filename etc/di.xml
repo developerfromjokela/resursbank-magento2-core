@@ -8,8 +8,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- Module initialization -->
     <type name="Magento\Framework\AppInterface">
         <plugin name="ResursbankCoreInit" type="Resursbank\Core\Plugin\Init" disabled="false" sortOrder="1" />
+    </type>
+
+    <!-- Translation handling -->
+    <type name="Magento\Framework\Phrase\Renderer\Placeholder">
+        <plugin name="ResursbankTranslations"
+                type="Resursbank\Core\Plugin\Framework\ApplyEcomTranslations"
+                disabled="false"
+                sortOrder="10"
+        />
     </type>
 
     <!-- Payment method configuration. -->
