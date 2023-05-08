@@ -126,7 +126,6 @@
                         <label>General</label>
                         <field id="logging" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>rb-logging</label>
-                            <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/logging/enabled</config_path>
                         </field>

@@ -8,7 +8,6 @@
 "Password","Lösenord"
 "Debug","Felsökning"
 "Enabled","Aktiverad"
-"Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).","Logdata sparas i var/log/resursbank_*.log (separata filer används för olika händelsetyper)."
 "Round item tax","Avrunda produkt moms"
 "Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.","Avrunda produkters momssats till närmaste heltal. Aktivera detta endast om din konfiguration resulterar i flytande momssats värden, till exempel om du nyttjar procentuella fraktpriser i samband med valutakonvertering."
 "Payment Methods","Betalmetoder"
