@@ -90,18 +90,24 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/debug/enabled</config_path>
                         </field>
-                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="1" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="log_level" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>rb-log-level</label>
+                            <source_model>Resursbank\Core\Model\Config\Source\LogLevel</source_model>
+                            <config_path>resursbank/advanced/log_level</config_path>
+                        </field>
+                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Delete aborted orders</label>
                             <comment>Delete order when payment is aborted, to avoid orders with pending payment.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
                         </field>
-                        <field id="round_tax_percentage" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="round_tax_percentage" type="select" sortOrder="3" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Round item tax</label>
                             <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/round_tax_percentage</config_path>
                         </field>
+
                     </group>
                 </group>
             </group>
