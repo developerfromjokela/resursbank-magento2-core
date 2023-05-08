@@ -151,7 +151,7 @@ class Init
         try {
             $logger = new FileLogger(path: $this->getLogPath());
         } catch (Throwable $error) {
-            $logger->error(message: $error->getMessage());
+            $this->logger->error(message: $error->getMessage());
         }
 
         return $logger;
