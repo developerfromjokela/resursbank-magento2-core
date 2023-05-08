@@ -142,8 +142,10 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return string
      */
-    public function getClientId(?string $scopeCode, string $scopeType = ScopeInterface::SCOPE_STORES): string
-    {
+    public function getClientId(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
         return (string)$this->get(
             group: self::API_GROUP,
             key: 'client_id_' . $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType),
@@ -291,7 +293,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): LogLevel {
         return LogLevel::from(
-            value: (int) $this->get(
+            value: (int)$this->get(
                 group: self::ADVANCED_GROUP,
                 key: 'log_level',
                 scopeCode: $scopeCode,
