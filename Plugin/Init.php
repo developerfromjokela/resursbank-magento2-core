@@ -13,14 +13,12 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Store\Model\StoreManagerInterface;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\Ecom\Config as EcomConfig;
-use Resursbank\Ecom\Lib\Api\Environment as EnvironmentType;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
 use Resursbank\Ecom\Lib\Log\FileLogger;
@@ -35,65 +33,25 @@ use Throwable;
 class Init
 {
     /**
-     * @var Config
-     */
-    private Config $config;
-    /**
-     * @var Scope
-     */
-    private Scope $scope;
-    /**
-     * @var Credentials
-     */
-    private Credentials $credentials;
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $loggerInterface;
-
-    /**
      * @param Config $config
      * @param DirectoryList $directoryList
      * @param File $file
      * @param LoggerInterface $logger
      * @param StoreManagerInterface $storeManager
      * @param Scope $scope
-     * @param Credentials $credentials
      * @param Log $log
      * @throws FileSystemException
      */
     public function __construct(
-        Config $config,
+        private Config $config,
         private DirectoryList $directoryList,
         private File $file,
-        LoggerInterface $logger,
-        StoreManagerInterface $storeManager,
-        Scope $scope,
-        Credentials $credentials,
-        Log $log,
+        private LoggerInterface $logger,
+        private StoreManagerInterface $storeManager,
+        private Scope $scope,
+        private Log $log,
     ) {
-        $this->config = $config;
-        $this->scope = $scope;
-        $this->credentials = $credentials;
-        $this->log = $log;
-        $this->logger = $logger;
         $this->loggerInterface = $logger;
-        $this->storeManager = $storeManager;
         $logPath = $this->getLogPath();
 
         if (!is_dir(filename: $logPath)) {
@@ -126,6 +84,7 @@ class Init
             $this->log->exception(error: $e);
         }
     }
+
     /**
      * @return string
      * @throws FileSystemException
