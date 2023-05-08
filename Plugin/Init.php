@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
-use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
