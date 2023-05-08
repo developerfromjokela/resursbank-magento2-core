@@ -14,7 +14,7 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Api\Credentials;
 use Resursbank\Ecom\Config as EcomConfig;
-use Resursbank\Ecom\Lib\Api\Environment as EnvironmentEnum;
+use Resursbank\Ecom\Lib\Api\Environment as EnvironmentType;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
@@ -67,7 +67,7 @@ class Init
     public function beforeLaunch(): void
     {
         $environment = $this->credentials->getEnvironment();
-        $jwtScope = $environment === EnvironmentEnum::PROD
+        $jwtScope = $environment === EnvironmentType::PROD
             ? EcomScope::MERCHANT_API
             : EcomScope::MOCK_MERCHANT_API;
 
@@ -83,7 +83,7 @@ class Init
                     scope: $jwtScope,
                     grantType: GrantType::CREDENTIALS,
                 ),
-                isProduction: $environment === EnvironmentEnum::PROD
+                isProduction: $environment === EnvironmentType::PROD
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
