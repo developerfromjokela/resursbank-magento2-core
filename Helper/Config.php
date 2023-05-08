@@ -40,7 +40,7 @@ class Config extends AbstractConfig
     /**
      * @var string
      */
-    public const DEBUG_GROUP = 'debug';
+    public const LOGGING_GROUP = 'logging';
 
     /** @var string */
     public const API_FLOW_OPTION_MAPI = 'mapi';
@@ -179,10 +179,10 @@ class Config extends AbstractConfig
     /**
      * @return bool
      */
-    public function isDebugEnabled(): bool
+    public function isLoggingEnabled(): bool
     {
         return $this->isEnabled(
-            self::DEBUG_GROUP,
+            self::LOGGING_GROUP,
             'enabled',
             null,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
