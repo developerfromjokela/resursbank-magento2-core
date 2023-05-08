@@ -164,7 +164,8 @@ class Config extends AbstractConfig
             data: (string)$this->get(
                 group: self::API_GROUP,
                 key: sprintf(
-                    'client_secret_%d', $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)
+                    'client_secret_%d',
+                    $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)
                 ),
                 scopeCode: $scopeCode,
                 scopeType: $scopeType
@@ -197,9 +198,9 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->getFlow(
-                scopeCode: $scopeCode,
-                scopeType: $scopeType
-            ) === self::API_FLOW_OPTION_MAPI;
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        ) === self::API_FLOW_OPTION_MAPI;
     }
 
     /**
@@ -245,11 +246,11 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return $this->isEnabled(
-                self::API_GROUP,
-                'auto_sync_data',
-                $scopeCode,
-                $scopeType
-            ) && !$this->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType);
+            self::API_GROUP,
+            'auto_sync_data',
+            $scopeCode,
+            $scopeType
+        ) && !$this->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType);
     }
 
     /**
