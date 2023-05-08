@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Resursbank\Ecom\Lib\Log\LogLevel;
 
 /**
  * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
@@ -238,6 +239,27 @@ class Config extends AbstractConfig
             'reuse_erroneously_created_orders',
             $scopeCode,
             $scopeType
+        );
+    }
+
+    /***
+     * Fetch configured log level.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return LogLevel
+     */
+    public function getLogLevel(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): LogLevel {
+        return LogLevel::from(
+            value: (int) $this->get(
+                group: self::ADVANCED_GROUP,
+                key: 'log_level',
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
+            )
         );
     }
 }
