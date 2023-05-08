@@ -69,7 +69,8 @@ class Init
                 logger: $this->getLogger(),
                 jwtAuth: new Jwt(
                     clientId: $this->config->getClientId(
-                        scopeCode: $this->scope->getId(type: $this->scope->getType())
+                        scopeCode: $this->scope->getId(),
+                        scopeType: $this->scope->getType()
                     ),
                     clientSecret: $this->config->getClientSecret(
                         scopeCode: $this->scope->getId(type: $this->scope->getType())
@@ -77,7 +78,10 @@ class Init
                     scope: EcomScope::MOCK_MERCHANT_API,
                     grantType: GrantType::CREDENTIALS,
                 ),
-                logLevel: $this->config->getLogLevel(scopeCode: $this->storeManager->getStore()->getCode())
+                logLevel: $this->config->getLogLevel(
+                    scopeCode: $this->storeManager->getStore()->getCode(),
+                    scopeType: $this->storeManager->getStore()->getType()
+                )
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
