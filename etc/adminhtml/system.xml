@@ -95,6 +95,14 @@
                             <field id="flow">mapi</field>
                         </depends>
                     </field>
+                    <field id="store" type="select" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-store-id</label>
+                        <source_model>Resursbank\Core\Model\Config\Source\Store</source_model>
+                        <config_path>resursbank/advanced/store</config_path>
+                        <depends>
+                            <field id="flow">mapi</field>
+                        </depends>
+                    </field>
                     <field id="sync" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
                         <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>

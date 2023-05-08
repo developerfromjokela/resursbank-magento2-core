@@ -15,6 +15,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Resursbank\Ecom\Lib\Log\LogLevel;
+use Resursbank\Ecom\Module\Store\Models\Store;
+use Resursbank\Ecom\Module\Store\Repository;
+use Throwable;
 
 /**
  * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
@@ -261,5 +264,34 @@ class Config extends AbstractConfig
                 scopeType: $scopeType
             )
         );
+    }
+
+    /***
+     * Fetch configured log level.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getStore(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        $result = $this->get(
+            group: self::API_GROUP,
+            key: 'store',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+
+        if ($result === null) {
+            try {
+                $result = Repository::getStores()->getSingleStoreId();
+            } catch (Throwable $error) {
+                // Circular dependency prevents logging.
+            }
+        }
+
+        return (string) $result;
     }
 }
