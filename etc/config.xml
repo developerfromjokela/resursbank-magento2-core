@@ -43,6 +43,9 @@
             <api>
                 <environment>1</environment>
             </api>
+            <advanced>
+                <log_level>1</log_level>
+            </advanced>
         </resursbank>
     </default>
 </config>
