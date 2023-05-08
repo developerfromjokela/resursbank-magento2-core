@@ -124,16 +124,19 @@
                     <label>Advanced Settings</label>
                     <group id="general" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>General</label>
-                        <field id="debug" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
-                            <label>Debug</label>
+                        <field id="logging" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>rb-logging</label>
                             <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>resursbank/debug/enabled</config_path>
+                            <config_path>resursbank/logging/enabled</config_path>
                         </field>
                         <field id="log_level" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>rb-log-level</label>
                             <source_model>Resursbank\Core\Model\Config\Source\LogLevel</source_model>
                             <config_path>resursbank/advanced/log_level</config_path>
+                            <depends>
+                                <field id="logging">1</field>
+                            </depends>
                         </field>
                         <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Delete aborted orders</label>
