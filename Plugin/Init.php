@@ -107,26 +107,20 @@ class Init
      */
     public function beforeLaunch(): void
     {
-        $environment = $this->credentials->getEnvironment();
-        $jwtScope = $environment === EnvironmentType::PROD
-            ? EcomScope::MERCHANT_API
-            : EcomScope::MOCK_MERCHANT_API;
-
         try {
             EcomConfig::setup(
                 logger: $this->getLogger(),
                 jwtAuth: new Jwt(
                     clientId: $this->config->getClientId(
-                        scopeCode: $this->scope->getId()
+                        scopeCode: $this->scope->getId(type: $this->scope->getType())
                     ),
                     clientSecret: $this->config->getClientSecret(
-                        scopeCode: $this->scope->getId()
+                        scopeCode: $this->scope->getId(type: $this->scope->getType())
                     ),
-                    scope: $jwtScope,
+                    scope: EcomScope::MOCK_MERCHANT_API,
                     grantType: GrantType::CREDENTIALS,
                 ),
-                logLevel: $this->config->getLogLevel(scopeCode: $this->storeManager->getStore()->getCode()),
-                isProduction: $environment === EnvironmentType::PROD
+                logLevel: $this->config->getLogLevel(scopeCode: $this->storeManager->getStore()->getCode())
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
