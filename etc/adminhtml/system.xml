@@ -66,7 +66,7 @@
                         <config_path>resursbank/api/client_id_1</config_path>
                         <depends>
                             <field id="environment">1</field>
-                            <field id="flow">rb-mapi</field>
+                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="client_secret_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -75,7 +75,7 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">1</field>
-                            <field id="flow">rb-mapi</field>
+                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="client_id_0" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -83,7 +83,7 @@
                         <config_path>resursbank/api/client_id_0</config_path>
                         <depends>
                             <field id="environment">0</field>
-                            <field id="flow">rb-mapi</field>
+                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="client_secret_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -92,7 +92,7 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">0</field>
-                            <field id="flow">rb-mapi</field>
+                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="sync" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
