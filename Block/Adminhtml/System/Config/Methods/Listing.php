@@ -232,15 +232,9 @@ class Listing extends Field
      */
     private function usingMapi(): bool
     {
-        if (
-            $this->config->isMapiActive(
-                scopeType: $this->scope->getType(),
-                scopeCode: $this->scope->getId()
-            )
-        ) {
-            return true;
-        }
-
-        return false;
+        return $this->config->isMapiActive(
+            scopeType: $this->scope->getType(),
+            scopeCode: $this->scope->getId()
+        );
     }
 }
