@@ -35,33 +35,6 @@ use function in_array;
 class Listing extends Field
 {
     /**
-     * @var PaymentMethods
-     */
-    private PaymentMethods $paymentMethods;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    private PriceCurrencyInterface $priceCurrency;
-
-    /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-    /**
-     * @var Scope
-     */
-    private Scope $scope;
-
-    /** @var Config  */
-    private Config $config;
-
-    /**
      * @param Context $context
      * @param PaymentMethods $paymentMethods
      * @param Log $log
@@ -74,12 +47,12 @@ class Listing extends Field
      */
     public function __construct(
         Context $context,
-        PaymentMethods $paymentMethods,
-        Log $log,
-        PriceCurrencyInterface $priceCurrency,
-        RequestInterface $request,
-        Scope $scope,
-        Config $config,
+        private PaymentMethods $paymentMethods,
+        private Log $log,
+        private PriceCurrencyInterface $priceCurrency,
+        private RequestInterface $request,
+        private Scope $scope,
+        private Config $config,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
