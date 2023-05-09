@@ -101,10 +101,6 @@ class Listing extends Field
      */
     public function getEcomWidget(): string
     {
-        if (!$this->usingMapi()) {
-            return '<h1>Attempted to load MAPI payment method listing but MAPI does not appear to be active</h1>';
-        }
-
         try {
             $widget = new PaymentMethodsWidget(
                 paymentMethods: Repository::getPaymentMethods(
