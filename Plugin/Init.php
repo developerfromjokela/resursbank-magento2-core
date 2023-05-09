@@ -79,9 +79,7 @@ class Init
                     scope: EcomScope::MOCK_MERCHANT_API,
                     grantType: GrantType::CREDENTIALS,
                 ),
-                logLevel: $this->config->getLogLevel(
-                    scopeCode: $this->storeManager->getStore()->getCode()
-                )
+                logLevel: $this->config->getLogLevel(scopeCode: $this->storeManager->getStore()->getCode())
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
