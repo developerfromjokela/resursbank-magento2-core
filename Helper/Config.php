@@ -284,7 +284,7 @@ class Config extends AbstractConfig
         );
     }
 
-    /***
+    /**
      * Fetch configured log level.
      *
      * @param string|null $scopeCode
@@ -305,8 +305,8 @@ class Config extends AbstractConfig
         );
     }
 
-    /***
-     * Fetch configured log level.
+    /**
+     * Fetch configured store id.
      *
      * @param string|null $scopeCode
      * @param string $scopeType
