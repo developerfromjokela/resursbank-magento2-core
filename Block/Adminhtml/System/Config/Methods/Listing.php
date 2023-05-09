@@ -116,7 +116,7 @@ class Listing extends Field
             );
             return $widget->content;
         } catch (Throwable $error) {
-            EcomConfig::getLogger()->error(message: $error);
+            $this->log->error(text: $error->getMessage());
             return '<h1>' . __('rb-payment-methods-widget-render-failed') . ': ' . $error->getMessage() . '</h1>';
         }
     }
