@@ -10,13 +10,14 @@ declare(strict_types=1);
 namespace Resursbank\Core\Block\Adminhtml\System\Config\Methods;
 
 use Exception;
+use Resursbank\Ecom\Exception\ConfigException;
+use Throwable;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
-use Magento\Store\Model\ScopeInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
@@ -89,12 +90,18 @@ class Listing extends Field
         $this->scope = $scope;
         $this->config = $config;
 
-        $this->setTemplate('system/config/methods/listing.phtml');
+        if ($this->usingMapi()) {
+            $this->setTemplate(template: 'system/config/methods/ecomlisting.phtml');
+        } else {
+            $this->setTemplate('system/config/methods/listing.phtml');
+        }
 
         parent::__construct($context, $data, $secureRenderer);
     }
 
     /**
+     * Fetches an array of payment methods.
+     *
      * @return PaymentMethodInterface[]
      */
     public function getMethods(): array
@@ -111,6 +118,34 @@ class Listing extends Field
         }
 
         return $result;
+    }
+
+    /**
+     * Loads the payment method widget from Ecom.
+     *
+     * @return string
+     * @throws ConfigException
+     */
+    public function getEcomWidget(): string
+    {
+        if (!$this->usingMapi()) {
+            return '<h1>Attempted to load MAPI payment method listing but MAPI does not appear to be active</h1>';
+        }
+
+        try {
+            $widget = new PaymentMethodsWidget(
+                paymentMethods: Repository::getPaymentMethods(
+                    storeId: $this->config->getStore(
+                        scopeType: $this->scope->getType(),
+                        scopeCode: $this->scope->getId()
+                    )
+                )
+            );
+            return $widget->content;
+        } catch (Throwable $error) {
+            EcomConfig::getLogger()->error(message: $error);
+            return '<h1>' . __('rb-payment-methods-widget-render-failed') . ': ' . $error->getMessage() . '</h1>';
+        }
     }
 
     /**
@@ -218,18 +253,25 @@ class Listing extends Field
     protected function _getElementHtml(
         AbstractElement $element
     ): string {
+        return $this->_toHtml();
+    }
+
+    /**
+     * Checks if we're using MAPI or not.
+     *
+     * @return bool
+     */
+    private function usingMapi(): bool
+    {
         if (
             $this->config->isMapiActive(
                 scopeType: $this->scope->getType(),
                 scopeCode: $this->scope->getId()
             )
         ) {
-            $widget = new PaymentMethodsWidget(
-                paymentMethods: Repository::getPaymentMethods(
-                    storeId: 123 // @todo fix this once MMA-27 is done
-                )
-            );
+            return true;
         }
-        return $this->_toHtml();
+
+        return false;
     }
 }

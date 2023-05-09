@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
+
+/** @var Listing $block */
+/** @var Escaper $escaper */
+
+if (isset($block)) {
+    $widget = $block->getEcomWidget();
+}
+
+?>
+<?php if (isset($escaper, $block)): ?>
+    <?= $escaper->escapeHtml(
+        data: $widget,
+        allowedTags: ['style', 'div', 'table', 'thead', 'tr', 'th', 'tbody', 'td']
+    ) ?>
+<?php endif; ?>
