@@ -97,7 +97,6 @@ class Listing extends Field
      * Loads the payment method widget from Ecom.
      *
      * @return string
-     * @throws ConfigException
      */
     public function getEcomWidget(): string
     {
