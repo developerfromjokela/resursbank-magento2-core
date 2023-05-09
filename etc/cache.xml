@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="resursbank" translate="label,description" instance="Resursbank\Core\Model\Cache\Type\Resursbank">
+        <label>Resurs Bank</label>
+        <description>Resurs Bank related cache</description>
+    </type>
+</config>
