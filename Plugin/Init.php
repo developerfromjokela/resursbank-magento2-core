@@ -39,6 +39,7 @@ class Init
      * @param Scope $scope
      * @param Log $log
      * @param Cache $cache
+     * @param Api $api
      * @throws FileSystemException
      */
     public function __construct(
@@ -48,7 +49,8 @@ class Init
         private readonly LoggerInterface $logger,
         private readonly Scope $scope,
         private readonly Log $log,
-        private readonly Cache $cache
+        private readonly Cache $cache,
+        private readonly Api $api
     ) {
         $logPath = $this->getLogPath();
 
