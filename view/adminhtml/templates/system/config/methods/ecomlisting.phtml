@@ -13,14 +13,10 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
 /** @var Listing $block */
 /** @var Escaper $escaper */
 
-if (isset($block)) {
-    $widget = $block->getEcomWidget();
-}
-
 ?>
 <?php if (isset($escaper, $block)): ?>
     <?= $escaper->escapeHtml(
-        data: $widget,
+        data: $block->getEcomWidget(),
         allowedTags: ['style', 'div', 'table', 'thead', 'tr', 'th', 'tbody', 'td']
     ) ?>
 <?php endif; ?>
