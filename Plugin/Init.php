@@ -42,6 +42,7 @@ class Init
      * @param Scope $scope
      * @param Log $log
      * @param Cache $cache
+     * @param Locale $locale
      * @throws FileSystemException
      */
     public function __construct(
