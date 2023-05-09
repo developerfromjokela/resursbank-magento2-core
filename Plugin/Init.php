@@ -12,11 +12,11 @@ namespace Resursbank\Core\Plugin;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
-use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
+use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
@@ -36,21 +36,20 @@ class Init
      * @param DirectoryList $directoryList
      * @param File $file
      * @param LoggerInterface $logger
-     * @param StoreManagerInterface $storeManager
      * @param Scope $scope
      * @param Log $log
+     * @param Cache $cache
      * @throws FileSystemException
      */
     public function __construct(
-        private Config $config,
-        private DirectoryList $directoryList,
-        private File $file,
-        private LoggerInterface $logger,
-        private StoreManagerInterface $storeManager,
-        private Scope $scope,
-        private Log $log,
+        private readonly Config $config,
+        private readonly DirectoryList $directoryList,
+        private readonly File $file,
+        private readonly LoggerInterface $logger,
+        private readonly Scope $scope,
+        private readonly Log $log,
+        private readonly Cache $cache
     ) {
-        $this->loggerInterface = $logger;
         $logPath = $this->getLogPath();
 
         if (!is_dir(filename: $logPath)) {
@@ -60,6 +59,7 @@ class Init
 
     /**
      * Perform initial setup of Ecom+
+     *
      * @return void
      */
     public function beforeLaunch(): void
@@ -79,7 +79,11 @@ class Init
                     scope: EcomScope::MOCK_MERCHANT_API,
                     grantType: GrantType::CREDENTIALS,
                 ),
-                logLevel: $this->config->getLogLevel(scopeCode: $this->storeManager->getStore()->getCode())
+                logLevel: $this->config->getLogLevel(
+                    scopeCode: $this->scope->getId(),
+                    scopeType: $this->scope->getType()
+                ),
+                cache: $this->cache
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
@@ -87,6 +91,8 @@ class Init
     }
 
     /**
+     * Get path to log directory inside Magento directory.
+     *
      * @return string
      * @throws FileSystemException
      */
