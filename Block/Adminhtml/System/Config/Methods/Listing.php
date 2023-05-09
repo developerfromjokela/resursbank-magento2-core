@@ -66,7 +66,7 @@ class Listing extends Field
         if ($this->usingMapi()) {
             $this->setTemplate(template: 'system/config/methods/ecomlisting.phtml');
         } else {
-            $this->setTemplate('system/config/methods/listing.phtml');
+            $this->setTemplate(template: 'system/config/methods/listing.phtml');
         }
 
         parent::__construct($context, $data, $secureRenderer);
