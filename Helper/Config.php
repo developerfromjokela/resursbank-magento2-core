@@ -73,6 +73,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API flow.
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -90,6 +92,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API environment.
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return int
@@ -124,6 +128,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API username (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -141,6 +147,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API password (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -160,6 +168,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured Client ID (utilised for modern APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -177,6 +187,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API secret (utilised for modern APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -199,6 +211,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Check whether custom logs are enabled.
+     *
      * @return bool
      */
     public function isLoggingEnabled(): bool
@@ -229,6 +243,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Check whether to round tax values (required for complex setups).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
@@ -246,6 +262,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Resolve configured country code (not part of our own config).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -262,6 +280,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Whether to automatically sync data to DB (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
