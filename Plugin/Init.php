@@ -12,6 +12,7 @@ namespace Resursbank\Core\Plugin;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Locale\Resolver as Locale;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
@@ -21,6 +22,7 @@ use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
+use Resursbank\Ecom\Lib\Locale\Language;
 use Resursbank\Ecom\Lib\Log\FileLogger;
 use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
@@ -40,6 +42,7 @@ class Init
      * @param Scope $scope
      * @param Log $log
      * @param Cache $cache
+     * @param Locale $locale
      * @throws FileSystemException
      */
     public function __construct(
@@ -49,7 +52,8 @@ class Init
         private readonly LoggerInterface $logger,
         private readonly Scope $scope,
         private readonly Log $log,
-        private readonly Cache $cache
+        private readonly Cache $cache,
+        private readonly Locale $locale
     ) {
         $logPath = $this->getLogPath();
 
@@ -91,7 +95,8 @@ class Init
                     scopeType: $this->scope->getType()
                 ),
                 cache: $this->cache,
-                isProduction: $env === Environment::PROD
+                isProduction: $env === Environment::PROD,
+                language: $this->getLanguage()
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
@@ -129,5 +134,17 @@ class Init
         }
 
         return $logger;
+    }
+
+    /**
+     * Retrieve language.
+     *
+     * @return Language
+     */
+    private function getLanguage(): Language
+    {
+        $code = strtok(string: $this->locale->getLocale(), token: '_');
+
+        return Language::tryFrom(value: $code) ?? Language::en;
     }
 }
