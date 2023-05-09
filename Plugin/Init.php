@@ -18,6 +18,7 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Ecom\Config as EcomConfig;
+use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
 use Resursbank\Ecom\Lib\Log\FileLogger;
@@ -65,6 +66,11 @@ class Init
     public function beforeLaunch(): void
     {
         try {
+            $env = $this->config->getMapiEnvironment(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            );
+
             EcomConfig::setup(
                 logger: $this->getLogger(),
                 jwtAuth: new Jwt(
@@ -76,14 +82,16 @@ class Init
                         scopeCode: $this->scope->getId(),
                         scopeType: $this->scope->getType()
                     ),
-                    scope: EcomScope::MOCK_MERCHANT_API,
+                    scope: $env === Environment::PROD ?
+                        EcomScope::MERCHANT_API : EcomScope::MOCK_MERCHANT_API,
                     grantType: GrantType::CREDENTIALS,
                 ),
                 logLevel: $this->config->getLogLevel(
                     scopeCode: $this->scope->getId(),
                     scopeType: $this->scope->getType()
                 ),
-                cache: $this->cache
+                cache: $this->cache,
+                isProduction: $env === Environment::PROD
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);

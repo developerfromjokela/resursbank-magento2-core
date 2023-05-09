@@ -14,9 +14,11 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
+use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Log\LogLevel;
 use Resursbank\Ecom\Module\Store\Models\Store;
 use Resursbank\Ecom\Module\Store\Repository;
+use Resursbank\RBEcomPHP\ResursBank;
 use Throwable;
 
 /**
@@ -102,6 +104,23 @@ class Config extends AbstractConfig
             $scopeCode,
             $scopeType
         );
+    }
+
+    /**
+     * Convert configured environment to MAPI value.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return Environment
+     */
+    public function getMapiEnvironment(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): Environment {
+        $env = $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType);
+
+        return $env === ResursBank::ENVIRONMENT_PRODUCTION ?
+            Environment::PROD : Environment::TEST;
     }
 
     /**
