@@ -12,8 +12,9 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Store\Model\ScopeInterface;
+use Resursbank\Ecom\Lib\Log\LogLevel;
 
 /**
  * NOTE: For an explanations of $scopeCode / $scopeType arguments please see
@@ -39,9 +40,9 @@ class Config extends AbstractConfig
     /**
      * @var string
      */
-    public const DEBUG_GROUP = 'debug';
+    public const LOGGING_GROUP = 'logging';
 
-    /** @var string  */
+    /** @var string */
     public const API_FLOW_OPTION_MAPI = 'mapi';
 
     /**
@@ -75,7 +76,7 @@ class Config extends AbstractConfig
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
-        return (string) $this->get(
+        return (string)$this->get(
             self::API_GROUP,
             'flow',
             $scopeCode,
@@ -92,7 +93,7 @@ class Config extends AbstractConfig
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): int {
-        return (int) $this->get(
+        return (int)$this->get(
             self::API_GROUP,
             'environment',
             $scopeCode,
@@ -109,7 +110,7 @@ class Config extends AbstractConfig
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
-        return (string) $this->get(
+        return (string)$this->get(
             self::API_GROUP,
             'username_' . $this->getEnvironment($scopeCode, $scopeType),
             $scopeCode,
@@ -127,7 +128,7 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
         return $this->encryptor->decrypt(
-            (string) $this->get(
+            (string)$this->get(
                 self::API_GROUP,
                 'password_' . $this->getEnvironment($scopeCode, $scopeType),
                 $scopeCode,
@@ -137,12 +138,51 @@ class Config extends AbstractConfig
     }
 
     /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getClientId(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        return (string)$this->get(
+            group: self::API_GROUP,
+            key: 'client_id_' . $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType),
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
+
+    /**
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getClientSecret(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        return $this->encryptor->decrypt(
+            data: (string)$this->get(
+                group: self::API_GROUP,
+                key: sprintf(
+                    'client_secret_%d',
+                    $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)
+                ),
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
+            )
+        );
+    }
+
+    /**
      * @return bool
      */
-    public function isDebugEnabled(): bool
+    public function isLoggingEnabled(): bool
     {
         return $this->isEnabled(
-            self::DEBUG_GROUP,
+            self::LOGGING_GROUP,
             'enabled',
             null,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -192,7 +232,7 @@ class Config extends AbstractConfig
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): string {
-        return (string) $this->reader->getValue(
+        return (string)$this->reader->getValue(
             'general/country/default',
             $scopeType,
             $scopeCode
@@ -238,6 +278,27 @@ class Config extends AbstractConfig
             'reuse_erroneously_created_orders',
             $scopeCode,
             $scopeType
+        );
+    }
+
+    /***
+     * Fetch configured log level.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return LogLevel
+     */
+    public function getLogLevel(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): LogLevel {
+        return LogLevel::from(
+            value: (int)$this->get(
+                group: self::ADVANCED_GROUP,
+                key: 'log_level',
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
+            )
         );
     }
 }

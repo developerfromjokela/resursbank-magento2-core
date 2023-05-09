@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -19,6 +20,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Resursbank\Core\Api\LogInterface;
 use Throwable;
+
 use function is_string;
 
 abstract class AbstractLog extends AbstractHelper implements LogInterface
@@ -145,7 +147,7 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
      */
     public function isEnabled(): bool
     {
-        return $this->config->isDebugEnabled();
+        return $this->config->isLoggingEnabled();
     }
 
     /**

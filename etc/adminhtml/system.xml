@@ -30,7 +30,10 @@
                     <field id="username_1" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Username</label>
                         <config_path>resursbank/api/username_1</config_path>
-                        <depends><field id="environment">1</field></depends>
+                        <depends>
+                            <field id="environment">1</field>
+                            <field id="flow" separator=",">simplified,rco</field>
+                        </depends>
                     </field>
                     <field id="password_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Password</label>
@@ -38,6 +41,7 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">1</field>
+                            <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
                     <field id="username_0" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -45,6 +49,7 @@
                         <config_path>resursbank/api/username_0</config_path>
                         <depends>
                             <field id="environment">0</field>
+                            <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
                     <field id="password_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -53,6 +58,41 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">0</field>
+                            <field id="flow" separator=",">simplified,rco</field>
+                        </depends>
+                    </field>
+                    <field id="client_id_1" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-client-id</label>
+                        <config_path>resursbank/api/client_id_1</config_path>
+                        <depends>
+                            <field id="environment">1</field>
+                            <field id="flow">mapi</field>
+                        </depends>
+                    </field>
+                    <field id="client_secret_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-client-secret</label>
+                        <config_path>resursbank/api/client_secret_1</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="environment">1</field>
+                            <field id="flow">mapi</field>
+                        </depends>
+                    </field>
+                    <field id="client_id_0" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-client-id</label>
+                        <config_path>resursbank/api/client_id_0</config_path>
+                        <depends>
+                            <field id="environment">0</field>
+                            <field id="flow">mapi</field>
+                        </depends>
+                    </field>
+                    <field id="client_secret_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-client-secret</label>
+                        <config_path>resursbank/api/client_secret_0</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="environment">0</field>
+                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="sync" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -84,24 +124,32 @@
                     <label>Advanced Settings</label>
                     <group id="general" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>General</label>
-                        <field id="debug" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
-                            <label>Debug</label>
-                            <comment>Log entries will be stored in var/log/resursbank_*.log (different log files are used for various operations).</comment>
+                        <field id="logging" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>rb-logging</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>resursbank/debug/enabled</config_path>
+                            <config_path>resursbank/logging/enabled</config_path>
                         </field>
-                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="1" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="log_level" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>rb-log-level</label>
+                            <source_model>Resursbank\Core\Model\Config\Source\LogLevel</source_model>
+                            <config_path>resursbank/advanced/log_level</config_path>
+                            <depends>
+                                <field id="logging">1</field>
+                            </depends>
+                        </field>
+                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Delete aborted orders</label>
                             <comment>Delete order when payment is aborted, to avoid orders with pending payment.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
                         </field>
-                        <field id="round_tax_percentage" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="round_tax_percentage" type="select" sortOrder="3" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Round item tax</label>
                             <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/round_tax_percentage</config_path>
                         </field>
+
                     </group>
                 </group>
             </group>
