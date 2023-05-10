@@ -14,9 +14,11 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
+use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Log\LogLevel;
 use Resursbank\Ecom\Module\Store\Models\Store;
 use Resursbank\Ecom\Module\Store\Repository;
+use Resursbank\RBEcomPHP\ResursBank;
 use Throwable;
 
 /**
@@ -71,6 +73,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API flow.
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -88,6 +92,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API environment.
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return int
@@ -105,6 +111,25 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Convert configured environment to MAPI value.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return Environment
+     */
+    public function getMapiEnvironment(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): Environment {
+        $env = $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType);
+
+        return $env === ResursBank::ENVIRONMENT_PRODUCTION ?
+            Environment::PROD : Environment::TEST;
+    }
+
+    /**
+     * Get configured API username (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -122,6 +147,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API password (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -141,6 +168,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured Client ID (utilised for modern APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -158,6 +187,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Get configured API secret (utilised for modern APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -180,6 +211,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Check whether custom logs are enabled.
+     *
      * @return bool
      */
     public function isLoggingEnabled(): bool
@@ -210,6 +243,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Check whether to round tax values (required for complex setups).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
@@ -227,6 +262,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Resolve configured country code (not part of our own config).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return string
@@ -243,6 +280,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Whether to automatically sync data to DB (utilised for old APIs).
+     *
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
