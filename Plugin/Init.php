@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Plugin;
 
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
@@ -17,6 +18,7 @@ use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Scope;
+use Resursbank\Core\Helper\Version;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Lib\Api\GrantType;
@@ -25,6 +27,7 @@ use Resursbank\Ecom\Lib\Log\FileLogger;
 use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
+use Resursbank\Ecom\Module\Store\Repository;
 use Throwable;
 
 /**
@@ -40,7 +43,8 @@ class Init
      * @param Scope $scope
      * @param Log $log
      * @param Cache $cache
-     * @param Api $api
+     * @param ProductMetadataInterface $productMetadata
+     * @param Version $version
      * @throws FileSystemException
      */
     public function __construct(
@@ -51,7 +55,8 @@ class Init
         private readonly Scope $scope,
         private readonly Log $log,
         private readonly Cache $cache,
-        private readonly Api $api
+        private readonly ProductMetadataInterface $productMetadata,
+        private readonly Version $version
     ) {
         $logPath = $this->getLogPath();
 
@@ -70,6 +75,7 @@ class Init
         try {
             EcomConfig::setup(
                 logger: $this->getLogger(),
+                cache: $this->cache,
                 jwtAuth: new Jwt(
                     clientId: $this->config->getClientId(
                         scopeCode: $this->scope->getId(),
@@ -86,7 +92,7 @@ class Init
                     scopeCode: $this->scope->getId(),
                     scopeType: $this->scope->getType()
                 ),
-                cache: $this->cache
+                userAgent: $this->getUserAgent()
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
@@ -124,5 +130,17 @@ class Init
         }
 
         return $logger;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        return sprintf(
+            'Magento %s | Resursbank_Core_MAPI %s',
+            $this->productMetadata->getVersion(),
+            $this->version->getComposerVersion(module: 'Resursbank_Core')
+        );
     }
 }
