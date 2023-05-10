@@ -90,6 +90,7 @@ class Init
 
             EcomConfig::setup(
                 logger: $this->getLogger(),
+                cache: $this->getCache(),
                 jwtAuth: new Jwt(
                     clientId: $this->config->getClientId(
                         scopeCode: $this->scope->getId(),
@@ -107,10 +108,9 @@ class Init
                     scopeCode: $this->scope->getId(),
                     scopeType: $this->scope->getType()
                 ),
-                cache: $this->getCache(),
+                userAgent: $this->getUserAgent(),
                 isProduction: $env === Environment::PROD,
-                language: $this->getLanguage(),
-                userAgent: $this->getUserAgent()
+                language: $this->getLanguage()
             );
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
@@ -180,7 +180,7 @@ class Init
     public function getUserAgent(): string
     {
         return sprintf(
-            'Magento %s | Resursbank_Core_MAPI %s',
+            'Magento %s | Resursbank_Core_MAPI %s |',
             $this->productMetadata->getVersion(),
             $this->version->getComposerVersion(module: 'Resursbank_Core')
         );
