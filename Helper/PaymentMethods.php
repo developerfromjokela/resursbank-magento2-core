@@ -37,9 +37,9 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
-
 use function json_decode;
 use function strlen;
+use function str_starts_with;
 use function is_array;
 
 /**
@@ -412,14 +412,7 @@ class PaymentMethods extends AbstractHelper
     public function isResursBankMethod(
         string $code
     ): bool {
-        return (
-            strpos($code, Method::CODE_PREFIX) === 0 &&
-            (
-                $this->isDefaultMethod($code) ||
-                $this->isCurrentMethod($code) ||
-                $this->isLegacyMethod($code)
-            )
-        );
+        return str_starts_with(haystack: $code, needle: Method::CODE_PREFIX);
     }
 
     /**
@@ -439,6 +432,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+<<<<<<< HEAD
      * Check whether method code corresponds to default method code.
      *
      * @param string $code
@@ -490,6 +484,8 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+=======
+>>>>>>> master
      * NOTE: If not provided a Credentials model instance it will be resolved
      * from the configuration.
      *
