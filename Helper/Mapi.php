@@ -45,7 +45,7 @@ class Mapi extends AbstractHelper
     /**
      * Resolve MAPI payment method converted to PaymentMethod
      *
-     * @param string $id
+     * @param int|string $id
      * @param string $storeId
      * @return PaymentMethod|null
      */
