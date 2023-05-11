@@ -37,6 +37,7 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
+
 use function json_decode;
 use function strlen;
 use function str_starts_with;
