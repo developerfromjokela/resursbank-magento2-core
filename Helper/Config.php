@@ -213,15 +213,19 @@ class Config extends AbstractConfig
     /**
      * Check whether custom logs are enabled.
      *
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return bool
      */
-    public function isLoggingEnabled(): bool
-    {
+    public function isLoggingEnabled(
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): bool {
         return $this->isEnabled(
-            self::LOGGING_GROUP,
-            'enabled',
-            null,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            group: self::LOGGING_GROUP,
+            key: 'enabled',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
         );
     }
 
