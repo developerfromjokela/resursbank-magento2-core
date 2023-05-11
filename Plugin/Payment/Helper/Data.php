@@ -27,26 +27,6 @@ use Throwable;
 class Data
 {
     /**
-     * @var PaymentMethods
-     */
-    private PaymentMethods $paymentMethods;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @var MethodFactory
-     */
-    private MethodFactory $methodFactory;
-
-    /**
-     * @var Repository
-     */
-    private Repository $repository;
-
-    /**
      * @var PaymentMethodInterface[]|null
      */
     private ?array $methodList = null;
@@ -60,17 +40,13 @@ class Data
      * @param Config $config
      */
     public function __construct(
-        PaymentMethods $paymentMethods,
-        Log $log,
-        MethodFactory $methodFactory,
-        Repository $repository,
+        private readonly PaymentMethods $paymentMethods,
+        private readonly Log $log,
+        private readonly MethodFactory $methodFactory,
+        private readonly Repository $repository,
         private readonly StoreManager $storeManager,
         private readonly Config $config
     ) {
-        $this->paymentMethods = $paymentMethods;
-        $this->log = $log;
-        $this->methodFactory = $methodFactory;
-        $this->repository = $repository;
     }
 
     /**
@@ -138,7 +114,8 @@ class Data
         bool $withGroups = false
     ): array {
         try {
-            if ($asLabelValue &&
+            if (
+                $asLabelValue &&
                 $withGroups &&
                 !isset($result['resursbank']['value'])
             ) {

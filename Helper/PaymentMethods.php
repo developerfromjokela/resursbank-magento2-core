@@ -49,41 +49,6 @@ use function is_array;
 class PaymentMethods extends AbstractHelper
 {
     /**
-     * @var Api
-     */
-    private Api $api;
-
-    /**
-     * @var PaymentMethodFactory
-     */
-    private PaymentMethodFactory $methodFactory;
-
-    /**
-     * @var Converter
-     */
-    private Converter $converter;
-
-    /**
-     * @var Repository
-     */
-    private Repository $repository;
-
-    /**
-     * @var Credentials
-     */
-    private Credentials $credentials;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchBuilder;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
      * @param Context $context
      * @param Api $api
      * @param PaymentMethodFactory $methodFactory
@@ -96,24 +61,16 @@ class PaymentMethods extends AbstractHelper
      */
     public function __construct(
         Context $context,
-        Api $api,
-        PaymentMethodFactory $methodFactory,
-        Converter $converter,
-        Repository $repository,
-        Credentials $credentials,
-        SearchCriteriaBuilder $searchBuilder,
-        Log $log,
+        private readonly Api $api,
+        private readonly PaymentMethodFactory $methodFactory,
+        private readonly Converter $converter,
+        private readonly Repository $repository,
+        private readonly Credentials $credentials,
+        private readonly SearchCriteriaBuilder $searchBuilder,
+        private readonly Log $log,
         private readonly Config $config
     ) {
-        $this->api = $api;
-        $this->methodFactory = $methodFactory;
-        $this->converter = $converter;
-        $this->repository = $repository;
-        $this->credentials = $credentials;
-        $this->searchBuilder = $searchBuilder;
-        $this->log = $log;
-
-        parent::__construct($context);
+        parent::__construct(context: $context);
     }
 
     /**
