@@ -47,29 +47,26 @@ class Listing extends Field
      */
     public function __construct(
         Context $context,
-        private PaymentMethods $paymentMethods,
-        private Log $log,
-        private PriceCurrencyInterface $priceCurrency,
-        private RequestInterface $request,
-        private Scope $scope,
-        private Config $config,
+        private readonly PaymentMethods $paymentMethods,
+        private readonly Log $log,
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly RequestInterface $request,
+        private readonly Scope $scope,
+        private readonly Config $config,
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
-        $this->paymentMethods = $paymentMethods;
-        $this->log = $log;
-        $this->priceCurrency = $priceCurrency;
-        $this->request = $request;
-        $this->scope = $scope;
-        $this->config = $config;
-
         if ($this->usingMapi()) {
             $this->setTemplate(template: 'system/config/methods/ecomlisting.phtml');
         } else {
             $this->setTemplate(template: 'system/config/methods/listing.phtml');
         }
 
-        parent::__construct($context, $data, $secureRenderer);
+        parent::__construct(
+            context: $context,
+            data: $data,
+            secureRenderer: $secureRenderer
+        );
     }
 
     /**
@@ -118,9 +115,7 @@ class Listing extends Field
 
     /**
      * Formats a price to include decimals and the configured currency of the
-     * selected store.
-     *
-     * Example: 123.53 => "123.53,00 kr"
+     * selected store. Example: 123.53 => "123.53,00 kr"
      *
      * @param float $price
      * @return string
