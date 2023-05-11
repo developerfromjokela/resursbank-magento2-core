@@ -23,7 +23,6 @@ use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Mapi;
-use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
@@ -100,7 +99,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function get(
         string|int $methodId
-    ): PaymentMethodInterface {
+    ): ?PaymentMethodInterface {
         $scopeCode = $this->storeManager->getStore()->getCode();
 
         if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
