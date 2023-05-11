@@ -12,6 +12,7 @@ namespace Resursbank\Core\Plugin;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
 use Psr\Log\LoggerInterface;
@@ -47,6 +48,8 @@ class Init
      * @param Log $log
      * @param Cache $cache
      * @param Locale $locale
+     * @param StateInterface $cacheState
+     * @param DriverInterface $filesystemDriver
      * @throws FileSystemException
      */
     public function __construct(
@@ -58,11 +61,12 @@ class Init
         private readonly Log $log,
         private readonly Cache $cache,
         private readonly Locale $locale,
-        private readonly StateInterface $cacheState
+        private readonly StateInterface $cacheState,
+        private readonly DriverInterface $filesystemDriver
     ) {
         $logPath = $this->getLogPath();
 
-        if (!is_dir(filename: $logPath)) {
+        if (!$this->filesystemDriver->isDirectory(path: $logPath)) {
             $this->file->mkdir(dir: $logPath);
         }
     }
@@ -128,7 +132,11 @@ class Init
     {
         $logger = new NoneLogger();
 
-        if (!$this->config->isLoggingEnabled()) {
+        if (!$this->config->isLoggingEnabled(
+            scopeCode: $this->scope->getId(),
+            scopeType: $this->scope->getType()
+        )
+        ) {
             return $logger;
         }
 
