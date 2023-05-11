@@ -9,11 +9,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-use Exception;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
-use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Ecom\Lib\Model\PaymentMethod as EcomPaymentMethod;
@@ -21,27 +17,12 @@ use Resursbank\Ecom\Lib\Order\PaymentMethod\Type;
 use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomRepository;
 use Throwable;
 use JsonException;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
-use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Resursbank\Core\Helper\Api\Credentials;
-use Resursbank\Core\Helper\PaymentMethods\Converter;
-use Resursbank\Core\Model\Api\Credentials as CredentialsModel;
-use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
-use Resursbank\Core\Model\PaymentMethodRepository as Repository;
-use stdClass;
 
-use function json_decode;
-use function strlen;
 use function str_starts_with;
-use function is_array;
 
 /**
  * Mapi related business logic.
@@ -64,12 +45,12 @@ class Mapi extends AbstractHelper
     /**
      * Resolve MAPI payment method converted to PaymentMethod
      *
-     * @param string $id
+     * @param int|string $id
      * @param string $storeId
      * @return PaymentMethod|null
      */
     public function getMapiMethodById(
-        string $id,
+        int|string $id,
         string $storeId
     ): ?PaymentMethod {
         try {

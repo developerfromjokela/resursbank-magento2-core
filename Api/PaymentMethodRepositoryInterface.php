@@ -25,10 +25,10 @@ interface PaymentMethodRepositoryInterface
     /**
      * Get entry by ID.
      *
-     * @param int $methodId
-     * @return PaymentMethodInterface
+     * @param int|string $methodId
+     * @return ?PaymentMethodInterface
      */
-    public function get(int $methodId): PaymentMethodInterface;
+    public function get(int|string $methodId): ?PaymentMethodInterface;
 
     /**
      * Get entry by code.
