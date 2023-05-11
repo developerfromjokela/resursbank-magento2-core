@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -11,8 +12,14 @@ namespace Resursbank\Core\Helper;
 use Exception;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Resursbank\Core\Exception\InvalidDataException;
-use function is_array;
+use Resursbank\Core\Model\Payment\Resursbank;
+use Resursbank\Core\Model\PaymentMethod;
+use Resursbank\Ecom\Lib\Model\PaymentMethod as EcomPaymentMethod;
+use Resursbank\Ecom\Lib\Order\PaymentMethod\Type;
+use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomRepository;
+use Throwable;
 use JsonException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -30,8 +37,10 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
+
 use function json_decode;
 use function strlen;
+use function is_array;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -82,6 +91,7 @@ class PaymentMethods extends AbstractHelper
      * @param Credentials $credentials
      * @param SearchCriteriaBuilder $searchBuilder
      * @param Log $log
+     * @param Config $config
      */
     public function __construct(
         Context $context,
@@ -91,7 +101,8 @@ class PaymentMethods extends AbstractHelper
         Repository $repository,
         Credentials $credentials,
         SearchCriteriaBuilder $searchBuilder,
-        Log $log
+        Log $log,
+        private readonly Config $config
     ) {
         $this->api = $api;
         $this->methodFactory = $methodFactory;
@@ -163,7 +174,7 @@ class PaymentMethods extends AbstractHelper
              * Magentos rendering component for the payment method list will
              * randomly sort the methods incorrectly unless we space them a bit.
              */
-            $method->setSortOrder($sortOrder+=10);
+            $method->setSortOrder($sortOrder += 10);
 
             // Overwrite data on method model instance and update db entry.
             $this->syncMethodData(
@@ -198,6 +209,8 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+     * Fetch payment methods from deprecated APIs, not utilised by modern APIs.
+     *
      * @param CredentialsModel $credentials
      * @return array<stdClass>
      * @throws IntegrationException
@@ -471,7 +484,7 @@ class PaymentMethods extends AbstractHelper
     private function isLegacyMethod(
         string $code
     ): bool {
-        $env = substr($code, strlen($code)-4);
+        $env = substr($code, strlen($code) - 4);
 
         return $env === 'test' || $env === 'prod';
     }
@@ -489,6 +502,12 @@ class PaymentMethods extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ): array {
+        if ($this->config->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType)) {
+            return $this->getMapiMethods(
+                storeId: $this->config->getStore(scopeCode: $scopeCode, scopeType: $scopeType)
+            );
+        }
+
         $result = [];
 
         $credentials = $this->credentials->resolveFromConfig(
@@ -563,5 +582,110 @@ class PaymentMethods extends AbstractHelper
         }
 
         return $result;
+    }
+
+    /**
+     * Resolve MAPI payment method converted to
+     * Resursbank\Core\Model\PaymentMethod
+     *
+     * @param string $id
+     * @param string $storeId
+     * @return PaymentMethod|null
+     */
+    public function getMapiMethodById(
+        string $id,
+        string $storeId
+    ): ?PaymentMethod {
+        try {
+            return $this->convertMapiMethod(
+                method: EcomRepository::getById(
+                    storeId: $storeId,
+                    paymentMethodId: $id
+                )
+            );
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve list of MAPI payment methods, converted to
+     * Resursbank\Core\Model\PaymentMethod instances, to function with our
+     * deprecated API implementations.
+     *
+     * @param string $storeId
+     * @return array
+     */
+    public function getMapiMethods(string $storeId): array
+    {
+        $result = [];
+
+        try {
+            $methods = EcomRepository::getPaymentMethods(storeId: $storeId);
+
+            foreach ($methods as $method) {
+                $result[] = $this->convertMapiMethod(method: $method);
+            }
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert EcomPaymentMethod to PaymentMethod.
+     *
+     * @param EcomPaymentMethod $method
+     * @return PaymentMethod
+     * @throws JsonException
+     * @throws ValidatorException
+     */
+    private function convertMapiMethod(
+        EcomPaymentMethod $method
+    ): PaymentMethod {
+        $result = $this->methodFactory->create();
+        $result->setCode(code: Resursbank::CODE_PREFIX . $method->id);
+        $result->setActive(state: true);
+        $result->setSortOrder(order: $method->sortOrder);
+        $result->setTitle(title: $method->name);
+        $result->setMinOrderTotal(total: $method->minPurchaseLimit);
+        $result->setMaxOrderTotal(total: $method->maxPurchaseLimit);
+        $result->setOrderStatus(status: Order::STATE_PENDING_PAYMENT);
+        $result->setRaw(value: json_encode(value: [
+            'type' => $this->getMapiType(type: $method->type),
+            'specificType' => $this->getMapiSpecificType(type: $method->type)
+        ], flags: JSON_THROW_ON_ERROR));
+
+        return $result;
+    }
+
+    /**
+     * Convert MAPI "type" to old "specificType". Essentially, drop the prefix
+     * "RESURS_" if it exists, this will match the "specificType" property from
+     * the deprecated APIs.
+     *
+     * @param Type $type
+     * @return string
+     */
+    private function getMapiSpecificType(Type $type): string
+    {
+        return (str_starts_with(haystack: $type->value, needle: 'RESURS_')) ?
+            substr(string: $type->value, offset: 8) : $type->value;
+    }
+
+    /**
+     * Resolve "PAYMENT_PROVIDER" as type for external payment methods to mimic
+     * some behavior established by the deprecated API integrations.
+     *
+     * @param Type $type
+     * @return string
+     */
+    private function getMapiType(Type $type): string
+    {
+        return str_starts_with(haystack: $type->value, needle: 'RESURS_') ?
+            'INTERNAL' : 'PAYMENT_PROVIDER';
     }
 }

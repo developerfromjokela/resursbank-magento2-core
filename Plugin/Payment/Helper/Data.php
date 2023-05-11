@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -14,11 +15,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\StoreManager;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
+use Throwable;
 
 class Data
 {
@@ -52,12 +56,16 @@ class Data
      * @param Log $log
      * @param MethodFactory $methodFactory
      * @param Repository $repository
+     * @param StoreManager $storeManager
+     * @param Config $config
      */
     public function __construct(
         PaymentMethods $paymentMethods,
         Log $log,
         MethodFactory $methodFactory,
-        Repository $repository
+        Repository $repository,
+        private readonly StoreManager $storeManager,
+        private readonly Config $config
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
@@ -191,6 +199,8 @@ class Data
     }
 
     /**
+     * Retrieve Resursbank model for payment method.
+     *
      * @param string $code
      * @return PaymentMethodInterface|null
      */
@@ -244,8 +254,22 @@ class Data
      */
     private function getMethodList(): array
     {
-        if ($this->methodList === null) {
-            $this->methodList = $this->paymentMethods->getActiveMethods();
+        if ($this->methodList !== null) {
+            return $this->methodList;
+        }
+
+        try {
+            $code = $this->storeManager->getStore()->getCode();
+
+            if ($this->config->isMapiActive(scopeCode: $code)) {
+                $this->methodList = $this->paymentMethods->getMapiMethods(
+                    storeId: $this->config->getStore(scopeCode: $code)
+                );
+            } else {
+                $this->methodList = $this->paymentMethods->getActiveMethods();
+            }
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
         }
 
         return $this->methodList;
