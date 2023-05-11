@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -11,8 +12,6 @@ namespace Resursbank\Core\Helper;
 use Exception;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Resursbank\Core\Exception\InvalidDataException;
-use function is_array;
 use JsonException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -30,8 +29,10 @@ use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodFactory;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
+
 use function json_decode;
-use function strlen;
+use function str_starts_with;
+use function is_array;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -163,7 +164,7 @@ class PaymentMethods extends AbstractHelper
              * Magentos rendering component for the payment method list will
              * randomly sort the methods incorrectly unless we space them a bit.
              */
-            $method->setSortOrder($sortOrder+=10);
+            $method->setSortOrder($sortOrder += 10);
 
             // Overwrite data on method model instance and update db entry.
             $this->syncMethodData(
@@ -399,14 +400,7 @@ class PaymentMethods extends AbstractHelper
     public function isResursBankMethod(
         string $code
     ): bool {
-        return (
-            strpos($code, Method::CODE_PREFIX) === 0 &&
-            (
-                $this->isDefaultMethod($code) ||
-                $this->isCurrentMethod($code) ||
-                $this->isLegacyMethod($code)
-            )
-        );
+            str_starts_with(haystack: $code, needle: Method::CODE_PREFIX);
     }
 
     /**
@@ -423,57 +417,6 @@ class PaymentMethods extends AbstractHelper
             $payment instanceof OrderPaymentInterface &&
             $this->isResursBankMethod($payment->getMethod())
         );
-    }
-
-    /**
-     * Check whether method code corresponds to default method code.
-     *
-     * @param string $code
-     * @return bool
-     */
-    private function isDefaultMethod(
-        string $code
-    ): bool {
-        return $code === 'resursbank_default';
-    }
-
-    /**
-     * Checks whether method code corresponds to modern layout pattern.
-     *
-     * NOTE: The difference from legacy methods is that the suffixed environment
-     * value is now replaced with a digit. Which corresponds with the value
-     * utilised in ECom.
-     *
-     * NOTE: This check is important at the time of writing because otherwise
-     * Magento will confuse config sections with payment methods. If memory
-     * serves this is because of a bug which has been reported, thus this may
-     * not be necessary to check in future releases.
-     *
-     * @param string $code
-     * @return bool
-     */
-    private function isCurrentMethod(
-        string $code
-    ): bool {
-        return is_numeric($code[strlen($code) - 1]);
-    }
-
-    /**
-     * Check whether supplied method code corresponds to the layout pattern
-     * utilised in older versions of the module.
-     *
-     * NOTE: This is required to support installations upgrading from older
-     * versions of the module.
-     *
-     * @param string $code
-     * @return bool
-     */
-    private function isLegacyMethod(
-        string $code
-    ): bool {
-        $env = substr($code, strlen($code)-4);
-
-        return $env === 'test' || $env === 'prod';
     }
 
     /**
