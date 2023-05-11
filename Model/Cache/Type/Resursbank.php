@@ -23,15 +23,13 @@ class Resursbank extends TagScope
 
     /**
      * @param FrontendPool $frontend
-     * @param string $tag
      */
     public function __construct(
         FrontendPool $frontend,
-        $tag
     ) {
         parent::__construct(
             frontend: $frontend->get(cacheType: self::TYPE_IDENTIFIER),
-            tag: $tag
+            tag: self::CACHE_TAG
         );
     }
 }
