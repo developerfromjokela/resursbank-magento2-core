@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -14,11 +15,16 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterfaceFactory;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
+use Resursbank\Core\Helper\Config;
+use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
 
@@ -28,49 +34,25 @@ use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
 class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 {
     /**
-     * @var PaymentMethodInterfaceFactory
-     */
-    protected PaymentMethodInterfaceFactory $methodFactory;
-
-    /**
-     * @var PaymentMethodSearchResultsInterfaceFactory
-     */
-    protected PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory;
-
-    /**
-     * @var ResourceModel
-     */
-    protected ResourceModel $resourceModel;
-
-    /**
-     * @var CollectionFactory
-     */
-    private CollectionFactory $collectionFactory;
-
-    /**
-     * @var FilterProcessor
-     */
-    private FilterProcessor $filterProcessor;
-
-    /**
      * @param ResourceModel $resourceModel
      * @param PaymentMethodInterfaceFactory $methodFactory
      * @param PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
      * @param FilterProcessor $filterProcessor
+     * @param Config $config
+     * @param StoreManagerInterface $storeManager
+     * @param Mapi $mapi
      */
     public function __construct(
-        ResourceModel $resourceModel,
-        PaymentMethodInterfaceFactory $methodFactory,
-        PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionFactory $collectionFactory,
-        FilterProcessor $filterProcessor
+        private readonly ResourceModel $resourceModel,
+        private readonly PaymentMethodInterfaceFactory $methodFactory,
+        private readonly PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory,
+        private readonly CollectionFactory $collectionFactory,
+        private readonly FilterProcessor $filterProcessor,
+        private readonly Config $config,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Mapi $mapi
     ) {
-        $this->resourceModel = $resourceModel;
-        $this->methodFactory = $methodFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->filterProcessor = $filterProcessor;
     }
 
     /**
@@ -117,8 +99,17 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @throws NoSuchEntityException
      */
     public function get(
-        int $methodId
+        string|int $methodId
     ): PaymentMethodInterface {
+        $scopeCode = $this->storeManager->getStore()->getCode();
+
+        if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
+            return $this->mapi->getMapiMethodById(
+                id: $methodId,
+                storeId: $this->config->getStore(scopeCode: $scopeCode)
+            );
+        }
+
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -140,6 +131,19 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function getByCode(
         string $code
     ): PaymentMethodInterface {
+        $scopeCode = $this->storeManager->getStore()->getCode();
+
+        if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
+            return $this->mapi->getMapiMethodById(
+                id: str_replace(
+                    search: Resursbank::CODE_PREFIX,
+                    replace: '',
+                    subject: $code
+                ),
+                storeId: $this->config->getStore(scopeCode: $scopeCode)
+            );
+        }
+
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
