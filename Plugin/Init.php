@@ -13,7 +13,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
 use Psr\Log\LoggerInterface;
@@ -38,6 +37,8 @@ use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Module\Store\Repository;
 use Throwable;
 
+use function is_dir;
+
 /**
  * Handles initial init of Ecom+.
  */
@@ -55,7 +56,6 @@ class Init
      * @param Version $version
      * @param Locale $locale
      * @param StateInterface $cacheState
-     * @param DriverInterface $filesystemDriver
      * @throws FileSystemException
      */
     public function __construct(
@@ -69,12 +69,11 @@ class Init
         private readonly ProductMetadataInterface $productMetadata,
         private readonly Version $version,
         private readonly Locale $locale,
-        private readonly StateInterface $cacheState,
-        private readonly DriverInterface $filesystemDriver
+        private readonly StateInterface $cacheState
     ) {
         $logPath = $this->getLogPath();
 
-        if (!$this->filesystemDriver->isDirectory(path: $logPath)) {
+        if (!is_dir(filename: $logPath)) {
             $this->file->mkdir(dir: $logPath);
         }
     }
