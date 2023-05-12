@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -148,10 +149,20 @@ class ProductItem extends AbstractItem
     }
 
     /**
+     * Check whether this is a bundle product.
+     *
      * @return bool
      */
     public function isBundle(): bool
     {
         return $this->product->getProductType() === 'bundle';
+    }
+
+    /**
+     * @inheriDoc
+     */
+    public function getTotalAmountInclVat(): float
+    {
+        return round(num: $this->product->getRowTotalInclTax(), precision: 2);
     }
 }

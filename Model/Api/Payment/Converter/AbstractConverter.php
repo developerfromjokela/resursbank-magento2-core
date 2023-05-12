@@ -23,41 +23,17 @@ use function is_array;
 abstract class AbstractConverter implements ConverterInterface
 {
     /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @var ShippingItemFactory
-     */
-    private ShippingItemFactory $shippingItemFactory;
-
-    /**
-     * @var DiscountItemFactory
-     */
-    private DiscountItemFactory $discountItemFactory;
-
-    /**
-     * @var TaxItemResourceFactory
-     */
-    private TaxItemResourceFactory $taxResourceFactory;
-
-    /**
      * @param Log $log
      * @param TaxItemResourceFactory $taxResourceFactory
      * @param ShippingItemFactory $shippingItemFactory
      * @param DiscountItemFactory $discountItemFactory
      */
     public function __construct(
-        Log $log,
-        TaxItemResourceFactory $taxResourceFactory,
-        ShippingItemFactory $shippingItemFactory,
-        DiscountItemFactory $discountItemFactory
+        private readonly Log $log,
+        private readonly TaxItemResourceFactory $taxResourceFactory,
+        private readonly ShippingItemFactory $shippingItemFactory,
+        private readonly DiscountItemFactory $discountItemFactory
     ) {
-        $this->log = $log;
-        $this->shippingItemFactory = $shippingItemFactory;
-        $this->discountItemFactory = $discountItemFactory;
-        $this->taxResourceFactory = $taxResourceFactory;
     }
 
     /**
@@ -72,8 +48,8 @@ abstract class AbstractConverter implements ConverterInterface
     ): array {
         $result = [];
 
-        if ($this->includeShippingData($method, $amount)) {
-            $item = $this->shippingItemFactory->create(compact([
+        if ($this->includeShippingData(method: $method, amount: $amount)) {
+            $item = $this->shippingItemFactory->create(data: compact(var_name: [
                 'method',
                 'description',
                 'amount',
@@ -130,11 +106,11 @@ abstract class AbstractConverter implements ConverterInterface
         $result = 0.0;
 
         $taxItem = $this->taxResourceFactory->create();
-        $collection = $taxItem->getTaxItemsByOrderId($orderId);
+        $collection = $taxItem->getTaxItemsByOrderId(orderId: $orderId);
 
         $match = false;
 
-        /** @var array<mixed> $item */
+        /** @var array $item */
         foreach ($collection as $item) {
             if (is_array($item) &&
                 isset($item['taxable_item_type']) &&
@@ -152,7 +128,7 @@ abstract class AbstractConverter implements ConverterInterface
 
         if (!$match) {
             $this->log->info(
-                'Could not find matching tax item type ' . $type . ' on ' .
+                text: 'Could not find matching tax item type ' . $type . ' on ' .
                 'order entity ' . $orderId
             );
         }
@@ -164,13 +140,16 @@ abstract class AbstractConverter implements ConverterInterface
      * Append discount item to passed array. We pass an array this way to
      * combine discount items, resulting in one item for each VAT percentage.
      *
+     * @param float $totalAmount
      * @param float $amount
      * @param int $taxPercent
      * @param float $productQty
      * @param array $items
      * @return void
+     * @throws Exception
      */
     public function addDiscountItem(
+        float $totalAmount,
         float $amount,
         int $taxPercent,
         float $productQty,
@@ -182,7 +161,8 @@ abstract class AbstractConverter implements ConverterInterface
             }
 
             $item = $this->discountItemFactory->create(
-                [
+                data: [
+                    'totalAmount' => $totalAmount,
                     'amount' => 0 - $amount,
                     'taxPercent' => $taxPercent
                 ]

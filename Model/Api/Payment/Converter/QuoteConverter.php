@@ -26,11 +26,6 @@ use function is_array;
 class QuoteConverter extends AbstractConverter
 {
     /**
-     * @var ProductItemFactory
-     */
-    private ProductItemFactory $productItemFactory;
-
-    /**
      * @param Log $log
      * @param TaxItemResourceFactory $taxResourceFactory
      * @param ShippingItemFactory $shippingItemFactory
@@ -42,15 +37,13 @@ class QuoteConverter extends AbstractConverter
         TaxItemResourceFactory $taxResourceFactory,
         ShippingItemFactory $shippingItemFactory,
         DiscountItemFactory $discountItemFactory,
-        ProductItemFactory $productItemFactory
+        private readonly ProductItemFactory $productItemFactory
     ) {
-        $this->productItemFactory = $productItemFactory;
-
         parent::__construct(
-            $log,
-            $taxResourceFactory,
-            $shippingItemFactory,
-            $discountItemFactory
+            log: $log,
+            taxResourceFactory: $taxResourceFactory,
+            shippingItemFactory: $shippingItemFactory,
+            discountItemFactory: $discountItemFactory
         );
     }
 
@@ -70,13 +63,13 @@ class QuoteConverter extends AbstractConverter
         return array_merge(
             array_merge(
                 $this->getShippingData(
-                    (string) $shippingAddress->getShippingMethod(),
-                    (string) $shippingAddress->getShippingDescription(),
-                    (float) $shippingAddress->getShippingInclTax(),
-                    $this->getShippingVatPct($shippingAddress)
+                    method: (string) $shippingAddress->getShippingMethod(),
+                    description: (string) $shippingAddress->getShippingDescription(),
+                    amount: (float) $shippingAddress->getShippingInclTax(),
+                    vatPct: $this->getShippingVatPct(address: $shippingAddress)
                 )
             ),
-            $this->getProductData($entity)
+            $this->getProductData(entity: $entity)
         );
     }
 
@@ -93,23 +86,26 @@ class QuoteConverter extends AbstractConverter
         $result = [];
         $discountItems = [];
 
-        if ($this->includeProductData($entity)) {
+        if ($this->includeProductData(entity: $entity)) {
             /** @var Item $product */
             foreach ($entity->getAllItems() as $product) {
                 if ($product->getQty() > 0 &&
-                    !$this->hasConfigurableParent($product)
+                    !$this->hasConfigurableParent(product: $product)
                 ) {
-                    $item = $this->productItemFactory->create([
+                    $item = $this->productItemFactory->create(data: [
                         'product' => $product
                     ]);
 
                     $result[] = $item->getItem();
 
                     $this->addDiscountItem(
-                        (float) $product->getDiscountAmount(),
-                        $product->getDiscountTaxCompensationAmount() > 0 ? $item->getItem()->getVatPct() : 0,
-                        (float) $product->getQty(),
-                        $discountItems
+                        totalAmount: (float) $product->getTotalDiscountAmount(),
+                        amount: (float) $product->getDiscountAmount(),
+                        taxPercent: $product->getDiscountTaxCompensationAmount() > 0
+                            ? $item->getItem()->getVatPct()
+                            : 0,
+                        productQty: (float) $product->getQty(),
+                        items: $discountItems
                     );
                 }
             }
@@ -143,9 +139,9 @@ class QuoteConverter extends AbstractConverter
     ): float {
         $result = 0.0;
 
-        $taxes = $address->getData('items_applied_taxes');
+        $taxes = $address->getData(key: 'items_applied_taxes');
 
-        if (is_array($taxes) && isset($taxes['shipping'][0]['percent'])) {
+        if (is_array(value: $taxes) && isset($taxes['shipping'][0]['percent'])) {
             $result = (float) $taxes['shipping'][0]['percent'];
         }
 

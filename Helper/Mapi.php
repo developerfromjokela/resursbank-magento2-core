@@ -111,8 +111,30 @@ class Mapi extends AbstractHelper
         $result->setOrderStatus(status: Order::STATE_PENDING_PAYMENT);
         $result->setRaw(value: json_encode(value: [
             'type' => $this->getMapiType(type: $method->type),
-            'specificType' => $this->getMapiSpecificType(type: $method->type)
+            'specificType' => $this->getMapiSpecificType(type: $method->type),
+            'customerType' => $this->getCustomerTypes(method: $method)
         ], flags: JSON_THROW_ON_ERROR));
+
+        return $result;
+    }
+
+    /**
+     * Resolve array of available customer types for MAPI method.
+     *
+     * @param EcomPaymentMethod $method
+     * @return array
+     */
+    private function getCustomerTypes(EcomPaymentMethod $method): array
+    {
+        $result = [];
+
+        if ($method->enabledForLegalCustomer) {
+            $result[] = 'LEGAL';
+        }
+
+        if ($method->enabledForNaturalCustomer) {
+            $result[] = 'NATURAL';
+        }
 
         return $result;
     }
