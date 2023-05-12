@@ -120,7 +120,7 @@ class Mapi
             orderLines: $this->getOrderLines(),
             orderReference: (string) $payment->getOrder()->getIncrementId(),
             customer: $this->getCustomerData(payment: $payment),
-            metadata: $this->getCustomerMedadata(),
+            metadata: $this->getCustomerMetadata(),
             options: $this->getOptions(order: $payment->getOrder())
         );
 
@@ -147,7 +147,7 @@ class Mapi
      * @return Metadata|null
      * @throws IllegalTypeException
      */
-    private function getCustomerMedadata(): ?Metadata
+    private function getCustomerMetadata(): ?Metadata
     {
         $result = null;
 
