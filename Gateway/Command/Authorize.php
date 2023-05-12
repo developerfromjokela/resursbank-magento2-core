@@ -101,7 +101,7 @@ class Authorize implements CommandInterface
                 $store = $payment->getOrder()->getStore()->getCode();
 
                 if ($this->config->isMapiActive(scopeCode: $store)) {
-                    $this->mapi->execute(commandSubject: $commandSubject);
+                    $this->mapi->createPayment(payment: $payment, store: $store);
                     return null;
                 }
             }

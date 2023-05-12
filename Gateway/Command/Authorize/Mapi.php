@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Command\ResultInterface;
-use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Address;
@@ -67,12 +66,11 @@ use Throwable;
 use function get_class;
 
 /**
- * Payment authorization command. Deprecated APIs extend this class using
- * plugins. The methods implemented directly in this class are MAPI specific.
+ * Payment authorization command for MAPI.
  *
  * @noinspection EfferentObjectCouplingInspection
  */
-class Mapi implements CommandInterface
+class Mapi
 {
     /**
      * @param Config $config
@@ -88,40 +86,6 @@ class Mapi implements CommandInterface
         private readonly QuoteConverter $quoteConverter,
         private readonly Session $customerSession
     ) {
-    }
-
-    /**
-     * Extended by other API implementations, only transaction id handling is
-     * centralized.
-     *
-     * @param array $commandSubject
-     * @return void
-     * @throws ApiException
-     * @throws AuthException
-     * @throws ConfigException
-     * @throws CurlException
-     * @throws EmptyValueException
-     * @throws IllegalTypeException
-     * @throws IllegalValueException
-     * @throws JsonException
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     * @throws ReflectionException
-     * @throws ValidationException
-     */
-    public function execute(
-        array $commandSubject
-    ): void {
-        $data = SubjectReader::readPayment(subject: $commandSubject);
-        $payment = $data->getPayment();
-
-        if ($payment instanceof Payment) {
-            $store = $payment->getOrder()->getStore()->getCode();
-
-            if ($this->config->isMapiActive(scopeCode: $store)) {
-                $this->createPayment(payment: $payment, store: $store);
-            }
-        }
     }
 
     /**
@@ -144,7 +108,7 @@ class Mapi implements CommandInterface
      * @throws ReflectionException
      * @throws ValidationException
      */
-    private function createPayment(Payment $payment, string $store): void
+    public function createPayment(Payment $payment, string $store): void
     {
         $ecomPayment = PaymentRepository::create(
             storeId: $this->config->getStore(scopeCode: $store),
