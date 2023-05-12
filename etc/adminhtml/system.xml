@@ -103,7 +103,7 @@
                             <field id="flow">mapi</field>
                         </depends>
                     </field>
-                    <field id="sync" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="sync" type="button" sortOrder="5" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
                         <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
@@ -112,7 +112,7 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                    <field id="auto_sync_data" type="select" sortOrder="5" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="auto_sync_data" type="select" sortOrder="6" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Automatically sync data</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>resursbank/api/auto_sync_data</config_path>
