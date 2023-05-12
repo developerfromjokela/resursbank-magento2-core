@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -120,5 +121,10 @@ class ShippingItem extends AbstractItem
     public function getType(): string
     {
         return Item::TYPE_SHIPPING;
+    }
+
+    public function getTotalAmountInclVat(): float
+    {
+        return round(num: $this->amount, precision: 2);
     }
 }

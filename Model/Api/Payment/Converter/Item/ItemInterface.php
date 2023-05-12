@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -54,6 +55,11 @@ interface ItemInterface
      * @return float
      */
     public function getUnitAmountWithoutVat(): float;
+
+    /**
+     * @return float
+     */
+    public function getTotalAmountInclVat(): float;
 
     /**
      * @return int

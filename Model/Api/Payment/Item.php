@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -82,6 +83,13 @@ class Item
     public const KEY_TYPE = 'type';
 
     /**
+     * Data key representing total incl. tax.
+     *
+     * @var string
+     */
+    public const KEY_TOTAL_AMOUNT_INCL_VAT = 'totalAmountInclVat';
+
+    /**
      * Shipping item type identifier.
      *
      * @var string
@@ -153,39 +161,11 @@ class Item
     private string $type = self::TYPE_PRODUCT;
 
     /**
-     * @var ArtNo
+     * Total amount incl vat.
+     *
+     * @var float
      */
-    private ArtNo $artNoValidator;
-
-    /**
-     * @var Description
-     */
-    private Description $descriptionValidator;
-
-    /**
-     * @var Quantity
-     */
-    private Quantity $quantityValidator;
-
-    /**
-     * @var UnitMeasure
-     */
-    private UnitMeasure $unitMeasureValidator;
-
-    /**
-     * @var UnitAmountWithoutVat
-     */
-    private UnitAmountWithoutVat $amountValidator;
-
-    /**
-     * @var VatPct
-     */
-    private VatPct $vatPctValidator;
-
-    /**
-     * @var Type
-     */
-    private Type $typeValidator;
+    private float $totalAmountInclVat = 0.0;
 
     /**
      * @param string $artNo
@@ -214,29 +194,23 @@ class Item
         float $unitAmountWithoutVat,
         int $vatPct,
         string $type,
-        ArtNo $artNoValidator,
-        Description $descriptionValidator,
-        Quantity $quantityValidator,
-        UnitMeasure $unitMeasureValidator,
-        UnitAmountWithoutVat $amountValidator,
-        VatPct $vatPctValidator,
-        Type $typeValidator
+        float $totalAmountInclVat,
+        private readonly ArtNo $artNoValidator,
+        private readonly Description $descriptionValidator,
+        private readonly Quantity $quantityValidator,
+        private readonly UnitMeasure $unitMeasureValidator,
+        private readonly UnitAmountWithoutVat $amountValidator,
+        private readonly VatPct $vatPctValidator,
+        private readonly Type $typeValidator
     ) {
-        $this->artNoValidator = $artNoValidator;
-        $this->descriptionValidator = $descriptionValidator;
-        $this->quantityValidator = $quantityValidator;
-        $this->unitMeasureValidator = $unitMeasureValidator;
-        $this->amountValidator = $amountValidator;
-        $this->vatPctValidator = $vatPctValidator;
-        $this->typeValidator = $typeValidator;
-
-        $this->setArtNo($artNo)
-            ->setDescription($description)
-            ->setQuantity($quantity)
-            ->setUnitMeasure($unitMeasure)
-            ->setUnitAmountWithoutVat($unitAmountWithoutVat)
-            ->setVatPct($vatPct)
-            ->setType($type);
+        $this->setArtNo(value: $artNo)
+            ->setDescription(value: $description)
+            ->setQuantity(value: $quantity)
+            ->setUnitMeasure(value: $unitMeasure)
+            ->setUnitAmountWithoutVat(value: $unitAmountWithoutVat)
+            ->setVatPct(value: $vatPct)
+            ->setType(value: $type)
+            ->setTotalAmountInclVat(value: $totalAmountInclVat);
     }
 
     /**
@@ -247,7 +221,7 @@ class Item
      */
     public function setArtNo(string $value): Item
     {
-        $this->artNoValidator->validate($value);
+        $this->artNoValidator->validate(value: $value);
 
         $this->artNo = $value;
 
@@ -270,7 +244,7 @@ class Item
      */
     public function setDescription(string $value): Item
     {
-        $this->descriptionValidator->validate($value);
+        $this->descriptionValidator->validate(value: $value);
 
         $this->description = $value;
 
@@ -293,7 +267,7 @@ class Item
      */
     public function setQuantity(float $value): Item
     {
-        $this->quantityValidator->validate($value);
+        $this->quantityValidator->validate(value: $value);
 
         $this->quantity = $value;
 
@@ -316,7 +290,7 @@ class Item
      */
     public function setUnitMeasure(string $value): Item
     {
-        $this->unitMeasureValidator->validate($value);
+        $this->unitMeasureValidator->validate(value: $value);
 
         $this->unitMeasure = $value;
 
@@ -339,7 +313,7 @@ class Item
      */
     public function setUnitAmountWithoutVat(float $value): Item
     {
-        $this->amountValidator->validate($value);
+        $this->amountValidator->validate(value: $value);
 
         $this->unitAmountWithoutVat = $value;
 
@@ -362,7 +336,7 @@ class Item
      */
     public function setVatPct(int $value): Item
     {
-        $this->vatPctValidator->validate($value);
+        $this->vatPctValidator->validate(value: $value);
 
         $this->vatPct = $value;
 
@@ -385,7 +359,7 @@ class Item
      */
     public function setType(string $value): Item
     {
-        $this->typeValidator->validate($value);
+        $this->typeValidator->validate(value: $value);
 
         $this->type = $value;
 
@@ -401,9 +375,32 @@ class Item
     }
 
     /**
+     * @param float $value
+     * @return Item
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public function setTotalAmountInclVat(float $value): Item
+    {
+        $this->amountValidator->validate(value: $value);
+
+        $this->totalAmountInclVat = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalAmountInclVat(): float
+    {
+        return $this->totalAmountInclVat;
+    }
+
+    /**
      * Retrieve object data converted to array.
      *
-     * @return array<mixed>
+     * @return array
      */
     public function toArray(): array
     {
@@ -414,7 +411,8 @@ class Item
             self::KEY_UNIT_MEASURE => $this->getUnitMeasure(),
             self::KEY_UNIT_AMOUNT_WITHOUT_VAT => $this->getUnitAmountWithoutVat(),
             self::KEY_VAT_PCT => $this->getVatPct(),
-            self::KEY_TYPE => $this->getType()
+            self::KEY_TYPE => $this->getType(),
+            self::KEY_TOTAL_AMOUNT_INCL_VAT => $this->getTotalAmountInclVat()
         ];
     }
 }

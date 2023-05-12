@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -21,19 +22,10 @@ use Resursbank\Core\Model\Api\Payment\ItemFactory;
 class DiscountItem extends AbstractItem
 {
     /**
-     * @var float
-     */
-    private float $amount;
-
-    /**
-     * @var int
-     */
-    private int $taxPercent;
-
-    /**
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
+     * @param float $totalAmount
      * @param float $amount Amount incl. tax.
      * @param int $taxPercent Tax amount.
      * @param StoreManagerInterface $storeManager
@@ -42,14 +34,17 @@ class DiscountItem extends AbstractItem
         Config $config,
         ItemFactory $itemFactory,
         Log $log,
-        float $amount,
-        int $taxPercent,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        private readonly float $totalAmount,
+        private readonly float $amount,
+        private readonly int $taxPercent,
     ) {
-        $this->amount = $amount;
-        $this->taxPercent = $taxPercent;
-
-        parent::__construct($config, $itemFactory, $log, $storeManager);
+        parent::__construct(
+            config: $config,
+            itemFactory: $itemFactory,
+            log: $log,
+            storeManager: $storeManager
+        );
     }
 
     /**
@@ -87,7 +82,7 @@ class DiscountItem extends AbstractItem
      */
     public function getUnitAmountWithoutVat(): float
     {
-        return $this->sanitizeUnitAmountWithoutVat($this->amount);
+        return $this->sanitizeUnitAmountWithoutVat(amount: $this->amount);
     }
 
     /**
@@ -118,5 +113,13 @@ class DiscountItem extends AbstractItem
     public function getType(): string
     {
         return Item::TYPE_DISCOUNT;
+    }
+
+    /**
+     * @inheriDoc
+     */
+    public function getTotalAmountInclVat(): float
+    {
+        return round(num: $this->totalAmount, precision: 2);
     }
 }

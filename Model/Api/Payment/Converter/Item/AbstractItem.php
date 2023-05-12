@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Resurs Bank AB. All rights reserved.
  * See LICENSE for license details.
@@ -20,6 +21,7 @@ use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\ArtNo;
 use Resursbank\Core\Model\Api\Payment\Item\Validation\UnitAmountWithoutVat;
 use Resursbank\Core\Model\Api\Payment\ItemFactory;
+
 use function strlen;
 
 /**
@@ -72,14 +74,15 @@ abstract class AbstractItem implements ItemInterface
      */
     public function getItem(): Item
     {
-        return $this->itemFactory->create([
+        return $this->itemFactory->create(data: [
             Item::KEY_ART_NO => $this->getArtNo(),
             Item::KEY_DESCRIPTION => $this->getDescription(),
             Item::KEY_QUANTITY => $this->getQuantity(),
             Item::KEY_UNIT_MEASURE => $this->getUnitMeasure(),
             Item::KEY_UNIT_AMOUNT_WITHOUT_VAT => $this->getUnitAmountWithoutVat(),
             Item::KEY_VAT_PCT => $this->getVatPct(),
-            Item::KEY_TYPE => $this->getType()
+            Item::KEY_TYPE => $this->getType(),
+            Item::KEY_TOTAL_AMOUNT_INCL_VAT => $this->getTotalAmountInclVat()
         ]);
     }
 
