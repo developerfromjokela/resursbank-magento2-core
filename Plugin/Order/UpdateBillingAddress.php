@@ -15,8 +15,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\AddressRepository;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -32,48 +34,23 @@ use Resursbank\Core\Model\Api\Payment as PaymentModel;
 class UpdateBillingAddress
 {
     /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @var AddressRepository
-     */
-    private AddressRepository $addressRepository;
-
-    /**
-     * @var Order
-     */
-    private Order $order;
-    /**
-     * @var Api
-     */
-    private Api $api;
-
-    /**
-     * @var PaymentMethods
-     */
-    private PaymentMethods $paymentMethods;
-
-    /**
      * @param Log $log
      * @param AddressRepository $addressRepository
      * @param Order $order
      * @param Api $api
-     * @param PaymentMethods $paymentMethods
+     * @param PaymentMethods $paymentMethod
+     * @param Config $config
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Log $log,
-        AddressRepository $addressRepository,
-        Order $order,
-        Api $api,
-        PaymentMethods $paymentMethods
+        private readonly Log $log,
+        private readonly AddressRepository $addressRepository,
+        private readonly Order $order,
+        private readonly Api $api,
+        private readonly PaymentMethods $paymentMethods,
+        private readonly Config $config,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->log = $log;
-        $this->addressRepository = $addressRepository;
-        $this->order = $order;
-        $this->api = $api;
-        $this->paymentMethods = $paymentMethods;
     }
 
     /**
@@ -94,7 +71,9 @@ class UpdateBillingAddress
         try {
             $order = $this->order->resolveOrderFromRequest();
 
-            if ($this->isEnabled($order)) {
+            if ($this->isEnabled($order) &&
+                !$this->config->isMapiActive(scopeCode: $this->storeManager->getStore()->getCode())
+            ) {
                 $paymentData = $this->api->getPayment($order);
 
                 if ($paymentData === null) {
