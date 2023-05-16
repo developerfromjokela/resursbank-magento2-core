@@ -48,36 +48,6 @@ class Order extends AbstractHelper implements ArgumentInterface
     public const CREDIT_DENIED_LABEL = 'Resurs Bank - Credit Denied';
 
     /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchBuilder;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private OrderRepositoryInterface $orderRepo;
-
-    /**
-     * @var CheckoutSession
-     */
-    private CheckoutSession $checkoutSession;
-
-    /**
-     * @var OrderManagementInterface
-     */
-    private OrderManagementInterface $orderManagement;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
      * @param Context $context
      * @param SearchCriteriaBuilder $searchBuilder
      * @param OrderRepositoryInterface $orderRepo
@@ -88,23 +58,16 @@ class Order extends AbstractHelper implements ArgumentInterface
      */
     public function __construct(
         Context $context,
-        SearchCriteriaBuilder $searchBuilder,
-        OrderRepositoryInterface $orderRepo,
-        RequestInterface $request,
-        CheckoutSession $checkoutSession,
-        OrderManagementInterface $orderManagement,
-        Log $log,
+        private readonly SearchCriteriaBuilder $searchBuilder,
+        private readonly OrderRepositoryInterface $orderRepo,
+        private readonly RequestInterface $request,
+        private readonly CheckoutSession $checkoutSession,
+        private readonly OrderManagementInterface $orderManagement,
+        private readonly Log $log,
         private readonly TransactionRepositoryInterface $transactionRepository,
         private readonly FilterBuilder $filterBuilder,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->searchBuilder = $searchBuilder;
-        $this->orderRepo = $orderRepo;
-        $this->request = $request;
-        $this->checkoutSession = $checkoutSession;
-        $this->orderManagement = $orderManagement;
-        $this->log = $log;
-
         parent::__construct($context);
     }
 
