@@ -16,7 +16,6 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -122,8 +121,6 @@ class PaymentMethodsTest extends TestCase
             ->onlyMethods(['getMethodSuffix'])
             ->getMock();
 
-        $transactionRepositoryMock = $this->createMock(originalClassName: Repository::class);
-
         // Mock of PaymentMethods service class.
         $this->paymentMethods = new PaymentMethods(
             $contextMock,
@@ -133,8 +130,7 @@ class PaymentMethodsTest extends TestCase
             $paymentMethodRepositoryMock,
             $this->credentialsMock,
             $searchCriteriaBuilderMock,
-            $logMock,
-            $transactionRepositoryMock
+            $logMock
         );
 
         parent::setUp();
