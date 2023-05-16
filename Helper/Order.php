@@ -8,15 +8,18 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order as OrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use function is_string;
@@ -45,36 +48,6 @@ class Order extends AbstractHelper implements ArgumentInterface
     public const CREDIT_DENIED_LABEL = 'Resurs Bank - Credit Denied';
 
     /**
-     * @var RequestInterface
-     */
-    private RequestInterface $request;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchBuilder;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private OrderRepositoryInterface $orderRepo;
-
-    /**
-     * @var CheckoutSession
-     */
-    private CheckoutSession $checkoutSession;
-
-    /**
-     * @var OrderManagementInterface
-     */
-    private OrderManagementInterface $orderManagement;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
      * @param Context $context
      * @param SearchCriteriaBuilder $searchBuilder
      * @param OrderRepositoryInterface $orderRepo
@@ -85,20 +58,16 @@ class Order extends AbstractHelper implements ArgumentInterface
      */
     public function __construct(
         Context $context,
-        SearchCriteriaBuilder $searchBuilder,
-        OrderRepositoryInterface $orderRepo,
-        RequestInterface $request,
-        CheckoutSession $checkoutSession,
-        OrderManagementInterface $orderManagement,
-        Log $log
+        private readonly SearchCriteriaBuilder $searchBuilder,
+        private readonly OrderRepositoryInterface $orderRepo,
+        private readonly RequestInterface $request,
+        private readonly CheckoutSession $checkoutSession,
+        private readonly OrderManagementInterface $orderManagement,
+        private readonly Log $log,
+        private readonly TransactionRepositoryInterface $transactionRepository,
+        private readonly FilterBuilder $filterBuilder,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->searchBuilder = $searchBuilder;
-        $this->orderRepo = $orderRepo;
-        $this->request = $request;
-        $this->checkoutSession = $checkoutSession;
-        $this->orderManagement = $orderManagement;
-        $this->log = $log;
-
         parent::__construct($context);
     }
 
@@ -294,5 +263,36 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function getQuoteId(): int
     {
         return (int) $this->request->getParam('quote_id');
+    }
+
+    /**
+     * Resolve order from transaction using Resurs Bank payment ID.
+     *
+     * @param string $paymentId
+     * @return OrderInterface|null
+     */
+    public function getOrderFromPaymentId(string $paymentId): ?OrderInterface
+    {
+        $typeFilter = $this->filterBuilder
+            ->setField(field: TransactionInterface::TXN_TYPE)
+            ->setValue(value: TransactionInterface::TYPE_AUTH)
+            ->create();
+        $idFilter = $this->filterBuilder
+            ->setField(field: TransactionInterface::TXN_ID)
+            ->setValue(value: $paymentId)
+            ->create();
+
+        $entity = current(
+            array: $this->transactionRepository->getList(
+                searchCriteria: $this->searchCriteriaBuilder
+                    ->addFilters(filter: [$typeFilter])
+                    ->addFilters(filter: [$idFilter])
+                    ->create()
+            )->getItems()
+        );
+
+        return !$entity instanceof TransactionInterface
+            ? null
+            : $this->orderRepo->get(id: $entity->getOrderId());
     }
 }
