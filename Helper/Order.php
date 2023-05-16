@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -20,6 +22,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order as OrderModel;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use function is_string;
@@ -56,6 +59,9 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param OrderManagementInterface $orderManagement
      * @param Log $log
      * @param Repository $transaction
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Context $context,
@@ -65,7 +71,10 @@ class Order extends AbstractHelper implements ArgumentInterface
         private readonly CheckoutSession $checkoutSession,
         private readonly OrderManagementInterface $orderManagement,
         private readonly Log $log,
-        private readonly Repository $transaction
+        private readonly Repository $transaction,
+        private readonly TransactionRepositoryInterface $transactionRepository,
+        private readonly FilterBuilder $filterBuilder,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         parent::__construct(context: $context);
     }
@@ -283,5 +292,37 @@ class Order extends AbstractHelper implements ArgumentInterface
         );
 
         return $transaction instanceof TransactionInterface ? $transaction->getTxnId() : '';
+
+    }
+
+    /**
+     * Resolve order from transaction using Resurs Bank payment ID.
+     *
+     * @param string $paymentId
+     * @return OrderInterface|null
+     */
+    public function getOrderFromPaymentId(string $paymentId): ?OrderInterface
+    {
+        $typeFilter = $this->filterBuilder
+            ->setField(field: TransactionInterface::TXN_TYPE)
+            ->setValue(value: TransactionInterface::TYPE_AUTH)
+            ->create();
+        $idFilter = $this->filterBuilder
+            ->setField(field: TransactionInterface::TXN_ID)
+            ->setValue(value: $paymentId)
+            ->create();
+
+        $entity = current(
+            array: $this->transactionRepository->getList(
+                searchCriteria: $this->searchCriteriaBuilder
+                    ->addFilters(filter: [$typeFilter])
+                    ->addFilters(filter: [$idFilter])
+                    ->create()
+            )->getItems()
+        );
+
+        return !$entity instanceof TransactionInterface
+            ? null
+            : $this->orderRepo->get(id: $entity->getOrderId());
     }
 }
