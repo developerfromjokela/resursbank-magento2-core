@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Plugin\Order;
 
-use Exception;
 use Magento\Checkout\Controller\Onepage\Success;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -23,6 +22,7 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Api\Payment as PaymentModel;
+use Throwable;
 
 /**
  * When the order has been placed and the payment is booked, retrieve the
@@ -38,7 +38,7 @@ class UpdateBillingAddress
      * @param AddressRepository $addressRepository
      * @param Order $order
      * @param Api $api
-     * @param PaymentMethods $paymentMethod
+     * @param PaymentMethods $paymentMethods
      * @param Config $config
      * @param StoreManagerInterface $storeManager
      */
@@ -71,23 +71,23 @@ class UpdateBillingAddress
         try {
             $order = $this->order->resolveOrderFromRequest();
 
-            if ($this->isEnabled($order) &&
+            if ($this->isEnabled(order: $order) &&
                 !$this->config->isMapiActive(scopeCode: $this->storeManager->getStore()->getCode())
             ) {
-                $paymentData = $this->api->getPayment($order);
+                $paymentData = $this->api->getPayment(order: $order);
 
                 if ($paymentData === null) {
-                    throw new InvalidDataException(__(
+                    throw new InvalidDataException(phrase: __(
                         'Payment data does not exist for ' .
-                        $this->order->getIncrementId($order)
+                        $this->order->getIncrementId(order: $order)
                     ));
                 }
 
-                $payment = $this->api->toPayment($paymentData);
-                $this->overrideBillingAddress($payment, $order);
+                $payment = $this->api->toPayment(payment: $paymentData);
+                $this->overrideBillingAddress(payment: $payment, order: $order);
             }
-        } catch (Exception $e) {
-            $this->log->exception($e);
+        } catch (Throwable $e) {
+            $this->log->exception(error: $e);
         }
 
         return $result;
@@ -102,8 +102,8 @@ class UpdateBillingAddress
     private function isEnabled(OrderInterface $order): bool
     {
         return (
-            $this->paymentMethods->isResursBankOrder($order) &&
-            $this->order->getResursbankResult($order) === null
+            $this->paymentMethods->isResursBankOrder(order: $order) &&
+            $this->order->getResursbankResult(order: $order) === null
         );
     }
 
@@ -126,23 +126,23 @@ class UpdateBillingAddress
 
         if ($billingAddress instanceof OrderAddressInterface) {
             if ($payment->getCustomer()->isCompany()) {
-                $billingAddress->setCompany($paymentAddress->getFullName());
+                $billingAddress->setCompany(company: $paymentAddress->getFullName());
             } else {
                 $billingAddress
-                    ->setFirstname($paymentAddress->getFirstName())
-                    ->setLastname($paymentAddress->getLastName());
+                    ->setFirstname(firstname: $paymentAddress->getFirstName())
+                    ->setLastname(lastname: $paymentAddress->getLastName());
             }
 
             $billingAddress
-                ->setStreet([
+                ->setStreet(street: [
                     $paymentAddress->getAddressRow1(),
                     $paymentAddress->getAddressRow2()
                 ])
-                ->setPostcode($paymentAddress->getPostalCode())
-                ->setCity($paymentAddress->getPostalArea())
-                ->setCountryId($paymentAddress->getCountry());
+                ->setPostcode(postcode: $paymentAddress->getPostalCode())
+                ->setCity(city: $paymentAddress->getPostalArea())
+                ->setCountryId(id: $paymentAddress->getCountry());
 
-            $this->addressRepository->save($billingAddress);
+            $this->addressRepository->save(entity: $billingAddress);
 
             // Ensure the address is applied on the order entity (without
             // this "bill to name" in the order grid would for example give the
