@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -18,6 +20,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order as OrderModel;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
@@ -55,6 +58,10 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param CheckoutSession $checkoutSession
      * @param OrderManagementInterface $orderManagement
      * @param Log $log
+     * @param Repository $transaction
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Context $context,
@@ -64,11 +71,12 @@ class Order extends AbstractHelper implements ArgumentInterface
         private readonly CheckoutSession $checkoutSession,
         private readonly OrderManagementInterface $orderManagement,
         private readonly Log $log,
+        private readonly Repository $transaction,
         private readonly TransactionRepositoryInterface $transactionRepository,
         private readonly FilterBuilder $filterBuilder,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        parent::__construct($context);
+        parent::__construct(context: $context);
     }
 
     /**
@@ -263,6 +271,28 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function getQuoteId(): int
     {
         return (int) $this->request->getParam('quote_id');
+    }
+
+    /**
+     * Extracts the MAPI payment ID from an order object.
+     *
+     * @param OrderInterface $order
+     * @return string
+     * @throws InputException
+     */
+    public function getPaymentId(OrderInterface $order): string
+    {
+        if ($order->getPayment() === null) {
+            return '';
+        }
+
+        $transaction = $this->transaction->getByTransactionType(
+            transactionType: TransactionInterface::TYPE_AUTH,
+            paymentId: $order->getPayment()->getEntityId()
+        );
+
+        return $transaction instanceof TransactionInterface ? $transaction->getTxnId() : '';
+
     }
 
     /**

@@ -11,6 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use PHPUnit\Framework\TestCase;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
@@ -32,6 +33,7 @@ class OrderTest extends TestCase
         $checkoutSessionMock = $this->createMock(originalClassName: CheckoutSession::class);
         $orderManagementInterfaceMock = $this->createMock(originalClassName: OrderManagementInterface::class);
         $logMock = $this->createMock(originalClassName: Log::class);
+        $transactionRepositoryMock = $this->createMock(originalClassName: Repository::class);
 
         $this->orderHelper = new Order(
             $contextMock,
@@ -40,7 +42,8 @@ class OrderTest extends TestCase
             $requestInterfaceMock,
             $checkoutSessionMock,
             $orderManagementInterfaceMock,
-            $logMock
+            $logMock,
+            $transactionRepositoryMock
         );
     }
 
