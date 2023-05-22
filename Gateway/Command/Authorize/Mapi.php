@@ -24,6 +24,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\StoreManagerInterface;
 use ReflectionException;
 use Resursbank\Core\Exception\PaymentDataException;
+use Resursbank\Core\Helper\Callback as CoreCallback;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
@@ -84,7 +85,8 @@ class Mapi
         private readonly Url $url,
         private readonly Checkout $session,
         private readonly QuoteConverter $quoteConverter,
-        private readonly Session $customerSession
+        private readonly Session $customerSession,
+        private readonly CoreCallback $callback
     ) {
     }
 
@@ -299,6 +301,17 @@ class Mapi
                 ),
                 coApplicant: null,
                 merchant: null
+            ),
+            callbacks: new Callbacks(
+                authorization: new Callback(
+                    url: $this->callback->getUrl(
+                        store: $order->getStore(),
+                        type: strtolower(
+                            string: CallbackType::AUTHORIZATION->value
+                        )
+                    )
+                ),
+                management: null
             )
         );
     }
