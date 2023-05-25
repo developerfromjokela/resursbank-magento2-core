@@ -191,9 +191,9 @@ class Mapi
                 totalAmountIncludingVat: $item->getTotalAmountInclVat(),
                 description: $item->getDescription(),
                 reference: $item->getArtNo(),
-                type: match (get_class(object: $item)) {
-                    DiscountItem::class =>  OrderLineType::DISCOUNT,
-                    ShippingItem::class => OrderLineType::SHIPPING,
+                type: match ($item->getType()) {
+                    'DISCOUNT' =>  OrderLineType::DISCOUNT,
+                    'SHIPPING_FEE' => OrderLineType::SHIPPING,
                     default => OrderLineType::NORMAL
                 }
             );

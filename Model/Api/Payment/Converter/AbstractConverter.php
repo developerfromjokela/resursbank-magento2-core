@@ -140,7 +140,6 @@ abstract class AbstractConverter implements ConverterInterface
      * Append discount item to passed array. We pass an array this way to
      * combine discount items, resulting in one item for each VAT percentage.
      *
-     * @param float $totalAmount
      * @param float $amount
      * @param int $taxPercent
      * @param float $productQty
@@ -149,21 +148,22 @@ abstract class AbstractConverter implements ConverterInterface
      * @throws Exception
      */
     public function addDiscountItem(
-        float $totalAmount,
         float $amount,
         int $taxPercent,
         float $productQty,
         array &$items
     ): void {
+        $amountWithoutTax = $amount;
+
         if ($amount > 0) {
             if ($taxPercent > 0) {
-                $amount /= (1 + ($taxPercent / 100));
+                $amountWithoutTax /= (1 + ($taxPercent / 100));
             }
 
             $item = $this->discountItemFactory->create(
                 data: [
-                    'totalAmount' => $totalAmount,
-                    'amount' => 0 - $amount,
+                    'totalAmount' => 0 - $amount,
+                    'amount' => 0 - $amountWithoutTax,
                     'taxPercent' => $taxPercent
                 ]
             );
@@ -176,6 +176,10 @@ abstract class AbstractConverter implements ConverterInterface
                     $existingItem->setUnitAmountWithoutVat(
                         $existingItem->getUnitAmountWithoutVat() +
                         $discountItem->getUnitAmountWithoutVat()
+                    );
+                    $existingItem->setTotalAmountInclVat(
+                        $existingItem->getTotalAmountInclVat() +
+                        $discountItem->getTotalAmountInclVat()
                     );
                     $found = true;
                     break;
