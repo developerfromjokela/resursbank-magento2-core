@@ -31,6 +31,7 @@ use Resursbank\Core\Helper\Url;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ItemInterface;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItem;
+use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\Api\Payment\Converter\QuoteConverter;
 use Resursbank\Core\ViewModel\Session\Checkout;
@@ -191,9 +192,9 @@ class Mapi
                 totalAmountIncludingVat: $item->getTotalAmountInclVat(),
                 description: $item->getDescription(),
                 reference: $item->getArtNo(),
-                type: match (get_class(object: $item)) {
-                    DiscountItem::class =>  OrderLineType::DISCOUNT,
-                    ShippingItem::class => OrderLineType::SHIPPING,
+                type: match ($item->getType()) {
+                    Item::TYPE_DISCOUNT =>  OrderLineType::DISCOUNT,
+                    Item::TYPE_SHIPPING => OrderLineType::SHIPPING,
                     default => OrderLineType::NORMAL
                 }
             );
