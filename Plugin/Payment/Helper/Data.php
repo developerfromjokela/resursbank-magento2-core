@@ -116,8 +116,7 @@ class Data
         bool $withGroups = false
     ): array {
         try {
-            if (
-                $asLabelValue &&
+            if ($asLabelValue &&
                 $withGroups &&
                 !isset($result['resursbank']['value'])
             ) {
@@ -218,7 +217,7 @@ class Data
 
         $model = $this->getResursModel($code);
 
-        if ($model !== null && $model->getMethodId() !== null) {
+        if ($model !== null && $model->getCode() !== 'resursbank_default') {
             $method->setResursModel($model);
         }
 
