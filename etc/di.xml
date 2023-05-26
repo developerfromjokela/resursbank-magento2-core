@@ -175,6 +175,11 @@
         <plugin
             name="resursbank_core_order_failure_set_result"
             type="Resursbank\Core\Plugin\Order\SetResursbankResult"
+            sortOrder="70"/>
+
+        <plugin
+            name="resursbank_core_order_failure_set_failure_reason"
+            type="Resursbank\Core\Plugin\Order\SetFailureReason"
             sortOrder="99"/>
     </type>
 
