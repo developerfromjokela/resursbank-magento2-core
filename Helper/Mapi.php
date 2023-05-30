@@ -150,7 +150,7 @@ class Mapi extends AbstractHelper
     private function getMapiSpecificType(Type $type): string
     {
         return (str_starts_with(haystack: $type->value, needle: 'RESURS_')) ?
-            substr(string: $type->value, offset: 8) : $type->value;
+            substr(string: $type->value, offset: 7) : $type->value;
     }
 
     /**
