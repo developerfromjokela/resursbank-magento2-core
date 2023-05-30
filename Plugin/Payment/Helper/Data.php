@@ -191,7 +191,7 @@ class Data
             if ($code !== Method::CODE) {
                 $result = $this->repository->getByCode($code);
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $this->log->exception($e);
         }
 
