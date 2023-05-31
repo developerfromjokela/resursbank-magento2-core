@@ -163,9 +163,10 @@ class ProductItem extends AbstractItem
      */
     public function getTotalAmountInclVat(): float
     {
-        return round(
-            num: (float) $this->product->getRowTotalInclTax(),
-            precision: 2
-        );
+        $result = $this->isBundle() && !$this->hasFixedPrice() ?
+            0.0 :
+            (float) $this->product->getRowTotalInclTax();
+
+        return round(num: $result, precision: 2);
     }
 }
