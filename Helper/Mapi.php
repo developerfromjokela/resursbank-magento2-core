@@ -23,6 +23,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Resursbank\Core\Model\PaymentMethodFactory;
 
 use function str_starts_with;
+use function substr;
 
 /**
  * Mapi related business logic.
@@ -88,6 +89,18 @@ class Mapi extends AbstractHelper
         }
 
         return $result;
+    }
+
+    /**
+     * Strips the 'resursbank_' part of a payment method code and returns just the UUID part.
+     *
+     * @param string $code
+     * @return string|null
+     */
+    public function mapiUuidFromCode(string $code): string|null
+    {
+        return str_starts_with(haystack: $code, needle: 'resursbank_') ?
+            substr(string: $code, offset: 11) : null;
     }
 
     /**
