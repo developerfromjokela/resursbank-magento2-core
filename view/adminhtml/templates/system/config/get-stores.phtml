@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Resursbank\Core\Block\Adminhtml\System\Config\GetStores;
+use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
+
+/** @var GetStores $block */
+/** @var Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $block->getWidget(), false); ?>

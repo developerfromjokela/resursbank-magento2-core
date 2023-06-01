@@ -195,15 +195,20 @@ class Config extends AbstractConfig
      */
     public function getClientSecret(
         ?string $scopeCode,
-        string $scopeType = ScopeInterface::SCOPE_STORES
+        string $scopeType = ScopeInterface::SCOPE_STORES,
+        ?int $environment = null
     ): string {
+        if ($environment === null) {
+            $environment = $this->getEnvironment(
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
+            );
+        }
+
         return $this->encryptor->decrypt(
             data: (string)$this->get(
                 group: self::API_GROUP,
-                key: sprintf(
-                    'client_secret_%d',
-                    $this->getEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)
-                ),
+                key: sprintf('client_secret_%d', $environment),
                 scopeCode: $scopeCode,
                 scopeType: $scopeType
             )
