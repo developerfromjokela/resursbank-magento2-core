@@ -23,44 +23,15 @@ use Resursbank\Core\Api\LogInterface;
 use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Config;
+use Resursbank\Core\Helper\Mapi;
+use Resursbank\Ecom\Exception\Validation\EmptyValueException;
+use Resursbank\Ecom\Module\PaymentMethod\Widget\ReadMore as ReadMoreWidget;
+use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomPaymentMethodRepository;
+use Throwable;
 
 class ReadMore implements HttpGetActionInterface
 {
-    /**
-     * @var LogInterface
-     */
-    protected LogInterface $log;
-
-    /**
-     * @var RequestInterface
-     */
-    protected RequestInterface $request;
-
-    /**
-     * @var ResultFactory
-     */
-    protected ResultFactory $resultFactory;
-
-    /**
-     * @var PaymentMethodRepository
-     */
-    protected PaymentMethodRepository $methodRepository;
-
-    /**
-     * @var Api
-     */
-    protected Api $api;
-
-    /**
-     * @var Credentials
-     */
-    protected Credentials $credentials;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected StoreManagerInterface $storeManager;
-
     /**
      * @param LogInterface $log
      * @param RequestInterface $request
@@ -69,23 +40,19 @@ class ReadMore implements HttpGetActionInterface
      * @param Api $api
      * @param Credentials $credentials
      * @param StoreManagerInterface $storeManager
+     * @param Config $config
      */
     public function __construct(
-        LogInterface $log,
-        RequestInterface $request,
-        ResultFactory $resultFactory,
-        PaymentMethodRepository $methodRepository,
-        Api $api,
-        Credentials $credentials,
-        StoreManagerInterface $storeManager
+        protected LogInterface $log,
+        protected RequestInterface $request,
+        protected readonly ResultFactory $resultFactory,
+        protected readonly PaymentMethodRepository $methodRepository,
+        protected readonly Api $api,
+        protected readonly Credentials $credentials,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly Mapi $mapiHelper,
+        protected readonly Config $config
     ) {
-        $this->log = $log;
-        $this->request = $request;
-        $this->resultFactory = $resultFactory;
-        $this->methodRepository = $methodRepository;
-        $this->api = $api;
-        $this->credentials = $credentials;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -123,6 +90,13 @@ class ReadMore implements HttpGetActionInterface
      */
     private function getHtml(): string
     {
+        if ($this->config->isMapiActive(
+            scopeCode: $this->storeManager->getStore()->getCode(),
+            scopeType: ScopeInterface::SCOPE_STORES
+        )) {
+            return $this->getMapiHtml();
+        }
+
         $store = $this->storeManager->getStore();
         $credentials = $this->credentials->resolveFromConfig(
             $store->getCode(),
@@ -137,6 +111,37 @@ class ReadMore implements HttpGetActionInterface
             false,
             true
         );
+    }
+
+    /**
+     * Render part payment information from MAPI.
+     *
+     * @return string
+     */
+    private function getMapiHtml(): string
+    {
+        try {
+            $paymentMethod = $this->getMethod();
+            $methodCode = $this->mapiHelper->mapiUuidFromCode(code: $paymentMethod->getCode());
+            $mapiMethod = EcomPaymentMethodRepository::getById(
+                storeId: $this->config->getStore(
+                    scopeCode: $this->storeManager->getStore()->getCode(),
+                    scopeType: ScopeInterface::SCOPE_STORES
+                ),
+                paymentMethodId: $methodCode
+            );
+            $widget = new ReadMoreWidget(
+                paymentMethod: $mapiMethod,
+                amount: $this->getPrice()
+            );
+
+            $result = '<iframe class="rb-rm-iframe" src="' . $widget->url . $this->getPrice() . '"></iframe>';
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+            $result = __('rb-unknown-error')->render();
+        }
+
+        return $result;
     }
 
     /**
