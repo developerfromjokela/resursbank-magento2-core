@@ -9,6 +9,7 @@
     <system>
         <section id="payment">
             <group id="resursbank_section" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                <attribute type="displayIn">recommended_solutions</attribute>
                 <fieldset_css>complex resursbank-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <label>
