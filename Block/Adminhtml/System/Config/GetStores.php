@@ -11,32 +11,18 @@ namespace Resursbank\Core\Block\Adminhtml\System\Config;
 
 use Exception;
 use Magento\Backend\Block\Template;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\UrlInterface;
 use Resursbank\Core\Helper\Url;
-use Resursbank\Ecom\Exception\ConfigException;
+use Resursbank\Ecom\Module\Store\Widget\GetStores as GetStoresWidget;
 use Throwable;
 use Magento\Backend\Block\Template\Context;
-use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
-use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Scope;
-use Resursbank\Ecom\Config as EcomConfig;
-use Resursbank\Ecom\Module\PaymentMethod\Widget\PaymentMethods as PaymentMethodsWidget;
-use Resursbank\Ecom\Module\PaymentMethod\Repository;
 use Magento\Framework\Data\Form\FormKey;
 
-use function in_array;
-
 /**
- * List payment methods and relevant metadata on config page.
+ * Render widget utilised to fetch stores in admin config.
  */
 class GetStores extends Template
 {
@@ -67,13 +53,17 @@ class GetStores extends Template
     }
 
     /**
+     * Resolve widget content.
+     *
      * @retrun string
      */
     public function getWidget(): string
     {
         try {
-            $widget = new \Resursbank\Ecom\Module\Store\Widget\GetStores(
-                fetchUrl: $this->url->getAdminUrl(path: 'resursbank_core/data/stores/form_key/' . $this->formKey->getFormKey()),
+            $widget = new GetStoresWidget(
+                fetchUrl: $this->url->getAdminUrl(
+                    path: 'resursbank_core/data/stores/form_key/' . $this->formKey->getFormKey()
+                ),
                 storeSelectId: 'payment_other_resursbank_section_api_store',
                 environmentSelectId: 'payment_other_resursbank_section_api_environment',
                 automatic: false
