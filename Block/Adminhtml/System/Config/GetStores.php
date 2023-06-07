@@ -16,9 +16,7 @@ use Resursbank\Ecom\Module\Store\Widget\GetStores as GetStoresWidget;
 use Throwable;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\RequestInterface;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\Scope;
 use Magento\Framework\Data\Form\FormKey;
 
 /**
@@ -30,22 +28,14 @@ class GetStores extends Template
      * @param Context $context
      * @param Log $log
      * @param Url $url
-     * @param Config $config
-     * @param Scope $scope
      * @param array $data
      */
     public function __construct(
         Context $context,
         private readonly Log $log,
         private readonly Url $url,
-        private readonly Config $config,
-        private readonly Scope $scope,
         array $data = []
     ) {
-        if (!$this->usingMapi()) {
-            return;
-        }
-
         parent::__construct(
             context: $context,
             data: $data
@@ -75,18 +65,5 @@ class GetStores extends Template
         }
 
         return '';
-    }
-
-    /**
-     * Checks if we're using MAPI or not.
-     *
-     * @return bool
-     */
-    private function usingMapi(): bool
-    {
-        return $this->config->isMapiActive(
-            scopeType: $this->scope->getType(),
-            scopeCode: $this->scope->getId()
-        );
     }
 }

@@ -8,22 +8,12 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Controller\Adminhtml\Data;
 
-use Exception;
-use JsonException;
-use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Response\RedirectInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Message\ManagerInterface;
-use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Mapi;
-use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Scope as ScopeHelper;
-use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Exception\AuthException;
 use Resursbank\Ecom\Exception\HttpException;
 use Resursbank\Ecom\Lib\Api\Environment as EnvironmentEnum;
@@ -33,19 +23,21 @@ use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Lib\Model\Store\GetStoresRequest;
 use Resursbank\Ecom\Module\Store\Http\GetStoresController;
 use Resursbank\Ecom\Module\Store\Repository;
-use stdClass;
 use Throwable;
 use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
- * This controller executes the process which synchronizes all available payment
- * methods from Resurs Bank to the corresponding table in the database.
+ * This controller fetches a list of stores from the API using the credentials
+ * supplied in the HTTP POST request.
  */
 class Stores extends GetStoresController implements HttpPostActionInterface
 {
     /**
      * @param Log $log
      * @param JsonFactory $jsonFactory
+     * @param Config $config
+     * @param ScopeHelper $scope
+     * @param Mapi $mapi
      */
     public function __construct(
         private readonly Log $log,
@@ -57,6 +49,8 @@ class Stores extends GetStoresController implements HttpPostActionInterface
     }
 
     /**
+     * Resolve and convert data from HTTP request to fetch stores.
+     *
      * @throws HttpException
      */
     public function getRequestData(): GetStoresRequest
@@ -65,6 +59,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
         $data = $this->getInputDataAsStdClass();
 
         try {
+            // Convert environment value (specified as 1/0 in deprecated API).
             if (isset($data->environment)) {
                 $data->environment = match ((int)$data->environment) {
                     1 => EnvironmentEnum::TEST->value,
@@ -72,6 +67,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
                 };
             }
 
+            // Client secret is masked if it's unchanged.
             if (
                 isset($data->clientSecret) &&
                 preg_match(pattern: '/^\*+$/', subject: $data->clientSecret)
@@ -83,6 +79,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
                 );
             }
 
+            // Create model with request data from converted values.
             $result = $this->getRequestModel(
                 model: GetStoresRequest::class,
                 data: $data
@@ -103,12 +100,15 @@ class Stores extends GetStoresController implements HttpPostActionInterface
 
     /**
      * Fetch list of available stores.
+     *
+     * @return ResultInterface
      */
     public function execute(): ResultInterface
     {
         try {
             $requestData = $this->getRequestData();
 
+            // Establish MAPI connection with the credentials in HTTP request.
             $this->mapi->connect(
                 jwtAuth: new Jwt(
                     clientId: $requestData->clientId,
@@ -121,6 +121,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
                 env: $requestData->environment
             );
 
+            // Attempt to resolve list of stores.
             $data = Repository::getApi()->getSelectList();
         } catch (AuthException) {
             $data = ['error' => __('rb-api-connection-failed-bad-credentials')];
