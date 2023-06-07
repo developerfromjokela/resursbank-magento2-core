@@ -34,7 +34,7 @@ require([
     fetcher.onComplete = function() {
         alert({
             title: 'Resurs Bank',
-            content: 'Please select store.'
+            content: $t('rb-please-select-store')
         });
     };
 
