@@ -85,6 +85,8 @@ class Mapi extends AbstractHelper
     /**
      * Setup ECom connection.
      *
+     * @param Jwt|null $jwtAuth
+     * @param Environment|null $env
      * @return void
      */
     public function connect(
@@ -199,6 +201,8 @@ class Mapi extends AbstractHelper
     }
 
     /**
+     * Get user agent.
+     *
      * @return string
      */
     public function getUserAgent(): string
