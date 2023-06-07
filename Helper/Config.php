@@ -191,6 +191,7 @@ class Config extends AbstractConfig
      *
      * @param string|null $scopeCode
      * @param string $scopeType
+     * @param int|null $environment
      * @return string
      */
     public function getClientSecret(
@@ -198,6 +199,8 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES,
         ?int $environment = null
     ): string {
+        /* When fetching stores we may need to resolve secret for a specified
+           environment. See \Resursbank\Core\Controller\Adminhtml\Data\Stores::getRequestData */
         if ($environment === null) {
             $environment = $this->getEnvironment(
                 scopeCode: $scopeCode,

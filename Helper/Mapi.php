@@ -18,6 +18,7 @@ use Magento\Framework\Locale\Resolver as Locale;
 use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
+use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Ecom\Config as EcomConfig;
@@ -52,6 +53,16 @@ class Mapi extends AbstractHelper
      * @param Context $context
      * @param PaymentMethodFactory $methodFactory
      * @param Log $log
+     * @param Scope $scope
+     * @param Config $config
+     * @param DirectoryList $directoryList
+     * @param File $file
+     * @param LoggerInterface $logger
+     * @param Cache $cache
+     * @param ProductMetadataInterface $productMetadata
+     * @param Version $version
+     * @param Locale $locale
+     * @param StateInterface $cacheState
      */
     public function __construct(
         Context $context,
@@ -183,7 +194,7 @@ class Mapi extends AbstractHelper
     private function getCache(): CacheInterface
     {
         return $this->cacheState->isEnabled(
-            cacheType: \Resursbank\Core\Model\Cache\Type\Resursbank::TYPE_IDENTIFIER
+            cacheType: ResursbankCacheType::TYPE_IDENTIFIER
         ) ? $this->cache : new None();
     }
 
