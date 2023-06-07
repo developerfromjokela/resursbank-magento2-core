@@ -68,8 +68,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
             }
 
             // Client secret is masked if it's unchanged.
-            if (
-                isset($data->clientSecret) &&
+            if (isset($data->clientSecret) &&
                 preg_match(pattern: '/^\*+$/', subject: $data->clientSecret)
             ) {
                 $data->clientSecret = $this->config->getClientSecret(
