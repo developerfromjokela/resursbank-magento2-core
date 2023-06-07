@@ -74,12 +74,9 @@ class GetStores extends Template
         try {
             $widget = new \Resursbank\Ecom\Module\Store\Widget\GetStores(
                 fetchUrl: $this->url->getAdminUrl(path: 'resursbank_core/data/stores/form_key/' . $this->formKey->getFormKey()),
-                environmentSelectId: 'payment_other_resursbank_section_api_environment',
-                clientIdInputId: 'payment_other_resursbank_section_api_client_id_1',
-                clientSecretInputId: 'payment_other_resursbank_section_api_client_secret_1',
                 storeSelectId: 'payment_other_resursbank_section_api_store',
-                spinnerClass: 'rb-store-fetching',
-                additionalData: ['form_key' => $this->formKey->getFormKey(), 'isAjax' => 1]
+                environmentSelectId: 'payment_other_resursbank_section_api_environment',
+                automatic: false
             );
 
             return $widget->content;

@@ -6,12 +6,18 @@
 
 declare(strict_types=1);
 
-use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Block\Adminhtml\System\Config\GetStores;
-use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
 
 /** @var GetStores $block */
-/** @var Escaper $escaper */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var SecureHtmlRenderer $secureRenderer */
 ?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $block->getWidget(), false); ?>
+<?=
+/* @noEscape */
+$secureRenderer->renderTag(
+    tagName: 'script',
+    attributes: [],
+    content: $block->getWidget(),
+    textContent: false
+)
+?>
