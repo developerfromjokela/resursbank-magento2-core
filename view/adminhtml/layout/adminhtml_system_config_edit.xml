@@ -12,7 +12,11 @@
     </head>
     <body>
         <referenceContainer name="js">
-            <block class="Resursbank\Core\Block\Adminhtml\System\Config\GetStores" name="js.system_config_js_resursbank" template="Resursbank_Core::system/config/get-stores.phtml" />
+            <block
+                class="Resursbank\Core\Block\Adminhtml\System\Config\GetStores"
+                name="js.system_config_js_resursbank_get_stores"
+                template="Resursbank_Core::system/config/get-stores.phtml"
+            />
         </referenceContainer>
     </body>
 </page>

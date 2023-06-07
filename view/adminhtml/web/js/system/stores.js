@@ -1,3 +1,8 @@
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
 require([
     'jquery',
     'Magento_Ui/js/modal/alert',
@@ -39,8 +44,6 @@ require([
     };
 
     fetcher.onToggle = function(state) {
-        // console.log(loader.loaderAjax);
-        // console.log(loader.loader);
         if (state) {
             $(document).trigger('ajaxSend', [undefined, { showLoader: true }]);
         } else {
