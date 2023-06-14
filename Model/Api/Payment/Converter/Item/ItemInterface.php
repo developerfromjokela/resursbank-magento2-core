@@ -27,46 +27,64 @@ use Resursbank\Core\Model\Api\Payment\Item;
 interface ItemInterface
 {
     /**
+     * Get item
+     *
      * @return Item
      */
     public function getItem(): Item;
 
     /**
+     * Get article number
+     *
      * @return string
      */
     public function getArtNo(): string;
 
     /**
+     * Get description
+     *
      * @return string
      */
     public function getDescription(): string;
 
     /**
+     * Get quantity
+     *
      * @return float
      */
     public function getQuantity(): float;
 
     /**
+     * Get unit measure
+     *
      * @return string
      */
     public function getUnitMeasure(): string;
 
     /**
+     * Get unit amount excluding VAT
+     *
      * @return float
      */
     public function getUnitAmountWithoutVat(): float;
 
     /**
+     * Get total amount including VAT
+     *
      * @return float
      */
     public function getTotalAmountInclVat(): float;
 
     /**
+     * Get VAT in percent
+     *
      * @return int
      */
     public function getVatPct(): int;
 
     /**
+     * Get type
+     *
      * @return string
      */
     public function getType(): string;

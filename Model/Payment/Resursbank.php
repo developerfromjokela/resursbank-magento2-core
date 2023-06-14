@@ -52,6 +52,8 @@ class Resursbank extends Adapter
     }
 
     /**
+     * Get Resurs model.
+     *
      * @return PaymentMethodInterface|null
      */
     public function getResursModel(): ?PaymentMethodInterface
@@ -60,7 +62,7 @@ class Resursbank extends Adapter
     }
 
     /**
-     * min_order_total and max_order_total need to be read before adapter
+     * Fields min_order_total and max_order_total need to be read before adapter
      * information is made available to value handlers. At the time of writing
      * there is no way for us to resolve these values from our value handlers
      * when the payment methods are rendered. This is important since we do not

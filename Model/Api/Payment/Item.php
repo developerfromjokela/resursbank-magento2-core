@@ -161,7 +161,7 @@ class Item
     private string $type = self::TYPE_PRODUCT;
 
     /**
-     * Total amount incl vat.
+     * Total amount including vat.
      *
      * @var float
      */
@@ -175,6 +175,7 @@ class Item
      * @param float $unitAmountWithoutVat
      * @param int $vatPct
      * @param string $type
+     * @param float $totalAmountInclVat
      * @param ArtNo $artNoValidator
      * @param Description $descriptionValidator
      * @param Quantity $quantityValidator
@@ -183,7 +184,6 @@ class Item
      * @param VatPct $vatPctValidator
      * @param Type $typeValidator
      * @throws Exception
-     * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -214,6 +214,8 @@ class Item
     }
 
     /**
+     * Set article number
+     *
      * @param string $value
      * @return Item
      * @throws Exception
@@ -229,6 +231,8 @@ class Item
     }
 
     /**
+     * Get article number
+     *
      * @return string
      */
     public function getArtNo(): string
@@ -237,6 +241,8 @@ class Item
     }
 
     /**
+     * Set description
+     *
      * @param string $value
      * @return Item
      * @throws Exception
@@ -252,6 +258,8 @@ class Item
     }
 
     /**
+     * Get description
+     *
      * @return string
      */
     public function getDescription(): string
@@ -260,6 +268,8 @@ class Item
     }
 
     /**
+     * Set quantity
+     *
      * @param float $value
      * @return Item
      * @throws Exception
@@ -275,6 +285,8 @@ class Item
     }
 
     /**
+     * Get quantity
+     *
      * @return float
      */
     public function getQuantity(): float
@@ -283,6 +295,8 @@ class Item
     }
 
     /**
+     * Set unitMeasure
+     *
      * @param string $value
      * @return Item
      * @throws Exception
@@ -298,6 +312,8 @@ class Item
     }
 
     /**
+     * Get unitMeasure
+     *
      * @return string
      */
     public function getUnitMeasure(): string
@@ -306,6 +322,8 @@ class Item
     }
 
     /**
+     * Set unit amount excluding VAT
+     *
      * @param float $value
      * @return Item
      * @throws Exception
@@ -321,6 +339,8 @@ class Item
     }
 
     /**
+     * Get unit amount excluding VAT
+     *
      * @return float
      */
     public function getUnitAmountWithoutVat(): float
@@ -329,6 +349,8 @@ class Item
     }
 
     /**
+     * Set VAT in percent
+     *
      * @param int $value
      * @return Item
      * @throws Exception
@@ -344,6 +366,8 @@ class Item
     }
 
     /**
+     * Get VAT in percent
+     *
      * @return int
      */
     public function getVatPct(): int
@@ -352,6 +376,8 @@ class Item
     }
 
     /**
+     * Set type
+     *
      * @param string $value
      * @return Item
      * @throws Exception
@@ -367,6 +393,8 @@ class Item
     }
 
     /**
+     * Get type
+     *
      * @return string
      */
     public function getType(): string
@@ -375,6 +403,8 @@ class Item
     }
 
     /**
+     * Set total amount including VAT
+     *
      * @param float $value
      * @return Item
      * @throws Exception
@@ -390,6 +420,8 @@ class Item
     }
 
     /**
+     * Get total amount including VAT
+     *
      * @return float
      */
     public function getTotalAmountInclVat(): float

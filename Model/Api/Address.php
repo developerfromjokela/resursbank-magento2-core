@@ -117,6 +117,8 @@ class Address
     }
 
     /**
+     * Set isCompany.
+     *
      * @see Address::$isCompany
      * @param bool $value
      * @return self
@@ -130,6 +132,8 @@ class Address
     }
 
     /**
+     * Get isCompany.
+     *
      * @see Address::$isCompany
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
@@ -140,6 +144,8 @@ class Address
     }
 
     /**
+     * Set fullName.
+     *
      * @see Address::$fullName
      * @param string $value
      * @return self
@@ -153,6 +159,8 @@ class Address
     }
 
     /**
+     * Get fullName.
+     *
      * @see Address::$fullName
      * @return string
      */
@@ -162,6 +170,8 @@ class Address
     }
 
     /**
+     * Set firstName.
+     *
      * @param string $value
      * @return self
      */
@@ -174,6 +184,8 @@ class Address
     }
 
     /**
+     * Get firstName.
+     *
      * @return string
      */
     public function getFirstName(): string
@@ -182,6 +194,8 @@ class Address
     }
 
     /**
+     * Set lastName.
+     *
      * @param string $value
      * @return self
      */
@@ -194,6 +208,8 @@ class Address
     }
 
     /**
+     * Get lastName.
+     *
      * @return string
      */
     public function getLastName(): string
@@ -202,6 +218,8 @@ class Address
     }
 
     /**
+     * Set addressRow1.
+     *
      * @param string $value
      * @return self
      */
@@ -214,6 +232,8 @@ class Address
     }
 
     /**
+     * Get addressRow1.
+     *
      * @return string
      */
     public function getAddressRow1(): string
@@ -222,6 +242,8 @@ class Address
     }
 
     /**
+     * Set addressRow2.
+     *
      * @param string $value
      * @return self
      */
@@ -234,6 +256,8 @@ class Address
     }
 
     /**
+     * Get addressRow2.
+     *
      * @return string
      */
     public function getAddressRow2(): string
@@ -242,6 +266,8 @@ class Address
     }
 
     /**
+     * Set postalArea.
+     *
      * @param string $value
      * @return self
      */
@@ -254,6 +280,8 @@ class Address
     }
 
     /**
+     * Get postalArea.
+     *
      * @see Address::$postalArea
      * @return string
      */
@@ -263,6 +291,8 @@ class Address
     }
 
     /**
+     * Set postalCode.
+     *
      * @param string $value
      * @return self
      */
@@ -275,6 +305,8 @@ class Address
     }
 
     /**
+     * Get postalCode.
+     *
      * @return string
      */
     public function getPostalCode(): string
@@ -283,6 +315,8 @@ class Address
     }
 
     /**
+     * Set country.
+     *
      * @param string $value
      * @return self
      */
@@ -295,6 +329,8 @@ class Address
     }
 
     /**
+     * Get country.
+     *
      * @return string
      */
     public function getCountry(): string
@@ -303,6 +339,8 @@ class Address
     }
 
     /**
+     * Set telephone.
+     *
      * @param string $value
      * @return self
      */
@@ -315,6 +353,8 @@ class Address
     }
 
     /**
+     * Get telephone.
+     *
      * @return string
      */
     public function getTelephone(): string

@@ -123,6 +123,9 @@ class ShippingItem extends AbstractItem
         return Item::TYPE_SHIPPING;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getTotalAmountInclVat(): float
     {
         return round(num: $this->amount, precision: 2);

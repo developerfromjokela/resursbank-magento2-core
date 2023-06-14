@@ -34,10 +34,10 @@ class UnitAmountWithoutVat extends AbstractValidation implements ValidationInter
     public const MAX_DECIMAL_LENGTH = 5;
 
     /**
+     * @inheritDoc
+     *
      * NOTE: This is unsigned since payment items of type DISCOUNT expects a
      * negative value while ORDER_LINE and SHIPPING_FEE expects positive values.
-     *
-     * @inheritDoc
      */
     public function validate(
         float $value = 0.0

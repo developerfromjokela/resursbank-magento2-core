@@ -34,6 +34,8 @@ class Credentials
     private string $country;
 
     /**
+     * Set username.
+     *
      * @param string $username
      * @return self
      * @throws ValidatorException
@@ -53,6 +55,8 @@ class Credentials
     }
 
     /**
+     * Get username.
+     *
      * @return string|null
      */
     public function getUsername(): ?string
@@ -61,6 +65,8 @@ class Credentials
     }
 
     /**
+     * Set password.
+     *
      * @param string $password
      * @return self
      * @throws ValidatorException
@@ -80,6 +86,8 @@ class Credentials
     }
 
     /**
+     * Get password.
+     *
      * @return string|null
      */
     public function getPassword(): ?string
@@ -88,6 +96,8 @@ class Credentials
     }
 
     /**
+     * Set environment.
+     *
      * @param int $environment
      * @return self
      * @throws ValidatorException
@@ -112,6 +122,8 @@ class Credentials
     }
 
     /**
+     * Get environment.
+     *
      * @return int|null
      */
     public function getEnvironment(): ?int
@@ -120,6 +132,8 @@ class Credentials
     }
 
     /**
+     * Set country.
+     *
      * @param string $country
      * @return self
      */
@@ -132,6 +146,8 @@ class Credentials
     }
 
     /**
+     * Get country.
+     *
      * @return string|null
      */
     public function getCountry(): ?string

@@ -14,11 +14,11 @@ use Resursbank\Core\Helper\Config;
 class Flow extends Options
 {
     /**
+     * @inheritDoc
+     *
      * NOTE: Options are appended through plugins in submodules adding API
      * implementations (like RCO or Simplified).
      *
-     * @inheritDoc
-     * @noinspection SenselessMethodDuplicationInspection
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function toArray(): array
