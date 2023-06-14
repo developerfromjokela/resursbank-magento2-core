@@ -170,11 +170,15 @@ interface PaymentMethodInterface
     public function setSortOrder(int $order): self;
 
     /**
+     * Get minimum order total
+     *
      * @return float|null
      */
     public function getMinOrderTotal(): ?float;
 
     /**
+     * Set minimum order total.
+     *
      * Set payment method minimum order total (cart total required to make
      * payment method available at checkout).
      *
@@ -184,11 +188,15 @@ interface PaymentMethodInterface
     public function setMinOrderTotal(float $total): self;
 
     /**
+     * Get maximum order total.
+     *
      * @return float|null
      */
     public function getMaxOrderTotal(): ?float;
 
     /**
+     * Set maximum order total.
+     *
      * Set payment method maximum order total (cart total limit to make payment
      * method available at checkout).
      *

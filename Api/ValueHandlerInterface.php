@@ -17,7 +17,8 @@ use Magento\Payment\Gateway\Config\ValueHandlerInterface as MagentoValueHandlerI
 interface ValueHandlerInterface extends MagentoValueHandlerInterface
 {
     /**
-     * @inheridoc
+     * @inheritdoc
+     *
      * @param array<mixed> $subject
      * @param int|null $storeId
      * @return mixed
