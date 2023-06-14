@@ -33,7 +33,7 @@ class UpdateEnvironmentValues implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply(): self
     {
@@ -63,7 +63,7 @@ class UpdateEnvironmentValues implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies(): array
     {
@@ -73,7 +73,7 @@ class UpdateEnvironmentValues implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases(): array
     {

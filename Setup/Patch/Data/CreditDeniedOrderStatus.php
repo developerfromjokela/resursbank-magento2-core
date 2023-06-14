@@ -51,7 +51,7 @@ class CreditDeniedOrderStatus implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies(): array
     {
@@ -59,7 +59,7 @@ class CreditDeniedOrderStatus implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases(): array
     {
@@ -67,7 +67,8 @@ class CreditDeniedOrderStatus implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws AlreadyExistsException
      */
     public function apply(): self
