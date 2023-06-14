@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Resursbank\Core\Block\Adminhtml\System\Config\Methods;
 
 use Exception;
-use Resursbank\Ecom\Exception\ConfigException;
 use Throwable;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
@@ -23,7 +22,6 @@ use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\Scope;
-use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Module\PaymentMethod\Widget\PaymentMethods as PaymentMethodsWidget;
 use Resursbank\Ecom\Module\PaymentMethod\Repository;
 
@@ -114,6 +112,8 @@ class Listing extends Field
     }
 
     /**
+     * Formats supplied price
+     *
      * Formats a price to include decimals and the configured currency of the
      * selected store. Example: 123.53 => "123.53,00 kr"
      *
@@ -173,7 +173,9 @@ class Listing extends Field
     }
 
     /**
-     * Only show Min & Max for methods that have a type that is not
+     * Check if min & max should be shown.
+     *
+     * We only want show Min & Max for methods that have a type that is not
      * CARD or PAYMENT_PROVIDER.
      *
      * @param PaymentMethodInterface $method

@@ -18,6 +18,8 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Button;
 class Sync extends Button
 {
     /**
+     * @inheritDoc
+     *
      * @param AbstractElement $element
      * @return string
      * @throws LocalizedException
