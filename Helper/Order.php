@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -292,7 +291,6 @@ class Order extends AbstractHelper implements ArgumentInterface
         );
 
         return $transaction instanceof TransactionInterface ? $transaction->getTxnId() : '';
-
     }
 
     /**

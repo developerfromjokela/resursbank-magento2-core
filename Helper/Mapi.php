@@ -12,16 +12,30 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
+use ReflectionException;
+use Resursbank\Core\Helper\Config;
+use Magento\Sales\Model\Order as MagentoOrder;
+use Resursbank\Core\Helper\Order;
 use Psr\Log\LoggerInterface;
+use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\PaymentMethod;
 use Resursbank\Ecom\Config as EcomConfig;
+use Resursbank\Ecom\Exception\ApiException;
+use Resursbank\Ecom\Exception\AuthException;
+use Resursbank\Ecom\Exception\ConfigException;
+use Resursbank\Ecom\Exception\CurlException;
+use Resursbank\Ecom\Exception\Validation\EmptyValueException;
+use Resursbank\Ecom\Exception\Validation\IllegalTypeException;
+use Resursbank\Ecom\Exception\Validation\IllegalValueException;
+use Resursbank\Ecom\Exception\ValidationException;
 use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
@@ -32,8 +46,10 @@ use Resursbank\Ecom\Lib\Log\FileLogger;
 use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
+use Resursbank\Ecom\Lib\Model\Payment;
 use Resursbank\Ecom\Lib\Model\PaymentMethod as EcomPaymentMethod;
 use Resursbank\Ecom\Lib\Order\PaymentMethod\Type;
+use Resursbank\Ecom\Module\Payment\Repository;
 use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomRepository;
 use Throwable;
 use JsonException;
@@ -237,7 +253,7 @@ class Mapi extends AbstractHelper
             $this->log->exception(error: $error);
         }
 
-        return null;
+        return $return ?? null;
     }
 
     /**
@@ -293,7 +309,7 @@ class Mapi extends AbstractHelper
         $result->setTitle(title: $method->name);
         $result->setMinOrderTotal(total: $method->minPurchaseLimit);
         $result->setMaxOrderTotal(total: $method->maxPurchaseLimit);
-        $result->setOrderStatus(status: Order::STATE_PENDING_PAYMENT);
+        $result->setOrderStatus(status: MagentoOrder::STATE_PENDING_PAYMENT);
         $result->setRaw(value: json_encode(value: [
             'type' => $this->getMapiType(type: $method->type),
             'specificType' => $this->getMapiSpecificType(type: $method->type),
@@ -349,5 +365,97 @@ class Mapi extends AbstractHelper
     {
         return str_starts_with(haystack: $type->value, needle: 'RESURS_') ?
             'INTERNAL' : 'PAYMENT_PROVIDER';
+    }
+
+    /**
+     * Get the payment id depending on which flow the order has been created with.
+     *
+     * @param OrderInterface $order
+     * @param Order $orderHelper
+     * @param Config $config
+     * @param Scope $scope
+     * @return string
+     * @throws InputException
+     */
+    public static function getPaymentId(
+        OrderInterface $order,
+        Order $orderHelper,
+        Config $config,
+        Scope $scope
+    ): string {
+        $id = $orderHelper->getPaymentId(order: $order);
+        $paymentMethod = $order->getPayment()->getMethod();
+
+        // Check if payment has been created with simplified by checking the name of the method.
+        if (str_starts_with(haystack: $paymentMethod, needle: 'resursbank_')) {
+            $searchLegacyPaymentId = self::findPaymentIdForLegacyOrder(
+                paymentId: $id,
+                config: $config,
+                scope: $scope
+            );
+            if ($searchLegacyPaymentId !== '' && $id !== $searchLegacyPaymentId) {
+                $id = $searchLegacyPaymentId;
+            }
+        }
+
+        return $id;
+    }
+
+    /**
+     * Search for legacy payments at Resurs.
+     *
+     * @param string $paymentId
+     * @param Config $config
+     * @param Scope $scope
+     * @return string
+     */
+    public static function findPaymentIdForLegacyOrder(
+        string $paymentId,
+        Config $config,
+        Scope $scope
+    ): string {
+        try {
+            $result = Repository::search(
+                storeId: $config->getStore(
+                    scopeCode: $scope->getId(),
+                    scopeType: $scope->getType()
+                ),
+                orderReference: $paymentId
+            );
+            return $result->count() > 0 ? $result->getData()[0]->id : '';
+        } catch (Throwable) {
+            return '';
+        }
+    }
+
+    /**
+     * Get payment from mapi with proper payment id.
+     *
+     * @throws ValidationException
+     * @throws CurlException
+     * @throws EmptyValueException
+     * @throws AuthException
+     * @throws IllegalValueException
+     * @throws JsonException
+     * @throws ConfigException
+     * @throws IllegalTypeException
+     * @throws ReflectionException
+     * @throws ApiException
+     * @throws InputException
+     */
+    public static function getMapiPayment(
+        OrderInterface $order,
+        Order $orderHelper,
+        Config $config,
+        Scope $scope
+    ): Payment {
+        $id = self::getPaymentId(
+            order: $order,
+            orderHelper: $orderHelper,
+            config: $config,
+            scope: $scope
+        );
+
+        return Repository::get(paymentId: $id);
     }
 }
