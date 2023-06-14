@@ -19,8 +19,7 @@ use Magento\Framework\Locale\Resolver as Locale;
 use Magento\Sales\Api\Data\OrderInterface;
 use ReflectionException;
 use Resursbank\Core\Helper\Config;
-use Magento\Sales\Model\Order as MagentoOrder;
-use Resursbank\Core\Helper\Order;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
@@ -309,7 +308,7 @@ class Mapi extends AbstractHelper
         $result->setTitle(title: $method->name);
         $result->setMinOrderTotal(total: $method->minPurchaseLimit);
         $result->setMaxOrderTotal(total: $method->maxPurchaseLimit);
-        $result->setOrderStatus(status: MagentoOrder::STATE_PENDING_PAYMENT);
+        $result->setOrderStatus(status: Order::STATE_PENDING_PAYMENT);
         $result->setRaw(value: json_encode(value: [
             'type' => $this->getMapiType(type: $method->type),
             'specificType' => $this->getMapiSpecificType(type: $method->type),
@@ -371,7 +370,7 @@ class Mapi extends AbstractHelper
      * Get the payment id depending on which flow the order has been created with.
      *
      * @param OrderInterface $order
-     * @param Order $orderHelper
+     * @param \Resursbank\Core\Helper\Order $orderHelper
      * @param Config $config
      * @param Scope $scope
      * @return string
@@ -379,7 +378,7 @@ class Mapi extends AbstractHelper
      */
     public static function getPaymentId(
         OrderInterface $order,
-        Order $orderHelper,
+        \Resursbank\Core\Helper\Order $orderHelper,
         Config $config,
         Scope $scope
     ): string {
