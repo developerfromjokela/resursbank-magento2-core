@@ -24,7 +24,9 @@ use Resursbank\Core\Model\Payment\Resursbank;
 class ValueHandlerSubjectReader extends AbstractHelper
 {
     /**
-     * Resolve additional data applied on the payment method instance (see
+     * Get additional data for pament method instance.
+     *
+     * Resolves additional data applied on the payment method instance (see
      * Resursbank\Core\Model\Payment\Resursbank :: getInfoInstance()).
      *
      * @param array<mixed> $subject
@@ -49,6 +51,8 @@ class ValueHandlerSubjectReader extends AbstractHelper
     }
 
     /**
+     * Get payment method instance.
+     *
      * @param array<mixed> $subject
      * @return MethodInterface|null
      * @throws LocalizedException
@@ -66,6 +70,8 @@ class ValueHandlerSubjectReader extends AbstractHelper
     }
 
     /**
+     * Get Resurs Bank payment method model.
+     *
      * @param array<mixed> $subject
      * @return PaymentMethodInterface|null
      * @throws LocalizedException
@@ -79,6 +85,8 @@ class ValueHandlerSubjectReader extends AbstractHelper
     }
 
     /**
+     * Check if method will debit automatically.
+     *
      * Check whether the payment method will debit automatically. This method is
      * utilised to resolve various flags for our payment methods.
      *

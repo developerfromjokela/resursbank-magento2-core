@@ -119,6 +119,7 @@ class Mapi extends AbstractHelper
             }
             $logPath = $this->getLogPath();
 
+            // phpcs:ignore
             if (!is_dir(filename: $logPath)) {
                 $this->file->mkdir(dir: $logPath);
             }
@@ -339,8 +340,10 @@ class Mapi extends AbstractHelper
     }
 
     /**
-     * Resolve "PAYMENT_PROVIDER" as type for external payment methods to mimic
-     * some behavior established by the deprecated API integrations.
+     * Resolve "PAYMENT_PROVIDER" as type for external payment methods.
+     *
+     * This method exists to mimic some behavior established by the deprecated
+     * API integrations.
      *
      * @param Type $type
      * @return string

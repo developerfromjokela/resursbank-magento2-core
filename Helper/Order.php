@@ -191,6 +191,8 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
+     * Updates the "resursbank_result" column in the "order_sales" table.
+     *
      * Sets the "resursbank_result" column in the "order_sales" table, which
      * says whether the customer has arrived to the success or failure page.
      *
@@ -262,6 +264,8 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
+     * Returns the quote id from a request.
+     *
      * Returns the quote id from a request by looking for a "quote_id"
      * parameter. Returns 0 if the there is no "quote_id" parameter.
      *

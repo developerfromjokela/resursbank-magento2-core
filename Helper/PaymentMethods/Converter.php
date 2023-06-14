@@ -62,6 +62,8 @@ class Converter extends AbstractHelper
     public const DEFAULT_VALUE_ORDER_STATUS = Order::STATE_PENDING_PAYMENT;
 
     /**
+     * Converts data to format Magento is able to parse.
+     *
      * @param array<mixed> $data
      * @return array<mixed>
      * @throws ValidatorException
@@ -91,6 +93,8 @@ class Converter extends AbstractHelper
     }
 
     /**
+     * Validate data.
+     *
      * @param array<mixed> $data
      * @return bool
      */
@@ -101,6 +105,8 @@ class Converter extends AbstractHelper
     }
 
     /**
+     * Get method identifier.
+     *
      * @param array<mixed> $data
      * @return string
      */
@@ -115,6 +121,8 @@ class Converter extends AbstractHelper
     }
 
     /**
+     * Get method description.
+     *
      * @param array<mixed> $data
      * @return string
      */
@@ -129,6 +137,8 @@ class Converter extends AbstractHelper
     }
 
     /**
+     * Get method minimum limit.
+     *
      * @param array<mixed> $data
      * @return float
      */
@@ -142,6 +152,8 @@ class Converter extends AbstractHelper
     }
 
     /**
+     * Get method maximum limit.
+     *
      * @param array<mixed> $data
      * @return float
      */

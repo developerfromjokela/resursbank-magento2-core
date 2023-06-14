@@ -58,6 +58,7 @@ class PaymentMethods extends AbstractHelper
      * @param SearchCriteriaBuilder $searchBuilder
      * @param Log $log
      * @param Config $config
+     * @param Mapi $mapi
      */
     public function __construct(
         Context $context,
@@ -221,6 +222,8 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+     * Generate payment method code.
+     *
      * Generate payment method code based on provided identifier value and
      * Credentials data model instance.
      *
@@ -362,8 +365,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * Perform various check on payment method code to confirm it stems from
-     * Resurs Bank.
+     * Verify that payment method code is for a Resurs Bank method.
      *
      * @param string $code
      * @return bool
@@ -391,8 +393,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * NOTE: If not provided a Credentials model instance it will be resolved
-     * from the configuration.
+     * Fetch payment methods.
      *
      * @param string|null $scopeCode
      * @param string $scopeType
@@ -435,8 +436,7 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
-     * Retrieve list of eligible customer types attached to payment method
-     * instance.
+     * Retrieve list of valid customer types for a payment method instance.
      *
      * @param PaymentMethodInterface $method
      * @return array<string>

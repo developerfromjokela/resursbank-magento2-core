@@ -80,6 +80,8 @@ class Api extends AbstractHelper
     }
 
     /**
+     * Get API connection object.
+     *
      * @param Credentials $credentials
      * @return ResursBank
      * @throws Exception
@@ -160,8 +162,7 @@ class Api extends AbstractHelper
     }
 
     /**
-     * Validate that an Exception was thrown because a payment was actually
-     * missing.
+     * Check if an Exception was thrown because a payment was actually missing.
      *
      * @param Exception $error
      * @return bool
@@ -176,11 +177,10 @@ class Api extends AbstractHelper
     }
 
     /**
-     * Makes a request to Resurs Bank's API to check if a payment exists for
-     * an order at Resurs Bank.
+     * Makes a request to Resurs Bank to check if a payment exists for order.
      *
      * If you're planning on using the payment afterwards it's better to use
-     * @link getPayment and check the return value. That way you won't waste
+     * getPayment and check the return value. That way you won't waste
      * time making an extra request to the API.
      *
      * @param OrderInterface $order
@@ -231,8 +231,8 @@ class Api extends AbstractHelper
      * but it's not required to. Missing properties will be created using
      * default values.
      *
-     * @param bool|null $isCompany
      * @param stdClass $payment
+     * @param bool|null $isCompany
      * @return PaymentModel
      */
     public function toPayment(
@@ -279,8 +279,8 @@ class Api extends AbstractHelper
      * but it's not required to. Missing properties will be created using
      * default values.
      *
-     * @param bool|null $isCompany
      * @param stdClass $customer
+     * @param bool|null $isCompany
      * @return Customer
      */
     public function toCustomer(
@@ -360,6 +360,8 @@ class Api extends AbstractHelper
     }
 
     /**
+     * Get user agent string to use when communicating with Resurs Bank.
+     *
      * @return string
      */
     public function getUserAgent(): string

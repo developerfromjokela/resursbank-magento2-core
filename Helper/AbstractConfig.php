@@ -71,6 +71,8 @@ abstract class AbstractConfig extends AbstractHelper
     }
 
     /**
+     * Check if enabled.
+     *
      * NOTE: For an explanation of $scopeCode argument please see the get method
      * above.
      *
