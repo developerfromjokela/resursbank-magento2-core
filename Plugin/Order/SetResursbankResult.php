@@ -58,6 +58,8 @@ class SetResursbankResult
     }
 
     /**
+     * Set resursbank_result after execute.
+     *
      * @param Success|Failure $subject
      * @param ResultInterface|Redirect|Page $result
      * @return ResultInterface|Redirect|Page
