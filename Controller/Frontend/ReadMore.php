@@ -25,7 +25,6 @@ use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Mapi;
-use Resursbank\Ecom\Exception\Validation\EmptyValueException;
 use Resursbank\Ecom\Module\PaymentMethod\Widget\ReadMore as ReadMoreWidget;
 use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomPaymentMethodRepository;
 use Throwable;
@@ -40,6 +39,7 @@ class ReadMore implements HttpGetActionInterface
      * @param Api $api
      * @param Credentials $credentials
      * @param StoreManagerInterface $storeManager
+     * @param Mapi $mapiHelper
      * @param Config $config
      */
     public function __construct(
@@ -56,6 +56,8 @@ class ReadMore implements HttpGetActionInterface
     }
 
     /**
+     * Execute controller
+     *
      * @throws Exception
      * @return ResultInterface
      */
@@ -83,6 +85,8 @@ class ReadMore implements HttpGetActionInterface
     }
 
     /**
+     * Get output HTML
+     *
      * @return string
      * @throws NoSuchEntityException
      * @throws ValidatorException
