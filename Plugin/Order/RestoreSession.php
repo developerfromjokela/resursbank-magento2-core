@@ -53,6 +53,11 @@ class RestoreSession implements ArgumentInterface
     private Order $order;
 
     /**
+     * @var PaymentMethods
+     */
+    private PaymentMethods $paymentMethods;
+
+    /**
      * @param Log $log
      * @param Order $order
      * @param Session $session
