@@ -15,6 +15,8 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 class Collection extends AbstractCollection
 {
     /**
+     * Initializes object.
+     *
      * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @noinspection MagicMethodsValidityInspection
@@ -22,6 +24,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct(): void
     {
-        $this->_init(Model::class, Resource::class);
+        $this->_init(model: Model::class, resourceModel: Resource::class);
     }
 }

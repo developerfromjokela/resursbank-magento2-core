@@ -50,6 +50,8 @@ class Credentials extends AbstractHelper
     }
 
     /**
+     * Check if object contains credentials.
+     *
      * @param CredentialsModel $model
      * @return bool
      */

@@ -63,6 +63,8 @@ class Customer
     }
 
     /**
+     * Set governmentId
+     *
      * @see Customer::$governmentId
      * @param string $value
      * @return self
@@ -76,6 +78,8 @@ class Customer
     }
 
     /**
+     * Get governmentId
+     *
      * @see Customer::$governmentId
      * @return string
      */
@@ -85,6 +89,8 @@ class Customer
     }
 
     /**
+     * Set phone
+     *
      * @see Customer::$phone
      * @param string $value
      * @return self
@@ -98,6 +104,8 @@ class Customer
     }
 
     /**
+     * Get phone
+     *
      * @see Customer::$phone
      * @return string
      */
@@ -107,6 +115,8 @@ class Customer
     }
 
     /**
+     * Set email
+     *
      * @see Customer::$email
      * @param string $value
      * @return self
@@ -120,6 +130,8 @@ class Customer
     }
 
     /**
+     * Get email
+     *
      * @see Customer::$email
      * @return string
      */
@@ -129,6 +141,8 @@ class Customer
     }
 
     /**
+     * Set type
+     *
      * @see Customer::$type
      * @param string $value
      * @return self
@@ -142,6 +156,8 @@ class Customer
     }
 
     /**
+     * Get type
+     *
      * @return string
      */
     public function getType(): string
@@ -150,6 +166,8 @@ class Customer
     }
 
     /**
+     * Set address
+     *
      * @param Address $value
      * @return self
      */
@@ -162,6 +180,8 @@ class Customer
     }
 
     /**
+     * Get address
+     *
      * @return Address
      */
     public function getAddress(): Address
@@ -170,6 +190,8 @@ class Customer
     }
 
     /**
+     * Check if customer is a company.
+     *
      * @return bool
      */
     public function isCompany(): bool

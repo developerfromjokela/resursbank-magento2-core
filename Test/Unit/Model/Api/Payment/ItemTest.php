@@ -60,7 +60,6 @@ class ItemTest extends TestCase
         $vatPctValidator = new VatPct();
         $typeValidator = new Type();
 
-
         $this->item = new Item(
             $this->data[Item::KEY_ART_NO],
             $this->data[Item::KEY_DESCRIPTION],

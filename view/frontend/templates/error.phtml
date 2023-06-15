@@ -25,7 +25,8 @@ if (isset($block)) {
         <script>
             require(['Magento_Ui/js/model/messageList', 'mage/translate'], function(messages, $t) {
                 messages.addErrorMessage({
-                    'message': $t('The payment failed. Please confirm the cart content and try a different payment method')
+                    'message':
+                        $t('The payment failed. Please confirm the cart content and try a different payment method')
                 })
             });
         </script>

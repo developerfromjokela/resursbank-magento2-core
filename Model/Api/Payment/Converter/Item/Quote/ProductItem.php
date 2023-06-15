@@ -138,7 +138,9 @@ class ProductItem extends AbstractItem
     }
 
     /**
-     * Checks if the product has fixed pricing by its parent's product options.
+     * Checks if the product has fixed pricing.
+     *
+     * Check if the product has fixed pricing by its parent's product options.
      * If a parent can't be found the product itself will be checked.
      *
      * @return bool
@@ -159,7 +161,7 @@ class ProductItem extends AbstractItem
     }
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     public function getTotalAmountInclVat(): float
     {

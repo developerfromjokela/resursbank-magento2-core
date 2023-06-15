@@ -14,12 +14,16 @@ use Monolog\Logger;
 interface LogInterface
 {
     /**
+     * Set logger
+     *
      * @param Logger $logger
      * @return self
      */
     public function setLogger(Logger $logger): self;
 
     /**
+     * Log info-level message
+     *
      * @param string $text
      * @param bool $force
      * @return self
@@ -27,6 +31,8 @@ interface LogInterface
     public function info(string $text, bool $force = false): self;
 
     /**
+     * Log error-level message
+     *
      * @param string $text
      * @param bool $force
      * @return self
@@ -34,6 +40,8 @@ interface LogInterface
     public function error(string $text, bool $force = false): self;
 
     /**
+     * Log exception
+     *
      * @param Exception $error
      * @param bool $force
      * @return self
@@ -41,6 +49,8 @@ interface LogInterface
     public function exception(Exception $error, bool $force = false): self;
 
     /**
+     * Check if logging is enabled
+     *
      * @return bool
      */
     public function isEnabled(): bool;

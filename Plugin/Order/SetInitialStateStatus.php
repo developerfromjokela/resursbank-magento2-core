@@ -59,6 +59,8 @@ class SetInitialStateStatus
     }
 
     /**
+     * Set the order state and status.
+     *
      * @param AuthorizeCommand $subject
      * @param Phrase $result
      * @param OrderPaymentInterface $payment

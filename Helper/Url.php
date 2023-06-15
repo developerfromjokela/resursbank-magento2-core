@@ -61,9 +61,10 @@ class Url extends AbstractHelper
     }
 
     /**
-     * URL client is redirect back to after successfully completing their
-     * payment at the gateway.
+     * Fetch success page URL.
      *
+     * This is the URL the client is redirected back to after successfully
+     * completing their payment at the gateway.
      * NOTE: We include quote id to support intermediate browser change during
      * signing. For example, if the client signs their payment using BankID on a
      * smartphone the redirect URL may be opened in the OS default browser
@@ -85,9 +86,10 @@ class Url extends AbstractHelper
     }
 
     /**
-     * URL client is redirected back to after failing to completing their
-     * payment at the gateway.
+     * Fetch failure page URL.
      *
+     * This is the URL the client is redirected back to after failing to
+     * completing their payment at the gateway.
      * NOTE: For information regarding the included quote id parameter, please
      * refer to the getSuccessUrl() docblock above.
      *

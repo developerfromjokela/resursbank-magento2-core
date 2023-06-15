@@ -32,6 +32,8 @@ abstract class AbstractValidation
     }
 
     /**
+     * Check if supplied value matches supplied regex.
+     *
      * NOTE: Regex rules expects a reverse value (meaning that if preg_match
      * succeeds there are illegal characters within the provided $value). This
      * is because the regex values defined in our child classes SHOULD be used
@@ -55,9 +57,10 @@ abstract class AbstractValidation
     }
 
     /**
+     * Validate string length.
+     *
      * Validate string length. If there is no "min" or "max" defined these are
      * set to int(0).
-     *
      * NOTE: int(0) values are treated as unlimited length.
      *
      * @param string $value

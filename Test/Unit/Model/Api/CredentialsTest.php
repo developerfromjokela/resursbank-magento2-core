@@ -28,7 +28,6 @@ class CredentialsTest extends TestCase
         $this->credentials = new Credentials();
     }
 
-
     /**
      * Assert that the username method will assign a value to the username prop.
      *

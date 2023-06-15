@@ -377,7 +377,7 @@ class Config extends AbstractConfig
         if ($result === null) {
             try {
                 $result = Repository::getStores()->getSingleStoreId();
-            } catch (Throwable $error) {
+            } catch (Throwable) { // phpcs:ignore
                 // Circular dependency prevents logging.
             }
         }

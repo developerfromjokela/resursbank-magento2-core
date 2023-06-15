@@ -32,6 +32,8 @@ class ConfigSave implements ObserverInterface
     }
 
     /**
+     * Execute observer
+     *
      * @param Observer $observer
      * @return void
      */

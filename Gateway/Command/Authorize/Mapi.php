@@ -9,28 +9,20 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Gateway\Command\Authorize;
 
-use Codeception\Step\Meta;
 use Exception;
 use JsonException;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\PaymentException;
-use Magento\Payment\Gateway\Command\ResultInterface;
-use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Store\Model\StoreManagerInterface;
 use ReflectionException;
 use Resursbank\Core\Exception\PaymentDataException;
 use Resursbank\Core\Helper\Callback as CoreCallback;
 use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Url;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\DiscountItem;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ItemInterface;
-use Resursbank\Core\Model\Api\Payment\Converter\Item\ShippingItem;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\Api\Payment\Converter\QuoteConverter;
@@ -46,7 +38,6 @@ use Resursbank\Ecom\Exception\Validation\IllegalValueException;
 use Resursbank\Ecom\Exception\ValidationException;
 use Resursbank\Ecom\Lib\Model\Address as EcomAddress;
 use Resursbank\Ecom\Lib\Model\Callback\Enum\CallbackType;
-use Resursbank\Ecom\Lib\Model\Payment as EcomPayment;
 use Resursbank\Ecom\Lib\Model\Payment\Customer as CustomerModel;
 use Resursbank\Ecom\Lib\Model\Payment\Customer\DeviceInfo;
 use Resursbank\Ecom\Lib\Model\Payment\Metadata;
@@ -63,9 +54,6 @@ use Resursbank\Ecom\Module\Payment\Models\CreatePaymentRequest\Options\Callbacks
 use Resursbank\Ecom\Module\Payment\Models\CreatePaymentRequest\Options\ParticipantRedirectionUrls;
 use Resursbank\Ecom\Module\Payment\Models\CreatePaymentRequest\Options\RedirectionUrls;
 use Resursbank\Ecom\Module\Payment\Repository as PaymentRepository;
-use Throwable;
-
-use function get_class;
 
 /**
  * Payment authorization command for MAPI.
@@ -80,6 +68,7 @@ class Mapi
      * @param Checkout $session
      * @param QuoteConverter $quoteConverter
      * @param Session $customerSession
+     * @param CoreCallback $callback
      */
     public function __construct(
         private readonly Config $config,
@@ -242,8 +231,8 @@ class Mapi
             governmentId: $govId,
             mobilePhone: $address->getTelephone(),
             deviceInfo: new DeviceInfo(
-                ip: $_SERVER['REMOTE_ADDR'] ?? '',
-                userAgent: $_SERVER['HTTP_USER_AGENT'] ?? ''
+                ip: $_SERVER['REMOTE_ADDR'] ?? '', // phpcs:ignore
+                userAgent: $_SERVER['HTTP_USER_AGENT'] ?? '' // phpcs:ignore
             )
         );
     }

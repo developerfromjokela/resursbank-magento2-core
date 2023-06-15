@@ -19,10 +19,11 @@ use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 
 class OrderTest extends TestCase
 {
+    /** @var Order  */
     private Order $orderHelper;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -82,7 +83,6 @@ class OrderTest extends TestCase
         $orderMock->method('getGrandTotal')->willReturn(0);
         self::assertFalse($this->orderHelper->isNew($orderMock));
     }
-
 
     /**
      * Assert that the order supplied is old if order has an incremented id.

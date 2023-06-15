@@ -54,6 +54,8 @@ class UpdateBillingAddress
     }
 
     /**
+     * Perform billing address update.
+     *
      * NOTE: Since this isn't a crucial operation we will log and ignore
      * potential Exceptions.
      *

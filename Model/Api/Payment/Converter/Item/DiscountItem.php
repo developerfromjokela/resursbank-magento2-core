@@ -25,10 +25,10 @@ class DiscountItem extends AbstractItem
      * @param Config $config
      * @param ItemFactory $itemFactory
      * @param Log $log
+     * @param StoreManagerInterface $storeManager
      * @param float $totalAmount
      * @param float $amount Amount incl. tax.
      * @param int $taxPercent Tax amount.
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Config $config,
@@ -49,6 +49,7 @@ class DiscountItem extends AbstractItem
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function getArtNo(): string
@@ -61,6 +62,7 @@ class DiscountItem extends AbstractItem
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function getDescription(): string
@@ -78,6 +80,7 @@ class DiscountItem extends AbstractItem
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function getUnitAmountWithoutVat(): float
@@ -86,6 +89,8 @@ class DiscountItem extends AbstractItem
     }
 
     /**
+     * @inheritDoc
+     *
      * NOTE: the tax percentage value is being rounded here because it should
      * always be an integer. Shipping and product tax percentage are stored with
      * the order entity, so we can re-calculate their accurate excl. tax
@@ -99,7 +104,6 @@ class DiscountItem extends AbstractItem
      * excl. tax price. This ensures the prices will be the same both in Magento
      * and at Resurs Bank.
      *
-     * @inheritDoc
      * @throws Exception
      */
     public function getVatPct(): int
@@ -116,7 +120,7 @@ class DiscountItem extends AbstractItem
     }
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     public function getTotalAmountInclVat(): float
     {

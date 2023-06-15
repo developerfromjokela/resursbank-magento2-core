@@ -75,6 +75,8 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
+     * Set logger.
+     *
      * @param Logger $logger
      * @return LogInterface
      */
@@ -87,6 +89,8 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
+     * Log info-level message.
+     *
      * @param string $text
      * @param bool $force
      * @return LogInterface
@@ -103,6 +107,8 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
+     * Log error-level message.
+     *
      * @param string $text
      * @param bool $force
      * @return LogInterface
@@ -119,6 +125,8 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
+     * Log exception.
+     *
      * @param Throwable $error
      * @param bool $force
      * @return LogInterface
@@ -143,6 +151,8 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     }
 
     /**
+     * Check if logging is enabled.
+     *
      * @return bool
      */
     public function isEnabled(): bool

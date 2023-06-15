@@ -48,8 +48,10 @@ class QuoteConverter extends AbstractConverter
     }
 
     /**
-     * Convert supplied entity to a collection of PaymentItem instances. These
-     * objects can later be mutated into a simple array the API can interpret.
+     * Convert supplied entity to a collection of PaymentItem instances.
+     *
+     * These objects can later be mutated into a simple array the API can
+     * interpret.
      *
      * @param Quote $entity
      * @return PaymentItem[]
@@ -148,8 +150,9 @@ class QuoteConverter extends AbstractConverter
     }
 
     /**
-     * Assemble total value of converted quote. This lets us check the actual
-     * data we are submitting to Resurs Bank.
+     * Assemble total value of converted quote.
+     *
+     * This lets us check the actual data we are submitting to Resurs Bank.
      *
      * @param PaymentItem[] $items
      * @return float

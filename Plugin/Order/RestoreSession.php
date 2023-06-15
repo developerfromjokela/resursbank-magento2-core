@@ -62,6 +62,7 @@ class RestoreSession implements ArgumentInterface
      * @param Order $order
      * @param Session $session
      * @param SuccessValidator $successValidator
+     * @param PaymentMethods $paymentMethods
      */
     public function __construct(
         Log $log,
@@ -78,6 +79,8 @@ class RestoreSession implements ArgumentInterface
     }
 
     /**
+     * Perform session restoration.
+     *
      * @return void
      */
     public function beforeExecute(): void

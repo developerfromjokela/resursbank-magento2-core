@@ -20,6 +20,8 @@ use Resursbank\Core\Block\Adminhtml\System\Config\Button as BaseButton;
 class Button extends BaseButton
 {
     /**
+     * @inheritDoc
+     *
      * @param AbstractElement $element
      * @return string
      * @throws LocalizedException

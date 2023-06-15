@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -192,6 +191,8 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
+     * Updates the "resursbank_result" column in the "order_sales" table.
+     *
      * Sets the "resursbank_result" column in the "order_sales" table, which
      * says whether the customer has arrived to the success or failure page.
      *
@@ -263,6 +264,8 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
+     * Returns the quote id from a request.
+     *
      * Returns the quote id from a request by looking for a "quote_id"
      * parameter. Returns 0 if the there is no "quote_id" parameter.
      *
@@ -292,7 +295,6 @@ class Order extends AbstractHelper implements ArgumentInterface
         );
 
         return $transaction instanceof TransactionInterface ? $transaction->getTxnId() : '';
-
     }
 
     /**

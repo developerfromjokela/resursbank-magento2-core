@@ -56,6 +56,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     *
      * @throws AlreadyExistsException
      * @throws Exception
      */
@@ -70,6 +71,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function delete(
@@ -83,6 +85,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      * @throws LocalizedException
      * @throws NoSuchEntityException
@@ -95,6 +98,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     *
      * @throws NoSuchEntityException
      */
     public function get(
@@ -125,6 +129,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * @inheritDoc
+     *
      * @throws NoSuchEntityException
      */
     public function getByCode(

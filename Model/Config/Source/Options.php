@@ -18,6 +18,8 @@ use Magento\Framework\Phrase;
 abstract class Options implements OptionSourceInterface
 {
     /**
+     * Convert to an option array.
+     *
      * Returns a list of options formatted to function with select elements in
      * the admin configuration.
      *

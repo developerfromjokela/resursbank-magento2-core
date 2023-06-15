@@ -52,7 +52,7 @@ class MigrateEnvironment implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies(): array
     {
@@ -60,7 +60,7 @@ class MigrateEnvironment implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases(): array
     {
@@ -68,7 +68,7 @@ class MigrateEnvironment implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply(): self
     {

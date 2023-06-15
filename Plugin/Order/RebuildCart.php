@@ -15,8 +15,6 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Cart as CartHelper;
 use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\Log;
@@ -102,6 +100,8 @@ class RebuildCart
     }
 
     /**
+     * Perform cart rebuild.
+     *
      * @param Failure $subject
      * @param Page|Redirect $result
      * @return Page|Redirect

@@ -10,13 +10,9 @@ namespace Resursbank\Core\Helper;
 
 class Log extends AbstractLog
 {
-    /**
-     * @inheritDoc
-     */
+    /** @var string $loggerName */
     protected string $loggerName = 'Resursbank Core Log';
 
-    /**
-     * @inheritDoc
-     */
+    /** @var string  */
     protected string $file = 'resursbank_core';
 }

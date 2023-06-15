@@ -53,7 +53,8 @@ class Title implements ValueHandlerInterface
 
     /**
      * @inheritdoc
-     * @param array<string, mixed> $subject
+     *
+     * @param array $subject
      * @param int|null $storeId
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -66,7 +67,7 @@ class Title implements ValueHandlerInterface
 
         try {
             $method = $this->reader->getResursModel($subject);
-            
+
             if ($method !== null) {
                 $result = sprintf(
                     '%s (%s)',

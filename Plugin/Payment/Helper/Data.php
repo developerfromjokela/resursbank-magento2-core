@@ -39,6 +39,7 @@ class Data
      * @param Repository $repository
      * @param StoreManager $storeManager
      * @param Config $config
+     * @param Mapi $mapi
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
@@ -52,14 +53,15 @@ class Data
     }
 
     /**
+     * Append Resurs payment methods to Magento's list.
+     *
      * Since we do not define our dynamic payment methods in the <payment>
      * section of our config.xml file we will need to manually append our
      * methods to the array collected by Magento.
-     *
      * Without this our payment methods will not be recognized in checkout.
      *
      * @param Subject $subject
-     * @param array<string, array> $result
+     * @param array $result
      * @return array<string, array>
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @noinspection PhpUnusedParameterInspection
@@ -199,6 +201,8 @@ class Data
     }
 
     /**
+     * Get instance of payment method with specified code.
+     *
      * Generate instance of our payment method model and apply the code of the
      * requested payment method (i.e. "resursbank_invoice" or similar).
      *
@@ -225,6 +229,8 @@ class Data
     }
 
     /**
+     * Get list of payment methods.
+     *
      * Store resolve method collection in a local variable to avoid expensive
      * database transactions during the same request cycle.
      *

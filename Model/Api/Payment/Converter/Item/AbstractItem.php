@@ -69,6 +69,8 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
+     * Get item
+     *
      * @return Item
      * @throws Exception
      */
@@ -142,6 +144,8 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
+     * Santize/round the unit amount without VAT.
+     *
      * The "unitAmountWithoutVat" property may not include more than 5 decimals.
      * Please refer to the linked documentation for further information.
      *
@@ -156,7 +160,9 @@ abstract class AbstractItem implements ItemInterface
     }
 
     /**
-     * @param CreditmemoItem|OrderItem|QuoteItem|AbstractModel $item
+     * Get order ID
+     *
+     * @param AbstractModel $item
      * @return mixed
      */
     public function getOrderId(

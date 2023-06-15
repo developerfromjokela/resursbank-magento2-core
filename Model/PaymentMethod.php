@@ -29,7 +29,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     protected function _construct(): void
     {
-        $this->_init(Resource::class);
+        $this->_init(resourceModel: Resource::class);
     }
 
     /**
@@ -37,14 +37,15 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function getMethodId(): ?int
     {
-        $result = $this->getData(self::METHOD_ID);
+        $result = $this->getData(key: self::METHOD_ID);
 
         return $result === null ? null : (int)$result;
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setMethodId(?int $methodId): PaymentMethodInterface
     {
@@ -71,8 +72,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setIdentifier(string $identifier): PaymentMethodInterface
     {
@@ -98,8 +100,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setCode(string $code): PaymentMethodInterface
     {
@@ -116,6 +119,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
+     *
      * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
     public function getActive(): ?bool
@@ -166,8 +170,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setSortOrder(int $order): PaymentMethodInterface
     {
@@ -184,6 +189,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
+     *
      * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
     public function getMinOrderTotal(): ?float
@@ -194,8 +200,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setMinOrderTotal(float $total): PaymentMethodInterface
     {
@@ -212,6 +219,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
 
     /**
      * @inheritDoc
+     *
      * @phpstan-ignore-next-line Incompatible magic Magento getter.
      */
     public function getMaxOrderTotal(): ?float
@@ -222,8 +230,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws ValidatorException
      * @inheritDoc
+     *
+     * @throws ValidatorException
      */
     public function setMaxOrderTotal(float $total): PaymentMethodInterface
     {
@@ -269,8 +278,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws JsonException
      * @inheritDoc
+     *
+     * @throws JsonException
      * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function setRaw(string $value): PaymentMethodInterface
@@ -284,8 +294,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws JsonException
      * @inheritdoc
+     *
+     * @throws JsonException
      * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getType(): ?string
@@ -301,8 +312,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
-     * @throws JsonException
      * @inheritdoc
+     *
+     * @throws JsonException
      * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function getSpecificType(): ?string
@@ -328,8 +340,9 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     }
 
     /**
+     * @inheritdoc
+     *
      * @throws ValidatorException
-     * @inheritDoc
      */
     public function setSpecificCountry(
         string $countryIso

@@ -64,6 +64,8 @@ class Payment
     }
 
     /**
+     * Set payment ID
+     *
      * @see Payment::$paymentId
      * @param string $value
      * @return self
@@ -77,6 +79,8 @@ class Payment
     }
 
     /**
+     * Get payment ID
+     *
      * @see Payment::$paymentId
      * @return string
      */
@@ -86,6 +90,8 @@ class Payment
     }
 
     /**
+     * Set bookPaymentStatus
+     *
      * @see Payment::$bookPaymentStatus
      * @param string $value
      * @return self
@@ -99,6 +105,8 @@ class Payment
     }
 
     /**
+     * Get bookPaymentStatus
+     *
      * @see Payment::$bookPaymentStatus
      * @return string
      */
@@ -108,6 +116,8 @@ class Payment
     }
 
     /**
+     * Set approvedAmount
+     *
      * @see Payment::$approvedAmount
      * @param float $value
      * @return self
@@ -121,6 +131,8 @@ class Payment
     }
 
     /**
+     * Get approvedAmount
+     *
      * @see Payment::$approvedAmount
      * @return float
      */
@@ -130,6 +142,8 @@ class Payment
     }
 
     /**
+     * Set signingUrl
+     *
      * @see Payment::$signingUrl
      * @param string $value
      * @return self
@@ -143,6 +157,8 @@ class Payment
     }
 
     /**
+     * Get signingUrl
+     *
      * @see Payment::$signingUrl
      * @return string
      */
@@ -152,6 +168,8 @@ class Payment
     }
 
     /**
+     * Set customer
+     *
      * @see Payment::$customer
      * @param Customer $value
      * @return self
@@ -165,6 +183,8 @@ class Payment
     }
 
     /**
+     * Get customer
+     *
      * @see Payment::$customer
      * @return Customer
      */

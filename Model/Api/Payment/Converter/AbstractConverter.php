@@ -38,6 +38,7 @@ abstract class AbstractConverter implements ConverterInterface
 
     /**
      * @inheritDoc
+     *
      * @throws Exception
      */
     public function getShippingData(
@@ -73,6 +74,8 @@ abstract class AbstractConverter implements ConverterInterface
     }
 
     /**
+     * Convert PaymentItems to arrays.
+     *
      * Convert all PaymentItem instances to simple arrays the API can
      * understand.
      *
@@ -92,6 +95,8 @@ abstract class AbstractConverter implements ConverterInterface
     }
 
     /**
+     * Get tax percentage from order.
+     *
      * Retrieve applied tax percentage from order entity by type (product,
      * shipping etc.).
      *
@@ -137,6 +142,8 @@ abstract class AbstractConverter implements ConverterInterface
     }
 
     /**
+     * Add discount element to supplied array.
+     *
      * Append discount item to passed array. We pass an array this way to
      * combine discount items, resulting in one item for each VAT percentage.
      *

@@ -46,7 +46,7 @@ class RemapConfigPaths implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies(): array
     {
@@ -54,7 +54,7 @@ class RemapConfigPaths implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases(): array
     {
@@ -62,7 +62,7 @@ class RemapConfigPaths implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply(): self
     {
@@ -76,16 +76,16 @@ class RemapConfigPaths implements DataPatchInterface
                 ['path = ?' => $old]
             );
         }
-        
+
         $this->moduleDataSetup->getConnection()->endSetup();
 
         return $this;
     }
 
     /**
-     * Retrieve map of old -> new settings paths (excluding their sections
-     * since this is the same for all of them).
+     * Retrieve map of old -> new settings paths.
      *
+     * Excludes their sections since this is the same for all of them.
      * If any of the newer setting paths exists, they will be filtered out of
      * the resulting array, leaving only old paths. This is to prevent MySQL
      * errors when running setup:upgrade or any other command that wants to

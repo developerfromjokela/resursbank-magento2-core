@@ -62,6 +62,8 @@ class SetEnvironmentFlag
     }
 
     /**
+     * Set resursbank_is_test flag
+     *
      * @param Order $subject
      * @param Order $result
      * @return Order
