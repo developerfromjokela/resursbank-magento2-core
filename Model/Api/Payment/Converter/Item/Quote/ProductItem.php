@@ -71,7 +71,7 @@ class ProductItem extends AbstractItem
             return (float) $options['info_buyRequest']['qty'];
         }
 
-        return(float) $this->product->getQty();
+        return (float) $this->product->getQty();
     }
 
     /**
