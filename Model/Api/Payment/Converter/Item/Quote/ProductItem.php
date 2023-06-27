@@ -66,6 +66,11 @@ class ProductItem extends AbstractItem
      */
     public function getQuantity(): float
     {
+        $options = $this->product->getProduct()->getTypeInstance(true)->getOrderOptions($this->product->getProduct());
+        if (isset($options['info_buyRequest']) && isset($options['info_buyRequest']['qty'])) {
+            return (float) $options['info_buyRequest']['qty'];
+        }
+
         return (float) $this->product->getQty();
     }
 
