@@ -117,7 +117,7 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return Environment
      */
-    public function getMapiEnvironment(
+    public function getApiEnvironment(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): Environment {

@@ -112,7 +112,7 @@ class Mapi extends AbstractHelper
     ): void {
         try {
             if ($env === null) {
-                $env = $this->config->getMapiEnvironment(
+                $env = $this->config->getApiEnvironment(
                     scopeCode: $this->scope->getId(),
                     scopeType: $this->scope->getType()
                 );
