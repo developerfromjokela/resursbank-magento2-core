@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Config\Source;
 
-use Resursbank\Core\Helper\Config;
-
 class Flow extends Options
 {
     /**
@@ -24,7 +22,6 @@ class Flow extends Options
     public function toArray(): array
     {
         return [
-            Config::API_FLOW_OPTION_MAPI => __('rb-mapi')
         ];
     }
 }
