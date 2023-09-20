@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Model\Api\Payment\Converter\Item\Quote;
 
+use Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Model\Api\Payment\Item;
@@ -47,6 +48,16 @@ class ProductItem extends AbstractItem
     }
 
     /**
+     * Get quote item.
+     *
+     * @return QuoteItem
+     */
+    public function getQuoteItem(): QuoteItem
+    {
+        return $this->product;
+    }
+
+    /**
      * @inheritDoc
      */
     public function getArtNo(): string
@@ -69,8 +80,7 @@ class ProductItem extends AbstractItem
     {
 
         $options = $this->product->getProduct()->getTypeInstance(true)->getOrderOptions($this->product->getProduct());
-        if (
-            $this->product->getParentItem() &&
+        if ($this->product->getParentItem() &&
             $this->product->getParentItem()->getProductType() === 'bundle' &&
             isset($options['info_buyRequest']) &&
             isset($options['info_buyRequest']['qty'])

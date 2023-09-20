@@ -40,7 +40,6 @@ class ArtNo extends AbstractValidation implements ValidationInterface
     public function validate(
         string $value = ''
     ): void {
-        $this->matchesRegex($value, self::REGEX);
         $this->hasStringLength($value, [
             'min' => self::MIN_LENGTH,
             'max' => self::MAX_LENGTH
