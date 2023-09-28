@@ -12,7 +12,6 @@ use Magento\Checkout\Controller\Onepage\Success;
 use Magento\Checkout\Controller\Onepage\Failure;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\View\Result\Page;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Log;
@@ -62,7 +61,6 @@ class SetFailureReason
      * @param ResultInterface|Redirect|Page $result
      * @return ResultInterface|Redirect|Page
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws AlreadyExistsException
      */
     public function afterExecute(
         $subject,
@@ -90,15 +88,19 @@ class SetFailureReason
 
         $magentoPayment = $order->getPayment();
 
-        $entry = $this->paymentHistoryFactory->create();
-        $entry
-            ->setPaymentId(identifier: (int) $magentoPayment->getEntityId())
-            ->setUser(user: PaymentHistoryInterface::USER_RESURS_BANK)
-            ->setStateFrom(state: $order->getState())
-            ->setStatusFrom(status: $order->getStatus())
-            ->setStateTo(state: \Magento\Sales\Model\Order::STATE_CANCELED)
-            ->setStatusTo(status: Order::CREDIT_DENIED_CODE);
-        $this->paymentHistoryRepository->save(entry: $entry);
+        try {
+            $entry = $this->paymentHistoryFactory->create();
+            $entry
+                ->setPaymentId(identifier: (int) $magentoPayment->getEntityId())
+                ->setUser(user: PaymentHistoryInterface::USER_RESURS_BANK)
+                ->setStateFrom(state: $order->getState())
+                ->setStatusFrom(status: $order->getStatus())
+                ->setStateTo(state: \Magento\Sales\Model\Order::STATE_CANCELED)
+                ->setStatusTo(status: Order::CREDIT_DENIED_CODE);
+            $this->paymentHistoryRepository->save(entry: $entry);
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
 
         return $result;
     }
