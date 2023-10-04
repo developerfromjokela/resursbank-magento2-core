@@ -129,12 +129,13 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                </group>
-                <group id="methods" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Payment Methods</label>
-                    <field id="listing" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="listing" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Methods</label>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing</frontend_model>
                         <config_path>resursbank/methods/listing</config_path>
+                        <depends>
+                            <field id="flow" separator=",">simplified,rco,mapi</field>
+                        </depends>
                     </field>
                 </group>
                 <group id="advanced" sortOrder="98" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
