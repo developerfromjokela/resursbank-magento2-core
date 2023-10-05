@@ -96,14 +96,6 @@
                             <field id="flow" separator=",">mapi,rcoplus</field>
                         </depends>
                     </field>
-                    <field id="fetch_stores" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-fetch-stores</label>
-                        <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\GetStores\Button</frontend_model>
-                        <config_path>resursbank/api/fetch_stores</config_path>
-                        <depends>
-                            <field id="flow">mapi</field>
-                        </depends>
-                    </field>
                     <field id="sync" type="button" sortOrder="5" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
                         <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>
