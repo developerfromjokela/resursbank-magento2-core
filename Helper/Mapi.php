@@ -130,7 +130,17 @@ class Mapi extends AbstractHelper
                     EcomScope::MERCHANT_API : EcomScope::MOCK_MERCHANT_API;
             }
 
-            if ($jwtAuth === null) {
+            $un = $this->config->getClientId(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            );
+
+            $pw = $this->config->getClientSecret(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            );
+
+            if ($jwtAuth === null && $un !== '' && $pw !== '') {
                 $jwtAuth = new Jwt(
                     clientId: $this->config->getClientId(
                         scopeCode: $this->scope->getId(),
