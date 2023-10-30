@@ -45,7 +45,8 @@
     "sales_order": {
         "column": {
             "resursbank_is_test": true,
-            "resursbank_result": true
+            "resursbank_result": true,
+            "resursbank_flow": true
         }
     }
 }
