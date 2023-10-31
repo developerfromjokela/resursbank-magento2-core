@@ -36,6 +36,6 @@
     -->
     <column xsi:type="boolean" name="resursbank_is_test" nullable="true" comment="Whether the purchase was conducted in test."/>
     <column xsi:type="boolean" name="resursbank_result" nullable="true" comment="Whether the order failed or succeeded."/>
-    <column xsi:type="varchar" name="resursbank_flow" nullable="true" comment="API flow used for order." />
+    <column xsi:type="varchar" name="resursbank_flow" nullable="true" length="255" comment="API flow used for order." />
   </table>
 </schema>
