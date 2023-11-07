@@ -58,7 +58,7 @@ class PaymentMethods extends AbstractHelper
      * @param SearchCriteriaBuilder $searchBuilder
      * @param Log $log
      * @param Config $config
-     * @param Mapi $mapi
+     * @param Ecom $mapi
      */
     public function __construct(
         Context $context,
@@ -70,7 +70,7 @@ class PaymentMethods extends AbstractHelper
         private readonly SearchCriteriaBuilder $searchBuilder,
         private readonly Log $log,
         private readonly Config $config,
-        private readonly Mapi $mapi
+        private readonly Ecom $mapi
     ) {
         parent::__construct(context: $context);
     }

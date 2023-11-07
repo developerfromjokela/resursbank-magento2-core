@@ -24,7 +24,7 @@ use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
 use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Ecom\Module\PaymentMethod\Widget\ReadMore as ReadMoreWidget;
 use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomPaymentMethodRepository;
 use Throwable;
@@ -39,7 +39,7 @@ class ReadMore implements HttpGetActionInterface
      * @param Api $api
      * @param Credentials $credentials
      * @param StoreManagerInterface $storeManager
-     * @param Mapi $mapiHelper
+     * @param Ecom $ecomHelper
      * @param Config $config
      */
     public function __construct(
@@ -50,7 +50,7 @@ class ReadMore implements HttpGetActionInterface
         protected readonly Api $api,
         protected readonly Credentials $credentials,
         protected readonly StoreManagerInterface $storeManager,
-        protected readonly Mapi $mapiHelper,
+        protected readonly Ecom $ecomHelper,
         protected readonly Config $config
     ) {
     }
@@ -126,7 +126,7 @@ class ReadMore implements HttpGetActionInterface
     {
         try {
             $paymentMethod = $this->getMethod();
-            $methodCode = $this->mapiHelper->mapiUuidFromCode(code: $paymentMethod->getCode());
+            $methodCode = $this->ecomHelper->mapiUuidFromCode(code: $paymentMethod->getCode());
             $mapiMethod = EcomPaymentMethodRepository::getById(
                 storeId: $this->config->getStore(
                     scopeCode: $this->storeManager->getStore()->getCode(),

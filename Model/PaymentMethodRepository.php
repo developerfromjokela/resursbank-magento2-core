@@ -22,7 +22,7 @@ use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
@@ -40,7 +40,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @param FilterProcessor $filterProcessor
      * @param Config $config
      * @param StoreManagerInterface $storeManager
-     * @param Mapi $mapi
+     * @param Ecom $ecom
      */
     public function __construct(
         private readonly ResourceModel $resourceModel,
@@ -50,7 +50,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         private readonly FilterProcessor $filterProcessor,
         private readonly Config $config,
         private readonly StoreManagerInterface $storeManager,
-        private readonly Mapi $mapi
+        private readonly Ecom $ecom
     ) {
     }
 
@@ -107,7 +107,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         $scopeCode = $this->storeManager->getStore()->getCode();
 
         if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
-            return $this->mapi->getMapiMethodById(
+            return $this->ecom->getMapiMethodById(
                 id: $methodId,
                 storeId: $this->config->getStore(scopeCode: $scopeCode)
             );
@@ -138,7 +138,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         $scopeCode = $this->storeManager->getStore()->getCode();
 
         if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
-            return $this->mapi->getMapiMethodById(
+            return $this->ecom->getMapiMethodById(
                 id: str_replace(
                     search: Resursbank::CODE_PREFIX,
                     replace: '',

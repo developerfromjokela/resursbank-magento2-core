@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Plugin;
 
-use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\Ecom;
 
 /**
  * Handles initial init of Ecom+.
@@ -17,10 +17,10 @@ use Resursbank\Core\Helper\Mapi;
 class Init
 {
     /**
-     * @param Mapi $mapi
+     * @param Ecom $ecom
      */
     public function __construct(
-        private readonly Mapi $mapi
+        private readonly Ecom $ecom
     ) {
     }
 
@@ -31,6 +31,6 @@ class Init
      */
     public function beforeLaunch(): void
     {
-        $this->mapi->connect();
+        $this->ecom->connect();
     }
 }
