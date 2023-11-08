@@ -62,40 +62,6 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                    <field id="client_id_1" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-id</label>
-                        <config_path>resursbank/api/client_id_1</config_path>
-                        <depends>
-                            <field id="environment">1</field>
-                            <field id="flow" separator=",">mapi,rcoplus</field>
-                        </depends>
-                    </field>
-                    <field id="client_secret_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-secret</label>
-                        <config_path>resursbank/api/client_secret_1</config_path>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <depends>
-                            <field id="environment">1</field>
-                            <field id="flow" separator=",">mapi,rcoplus</field>
-                        </depends>
-                    </field>
-                    <field id="client_id_0" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-id</label>
-                        <config_path>resursbank/api/client_id_0</config_path>
-                        <depends>
-                            <field id="environment">0</field>
-                            <field id="flow" separator=",">mapi,rcoplus</field>
-                        </depends>
-                    </field>
-                    <field id="client_secret_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-secret</label>
-                        <config_path>resursbank/api/client_secret_0</config_path>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <depends>
-                            <field id="environment">0</field>
-                            <field id="flow" separator=",">mapi,rcoplus</field>
-                        </depends>
-                    </field>
                     <field id="sync" type="button" sortOrder="5" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
                         <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>
@@ -103,14 +69,6 @@
                         <config_path>resursbank/api/sync</config_path>
                         <depends>
                             <field id="flow" separator=",">simplified,rco</field>
-                        </depends>
-                    </field>
-                    <field id="store" type="select" sortOrder="6" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label></label>
-                        <source_model>Resursbank\Core\Model\Config\Source\Store</source_model>
-                        <config_path>resursbank/api/store</config_path>
-                        <depends>
-                            <field id="flow">mapi</field>
                         </depends>
                     </field>
                     <field id="auto_sync_data" type="select" sortOrder="7" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -126,7 +84,7 @@
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing</frontend_model>
                         <config_path>resursbank/methods/listing</config_path>
                         <depends>
-                            <field id="flow" separator=",">simplified,rco,mapi</field>
+                            <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
                 </group>

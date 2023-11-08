@@ -277,7 +277,7 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
-     * Extracts the MAPI payment ID from an order object.
+     * Extracts the payment uuid from an order object.
      *
      * @param OrderInterface $order
      * @return string

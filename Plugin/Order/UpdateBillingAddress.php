@@ -14,10 +14,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\AddressRepository;
-use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -39,17 +37,13 @@ class UpdateBillingAddress
      * @param Order $order
      * @param Api $api
      * @param PaymentMethods $paymentMethods
-     * @param Config $config
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         private readonly Log $log,
         private readonly AddressRepository $addressRepository,
         private readonly Order $order,
         private readonly Api $api,
-        private readonly PaymentMethods $paymentMethods,
-        private readonly Config $config,
-        private readonly StoreManagerInterface $storeManager
+        private readonly PaymentMethods $paymentMethods
     ) {
     }
 
@@ -73,9 +67,7 @@ class UpdateBillingAddress
         try {
             $order = $this->order->resolveOrderFromRequest();
 
-            if ($this->isEnabled(order: $order) &&
-                !$this->config->isMapiActive(scopeCode: $this->storeManager->getStore()->getCode())
-            ) {
+            if ($this->isEnabled(order: $order)) {
                 $paymentData = $this->api->getPayment(order: $order);
 
                 if ($paymentData === null) {
