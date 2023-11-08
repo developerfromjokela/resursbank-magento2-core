@@ -64,7 +64,7 @@ use function substr;
 /**
  * Mapi related business logic.
  */
-class Mapi extends AbstractHelper
+class Ecom extends AbstractHelper
 {
     /**
      * @param Context $context
@@ -118,18 +118,6 @@ class Mapi extends AbstractHelper
                 );
             }
 
-            $scope = $this->config->getFlow(
-                scopeCode: $this->scope->getId(),
-                scopeType: $this->scope->getType()
-            );
-
-            if ($scope === 'rcoplus') {
-                $ecomScope = EcomScope::CHECKOUT_PLUS_API;
-            } else {
-                $ecomScope = $env === Environment::PROD ?
-                    EcomScope::MERCHANT_API : EcomScope::MOCK_MERCHANT_API;
-            }
-
             $un = $this->config->getClientId(
                 scopeCode: $this->scope->getId(),
                 scopeType: $this->scope->getType()
@@ -150,7 +138,7 @@ class Mapi extends AbstractHelper
                         scopeCode: $this->scope->getId(),
                         scopeType: $this->scope->getType()
                     ),
-                    scope: $ecomScope,
+                    scope: $this->getScope(environment: $env),
                     grantType: GrantType::CREDENTIALS,
                 );
             }
@@ -176,6 +164,17 @@ class Mapi extends AbstractHelper
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
         }
+    }
+
+    /**
+     * @param Environment $environment
+     * @return EcomScope
+     */
+    public function getScope(Environment $environment): EcomScope
+    {
+        return $environment === Environment::PROD ?
+            EcomScope::MERCHANT_API :
+            EcomScope::MOCK_MERCHANT_API;
     }
 
     /**

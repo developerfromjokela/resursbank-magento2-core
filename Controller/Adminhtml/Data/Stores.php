@@ -12,7 +12,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Scope as ScopeHelper;
 use Resursbank\Ecom\Exception\AuthException;
 use Resursbank\Ecom\Exception\HttpException;
@@ -37,14 +37,14 @@ class Stores extends GetStoresController implements HttpPostActionInterface
      * @param JsonFactory $jsonFactory
      * @param Config $config
      * @param ScopeHelper $scope
-     * @param Mapi $mapi
+     * @param Ecom $ecom
      */
     public function __construct(
         private readonly Log $log,
         private readonly JsonFactory $jsonFactory,
         private readonly Config $config,
         private readonly ScopeHelper $scope,
-        private readonly Mapi $mapi
+        private readonly Ecom $ecom
     ) {
     }
 
@@ -108,7 +108,7 @@ class Stores extends GetStoresController implements HttpPostActionInterface
             $requestData = $this->getRequestData();
 
             // Establish MAPI connection with the credentials in HTTP request.
-            $this->mapi->connect(
+            $this->ecom->connect(
                 jwtAuth: new Jwt(
                     clientId: $requestData->clientId,
                     clientSecret: $requestData->clientSecret,

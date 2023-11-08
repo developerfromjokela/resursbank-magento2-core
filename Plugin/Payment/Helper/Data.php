@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManager;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\Mapi;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
@@ -39,7 +39,7 @@ class Data
      * @param Repository $repository
      * @param StoreManager $storeManager
      * @param Config $config
-     * @param Mapi $mapi
+     * @param Ecom $ecom
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
@@ -48,7 +48,7 @@ class Data
         private readonly Repository $repository,
         private readonly StoreManager $storeManager,
         private readonly Config $config,
-        private readonly Mapi $mapi
+        private readonly Ecom $ecom
     ) {
     }
 
@@ -246,7 +246,7 @@ class Data
             $code = $this->storeManager->getStore()->getCode();
 
             if ($this->config->isMapiActive(scopeCode: $code)) {
-                $this->methodList = $this->mapi->getMapiMethods(
+                $this->methodList = $this->ecom->getMapiMethods(
                     storeId: $this->config->getStore(scopeCode: $code)
                 );
             } else {
