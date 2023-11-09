@@ -207,7 +207,6 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order,
         bool $value
     ): OrderInterface {
-        /** @noinspection PhpUndefinedMethodInspection */
         /* Type-cast:ed twice because we need an integer typed as a string,
            otherwise the value won't be properly saved if it's 0|false */
         /** @phpstan-ignore-next-line Undefined method. */
@@ -277,7 +276,7 @@ class Order extends AbstractHelper implements ArgumentInterface
     }
 
     /**
-     * Extracts the MAPI payment ID from an order object.
+     * Extracts the payment uuid from an order object.
      *
      * @param OrderInterface $order
      * @return string

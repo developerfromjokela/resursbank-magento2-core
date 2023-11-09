@@ -23,7 +23,6 @@ use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Ecom;
-use Resursbank\Core\Model\Payment\Resursbank;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
 
@@ -104,15 +103,6 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function get(
         string|int $methodId
     ): ?PaymentMethodInterface {
-        $scopeCode = $this->storeManager->getStore()->getCode();
-
-        if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
-            return $this->ecom->getMapiMethodById(
-                id: $methodId,
-                storeId: $this->config->getStore(scopeCode: $scopeCode)
-            );
-        }
-
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
@@ -135,19 +125,6 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     public function getByCode(
         string $code
     ): PaymentMethodInterface {
-        $scopeCode = $this->storeManager->getStore()->getCode();
-
-        if ($this->config->isMapiActive(scopeCode: $scopeCode)) {
-            return $this->ecom->getMapiMethodById(
-                id: str_replace(
-                    search: Resursbank::CODE_PREFIX,
-                    replace: '',
-                    subject: $code
-                ),
-                storeId: $this->config->getStore(scopeCode: $scopeCode)
-            );
-        }
-
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 

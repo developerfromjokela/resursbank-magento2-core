@@ -16,7 +16,6 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Log\LogLevel;
-use Resursbank\Ecom\Module\Store\Models\Store;
 use Resursbank\Ecom\Module\Store\Repository;
 use Resursbank\RBEcomPHP\ResursBank;
 use Throwable;
@@ -35,20 +34,12 @@ class Config extends AbstractConfig
     /**
      * @var string
      */
-    public const METHODS_GROUP = 'methods';
-
-    /**
-     * @var string
-     */
     public const ADVANCED_GROUP = 'advanced';
 
     /**
      * @var string
      */
     public const LOGGING_GROUP = 'logging';
-
-    /** @var string */
-    public const API_FLOW_OPTION_MAPI = 'mapi';
 
     /**
      * @var EncryptorInterface
@@ -111,7 +102,7 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Convert configured environment to MAPI value.
+     * Resolve configured environment value.
      *
      * @param string|null $scopeCode
      * @param string $scopeType
@@ -238,23 +229,6 @@ class Config extends AbstractConfig
     }
 
     /**
-     * Checks if MAPI flow is active.
-     *
-     * @param string|null $scopeCode
-     * @param string $scopeType
-     * @return bool
-     */
-    public function isMapiActive(
-        ?string $scopeCode,
-        string $scopeType = ScopeInterface::SCOPE_STORES
-    ): bool {
-        return $this->getFlow(
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
-        ) === self::API_FLOW_OPTION_MAPI;
-    }
-
-    /**
      * Check whether to round tax values (required for complex setups).
      *
      * @param string|null $scopeCode
@@ -307,7 +281,7 @@ class Config extends AbstractConfig
             'auto_sync_data',
             $scopeCode,
             $scopeType
-        ) && !$this->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType);
+        );
     }
 
     /**

@@ -14,8 +14,6 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order\Payment;
-use Resursbank\Core\Gateway\Command\Authorize\Mapi;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Throwable;
 
@@ -26,13 +24,9 @@ class Authorize implements CommandInterface
 {
     /**
      * @param Log $log
-     * @param Mapi $mapi
-     * @param Config $config
      */
     public function __construct(
-        private readonly Log $log,
-        private readonly Mapi $mapi,
-        private readonly Config $config
+        private readonly Log $log
     ) {
     }
 
@@ -52,15 +46,6 @@ class Authorize implements CommandInterface
         try {
             $data = SubjectReader::readPayment(subject: $commandSubject);
             $payment = $data->getPayment();
-
-            if ($payment instanceof Payment) {
-                $store = $payment->getOrder()->getStore()->getCode();
-
-                if ($this->config->isMapiActive(scopeCode: $store)) {
-                    $this->mapi->createPayment(payment: $payment, store: $store);
-                    return null;
-                }
-            }
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
 

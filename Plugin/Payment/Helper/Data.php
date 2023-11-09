@@ -15,11 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Store\Model\StoreManager;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
@@ -37,18 +34,12 @@ class Data
      * @param Log $log
      * @param MethodFactory $methodFactory
      * @param Repository $repository
-     * @param StoreManager $storeManager
-     * @param Config $config
-     * @param Ecom $ecom
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
         private readonly Log $log,
         private readonly MethodFactory $methodFactory,
-        private readonly Repository $repository,
-        private readonly StoreManager $storeManager,
-        private readonly Config $config,
-        private readonly Ecom $ecom
+        private readonly Repository $repository
     ) {
     }
 
@@ -243,15 +234,7 @@ class Data
         }
 
         try {
-            $code = $this->storeManager->getStore()->getCode();
-
-            if ($this->config->isMapiActive(scopeCode: $code)) {
-                $this->methodList = $this->ecom->getMapiMethods(
-                    storeId: $this->config->getStore(scopeCode: $code)
-                );
-            } else {
-                $this->methodList = $this->paymentMethods->getActiveMethods();
-            }
+            $this->methodList = $this->paymentMethods->getActiveMethods();
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
         }

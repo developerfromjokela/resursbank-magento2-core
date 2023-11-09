@@ -23,11 +23,6 @@ use Resursbank\Core\Api\LogInterface;
 use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
-use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Ecom;
-use Resursbank\Ecom\Module\PaymentMethod\Widget\ReadMore as ReadMoreWidget;
-use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomPaymentMethodRepository;
-use Throwable;
 
 class ReadMore implements HttpGetActionInterface
 {
@@ -39,8 +34,6 @@ class ReadMore implements HttpGetActionInterface
      * @param Api $api
      * @param Credentials $credentials
      * @param StoreManagerInterface $storeManager
-     * @param Ecom $ecomHelper
-     * @param Config $config
      */
     public function __construct(
         protected LogInterface $log,
@@ -50,8 +43,6 @@ class ReadMore implements HttpGetActionInterface
         protected readonly Api $api,
         protected readonly Credentials $credentials,
         protected readonly StoreManagerInterface $storeManager,
-        protected readonly Ecom $ecomHelper,
-        protected readonly Config $config
     ) {
     }
 
@@ -94,13 +85,6 @@ class ReadMore implements HttpGetActionInterface
      */
     private function getHtml(): string
     {
-        if ($this->config->isMapiActive(
-            scopeCode: $this->storeManager->getStore()->getCode(),
-            scopeType: ScopeInterface::SCOPE_STORES
-        )) {
-            return $this->getMapiHtml();
-        }
-
         $store = $this->storeManager->getStore();
         $credentials = $this->credentials->resolveFromConfig(
             $store->getCode(),
@@ -115,37 +99,6 @@ class ReadMore implements HttpGetActionInterface
             false,
             true
         );
-    }
-
-    /**
-     * Render part payment information from MAPI.
-     *
-     * @return string
-     */
-    private function getMapiHtml(): string
-    {
-        try {
-            $paymentMethod = $this->getMethod();
-            $methodCode = $this->ecomHelper->mapiUuidFromCode(code: $paymentMethod->getCode());
-            $mapiMethod = EcomPaymentMethodRepository::getById(
-                storeId: $this->config->getStore(
-                    scopeCode: $this->storeManager->getStore()->getCode(),
-                    scopeType: ScopeInterface::SCOPE_STORES
-                ),
-                paymentMethodId: $methodCode
-            );
-            $widget = new ReadMoreWidget(
-                paymentMethod: $mapiMethod,
-                amount: $this->getPrice()
-            );
-
-            $result = '<iframe class="rb-rm-iframe" src="' . $widget->url . $this->getPrice() . '"></iframe>';
-        } catch (Throwable $error) {
-            $this->log->exception(error: $error);
-            $result = __('rb-unknown-error')->render();
-        }
-
-        return $result;
     }
 
     /**

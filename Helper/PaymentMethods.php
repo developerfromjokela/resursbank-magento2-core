@@ -5,6 +5,8 @@
  * See LICENSE for license details.
  */
 
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
 declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
@@ -12,14 +14,6 @@ namespace Resursbank\Core\Helper;
 use Exception;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Sales\Model\Order;
-use Resursbank\Core\Exception\InvalidDataException;
-use Resursbank\Core\Model\Payment\Resursbank;
-use Resursbank\Core\Model\PaymentMethod;
-use Resursbank\Ecom\Lib\Model\PaymentMethod as EcomPaymentMethod;
-use Resursbank\Ecom\Lib\Order\PaymentMethod\Type;
-use Resursbank\Ecom\Module\PaymentMethod\Repository as EcomRepository;
-use Throwable;
 use JsonException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -39,7 +33,6 @@ use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use stdClass;
 
 use function json_decode;
-use function strlen;
 use function str_starts_with;
 use function is_array;
 
@@ -57,8 +50,6 @@ class PaymentMethods extends AbstractHelper
      * @param Credentials $credentials
      * @param SearchCriteriaBuilder $searchBuilder
      * @param Log $log
-     * @param Config $config
-     * @param Ecom $mapi
      */
     public function __construct(
         Context $context,
@@ -68,9 +59,7 @@ class PaymentMethods extends AbstractHelper
         private readonly Repository $repository,
         private readonly Credentials $credentials,
         private readonly SearchCriteriaBuilder $searchBuilder,
-        private readonly Log $log,
-        private readonly Config $config,
-        private readonly Ecom $mapi
+        private readonly Log $log
     ) {
         parent::__construct(context: $context);
     }
@@ -88,7 +77,6 @@ class PaymentMethods extends AbstractHelper
      * @throws JsonException
      * @noinspection BadExceptionsProcessingInspection
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @noinspection PhpMultipleClassDeclarationsInspection
      */
     public function sync(
         CredentialsModel $credentials
@@ -123,7 +111,7 @@ class PaymentMethods extends AbstractHelper
                         $credentials
                     )
                 );
-            } catch (NoSuchEntityException $error) {
+            } catch (NoSuchEntityException) {
                 // NOTE: NoSuchEntityException is expected if the requested
                 // method does not exist within the database, which is why we
                 // just ignore it here and create a clean Method data model.
@@ -258,7 +246,7 @@ class PaymentMethods extends AbstractHelper
      * @throws IntegrationException
      */
     private function resolveMethodDataArray(
-        $data
+        mixed $data
     ): array {
         $result = $data;
 
@@ -382,7 +370,7 @@ class PaymentMethods extends AbstractHelper
      * @param OrderInterface $order
      * @return bool
      */
-    public function isResursBankOrder(OrderInterface $order)
+    public function isResursBankOrder(OrderInterface $order): bool
     {
         $payment = $order->getPayment();
 
@@ -404,12 +392,6 @@ class PaymentMethods extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ): array {
-        if ($this->config->isMapiActive(scopeCode: $scopeCode, scopeType: $scopeType)) {
-            return $this->mapi->getMapiMethods(
-                storeId: $this->config->getStore(scopeCode: $scopeCode, scopeType: $scopeType)
-            );
-        }
-
         $result = [];
 
         $credentials = $this->credentials->resolveFromConfig(

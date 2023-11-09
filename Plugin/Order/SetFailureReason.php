@@ -15,8 +15,6 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\View\Result\Page;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\Log;
-use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Scope;
 use Resursbank\Ecom\Module\Payment\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Throwable;
@@ -33,16 +31,12 @@ class SetFailureReason
      *
      * @param Log $log
      * @param Order $orderHelper
-     * @param Config $configHelper
-     * @param Scope $scope
      * @param OrderRepositoryInterface $orderRepo
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         private readonly Log $log,
         private readonly Order $orderHelper,
-        private readonly Config $configHelper,
-        private readonly Scope $scope,
         private readonly OrderRepositoryInterface $orderRepo,
     ) {
     }
@@ -59,13 +53,6 @@ class SetFailureReason
         $subject,
         $result
     ) {
-        if (!$this->configHelper->isMapiActive(
-            scopeCode: $this->scope->getId(),
-            scopeType: $this->scope->getType()
-        )) {
-            return $result;
-        }
-
         try {
             $order = $this->orderHelper->resolveOrderFromRequest();
             $payment = Repository::get(paymentId: $this->orderHelper->getPaymentId(order: $order));
