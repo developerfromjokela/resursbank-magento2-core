@@ -48,6 +48,22 @@ class UpdateBillingAddress
     }
 
     /**
+     * Whether to update billing address on order after purchase.
+     *
+     * This method is public, so we can override it from other modules.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    public function isEnabled(OrderInterface $order): bool
+    {
+        return (
+            $this->paymentMethods->isResursBankOrder(order: $order) &&
+            $this->order->getResursbankResult(order: $order) === null
+        );
+    }
+
+    /**
      * Perform billing address update.
      *
      * NOTE: Since this isn't a crucial operation we will log and ignore
@@ -85,20 +101,6 @@ class UpdateBillingAddress
         }
 
         return $result;
-    }
-
-    /**
-     * Check if this plugin is enabled.
-     *
-     * @param OrderInterface $order
-     * @return bool
-     */
-    private function isEnabled(OrderInterface $order): bool
-    {
-        return (
-            $this->paymentMethods->isResursBankOrder(order: $order) &&
-            $this->order->getResursbankResult(order: $order) === null
-        );
     }
 
     /**

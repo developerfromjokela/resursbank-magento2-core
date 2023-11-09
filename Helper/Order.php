@@ -207,7 +207,6 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order,
         bool $value
     ): OrderInterface {
-        /** @noinspection PhpUndefinedMethodInspection */
         /* Type-cast:ed twice because we need an integer typed as a string,
            otherwise the value won't be properly saved if it's 0|false */
         /** @phpstan-ignore-next-line Undefined method. */
