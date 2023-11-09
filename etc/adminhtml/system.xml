@@ -121,6 +121,30 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
+                    <field id="terms_url" type="text" sortOrder="9" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-terms-url</label>
+                        <comment>rb-terms-url-description</comment>
+                        <config_path>resursbank/api/terms_url</config_path>
+                        <depends>
+                            <field id="flow">rcoplus</field>
+                        </depends>
+                    </field>
+                    <field id="available_customer_types" type="select" sortOrder="10" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Available customer types</label>
+                        <source_model>Resursbank\Rcoplus\Model\Config\Source\CustomerType</source_model>
+                        <config_path>resursbank/advanced/available_customer_types</config_path>
+                        <depends>
+                            <field id="flow">rcoplus</field>
+                        </depends>
+                    </field>
+                    <field id="lookup_b2c_address" type="select" sortOrder="11" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Look up customer address</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/advanced/lookup_b2c_address</config_path>
+                        <depends>
+                            <field id="flow">rcoplus</field>
+                        </depends>
+                    </field>
                 </group>
                 <group id="advanced" sortOrder="98" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced Settings</label>
@@ -151,7 +175,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>resursbank/advanced/round_tax_percentage</config_path>
                         </field>
-
                     </group>
                 </group>
             </group>
