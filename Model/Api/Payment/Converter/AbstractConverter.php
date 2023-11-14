@@ -29,10 +29,10 @@ abstract class AbstractConverter implements ConverterInterface
      * @param DiscountItemFactory $discountItemFactory
      */
     public function __construct(
-        private readonly Log $log,
-        private readonly TaxItemResourceFactory $taxResourceFactory,
-        private readonly ShippingItemFactory $shippingItemFactory,
-        private readonly DiscountItemFactory $discountItemFactory
+        protected readonly Log $log,
+        protected readonly TaxItemResourceFactory $taxResourceFactory,
+        protected readonly ShippingItemFactory $shippingItemFactory,
+        protected readonly DiscountItemFactory $discountItemFactory
     ) {
     }
 

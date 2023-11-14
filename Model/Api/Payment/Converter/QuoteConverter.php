@@ -37,7 +37,7 @@ class QuoteConverter extends AbstractConverter
         TaxItemResourceFactory $taxResourceFactory,
         ShippingItemFactory $shippingItemFactory,
         DiscountItemFactory $discountItemFactory,
-        private readonly ProductItemFactory $productItemFactory
+        protected readonly ProductItemFactory $productItemFactory
     ) {
         parent::__construct(
             log: $log,
@@ -179,7 +179,7 @@ class QuoteConverter extends AbstractConverter
      * @param Item $product
      * @return bool
      */
-    private function hasConfigurableParent(
+    protected function hasConfigurableParent(
         Item $product
     ): bool {
         return (
