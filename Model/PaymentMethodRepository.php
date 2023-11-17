@@ -15,14 +15,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterfaceFactory;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
-use Resursbank\Core\Helper\Config;
-use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
 
@@ -37,19 +34,13 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @param PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
      * @param FilterProcessor $filterProcessor
-     * @param Config $config
-     * @param StoreManagerInterface $storeManager
-     * @param Ecom $ecom
      */
     public function __construct(
         private readonly ResourceModel $resourceModel,
         private readonly PaymentMethodInterfaceFactory $methodFactory,
         private readonly PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionFactory $collectionFactory,
-        private readonly FilterProcessor $filterProcessor,
-        private readonly Config $config,
-        private readonly StoreManagerInterface $storeManager,
-        private readonly Ecom $ecom
+        private readonly FilterProcessor $filterProcessor
     ) {
     }
 

@@ -192,6 +192,29 @@ class Data
     }
 
     /**
+     * Get list of payment methods.
+     *
+     * Store resolve method collection in a local variable to avoid expensive
+     * database transactions during the same request cycle.
+     *
+     * @return PaymentMethodInterface[]
+     */
+    public function getMethodList(): array
+    {
+        if ($this->methodList !== null) {
+            return $this->methodList;
+        }
+
+        try {
+            $this->methodList = $this->paymentMethods->getActiveMethods();
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        return $this->methodList;
+    }
+
+    /**
      * Get instance of payment method with specified code.
      *
      * Generate instance of our payment method model and apply the code of the
@@ -217,28 +240,5 @@ class Data
         }
 
         return $method;
-    }
-
-    /**
-     * Get list of payment methods.
-     *
-     * Store resolve method collection in a local variable to avoid expensive
-     * database transactions during the same request cycle.
-     *
-     * @return PaymentMethodInterface[]
-     */
-    private function getMethodList(): array
-    {
-        if ($this->methodList !== null) {
-            return $this->methodList;
-        }
-
-        try {
-            $this->methodList = $this->paymentMethods->getActiveMethods();
-        } catch (Throwable $error) {
-            $this->log->exception(error: $error);
-        }
-
-        return $this->methodList;
     }
 }
