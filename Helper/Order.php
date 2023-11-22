@@ -302,8 +302,25 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param string $paymentId
      * @return OrderInterface|null
      */
-    public function getOrderFromPaymentId(string $paymentId): ?OrderInterface
-    {
+    public function getOrderFromPaymentId(
+        string $paymentId
+    ): ?OrderInterface {
+        $entity = $this->getTransactionFromPaymentId(paymentId: $paymentId);
+
+        return !$entity instanceof TransactionInterface
+            ? null
+            : $this->orderRepo->get(id: $entity->getOrderId());
+    }
+
+    /**
+     * Resolve transaction from payment id.
+     *
+     * @param string $paymentId
+     * @return TransactionInterface|null
+     */
+    public function getTransactionFromPaymentId(
+        string $paymentId
+    ): ?TransactionInterface {
         $typeFilter = $this->filterBuilder
             ->setField(field: TransactionInterface::TXN_TYPE)
             ->setValue(value: TransactionInterface::TYPE_AUTH)
@@ -313,7 +330,7 @@ class Order extends AbstractHelper implements ArgumentInterface
             ->setValue(value: $paymentId)
             ->create();
 
-        $entity = current(
+        $transaction = current(
             array: $this->transactionRepository->getList(
                 searchCriteria: $this->searchCriteriaBuilder
                     ->addFilters(filter: [$typeFilter])
@@ -322,8 +339,6 @@ class Order extends AbstractHelper implements ArgumentInterface
             )->getItems()
         );
 
-        return !$entity instanceof TransactionInterface
-            ? null
-            : $this->orderRepo->get(id: $entity->getOrderId());
+        return $transaction instanceof TransactionInterface ? $transaction : null;
     }
 }
