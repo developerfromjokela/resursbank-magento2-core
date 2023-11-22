@@ -143,6 +143,20 @@ class Item
     private float $unitAmountWithoutVat = 0.0;
 
     /**
+     * URL to product image.
+     *
+     * @var string
+     */
+    private string $imageUrl = '';
+
+    /**
+     * URL to product page.
+     *
+     * @var string
+     */
+    private string $productUrl = '';
+
+    /**
      * Tax percentage.
      *
      * @var int
@@ -427,6 +441,26 @@ class Item
     public function getTotalAmountInclVat(): float
     {
         return $this->totalAmountInclVat;
+    }
+
+    /**
+     * Get image URL.
+     *
+     * @return string
+     */
+    public function getImageUrl(): string
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * Get product URL.
+     *
+     * @return string
+     */
+    public function getProductUrl(): string
+    {
+        return $this->productUrl;
     }
 
     /**
