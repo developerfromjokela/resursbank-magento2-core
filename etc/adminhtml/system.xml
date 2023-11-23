@@ -96,7 +96,8 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                    <field id="sync" type="button" sortOrder="5" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <!-- Increase sort order to make room for settings from submodules. -->
+                    <field id="sync" type="button" sortOrder="50" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
                         <comment>Sync payment methods and other data from Resurs Bank for all API accounts in all store views.</comment>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Sync</frontend_model>
@@ -105,7 +106,7 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                    <field id="auto_sync_data" type="select" sortOrder="7" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <field id="auto_sync_data" type="select" sortOrder="51" translate="label" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Automatically sync data</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>resursbank/api/auto_sync_data</config_path>
@@ -113,7 +114,8 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
-                    <field id="listing" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <!-- Increase sort order to make room for settings from submodules. -->
+                    <field id="listing" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Methods</label>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing</frontend_model>
                         <config_path>resursbank/methods/listing</config_path>
@@ -124,35 +126,31 @@
                 </group>
                 <group id="advanced" sortOrder="98" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced Settings</label>
-                    <group id="general" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>General</label>
-                        <field id="logging" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
-                            <label>rb-logging</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>resursbank/logging/enabled</config_path>
-                        </field>
-                        <field id="log_level" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>rb-log-level</label>
-                            <source_model>Resursbank\Core\Model\Config\Source\LogLevel</source_model>
-                            <config_path>resursbank/advanced/log_level</config_path>
-                            <depends>
-                                <field id="logging">1</field>
-                            </depends>
-                        </field>
-                        <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Delete aborted orders</label>
-                            <comment>Delete order when payment is aborted, to avoid orders with pending payment.</comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
-                        </field>
-                        <field id="round_tax_percentage" type="select" sortOrder="3" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Round item tax</label>
-                            <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>resursbank/advanced/round_tax_percentage</config_path>
-                        </field>
-
-                    </group>
+                    <field id="logging" type="select" sortOrder="0" translate="label, comment" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>rb-logging</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/logging/enabled</config_path>
+                    </field>
+                    <field id="log_level" type="select" sortOrder="1" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-log-level</label>
+                        <source_model>Resursbank\Core\Model\Config\Source\LogLevel</source_model>
+                        <config_path>resursbank/advanced/log_level</config_path>
+                        <depends>
+                            <field id="logging">1</field>
+                        </depends>
+                    </field>
+                    <field id="reuse_erroneously_created_orders" type="select" sortOrder="2" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Delete aborted orders</label>
+                        <comment>Delete order when payment is aborted, to avoid orders with pending payment.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/advanced/reuse_erroneously_created_orders</config_path>
+                    </field>
+                    <field id="round_tax_percentage" type="select" sortOrder="3" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Round item tax</label>
+                        <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/advanced/round_tax_percentage</config_path>
+                    </field>
                 </group>
             </group>
         </section>
