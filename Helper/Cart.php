@@ -14,6 +14,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderInterface;
 
@@ -62,13 +63,18 @@ class Cart extends AbstractHelper implements ArgumentInterface
      * @throws NoSuchEntityException
      */
     public function rebuildCart(
-        OrderInterface $order
+        OrderInterface $order,
+        bool $releaseReservedOrderId = false
     ): bool {
         $quote = $this->quoteRepo->get((int) $order->getQuoteId());
         $result = false;
 
         if ($quote instanceof Quote) {
             $quote->setIsActive(true);
+
+            if ($releaseReservedOrderId) {
+                $quote->unsetData(key: CartInterface::KEY_RESERVED_ORDER_ID);
+            }
 
             $this->checkoutSession->replaceQuote($quote);
             $this->quoteRepo->save($quote);
