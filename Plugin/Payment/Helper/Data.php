@@ -16,6 +16,7 @@ use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
+use Resursbank\Core\Gateway\ValueHandler\Title;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
@@ -127,15 +128,21 @@ class Data
                     if ($asLabelValue && $withGroups) {
                         $result['resursbank']['value'][$code] = [
                             'value' => $code,
-                            'label' => $method->getTitle('Resurs Bank')
+                            'label' => $method->getTitle(
+                                default: Title::DEFAULT_TITLE
+                            )
                         ];
                     } elseif ($asLabelValue) {
                         $result[$code] = [
                             'value' => $code,
-                            'label' => $method->getTitle('Resurs Bank')
+                            'label' => $method->getTitle(
+                                default: Title::DEFAULT_TITLE
+                            )
                         ];
                     } elseif (!$withGroups) {
-                        $result[$code] = $method->getTitle('Resurs Bank');
+                        $result[$code] = $method->getTitle(
+                            default: Title::DEFAULT_TITLE
+                        );
                     }
                 }
             }
