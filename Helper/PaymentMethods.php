@@ -197,6 +197,10 @@ class PaymentMethods extends AbstractHelper
     /**
      * Retrieve collection of all active methods tracked in our db.
      *
+     * NOTE: Not intended for frontend usage. Plugins from submodules will
+     * assume this is only called in backed and append payment methods using
+     * scope extracted from $_REQUEST instead of using StoreManagerInterface.
+     *
      * @return PaymentMethodInterface[]
      */
     public function getActiveMethods(): array
