@@ -10,7 +10,11 @@
 
     <!-- Module initialization -->
     <type name="Magento\Framework\AppInterface">
-        <plugin name="ResursbankCoreInit" type="Resursbank\Core\Plugin\Init" disabled="false" sortOrder="1" />
+        <plugin name="ResursbankCoreInit"
+                type="Resursbank\Core\Plugin\Init"
+                disabled="false"
+                sortOrder="1"
+        />
     </type>
 
     <!-- Translation handling -->
