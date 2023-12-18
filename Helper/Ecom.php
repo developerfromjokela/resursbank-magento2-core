@@ -17,6 +17,9 @@ use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
@@ -79,40 +82,41 @@ class Ecom extends AbstractHelper
      *
      * @param Jwt|null $jwtAuth
      * @param Environment|null $env
+     * @param string|null $scopeType
+     * @param string|null $scopeCode
      * @return void
      */
     public function connect(
         ?Jwt $jwtAuth = null,
-        ?Environment $env = null
+        ?Environment $env = null,
+        ?string $scopeCode = null,
+        ?string $scopeType = null
     ): void {
         try {
+            $scopeType = $scopeType ?? $this->scope->getType();
+            $scopeCode = $scopeCode ?? $this->scope->getId();
+
             if ($env === null) {
                 $env = $this->config->getApiEnvironment(
-                    scopeCode: $this->scope->getId(),
-                    scopeType: $this->scope->getType()
+                    scopeCode: $scopeCode,
+                    scopeType: $scopeType
                 );
             }
 
-            $un = $this->config->getClientId(
-                scopeCode: $this->scope->getId(),
-                scopeType: $this->scope->getType()
+            $clientId = $this->config->getClientId(
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
             );
 
-            $pw = $this->config->getClientSecret(
-                scopeCode: $this->scope->getId(),
-                scopeType: $this->scope->getType()
+            $clientSecret = $this->config->getClientSecret(
+                scopeCode: $scopeCode,
+                scopeType: $scopeType
             );
 
-            if ($jwtAuth === null && $un !== '' && $pw !== '') {
+            if ($jwtAuth === null && $clientId !== '' && $clientSecret !== '') {
                 $jwtAuth = new Jwt(
-                    clientId: $this->config->getClientId(
-                        scopeCode: $this->scope->getId(),
-                        scopeType: $this->scope->getType()
-                    ),
-                    clientSecret: $this->config->getClientSecret(
-                        scopeCode: $this->scope->getId(),
-                        scopeType: $this->scope->getType()
-                    ),
+                    clientId: $clientId,
+                    clientSecret: $clientSecret,
                     scope: $this->getScope(environment: $env),
                     grantType: GrantType::CREDENTIALS,
                 );
@@ -129,8 +133,8 @@ class Ecom extends AbstractHelper
                 cache: $this->getCache(),
                 jwtAuth: $jwtAuth,
                 logLevel: $this->config->getLogLevel(
-                    scopeCode: $this->scope->getId(),
-                    scopeType: $this->scope->getType()
+                    scopeCode: $scopeCode,
+                    scopeType: $scopeType
                 ),
                 userAgent: $this->getUserAgent(),
                 isProduction: $env === Environment::PROD,
@@ -286,5 +290,26 @@ class Ecom extends AbstractHelper
         } catch (Throwable) {
             return '';
         }
+    }
+
+    /**
+     * Configure Ecom to utilise API account associated with supplied entity.
+     *
+     * Since the original connect() method above will execute early in the
+     * request cycle it will use credentials from the Default config scope. When
+     * viewing/manipulating the payment through the admin panel, we need to
+     * re-configure Ecom to use the API account associated with the order
+     * instead, to support setups using multiple accounts.
+     *
+     * @param OrderInterface|Invoice|Creditmemo $entity
+     * @return void
+     */
+    public function connectAftershop(
+        OrderInterface|Invoice|Creditmemo $entity
+    ): void {
+        $this->connect(
+            scopeCode: $entity->getStore()->getCode(),
+            scopeType: ScopeInterface::SCOPE_STORES
+        );
     }
 }

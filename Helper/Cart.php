@@ -59,6 +59,7 @@ class Cart extends AbstractHelper implements ArgumentInterface
      * Rebuilds the cart from an order.
      *
      * @param OrderInterface $order
+     * @param bool $releaseReservedOrderId
      * @return bool
      * @throws NoSuchEntityException
      */
