@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Magento\Backend\App\Router;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
@@ -19,21 +21,133 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Extract specified scope type and id from request or StoreManagerInterface,
  * depending whether you are on frontend or backend.
+ *
+ * You will notice we intentionally avoid using DI, this is to ensure
+ * compatibility with future Magento releases which may alter the DI of the
+ * Router class which we are forced to extend. We are forced to extend it
+ * because we need access to the parseRequest method in order to resolve
+ * request parameters in the expected way (taking such things are URL rewrites
+ * into account).
  */
-class Scope
+class Scope extends Router
 {
-    private ?array $params = null;
+    /**
+     * @var StoreManagerInterface|null
+     */
+    private ?StoreManagerInterface $storeManager = null;
 
     /**
-     * @param RequestHttp $request
-     * @param StoreManagerInterface $storeManager
-     * @param AreaList $areaList
+     * @var RequestInterface|null
      */
-    public function __construct(
-        private readonly RequestHttp $request,
-        private readonly StoreManagerInterface $storeManager,
-        private readonly AreaList $areaList
-    ) {
+    private ?RequestInterface $request = null;
+
+    /**
+     * @var AreaList|null
+     */
+    private ?AreaList $areaList = null;
+
+    /**
+     * @var array|null
+     */
+    private ?array $parameters = null;
+
+    /**
+     * Resolve ObjectManager instance.
+     *
+     * We intentionally avoid DI, see class comment.
+     *
+     * @return ObjectManager
+     */
+    private function getObjectManager(): ObjectManager
+    {
+        return ObjectManager::getInstance();
+    }
+
+    /**
+     * Resolve store manager object.
+     *
+     * We intentionally avoid DI, see class comment.
+     *
+     * @return StoreManagerInterface
+     */
+    public function getStoreManager(): StoreManagerInterface
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager = $this->getObjectManager()->create(
+                type: StoreManagerInterface::class
+            );
+        }
+
+        return $this->storeManager;
+    }
+
+    /**
+     * Resolve HTTP request object.
+     *
+     * We intentionally avoid DI, see class comment.
+     *
+     * @return RequestInterface
+     */
+    public function getRequest(): RequestInterface
+    {
+        if ($this->request === null) {
+            $this->request = $this->getObjectManager()->create(
+                type: RequestInterface::class
+            );
+        }
+
+        return $this->request;
+    }
+
+    /**
+     * Resolve area list.
+     *
+     *  We intentionally avoid DI, see class comment.
+     *
+     * @return AreaList
+     */
+    public function getAreaList(): AreaList
+    {
+        if ($this->areaList === null) {
+            $this->areaList = $this->getObjectManager()->create(
+                type: AreaList::class
+            );
+        }
+
+        return $this->areaList;
+    }
+
+    /**
+     * Resolve parameters from request and store in $this->>parameters
+     *
+     * @return array
+     */
+    private function getParameters(): array
+    {
+        if ($this->parameters === null) {
+            $data = $this->parseRequest(request: $this->getRequest());
+
+            $this->parameters =
+                (
+                    isset($data['variables']) &&
+                    is_array($data['variables'])
+                ) ? $data['variables'] : [];
+        }
+
+        return $this->parameters;
+    }
+
+    /**
+     * Resolve specific request parameter value.
+     *
+     * @param string $key
+     * @return string|null
+     */
+    private function getParam(string $key): ?string
+    {
+        $data = $this->getParameters();
+
+        return isset($data[$key]) ? (string) $data[$key] : null;
     }
 
     /**
@@ -88,7 +202,7 @@ class Scope
         ?string $type = null
     ): ?string {
         if ($this->isFrontend()) {
-            return $this->storeManager->getStore()->getCode();
+            return $this->getStoreManager()->getStore()->getCode();
         }
 
         $type = $type ?? $this->getTypeParam();
@@ -101,60 +215,15 @@ class Scope
     }
 
     /**
-     * Resolve parameter from request URI.
-     *
-     * ECom initiates before Magento has parsed request parameters from the URI.
-     * ECom cannot initiate later because the cache kicks in. The method which
-     * parses the request (\Magento\Framework\App\Router\Base::parseRequest) is
-     * protected, so we cannot use it.
-     *
-     * This code should only be executed on the backend where an Order related
-     * entity is not available to collect store information from.
-     *
-     * @param string $key
-     * @return string|null
-     */
-    private function getParam(string $key): ?string
-    {
-        if ($this->params === null) {
-            $request = (string) $this->request->getRequestUri();
-
-            if (str_starts_with(haystack: $request, needle: '/')) {
-                $request = substr(string: $request, offset: 1);
-            }
-
-            if (str_ends_with(haystack: $request, needle: '/')) {
-                $request = substr(
-                    string: $request,
-                    offset: 0,
-                    length: strlen(string: $request)-1
-                );
-            }
-
-            $data = explode(separator: '/', string: $request);
-
-            if (!empty($data)) {
-                $chunks = array_chunk(array: $data, length: 2);
-
-                $this->params = array_combine(
-                    keys: array_column(array: $chunks, column_key: 0),
-                    values: array_column(array: $chunks, column_key: 1)
-                );
-            }
-        }
-
-        return isset($this->params[$key]) ? (string) $this->params[$key] : null;
-    }
-
-    /**
      * Check if we are on frontend.
      *
      * @return bool
      */
     private function isFrontend(): bool
     {
-        return $this->areaList->getCodeByFrontName(
-            $this->request->getFrontName()
-        ) === 'frontend';
+        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
+        return $this->getAreaList()->getCodeByFrontName(
+                $this->getRequest()->getFrontName()
+            ) === 'frontend';
     }
 }
