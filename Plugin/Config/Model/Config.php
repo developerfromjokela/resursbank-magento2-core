@@ -49,8 +49,8 @@ class Config
 
         if (is_array(value: $cleanOrdersFrequency) &&
             is_array(value: $cleanOrdersTime) &&
-            $cleanOrdersFrequency['value'] !== null &&
-            is_array(value: $cleanOrdersTime['value'])
+            is_array(value: $cleanOrdersTime['value']) &&
+            isset($cleanOrdersFrequency['value'], $cleanOrdersTime['value'])
         ) {
             $frequency = $cleanOrdersFrequency['value'];
             $time = $cleanOrdersTime['value'];
