@@ -331,6 +331,46 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Check if clean orders cron job is enabled.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function getCleanOrders(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): bool {
+        return $this->isEnabled(
+            self::ADVANCED_GROUP,
+            'clean_orders_frequency',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * Get minimum order age setting for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return int
+     */
+    public function getCleanOrdersMinimumAge(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): int {
+        $time = $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_minimum_age',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+
+        return $time * 3600;
+    }
+
+    /**
      * Fetch configured store id.
      *
      * @param string|null $scopeCode
