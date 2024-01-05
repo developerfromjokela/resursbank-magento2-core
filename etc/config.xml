@@ -45,6 +45,7 @@
             </api>
             <advanced>
                 <log_level>1</log_level>
+                <clean_orders>0</clean_orders>
             </advanced>
         </resursbank>
     </default>
