@@ -224,6 +224,6 @@ class Scope extends Router
         /** @noinspection PhpPossiblePolymorphicInvocationInspection */
         return $this->getAreaList()->getCodeByFrontName(
                 $this->getRequest()->getFrontName()
-            ) === 'frontend';
+            ) !== 'adminhtml';
     }
 }
