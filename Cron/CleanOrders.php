@@ -15,6 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Order;
 use Throwable;
+use function is_string;
 
 /**
  * Cleans up stale order with the state pending_payment.
@@ -84,11 +85,13 @@ class CleanOrders
                 /** @var Order $order */
                 foreach ($orders as $order) {
                     try {
-                        $this->orderHelper->cancelOrder(order: $order);
-                        $this->log->info(
-                            text: 'Successfully canceled stale pending order ' .
-                            $order->getIncrementId() . '.'
-                        );
+                        if ($this->isResursOrder(order: $order)) {
+                            $this->orderHelper->cancelOrder(order: $order);
+                            $this->log->info(
+                                text: 'Successfully canceled stale pending order ' .
+                                $order->getIncrementId() . '.'
+                            );
+                        }
                     } catch (Throwable $error) {
                         $this->log->error(
                             text: 'Automated cancel of stale pending order ' .
@@ -101,5 +104,28 @@ class CleanOrders
         }
 
         $this->log->info(text: 'Clean orders cron job run finished.');
+    }
+
+    /**
+     * Check if order is using a Resurs payment method.
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function isResursOrder(Order $order): bool
+    {
+        $payment = $order->getPayment();
+        $method = $payment->getMethod();
+
+        if (is_string(value: $method) &&
+            str_starts_with(
+                haystack: $method,
+                needle: 'resursbank_'
+            )
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
