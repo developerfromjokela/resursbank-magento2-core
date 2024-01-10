@@ -11,6 +11,7 @@ namespace Resursbank\Core\Cron;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order as OrderHelper;
+use Resursbank\Core\Helper\PaymentMethods as PaymentHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Order;
@@ -28,13 +29,15 @@ class CleanOrders
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $orderCollectionFactory
      * @param OrderHelper $orderHelper
+     * @param PaymentHelper $paymentHelper
      */
     public function __construct(
         private readonly Log $log,
         private readonly Config $config,
         private readonly StoreManagerInterface $storeManager,
         private readonly CollectionFactory $orderCollectionFactory,
-        private readonly OrderHelper $orderHelper
+        private readonly OrderHelper $orderHelper,
+        private readonly PaymentHelper $paymentHelper
     ) {
     }
 
@@ -85,7 +88,7 @@ class CleanOrders
                 /** @var Order $order */
                 foreach ($orders as $order) {
                     try {
-                        if ($this->isResursOrder(order: $order)) {
+                        if ($this->paymentHelper->isResursBankOrder(order: $order)) {
                             $this->orderHelper->cancelOrder(order: $order);
                             $this->log->info(
                                 text: 'Successfully canceled stale pending order ' .
@@ -104,28 +107,5 @@ class CleanOrders
         }
 
         $this->log->info(text: 'Clean orders cron job run finished.');
-    }
-
-    /**
-     * Check if order is using a Resurs payment method.
-     *
-     * @param Order $order
-     * @return bool
-     */
-    private function isResursOrder(Order $order): bool
-    {
-        $payment = $order->getPayment();
-        $method = $payment->getMethod();
-
-        if (is_string(value: $method) &&
-            str_starts_with(
-                haystack: $method,
-                needle: 'resursbank_'
-            )
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }
