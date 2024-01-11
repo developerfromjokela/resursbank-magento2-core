@@ -11,10 +11,12 @@ namespace Resursbank\Core\Cron;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order as OrderHelper;
+use Resursbank\Core\Helper\PaymentMethods as PaymentHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Order;
 use Throwable;
+use function is_string;
 
 /**
  * Cleans up stale order with the state pending_payment.
@@ -27,13 +29,15 @@ class CleanOrders
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $orderCollectionFactory
      * @param OrderHelper $orderHelper
+     * @param PaymentHelper $paymentHelper
      */
     public function __construct(
         private readonly Log $log,
         private readonly Config $config,
         private readonly StoreManagerInterface $storeManager,
         private readonly CollectionFactory $orderCollectionFactory,
-        private readonly OrderHelper $orderHelper
+        private readonly OrderHelper $orderHelper,
+        private readonly PaymentHelper $paymentHelper
     ) {
     }
 
@@ -84,11 +88,13 @@ class CleanOrders
                 /** @var Order $order */
                 foreach ($orders as $order) {
                     try {
-                        $this->orderHelper->cancelOrder(order: $order);
-                        $this->log->info(
-                            text: 'Successfully canceled stale pending order ' .
-                            $order->getIncrementId() . '.'
-                        );
+                        if ($this->paymentHelper->isResursBankOrder(order: $order)) {
+                            $this->orderHelper->cancelOrder(order: $order);
+                            $this->log->info(
+                                text: 'Successfully canceled stale pending order ' .
+                                $order->getIncrementId() . '.'
+                            );
+                        }
                     } catch (Throwable $error) {
                         $this->log->error(
                             text: 'Automated cancel of stale pending order ' .
