@@ -48,7 +48,7 @@ class CleanOrders
      */
     public function execute(): void
     {
-        $this->log->error(text: 'Clean orders cron job running!');
+        $this->log->info(text: 'Clean orders cron job running!');
 
         $stores = $this->storeManager->getStores();
 
