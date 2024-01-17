@@ -42,6 +42,7 @@
         <resursbank>
             <api>
                 <environment>1</environment>
+                <clean_orders>0</clean_orders>
             </api>
         </resursbank>
     </default>

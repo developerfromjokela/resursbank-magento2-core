@@ -176,4 +176,12 @@
             name="resursbank_core_set_initial_order_state_status"
             type="Resursbank\Core\Plugin\Order\SetInitialStateStatus" />
     </type>
+
+    <!-- Update clean orders frequency -->
+    <type name="Magento\Config\Model\Config">
+        <plugin
+            name="resursbank_core_set_clean_orders_interval"
+            type="Resursbank\Core\Plugin\Config\Model\Config"
+        />
+    </type>
 </config>
