@@ -53,7 +53,7 @@ class CleanOrders
         $stores = $this->storeManager->getStores();
 
         foreach ($stores as $store) {
-            if ($this->config->getCleanOrders(scopeCode: $store->getCode())) {
+            if ($this->config->isCleanOrdersEnabled(scopeCode: $store->getCode())) {
                 $this->log->info(
                     text: 'Looking for stale pending orders on store ' .
                     $store->getName()

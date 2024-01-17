@@ -227,7 +227,7 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return bool
      */
-    public function getCleanOrders(
+    public function isCleanOrdersEnabled(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
@@ -258,5 +258,48 @@ class Config extends AbstractConfig
         );
 
         return $time * 3600;
+    }
+
+    /**
+     * Get raw configured frequency for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getCleanOrdersFrequency(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        return $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_frequency',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
+
+    /**
+     * Get raw configured time for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return array
+     */
+    public function getCleanOrdersTime(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): array {
+        $frequency = $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_time',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+
+        return explode(
+            separator: ',',
+            string: $frequency
+        );
     }
 }

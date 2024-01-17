@@ -11,7 +11,7 @@ namespace Resursbank\Core\Plugin\Config\Model;
 use Magento\Config\Model\Config as ConfigModel;
 use Magento\Cron\Model\Config\Source\Frequency as CronFrequency;
 use Magento\Config\Model\ResourceModel\Config as ConfigResourceModel;
-use function is_array;
+use Resursbank\Core\Helper\Config as ConfigHelper;
 
 /**
  * Generates the cron schedule for the clean orders job.
@@ -23,9 +23,11 @@ class Config
 
     /**
      * @param ConfigResourceModel $configResourceModel
+     * @param ConfigHelper $configHelper
      */
     public function __construct(
-        private readonly ConfigResourceModel $configResourceModel
+        private readonly ConfigResourceModel $configResourceModel,
+        private readonly ConfigHelper $configHelper
     ) {
     }
 
@@ -38,23 +40,20 @@ class Config
     public function afterSave(ConfigModel $subject): ConfigModel
     {
         $scopeType = $subject->getScope();
+        $scopeCode = $subject->getScopeCode();
         $scopeId = $subject->getScopeId();
 
-        $cleanOrdersFrequency = $subject->getDataByPath(
-            path: 'groups/resursbank_section/groups/advanced/fields/clean_orders_frequency'
+        $frequency = $this->configHelper->getCleanOrdersFrequency(
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
         );
-        $cleanOrdersTime = $subject->getDataByPath(
-            path: 'groups/resursbank_section/groups/advanced/fields/clean_orders_time'
+        $time = $this->configHelper->getCleanOrdersTime(
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
         );
 
-        if (is_array(value: $cleanOrdersFrequency) &&
-            is_array(value: $cleanOrdersTime) &&
-            is_array(value: $cleanOrdersTime['value']) &&
-            isset($cleanOrdersFrequency['value'], $cleanOrdersTime['value'])
-        ) {
-            $frequency = $cleanOrdersFrequency['value'];
-            $time = $cleanOrdersTime['value'];
-
+        if (!empty($time) &&
+            !empty($frequency)) {
             // phpcs:ignore
             $cronExpression = implode(separator: ' ', array: [
                 (int)$time[1],
