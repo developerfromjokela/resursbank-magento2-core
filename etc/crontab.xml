@@ -10,5 +10,8 @@
         <job name="resursbank_core_sync_data" instance="Resursbank\Core\Cron\SyncData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
+        <job name="resursbank_core_clean_orders" instance="Resursbank\Core\Cron\CleanOrders" method="execute">
+            <config_path>crontab/default/jobs/resursbank_core_clean_orders/schedule/cron_expr</config_path>
+        </job>
     </group>
 </config>

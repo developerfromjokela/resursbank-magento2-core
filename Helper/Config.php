@@ -219,4 +219,87 @@ class Config extends AbstractConfig
             $scopeType
         );
     }
+
+    /**
+     * Check if clean orders cron job is enabled.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isCleanOrdersEnabled(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): bool {
+        return $this->isEnabled(
+            self::ADVANCED_GROUP,
+            'clean_orders_frequency',
+            $scopeCode,
+            $scopeType
+        );
+    }
+
+    /**
+     * Get minimum order age setting for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return int
+     */
+    public function getCleanOrdersMinimumAge(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): int {
+        $time = $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_minimum_age',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+
+        return $time * 3600;
+    }
+
+    /**
+     * Get raw configured frequency for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getCleanOrdersFrequency(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        return $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_frequency',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
+
+    /**
+     * Get raw configured time for clean orders job.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return array
+     */
+    public function getCleanOrdersTime(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): array {
+        $frequency = $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'clean_orders_time',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+
+        return explode(
+            separator: ',',
+            string: $frequency
+        );
+    }
 }
