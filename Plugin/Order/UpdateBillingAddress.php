@@ -20,6 +20,7 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Model\Api\Payment as PaymentModel;
+use Resursbank\Core\ViewModel\Session\Checkout;
 use Throwable;
 
 /**
@@ -37,13 +38,15 @@ class UpdateBillingAddress
      * @param Order $order
      * @param Api $api
      * @param PaymentMethods $paymentMethods
+     * @param Checkout $checkout
      */
     public function __construct(
         private readonly Log $log,
         private readonly AddressRepository $addressRepository,
         private readonly Order $order,
         private readonly Api $api,
-        private readonly PaymentMethods $paymentMethods
+        private readonly PaymentMethods $paymentMethods,
+        private readonly Checkout $checkout
     ) {
     }
 
@@ -81,7 +84,9 @@ class UpdateBillingAddress
     ): ResultInterface {
         /** @noinspection BadExceptionsProcessingInspection */
         try {
-            $order = $this->order->resolveOrderFromRequest();
+            $order = $this->order->resolveOrderFromRequest(
+                lastRealOrder: $this->checkout->getLastRealOrder()
+            );
 
             if ($this->isEnabled(order: $order)) {
                 $paymentData = $this->api->getPayment(order: $order);

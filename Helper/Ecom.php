@@ -35,6 +35,8 @@ use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Module\Payment\Repository;
+use Resursbank\Ecom\Module\PaymentHistory\DataHandler\DataHandlerInterface;
+use Resursbank\Ecom\Module\PaymentHistory\DataHandler\VoidDataHandler;
 use Throwable;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -132,6 +134,7 @@ class Ecom extends AbstractHelper
                 logger: $this->getLogger(),
                 cache: $this->getCache(),
                 jwtAuth: $jwtAuth,
+                paymentHistoryDataHandler: $this->getPaymentHistoryDataHandler(),
                 logLevel: $this->config->getLogLevel(
                     scopeCode: $scopeCode,
                     scopeType: $scopeType
@@ -143,6 +146,16 @@ class Ecom extends AbstractHelper
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
         }
+    }
+
+    /**
+     * Place-holder for plugins in separate modules.
+     *
+     * @return DataHandlerInterface
+     */
+    public function getPaymentHistoryDataHandler(): DataHandlerInterface
+    {
+        return new VoidDataHandler();
     }
 
     /**

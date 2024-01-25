@@ -87,7 +87,9 @@ class RestoreSession implements ArgumentInterface
     {
         try {
             if (!$this->successValidator->isValid()) {
-                $order = $this->order->resolveOrderFromRequest();
+                $order = $this->order->resolveOrderFromRequest(
+                    lastRealOrder: $this->session->getLastRealOrder()
+                );
 
                 if ($this->isEnabled($order)) {
                     $quoteId = $order->getQuoteId();

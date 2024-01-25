@@ -23,7 +23,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
-use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
 use function is_string;
 
 /**
@@ -54,7 +53,6 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param SearchCriteriaBuilder $searchBuilder
      * @param OrderRepositoryInterface $orderRepo
      * @param RequestInterface $request
-     * @param CheckoutSession $checkoutSession
      * @param OrderManagementInterface $orderManagement
      * @param Log $log
      * @param Repository $transaction
@@ -67,7 +65,6 @@ class Order extends AbstractHelper implements ArgumentInterface
         private readonly SearchCriteriaBuilder $searchBuilder,
         private readonly OrderRepositoryInterface $orderRepo,
         private readonly RequestInterface $request,
-        private readonly CheckoutSession $checkoutSession,
         private readonly OrderManagementInterface $orderManagement,
         private readonly Log $log,
         private readonly Repository $transaction,
@@ -241,15 +238,16 @@ class Order extends AbstractHelper implements ArgumentInterface
      *
      * This method exists in order to support intermediate browser change.
      *
+     * @param mixed $lastRealOrder
      * @return OrderInterface
      * @throws InvalidDataException
      */
-    public function resolveOrderFromRequest(): OrderInterface
-    {
+    public function resolveOrderFromRequest(
+        mixed $lastRealOrder
+    ): OrderInterface {
         $quoteId = $this->getQuoteId();
         $order = $quoteId !== 0 ?
-            $this->getOrderByQuoteId($quoteId) :
-            $this->checkoutSession->getLastRealOrder();
+            $this->getOrderByQuoteId($quoteId) : $lastRealOrder;
 
         if (!($order instanceof OrderInterface) ||
             (int) $order->getEntityId() === 0
