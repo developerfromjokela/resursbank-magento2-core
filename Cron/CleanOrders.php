@@ -76,8 +76,12 @@ class CleanOrders
                 $orders = $this->orderCollectionFactory->create()
                     ->addFieldToSelect(field: '*')
                     ->addFieldToFilter(
-                        field: 'state',
+                        field: 'status',
                         condition: Order::STATE_PENDING_PAYMENT
+                    )
+                    ->addFieldToFilter(
+                        field: 'store_id',
+                        condition: ['eq' => $store->getId()]
                     )
                     ->addFieldToFilter(
                         field: 'created_at',
