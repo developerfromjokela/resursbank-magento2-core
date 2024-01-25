@@ -114,7 +114,9 @@ class RebuildCart
         $result
     ) {
         try {
-            $order = $this->orderHelper->resolveOrderFromRequest();
+            $order = $this->orderHelper->resolveOrderFromRequest(
+                lastRealOrder: $this->checkoutSession->getLastRealOrder()
+            );
 
             if ($this->isEnabled($order)) {
                 // Cancel order since payment failed.
