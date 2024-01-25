@@ -80,6 +80,10 @@ class CleanOrders
                         condition: Order::STATE_PENDING_PAYMENT
                     )
                     ->addFieldToFilter(
+                        field: 'store_id',
+                        condition: ['eq' => $store->getId()]
+                    )
+                    ->addFieldToFilter(
                         field: 'created_at',
                         condition: ['to' => date(
                             format: 'Y-m-d H:i:s',
