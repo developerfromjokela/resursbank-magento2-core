@@ -8,18 +8,26 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Cron;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
+use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Helper\Api as ApiHelper;
 use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\PaymentMethods as PaymentHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Order;
+use ResursException;
 use Throwable;
+use TorneLIB\Exception\ExceptionHandler;
 use function is_string;
 
 /**
  * Cleans up stale order with the state pending_payment.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CleanOrders
 {
@@ -30,6 +38,7 @@ class CleanOrders
      * @param CollectionFactory $orderCollectionFactory
      * @param OrderHelper $orderHelper
      * @param PaymentHelper $paymentHelper
+     * @param ApiHelper $apiHelper
      */
     public function __construct(
         private readonly Log $log,
@@ -37,7 +46,8 @@ class CleanOrders
         private readonly StoreManagerInterface $storeManager,
         private readonly CollectionFactory $orderCollectionFactory,
         private readonly OrderHelper $orderHelper,
-        private readonly PaymentHelper $paymentHelper
+        private readonly PaymentHelper $paymentHelper,
+        private readonly ApiHelper $apiHelper
     ) {
     }
 
@@ -70,6 +80,10 @@ class CleanOrders
                         condition: Order::STATE_PENDING_PAYMENT
                     )
                     ->addFieldToFilter(
+                        field: 'store_id',
+                        condition: ['eq' => $store->getId()]
+                    )
+                    ->addFieldToFilter(
                         field: 'created_at',
                         condition: ['to' => date(
                             format: 'Y-m-d H:i:s',
@@ -88,7 +102,11 @@ class CleanOrders
                 /** @var Order $order */
                 foreach ($orders as $order) {
                     try {
-                        if ($this->paymentHelper->isResursBankOrder(order: $order)) {
+                        if ($this->paymentHelper->isResursBankOrder(
+                            order: $order
+                        ) &&
+                            $this->isInactive(order: $order)
+                        ) {
                             $this->orderHelper->cancelOrder(order: $order);
                             $this->log->info(
                                 text: 'Successfully canceled stale pending order ' .
@@ -107,5 +125,21 @@ class CleanOrders
         }
 
         $this->log->info(text: 'Clean orders cron job run finished.');
+    }
+
+    /**
+     * Check if session is inactive/not created at Resurs.
+     *
+     * @param Order $order
+     * @return bool
+     * @throws LocalizedException
+     * @throws ValidatorException
+     * @throws ResursException
+     * @throws InvalidDataException
+     * @throws ExceptionHandler
+     */
+    public function isInactive(Order $order): bool
+    {
+        return $this->apiHelper->getPayment(order: $order) !== null;
     }
 }
