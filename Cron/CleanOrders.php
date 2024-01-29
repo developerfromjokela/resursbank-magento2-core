@@ -84,7 +84,7 @@ class CleanOrders
                         condition: ['eq' => $store->getId()]
                     )
                     ->addFieldToFilter(
-                        field: 'created_at',
+                        field: 'updated_at',
                         condition: ['to' => date(
                             format: 'Y-m-d H:i:s',
                             timestamp: time()-$minimumAge
@@ -140,6 +140,6 @@ class CleanOrders
      */
     public function isInactive(Order $order): bool
     {
-        return $this->apiHelper->getPayment(order: $order) !== null;
+        return $this->apiHelper->getPayment(order: $order) === null;
     }
 }
