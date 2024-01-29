@@ -339,4 +339,18 @@ class Order extends AbstractHelper implements ArgumentInterface
 
         return $transaction instanceof TransactionInterface ? $transaction : null;
     }
+
+    /**
+     * Whether order was placed using a legacy flow.
+     *
+     * Only modern flows track their API in this custom sales_order col.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     */
+    public function isLegacyFlow(
+        OrderInterface $order
+    ): bool {
+        return (string) $order->getData(key: 'resursbank_flow') === '';
+    }
 }
