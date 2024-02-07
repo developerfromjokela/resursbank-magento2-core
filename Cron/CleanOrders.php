@@ -16,6 +16,11 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Api as ApiHelper;
 use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\PaymentMethods as PaymentHelper;
+use Resursbank\Ecom\Lib\Model\PaymentHistory\Entry;
+use Resursbank\Ecom\Lib\Model\PaymentHistory\Event;
+use Resursbank\Ecom\Lib\Model\PaymentHistory\User;
+use Resursbank\Ecom\Module\PaymentHistory\Repository
+    as PaymentHistoryRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Sales\Model\Order;
@@ -108,6 +113,13 @@ class CleanOrders
                             $this->isInactive(order: $order)
                         ) {
                             $this->orderHelper->cancelOrder(order: $order);
+                            PaymentHistoryRepository::write(
+                                entry: new Entry(
+                                    paymentId: $this->orderHelper->getPaymentId(order: $order),
+                                    event: Event::ORDER_CANCELED_CRON,
+                                    user: User::CRON
+                                )
+                            );
                             $this->log->info(
                                 text: 'Successfully canceled stale pending order ' .
                                 $order->getIncrementId() . '.'
