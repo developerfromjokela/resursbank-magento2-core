@@ -115,9 +115,13 @@ class CleanOrders
                             $this->orderHelper->cancelOrder(order: $order);
                             PaymentHistoryRepository::write(
                                 entry: new Entry(
-                                    paymentId: $this->orderHelper->getPaymentId(order: $order),
+                                    paymentId: $this->orderHelper->getPaymentId(
+                                        order: $order
+                                    ),
                                     event: Event::ORDER_CANCELED_CRON,
-                                    user: User::CRON
+                                    user: User::CRON,
+                                    extra:
+                                        'Job code: resursbank_core_clean_orders'
                                 )
                             );
                             $this->log->info(
