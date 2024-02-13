@@ -162,7 +162,7 @@
                         <config_path>resursbank/advanced/clean_orders_frequency</config_path>
                     </field>
                     <field id="clean_orders_time" translate="label, comment" sortOrder="6" type="time" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Start Time for cleanup</label>
+                        <label>Start time for cleanup</label>
                         <config_path>resursbank/advanced/clean_orders_time</config_path>
                     </field>
                     <field id="clean_orders_minimum_age" translate="label, comment" sortOrder="7" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
