@@ -148,6 +148,9 @@
                         <comment>Round item tax percentage to nearest integer. Only use this when your configuration results in floating tax percentage values, for instance when using percentage based shipping fees in combination with currency conversion.</comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>resursbank/advanced/round_tax_percentage</config_path>
+                        <depends>
+                            <field id="*/resursbank_section/api/flow" separator=",">simplified,rco</field>
+                        </depends>
                     </field>
                     <field id="clean_orders" type="select" sortOrder="4" translate="label,comment" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Clean up old pending orders</label>
