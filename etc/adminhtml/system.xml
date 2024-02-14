@@ -12,9 +12,7 @@
                 <attribute type="displayIn">recommended_solutions</attribute>
                 <fieldset_css>complex resursbank-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <label>
-                    <![CDATA[<div class="resursbank-payment-logo"></div><div class="resursbank-payment-description">The easier and more flexible it is for your customers to shop, the more you sell. With Resurs checkout, you increase the possibility of more purchases and more satisfied customers.</div>]]>
-                </label>
+                <label>rb-payment-group-section</label>
                 <group id="api" type="text" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Resurs Bank API</label>
                     <field id="flow" type="select" sortOrder="0" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
