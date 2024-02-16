@@ -155,21 +155,21 @@
                         </depends>
                     </field>
                     <field id="clean_orders" type="select" sortOrder="4" translate="label,comment" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Clean up old pending orders</label>
+                        <label>rb-clean-up-pending-orders</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>resursbank/advanced/clean_orders</config_path>
                     </field>
                     <field id="clean_orders_frequency" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Clean up frequency</label>
+                        <label>rb-clean-up-pending-frequency</label>
                         <source_model>Magento\Cron\Model\Config\Source\Frequency</source_model>
                         <config_path>resursbank/advanced/clean_orders_frequency</config_path>
                     </field>
                     <field id="clean_orders_time" translate="label, comment" sortOrder="6" type="time" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Start time for cleanup</label>
+                        <label>rb-clean-up-startup-time</label>
                         <config_path>resursbank/advanced/clean_orders_time</config_path>
                     </field>
                     <field id="clean_orders_minimum_age" translate="label, comment" sortOrder="7" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Minimum order age in hours</label>
+                        <label>rb-clean-up-order-age</label>
                         <config_path>resursbank/advanced/clean_orders_minimum_age</config_path>
                         <source_model>Resursbank\Core\Model\Config\Source\CleanOrders\MinimumAge</source_model>
                     </field>
