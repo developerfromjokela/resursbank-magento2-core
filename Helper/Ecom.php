@@ -45,6 +45,7 @@ use function str_starts_with;
 
 /**
  * Basic API integration.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ecom extends AbstractHelper
 {
@@ -61,6 +62,7 @@ class Ecom extends AbstractHelper
      * @param Version $version
      * @param Locale $locale
      * @param StateInterface $cacheState
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
