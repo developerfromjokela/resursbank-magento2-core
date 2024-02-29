@@ -31,6 +31,8 @@ use function is_string;
  * for PHPMD.CookieAndSessionMisuse. The interface fools the analytic tools into
  * thinking this class is part of the presentation layer, and thus eligible to
  * handle the session.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends AbstractHelper implements ArgumentInterface
 {
@@ -59,6 +61,7 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param TransactionRepositoryInterface $transactionRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
