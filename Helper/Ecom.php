@@ -12,7 +12,6 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
