@@ -247,67 +247,6 @@ class Ecom extends AbstractHelper
     }
 
     /**
-     * Get the payment id depending on which flow the order has been created with.
-     *
-     * @param OrderInterface $order
-     * @param Order $orderHelper
-     * @param Config $config
-     * @param Scope $scope
-     * @return string
-     * @throws InputException
-     */
-    public static function getPaymentId(
-        OrderInterface $order,
-        Order $orderHelper,
-        Config $config,
-        Scope $scope
-    ): string {
-        $id = $orderHelper->getPaymentId(order: $order);
-        $paymentMethod = $order->getPayment()->getMethod();
-
-        // Check if payment has been created with simplified by checking the name of the method.
-        if (str_starts_with(haystack: $paymentMethod, needle: 'resursbank_')) {
-            $searchLegacyPaymentId = self::findPaymentIdForLegacyOrder(
-                paymentId: $id,
-                config: $config,
-                scope: $scope
-            );
-            if ($searchLegacyPaymentId !== '' && $id !== $searchLegacyPaymentId) {
-                $id = $searchLegacyPaymentId;
-            }
-        }
-
-        return $id;
-    }
-
-    /**
-     * Search for legacy payments at Resurs.
-     *
-     * @param string $paymentId
-     * @param Config $config
-     * @param Scope $scope
-     * @return string
-     */
-    public static function findPaymentIdForLegacyOrder(
-        string $paymentId,
-        Config $config,
-        Scope $scope
-    ): string {
-        try {
-            $result = Repository::search(
-                storeId: $config->getStore(
-                    scopeCode: $scope->getId(),
-                    scopeType: $scope->getType()
-                ),
-                orderReference: $paymentId
-            );
-            return $result->count() > 0 ? $result->getData()[0]->id : '';
-        } catch (Throwable) {
-            return '';
-        }
-    }
-
-    /**
      * Configure Ecom to utilise API account associated with supplied entity.
      *
      * Since the original connect() method above will execute early in the
