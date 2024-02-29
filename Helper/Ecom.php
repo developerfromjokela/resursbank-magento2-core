@@ -84,8 +84,8 @@ class Ecom extends AbstractHelper
      *
      * @param Jwt|null $jwtAuth
      * @param Environment|null $env
-     * @param string|null $scopeType
      * @param string|null $scopeCode
+     * @param string|null $scopeType
      * @return void
      */
     public function connect(
@@ -159,6 +159,8 @@ class Ecom extends AbstractHelper
     }
 
     /**
+     * Fetch scope for specified environment.
+     *
      * @param Environment $environment
      * @return EcomScope
      */
