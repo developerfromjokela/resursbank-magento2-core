@@ -24,6 +24,7 @@ use Resursbank\Core\ViewModel\Session\Checkout;
  * Marks whether client reached success or failure page in Magento.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SetResursbankResult
 {
