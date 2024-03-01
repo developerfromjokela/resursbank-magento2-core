@@ -15,13 +15,17 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterfaceFactory;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterface;
 use Resursbank\Core\Api\Data\PaymentMethodSearchResultsInterfaceFactory;
 use Resursbank\Core\Api\PaymentMethodRepositoryInterface;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod as ResourceModel;
 use Resursbank\Core\Model\ResourceModel\PaymentMethod\CollectionFactory;
+use Resursbank\Ecom\Lib\Validation\StringValidation;
+use Throwable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,13 +38,18 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @param PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
      * @param FilterProcessor $filterProcessor
+     * @param Config $config
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         private readonly ResourceModel $resourceModel,
         private readonly PaymentMethodInterfaceFactory $methodFactory,
         private readonly PaymentMethodSearchResultsInterfaceFactory $searchResultsFactory,
         private readonly CollectionFactory $collectionFactory,
-        private readonly FilterProcessor $filterProcessor
+        private readonly FilterProcessor $filterProcessor,
+        private readonly Config $config,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly StringValidation $stringValidation
     ) {
     }
 
@@ -118,6 +127,9 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     ): PaymentMethodInterface {
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
+        $scopeCode = $this->storeManager->getStore()->getCode();
+
+        $flow = $this->config->getFlow(scopeCode: $scopeCode);
 
         $this->resourceModel->load(
             $result,
@@ -125,13 +137,32 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
             PaymentMethodInterface::CODE
         );
 
-        if (!$result->getId()) {
+        // If the code is a UUID, despite the fact that $flow can be a legacy based method, we should not
+        // avoid verifying the flow as something else that rcoplus. Main reason is that all payment methods
+        // are always iterated even if the flow may be unsupported.
+        // @todo Can this be optimized?
+        if (!$this->isUuid(code: $code) && $flow !== 'rcoplus' && !$result->getId()) {
+            /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             throw new NoSuchEntityException(
                 __('Unable to find payment method with code %1', $code)
             );
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    private function isUuid(string $code): bool
+    {
+        try {
+            $uuidCodeTest = preg_replace('/^resursbank_/', '', $code);
+            return $this->stringValidation->isUuid(value: $uuidCodeTest);
+        } catch (Throwable) {
+            return false;
+        }
     }
 
     /**
