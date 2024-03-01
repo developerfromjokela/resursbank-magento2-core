@@ -102,7 +102,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      */
     public function get(
         string|int $methodId
-    ): ?PaymentMethodInterface {
+    ): PaymentMethodInterface {
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
 
