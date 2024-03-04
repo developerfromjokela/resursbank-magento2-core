@@ -152,17 +152,21 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     }
 
     /**
+     * Validate if the code is an actual UUID after the "resursbank_" string.
      * @param string $code
      * @return bool
      */
     private function isUuid(string $code): bool
     {
         try {
-            $uuidCodeTest = preg_replace('/^resursbank_/', '', $code);
-            return $this->stringValidation->isUuid(value: $uuidCodeTest);
+            if (str_starts_with(haystack: $code, needle: 'resursbank_')) {
+                $uuidCodeTest = preg_replace('/^resursbank_/', '', $code);
+                return $this->stringValidation->isUuid(value: $uuidCodeTest);
+            }
         } catch (Throwable) {
-            return false;
         }
+
+        return false;
     }
 
     /**
