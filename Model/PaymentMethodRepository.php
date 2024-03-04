@@ -128,13 +128,12 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
         $scopeCode = $this->storeManager->getStore()->getCode();
-
         $flow = $this->config->getFlow(scopeCode: $scopeCode);
 
         $this->resourceModel->load(
-            $result,
-            $code,
-            PaymentMethodInterface::CODE
+            object: $result,
+            value: $code,
+            field: PaymentMethodInterface::CODE
         );
 
         // If the code is a UUID, despite the fact that $flow can be a legacy based method, we should not
