@@ -24,6 +24,9 @@ use Resursbank\Core\Model\PaymentMethodRepository;
 use Resursbank\Core\Helper\Api\Credentials;
 use Resursbank\Core\Helper\Api;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReadMore implements HttpGetActionInterface
 {
     /**
@@ -55,14 +58,14 @@ class ReadMore implements HttpGetActionInterface
     public function execute(): ResultInterface
     {
         /** @var Json $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $result = $this->resultFactory->create(type: ResultFactory::TYPE_JSON);
 
         try {
-            $result->setData(['html' => $this->getHtml()]);
+            $result->setData(data: ['html' => $this->getHtml()]);
         } catch (Exception $e) {
-            $this->log->exception($e);
+            $this->log->exception(error: $e);
 
-            $result->setData([
+            $result->setData(data: [
                 'message' => [
                     'error' => __(
                         'Something went wrong when fetching the content. ' .
@@ -87,17 +90,15 @@ class ReadMore implements HttpGetActionInterface
     {
         $store = $this->storeManager->getStore();
         $credentials = $this->credentials->resolveFromConfig(
-            $store->getCode(),
-            ScopeInterface::SCOPE_STORES
+            scopeCode: $store->getCode(),
+            scopeType: ScopeInterface::SCOPE_STORES
         );
 
-        $connection = $this->api->getConnection($credentials);
-
-        return $connection->getCostOfPriceInformation(
-            $this->getIdentifier($this->getMethod()),
-            $this->getPrice(),
-            false,
-            true
+        return $this->api->getConnection(credentials: $credentials)->getCostOfPriceInformation(
+            paymentMethod: $this->getIdentifier(method: $this->getMethod()),
+            amount: $this->getPrice(),
+            fetch: false,
+            iframe: true
         );
     }
 
@@ -110,7 +111,7 @@ class ReadMore implements HttpGetActionInterface
     protected function getMethod(): PaymentMethodInterface
     {
         return $this->methodRepository->getByCode(
-            $this->request->getParam('code')
+            code: $this->request->getParam(key: 'code')
         );
     }
 
@@ -121,7 +122,7 @@ class ReadMore implements HttpGetActionInterface
      */
     private function getPrice(): int
     {
-        return (int) ceil((float) $this->request->getParam('price'));
+        return (int) ceil(num: (float) $this->request->getParam(key: 'price'));
     }
 
     /**

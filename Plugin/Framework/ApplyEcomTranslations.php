@@ -27,6 +27,7 @@ class ApplyEcomTranslations
      * @param string $result
      * @return string
      * @throws ConfigException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterRender(
         Placeholder $subject,

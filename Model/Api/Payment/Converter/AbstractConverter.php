@@ -153,6 +153,7 @@ abstract class AbstractConverter implements ConverterInterface
      * @param array $items
      * @return void
      * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addDiscountItem(
         float $amount,
