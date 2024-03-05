@@ -12,7 +12,6 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
@@ -34,17 +33,15 @@ use Resursbank\Ecom\Lib\Log\FileLogger;
 use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
-use Resursbank\Ecom\Module\Payment\Repository;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\DataHandlerInterface;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\VoidDataHandler;
 use Throwable;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 
-use function str_starts_with;
-
 /**
  * Basic API integration.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ecom extends AbstractHelper
 {
@@ -61,6 +58,7 @@ class Ecom extends AbstractHelper
      * @param Version $version
      * @param Locale $locale
      * @param StateInterface $cacheState
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -84,8 +82,8 @@ class Ecom extends AbstractHelper
      *
      * @param Jwt|null $jwtAuth
      * @param Environment|null $env
-     * @param string|null $scopeType
      * @param string|null $scopeCode
+     * @param string|null $scopeType
      * @return void
      */
     public function connect(
@@ -159,6 +157,8 @@ class Ecom extends AbstractHelper
     }
 
     /**
+     * Fetch scope for specified environment.
+     *
      * @param Environment $environment
      * @return EcomScope
      */
@@ -242,67 +242,6 @@ class Ecom extends AbstractHelper
             $this->productMetadata->getVersion(),
             $this->version->getComposerVersion(module: 'Resursbank_Core')
         );
-    }
-
-    /**
-     * Get the payment id depending on which flow the order has been created with.
-     *
-     * @param OrderInterface $order
-     * @param Order $orderHelper
-     * @param Config $config
-     * @param Scope $scope
-     * @return string
-     * @throws InputException
-     */
-    public static function getPaymentId(
-        OrderInterface $order,
-        Order $orderHelper,
-        Config $config,
-        Scope $scope
-    ): string {
-        $id = $orderHelper->getPaymentId(order: $order);
-        $paymentMethod = $order->getPayment()->getMethod();
-
-        // Check if payment has been created with simplified by checking the name of the method.
-        if (str_starts_with(haystack: $paymentMethod, needle: 'resursbank_')) {
-            $searchLegacyPaymentId = self::findPaymentIdForLegacyOrder(
-                paymentId: $id,
-                config: $config,
-                scope: $scope
-            );
-            if ($searchLegacyPaymentId !== '' && $id !== $searchLegacyPaymentId) {
-                $id = $searchLegacyPaymentId;
-            }
-        }
-
-        return $id;
-    }
-
-    /**
-     * Search for legacy payments at Resurs.
-     *
-     * @param string $paymentId
-     * @param Config $config
-     * @param Scope $scope
-     * @return string
-     */
-    public static function findPaymentIdForLegacyOrder(
-        string $paymentId,
-        Config $config,
-        Scope $scope
-    ): string {
-        try {
-            $result = Repository::search(
-                storeId: $config->getStore(
-                    scopeCode: $scope->getId(),
-                    scopeType: $scope->getType()
-                ),
-                orderReference: $paymentId
-            );
-            return $result->count() > 0 ? $result->getData()[0]->id : '';
-        } catch (Throwable) {
-            return '';
-        }
     }
 
     /**

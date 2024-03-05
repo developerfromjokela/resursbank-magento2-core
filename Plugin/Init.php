@@ -27,7 +27,8 @@ class Init
     /**
      * Perform initial setup of Ecom+
      */
-    public function beforeLaunch() {
+    public function beforeLaunch()
+    {
         $this->ecom->connect();
 
         return null;

@@ -337,7 +337,7 @@ class Config extends AbstractConfig
      * @param string $scopeType
      * @return bool
      */
-    public function getCleanOrders(
+    public function isCleanOrdersActive(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
