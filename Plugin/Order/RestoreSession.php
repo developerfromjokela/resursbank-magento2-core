@@ -113,9 +113,6 @@ class RestoreSession implements ArgumentInterface
      */
     private function isEnabled(OrderInterface $order): bool
     {
-        return (
-            !$this->order->getResursbankResult($order) &&
-            $this->paymentMethods->isResursBankOrder($order)
-        );
+        return $this->paymentMethods->isResursBankOrder(order: $order);
     }
 }
