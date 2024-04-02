@@ -40,6 +40,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
      * @param FilterProcessor $filterProcessor
      * @param Config $config
      * @param StoreManagerInterface $storeManager
+     * @param StringValidation $stringValidation
      */
     public function __construct(
         private readonly ResourceModel $resourceModel,
@@ -140,7 +141,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
         // avoid verifying the flow as something else that rcoplus. Main reason is that all payment methods
         // are always iterated even if the flow may be unsupported.
         // @todo Can this be optimized?
-        if (!$this->isUuid(code: $code) && $flow !== 'rcoplus' && !$result->getId()) {
+        if (!$this->isUuid(code: $code) && !$result->getId()) {
             /** @noinspection PhpArgumentWithoutNamedIdentifierInspection */
             throw new NoSuchEntityException(
                 __('Unable to find payment method with code %1', $code)
@@ -152,6 +153,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
     /**
      * Validate if the code is an actual UUID after the "resursbank_" string.
+     *
      * @param string $code
      * @return bool
      */
