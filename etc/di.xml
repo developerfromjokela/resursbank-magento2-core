@@ -122,7 +122,9 @@
     <type name="Magento\Payment\Helper\Data">
         <plugin
             name="resursbank_core_payment_helper"
-            type="Resursbank\Core\Plugin\Payment\Helper\Data" />
+            type="Resursbank\Core\Plugin\Payment\Helper\Data"
+            sortOrder="100"
+        />
     </type>
 
     <!-- Set "resursbank_is_test" flag depending on configured environment. -->
