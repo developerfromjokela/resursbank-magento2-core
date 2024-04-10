@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Resursbank\Core\Block\Adminhtml\System\Config\GetStores;
+
+/** @var GetStores $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+
+$widget = $block->getWidget();
+
+if ($widget !== '') {
+    /* @noEscape */
+    echo $secureRenderer->renderTag(
+        tagName: 'script',
+        attributes: [],
+        content: $widget,
+        textContent: false
+    );
+}
+?>
+<script>
+    /* This is to translate our message in view/adminhtml/web/js/system/stores.js
+       since ECom translations are not available to the frontend i18n package. */
+    const resursbankPleaseSelectStoreMsg = '<?= $escaper->escapeHtml(data: __('rb-please-select-store')) ?>';
+</script>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Resursbank\Core\Block\Adminhtml\System\Config\PaymentMethods;
+
+/** @var PaymentMethods $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+
+$widget = $block->getWidget();
+
+if ($widget !== '') {
+    echo $escaper->escapeHtml(
+        data: $widget,
+        allowedTags: [
+            'div', 'table', 'thead', 'tr', 'th', 'td', 'tbody', 'p', 'style'
+        ]
+    );
+}

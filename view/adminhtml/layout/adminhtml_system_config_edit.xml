@@ -8,5 +8,15 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Resursbank_Core::css/styles.css"/>
+        <script src="Resursbank_Core::js/system/stores.js"/>
     </head>
+    <body>
+        <referenceContainer name="js">
+            <block
+                class="Resursbank\Core\Block\Adminhtml\System\Config\GetStores"
+                name="js.system_config_js_resursbank_get_stores"
+                template="Resursbank_Core::system/config/get-stores.phtml"
+            />
+        </referenceContainer>
+    </body>
 </page>
