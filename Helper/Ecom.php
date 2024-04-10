@@ -12,6 +12,8 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Locale\Resolver as Locale;
@@ -84,13 +86,15 @@ class Ecom extends AbstractHelper
      * @param Environment|null $env
      * @param string|null $scopeCode
      * @param string|null $scopeType
+     * @param EcomScope|null $scope
      * @return void
      */
     public function connect(
         ?Jwt $jwtAuth = null,
         ?Environment $env = null,
         ?string $scopeCode = null,
-        ?string $scopeType = null
+        ?string $scopeType = null,
+        ?EcomSCope $scope = null
     ): void {
         try {
             $scopeType = $scopeType ?? $this->scope->getType();
@@ -117,7 +121,7 @@ class Ecom extends AbstractHelper
                 $jwtAuth = new Jwt(
                     clientId: $clientId,
                     clientSecret: $clientSecret,
-                    scope: $this->getScope(environment: $env),
+                    scope: $scope ?? $this->getScope(environment: $env),
                     grantType: GrantType::CREDENTIALS,
                 );
             }
@@ -184,6 +188,8 @@ class Ecom extends AbstractHelper
      * Fetch a logger instance.
      *
      * @return EcomLoggerInterface
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function getLogger(): EcomLoggerInterface
     {
@@ -215,7 +221,7 @@ class Ecom extends AbstractHelper
     {
         $code = strtok(string: $this->locale->getLocale(), token: '_');
 
-        return Language::tryFrom(value: $code) ?? Language::en;
+        return Language::tryFrom(value: $code) ?? Language::EN;
     }
 
     /**
