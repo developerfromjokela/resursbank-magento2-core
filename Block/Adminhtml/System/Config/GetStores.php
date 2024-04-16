@@ -30,7 +30,7 @@ class GetStores extends Template
     public function __construct(
         Context $context,
         private readonly Log $log,
-        private readonly Url $url,
+        public readonly Url $url,
         array $data = []
     ) {
         parent::__construct(
@@ -50,9 +50,7 @@ class GetStores extends Template
             Config::validateInstance();
 
             $widget = new GetStoresWidget(
-                fetchUrl: $this->url->getAdminUrl(
-                    path: 'resursbank_core/data/stores/form_key/' . $this->formKey->getFormKey()
-                ),
+                fetchUrlCallback: 'getResursBankFetchStoresUrl',
                 automatic: false,
                 storeSelectId: 'payment_other_resursbank_section_api_store',
                 environmentSelectId: 'payment_other_resursbank_section_api_environment'
@@ -64,5 +62,15 @@ class GetStores extends Template
         }
 
         return '';
+    }
+
+    /**
+     * Placeholder getUrls method.
+     *
+     * @return array
+     */
+    public function getUrls(): array
+    {
+        return [];
     }
 }

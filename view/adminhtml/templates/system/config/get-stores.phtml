@@ -27,6 +27,18 @@ if ($widget !== '') {
 }
 ?>
 <script>
+    function getResursBankFetchStoresUrl() {
+        let urls = [];
+
+        <?php foreach ($block->getUrls() as $api => $url): ?>
+        urls['<?= $escaper->escapeJs(string: $api) ?>'] = '<?= $escaper->escapeJs(string: $url) ?>';
+        <?php endforeach; ?>
+
+        let selectedApi = document.getElementById('payment_other_resursbank_section_api_flow').value;
+
+        return urls[selectedApi] ?? '';
+    }
+
     /* This is to translate our message in view/adminhtml/web/js/system/stores.js
        since ECom translations are not available to the frontend i18n package. */
     const resursbankPleaseSelectStoreMsg = '<?= $escaper->escapeHtml(data: __('rb-please-select-store')) ?>';
