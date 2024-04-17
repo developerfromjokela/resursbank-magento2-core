@@ -53,8 +53,7 @@ class GetStores extends Template
                 fetchUrlCallback: 'getResursBankFetchStoresUrl',
                 automatic: false,
                 storeSelectId: 'payment_other_resursbank_section_api_store',
-                environmentSelectId: 'payment_other_resursbank_section_api_environment',
-                flowSelectId: 'payment_other_resursbank_section_api_flow'
+                environmentSelectId: 'payment_other_resursbank_section_api_environment'
             );
 
             return $widget->content;
