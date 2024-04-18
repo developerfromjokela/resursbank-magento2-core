@@ -34,18 +34,18 @@ use Throwable;
 class Stores extends GetStoresController implements HttpPostActionInterface
 {
     /**
-     * @param Log $log
+     * @param AbstractLog $log
      * @param JsonFactory $jsonFactory
      * @param Config $config
      * @param ScopeHelper $scope
      * @param Ecom $ecom
      */
     public function __construct(
-        private readonly Log $log,
-        private readonly JsonFactory $jsonFactory,
-        private readonly Config $config,
-        private readonly ScopeHelper $scope,
-        private readonly Ecom $ecom
+        protected readonly Log $log,
+        protected readonly JsonFactory $jsonFactory,
+        protected readonly Config $config,
+        protected readonly ScopeHelper $scope,
+        protected readonly Ecom $ecom
     ) {
     }
 
