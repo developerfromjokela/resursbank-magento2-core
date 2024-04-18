@@ -9,8 +9,9 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-use InvalidArgumentException;
 use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -23,7 +24,6 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
-use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Ecom\Config as EcomConfig;
@@ -40,8 +40,6 @@ use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\DataHandlerInterface;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\VoidDataHandler;
 use Throwable;
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 
 /**
  * Basic API integration.
