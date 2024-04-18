@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use InvalidArgumentException;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
@@ -22,6 +23,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
+use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Ecom\Config as EcomConfig;
@@ -148,6 +150,34 @@ class Ecom extends AbstractHelper
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
         }
+    }
+
+    /**
+     * Check if a connection to the Resurs Bank API can be established.
+     *
+     * @param string|null $configuredFlow
+     * @return bool
+     */
+    public function canConnect(?string $configuredFlow): bool
+    {
+        $canConnect = false;
+
+        try {
+            $scopeType = $this->scope->getType();
+            $scopeCode = $this->scope->getId();
+
+            // Kontrollera nödvändiga konfigurationer och om rätt API-flöde är inställt
+            if (!empty($this->config->getClientId(scopeCode: $scopeCode, scopeType: $scopeType)) &&
+                !empty($this->config->getClientSecret(scopeCode: $scopeCode, scopeType: $scopeType)) &&
+                !empty($this->config->getApiEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)) &&
+                $this->config->getFlow(scopeCode: $scopeCode, scopeType: $scopeType) === $configuredFlow) {
+                $canConnect = true;
+            }
+        } catch (Throwable $e) {
+            $this->logger->error(message: 'Error in canConnect check: ' . $e->getMessage());
+        }
+
+        return $canConnect;
     }
 
     /**

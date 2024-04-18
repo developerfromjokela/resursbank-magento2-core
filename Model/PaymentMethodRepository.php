@@ -128,8 +128,6 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
     ): PaymentMethodInterface {
         /** @var PaymentMethod $result */
         $result = $this->methodFactory->create();
-        $scopeCode = $this->storeManager->getStore()->getCode();
-        $flow = $this->config->getFlow(scopeCode: $scopeCode);
 
         $this->resourceModel->load(
             object: $result,
@@ -164,7 +162,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
                 $uuidCodeTest = preg_replace('/^resursbank_/', '', $code);
                 return $this->stringValidation->isUuid(value: $uuidCodeTest);
             }
-        } catch (Throwable) {
+        } catch (Throwable) { // phpcs:ignore
         }
 
         return false;
