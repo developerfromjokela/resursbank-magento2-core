@@ -151,9 +151,8 @@ class Ecom extends AbstractHelper
     }
 
     /**
-     * Check if a connection to the Resurs Bank API can be established.
+     * Check if a connection to the Resurs Bank API can be established (defaults to false).
      *
-     * @param string|null $configuredFlow
      * @return bool
      */
     public function canConnect(): bool
