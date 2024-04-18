@@ -156,26 +156,9 @@ class Ecom extends AbstractHelper
      * @param string|null $configuredFlow
      * @return bool
      */
-    public function canConnect(?string $configuredFlow): bool
+    public function canConnect(): bool
     {
-        $canConnect = false;
-
-        try {
-            $scopeType = $this->scope->getType();
-            $scopeCode = $this->scope->getId();
-
-            // Kontrollera nödvändiga konfigurationer och om rätt API-flöde är inställt
-            if (!empty($this->config->getClientId(scopeCode: $scopeCode, scopeType: $scopeType)) &&
-                !empty($this->config->getClientSecret(scopeCode: $scopeCode, scopeType: $scopeType)) &&
-                !empty($this->config->getApiEnvironment(scopeCode: $scopeCode, scopeType: $scopeType)) &&
-                $this->config->getFlow(scopeCode: $scopeCode, scopeType: $scopeType) === $configuredFlow) {
-                $canConnect = true;
-            }
-        } catch (Throwable $e) {
-            $this->logger->error(message: 'Error in canConnect check: ' . $e->getMessage());
-        }
-
-        return $canConnect;
+        return false;
     }
 
     /**
