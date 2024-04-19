@@ -153,9 +153,10 @@ class Ecom extends AbstractHelper
     /**
      * Check if a connection to the Resurs Bank API can be established (defaults to false).
      *
+     * @param string $scopeCode
      * @return bool
      */
-    public function canConnect(): bool
+    public function canConnect(string $scopeCode): bool
     {
         return false;
     }
