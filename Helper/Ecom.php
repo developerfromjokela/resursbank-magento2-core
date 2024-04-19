@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Resursbank\Core\Helper;
 
 use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -38,8 +40,6 @@ use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\DataHandlerInterface;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\VoidDataHandler;
 use Throwable;
-use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 
 /**
  * Basic API integration.
@@ -148,6 +148,16 @@ class Ecom extends AbstractHelper
         } catch (Throwable $e) {
             $this->log->exception(error: $e);
         }
+    }
+
+    /**
+     * Check if a connection to the Resurs Bank API can be established (defaults to false).
+     *
+     * @return bool
+     */
+    public function canConnect(): bool
+    {
+        return false;
     }
 
     /**
