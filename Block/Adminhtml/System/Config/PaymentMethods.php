@@ -11,6 +11,7 @@ namespace Resursbank\Core\Block\Adminhtml\System\Config;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Module\PaymentMethod\Widget\PaymentMethods as Widget;

@@ -156,8 +156,9 @@ class Ecom extends AbstractHelper
      * @param string $scopeCode
      * @return bool
      */
-    public function canConnect(string $scopeCode): bool
-    {
+    public function canConnect(
+        ?string $scopeCode = null
+    ): bool {
         return false;
     }
 
