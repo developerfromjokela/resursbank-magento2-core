@@ -17,8 +17,11 @@ use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Gateway\ValueHandler\Title;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
+use Resursbank\Core\Helper\PaymentMethods\Ecom as EcomPaymentMethods;
+use Resursbank\Core\Helper\Scope;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use Throwable;
@@ -38,12 +41,18 @@ class Data
      * @param Log $log
      * @param MethodFactory $methodFactory
      * @param Repository $repository
+     * @param Scope $scope
+     * @param Ecom $ecom
+     * @param EcomPaymentMethods $ecomPaymentMethods
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
         private readonly Log $log,
         private readonly MethodFactory $methodFactory,
-        private readonly Repository $repository
+        private readonly Repository $repository,
+        private readonly Scope $scope,
+        private readonly Ecom $ecom,
+        private readonly EcomPaymentMethods $ecomPaymentMethods
     ) {
     }
 
@@ -180,51 +189,6 @@ class Data
     }
 
     /**
-     * Retrieve Resursbank model for payment method.
-     *
-     * @param string $code
-     * @return PaymentMethodInterface|null
-     */
-    public function getResursModel(
-        string $code
-    ): ?PaymentMethodInterface {
-        $result = null;
-
-        try {
-            if ($code !== Method::CODE) {
-                $result = $this->repository->getByCode($code);
-            }
-        } catch (Throwable $e) {
-            $this->log->exception($e);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get list of payment methods.
-     *
-     * Store resolve method collection in a local variable to avoid expensive
-     * database transactions during the same request cycle.
-     *
-     * @return PaymentMethodInterface[]
-     */
-    public function getMethodList(): array
-    {
-        if ($this->methodList !== null) {
-            return $this->methodList;
-        }
-
-        try {
-            $this->methodList = $this->paymentMethods->getActiveMethods();
-        } catch (Throwable $error) {
-            $this->log->exception(error: $error);
-        }
-
-        return $this->methodList;
-    }
-
-    /**
      * Get instance of payment method with specified code.
      *
      * Generate instance of our payment method model and apply the code of the
@@ -250,5 +214,87 @@ class Data
         }
 
         return $method;
+    }
+
+    /**
+     * Retrieve Resurs Bank model for payment method.
+     *
+     * @param string $code
+     * @return PaymentMethodInterface|null
+     */
+    private function getResursModel(
+        string $code
+    ): ?PaymentMethodInterface {
+        try {
+            if ($code === Method::CODE) {
+                return null;
+            }
+
+            $useEcom = $this->ecom->canConnect(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            );
+
+            return $useEcom ?
+                $this->ecomPaymentMethods->getMethodById(
+                    id: $this->ecomPaymentMethods->getUuidFromCode(
+                        code: $code
+                    ),
+                    scopeCode: $this->scope->getId(),
+                    scopeType: $this->scope->getType()
+                ) :
+                $this->repository->getByCode($code);
+        } catch (Throwable $e) {
+            $this->log->exception($e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get list of payment methods.
+     *
+     * Store resolve method collection in a local variable to avoid expensive
+     * database transactions during the same request cycle.
+     *
+     * @return PaymentMethodInterface[]
+     */
+    private function getMethodList(): array
+    {
+        if ($this->methodList !== null) {
+            return $this->methodList;
+        }
+
+        $methodList = [];
+
+        // Resolve list of deprecated payment methods.
+        try {
+            $methodList = $this->paymentMethods->getActiveMethods();
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        // Resolve list of Ecom payment methods.
+        try {
+            if ($this->ecom->canConnect(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            )) {
+                $methodList = array_merge(
+                    $methodList,
+                    $this->ecomPaymentMethods->getMethods(
+                        scopeCode: $this->scope->getId(),
+                        scopeType: $this->scope->getType()
+                    )
+                );
+            }
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        // Store resolved list in local variable for enhanced performance.
+        $this->methodList = $methodList;
+
+        return $this->methodList;
     }
 }

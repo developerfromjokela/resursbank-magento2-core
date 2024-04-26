@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Ecom\Config as EcomConfig;
+use Resursbank\Ecom\Exception\Validation\IllegalTypeException;
 use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope as EcomScope;
@@ -36,13 +37,17 @@ use Resursbank\Ecom\Lib\Locale\Language;
 use Resursbank\Ecom\Lib\Log\FileLogger;
 use Resursbank\Ecom\Lib\Log\LoggerInterface as EcomLoggerInterface;
 use Resursbank\Ecom\Lib\Log\NoneLogger;
+use Resursbank\Ecom\Lib\Model\PaymentMethodCollection;
+use Resursbank\Ecom\Lib\Model\Interface\PaymentMethodCollection as PaymentMethodCollectionInterface;
 use Resursbank\Ecom\Lib\Model\Network\Auth\Jwt;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\DataHandlerInterface;
 use Resursbank\Ecom\Module\PaymentHistory\DataHandler\VoidDataHandler;
+use Resursbank\Ecom\Module\PaymentMethod\Repository;
 use Throwable;
 
 /**
  * Basic API integration.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ecom extends AbstractHelper
@@ -153,11 +158,14 @@ class Ecom extends AbstractHelper
     /**
      * Check if a connection to the Resurs Bank API can be established (defaults to false).
      *
-     * @param string $scopeCode
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canConnect(
-        ?string $scopeCode = null
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORES
     ): bool {
         return false;
     }

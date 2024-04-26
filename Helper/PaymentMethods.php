@@ -37,6 +37,8 @@ use function str_starts_with;
 use function is_array;
 
 /**
+ * Business logic relating to payment methods.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentMethods extends AbstractHelper
@@ -241,6 +243,18 @@ class PaymentMethods extends AbstractHelper
     }
 
     /**
+     * Get payment method code for ECom based payment methods.
+     *
+     * @param string $id
+     * @return string
+     */
+    public function getEcomCode(
+        string $id
+    ): string {
+        return Method::ECOM_PREFIX . $id;
+    }
+
+    /**
      * The data returned from ECom when fetching payment methods is described
      * as mixed. We can therefore not be certain what we get back and need to
      * properly convert the data to an array for further processing.
@@ -365,7 +379,8 @@ class PaymentMethods extends AbstractHelper
     public function isResursBankMethod(
         string $code
     ): bool {
-        return str_starts_with(haystack: $code, needle: Method::CODE_PREFIX);
+        return str_starts_with(haystack: $code, needle: Method::CODE_PREFIX) ||
+            str_starts_with(haystack: $code, needle: Method::ECOM_PREFIX);
     }
 
     /**

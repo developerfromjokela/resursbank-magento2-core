@@ -21,6 +21,11 @@ class Resursbank extends Adapter
     public const CODE_PREFIX = 'resursbank_';
 
     /**
+     * Prefix for modern, Ecom based, payment methods.
+     */
+    public const ECOM_PREFIX = 'rb-ecom-';
+
+    /**
      * Default payment method code.
      *
      * @var string
