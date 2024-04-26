@@ -37,6 +37,8 @@ use function str_starts_with;
 use function is_array;
 
 /**
+ * Business logic relating to payment methods.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentMethods extends AbstractHelper

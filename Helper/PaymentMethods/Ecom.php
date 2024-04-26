@@ -43,6 +43,8 @@ use Throwable;
 
 /**
  * Methods to fetch and convert payment methods using Ecom.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ecom extends AbstractHelper
 {
@@ -87,8 +89,8 @@ class Ecom extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): array {
-        /* During a single checkout request this method will execute
-               multiple times. Storing collection locally improves performance. */
+        // During a single checkout request this method will execute multiple
+        // times. Storing collection locally improves performance.
         if (!empty($this->methods)) {
             return $this->methods;
         }
@@ -295,6 +297,7 @@ class Ecom extends AbstractHelper
         $orderTable = $connection->getTableName(tableName: 'sales_order');
         $paymentTable = $connection->getTableName(tableName: 'sales_order_payment');
 
+        /** @noinspection SqlNoDataSourceInspection */
         $data = $connection->fetchAll(
             sql: "select $paymentTable.method, $paymentTable.additional_information from $paymentTable " .
                 "left join $orderTable on $paymentTable.parent_id = $orderTable.entity_id " .
@@ -402,8 +405,11 @@ class Ecom extends AbstractHelper
      *  based on whether their API flow is enabled or not.
      *
      * @param string $storeId
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return PaymentMethodCollectionInterface
      * @throws IllegalTypeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPaymentMethodsCollection(
         string $storeId,
@@ -433,19 +439,22 @@ class Ecom extends AbstractHelper
      *
      * @param string $storeId
      * @param string $id
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return PaymentMethodInterface
-     * @throws IllegalTypeException
-     * @throws IllegalValueException
-     * @throws JsonException
-     * @throws Throwable
-     * @throws ReflectionException
      * @throws ApiException
      * @throws AuthException
      * @throws CacheException
      * @throws ConfigException
      * @throws CurlException
-     * @throws ValidationException
      * @throws EmptyValueException
+     * @throws IllegalTypeException
+     * @throws IllegalValueException
+     * @throws JsonException
+     * @throws ReflectionException
+     * @throws Throwable
+     * @throws ValidationException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMethod(
         string $storeId,

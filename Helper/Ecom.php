@@ -47,6 +47,7 @@ use Throwable;
 
 /**
  * Basic API integration.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ecom extends AbstractHelper
@@ -160,6 +161,7 @@ class Ecom extends AbstractHelper
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canConnect(
         ?string $scopeCode = null,

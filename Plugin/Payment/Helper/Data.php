@@ -17,7 +17,6 @@ use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Gateway\ValueHandler\Title;
-use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -45,7 +44,6 @@ class Data
      * @param Scope $scope
      * @param Ecom $ecom
      * @param EcomPaymentMethods $ecomPaymentMethods
-     * @param Config $config
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
@@ -54,8 +52,7 @@ class Data
         private readonly Repository $repository,
         private readonly Scope $scope,
         private readonly Ecom $ecom,
-        private readonly EcomPaymentMethods $ecomPaymentMethods,
-        private readonly Config $config
+        private readonly EcomPaymentMethods $ecomPaymentMethods
     ) {
     }
 
@@ -220,7 +217,7 @@ class Data
     }
 
     /**
-     * Retrieve Resursbank model for payment method.
+     * Retrieve Resurs Bank model for payment method.
      *
      * @param string $code
      * @return PaymentMethodInterface|null
@@ -228,30 +225,30 @@ class Data
     private function getResursModel(
         string $code
     ): ?PaymentMethodInterface {
-        $result = null;
-
         try {
-            if ($code !== Method::CODE) {
-                if (!$this->ecom->canConnect(
+            if ($code === Method::CODE) {
+                return null;
+            }
+
+            $useEcom = $this->ecom->canConnect(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            );
+
+            return $useEcom ?
+                $this->ecomPaymentMethods->getMethodById(
+                    id: $this->ecomPaymentMethods->getUuidFromCode(
+                        code: $code
+                    ),
                     scopeCode: $this->scope->getId(),
                     scopeType: $this->scope->getType()
-                )) {
-                    $result = $this->repository->getByCode($code);
-                } else {
-                    $result = $this->ecomPaymentMethods->getMethodById(
-                        id: $this->ecomPaymentMethods->getUuidFromCode(
-                            code: $code
-                        ),
-                        scopeCode: $this->scope->getId(),
-                        scopeType: $this->scope->getType()
-                    );
-                }
-            }
+                ) :
+                $this->repository->getByCode($code);
         } catch (Throwable $e) {
             $this->log->exception($e);
         }
 
-        return $result;
+        return null;
     }
 
     /**
@@ -270,12 +267,14 @@ class Data
 
         $methodList = [];
 
+        // Resolve list of deprecated payment methods.
         try {
             $methodList = $this->paymentMethods->getActiveMethods();
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
         }
 
+        // Resolve list of Ecom payment methods.
         try {
             if ($this->ecom->canConnect(
                 scopeCode: $this->scope->getId(),
@@ -293,6 +292,7 @@ class Data
             $this->log->exception(error: $error);
         }
 
+        // Store resolved list in local variable for enhanced performance.
         $this->methodList = $methodList;
 
         return $this->methodList;
