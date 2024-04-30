@@ -34,11 +34,9 @@ use Resursbank\Ecom\Exception\ValidationException;
 use Resursbank\Ecom\Lib\Model\Interface\PaymentMethod as PaymentMethodInterface;
 use Resursbank\Ecom\Lib\Model\Interface\PaymentMethodCollection as PaymentMethodCollectionInterface;
 use Resursbank\Ecom\Lib\Model\PaymentMethodCollection;
-use Resursbank\Ecom\Lib\Model\Rco\PaymentMethod as RcoPaymentMethod;
-use Resursbank\Ecom\Lib\Model\Rco\PaymentMethod\Type;
 use Resursbank\Ecom\Lib\Validation\StringValidation;
 use Resursbank\Ecom\Module\PaymentMethod\Repository;
-use Resursbank\Rcoplus\Helper\Log;
+use Resursbank\Core\Helper\Log;
 use Throwable;
 
 /**
@@ -106,7 +104,7 @@ class Ecom extends AbstractHelper
             $methods = $this->getPaymentMethodsCollection(storeId: $storeId);
 
             foreach ($methods as $method) {
-                $result["$storeId-" . $method->methodId] =
+                $result["$storeId-" . $method->getId()] =
                     $this->convertMethod(method: $method);
             }
         } catch (Throwable $error) {
@@ -152,9 +150,11 @@ class Ecom extends AbstractHelper
                 return $methods["$storeId-$id"];
             }
 
-            $result = $this->convertMethod(
-                method: $this->getMethod(storeId: $storeId, id: $id)
-            );
+            $method = $this->getMethod(storeId: $storeId, id: $id);
+
+            if ($method !== null) {
+                $result = $this->convertMethod(method: $method);
+            }
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
         }
@@ -185,7 +185,7 @@ class Ecom extends AbstractHelper
     /**
      * Convert Ecom to Magento payment method model.
      *
-     * @param RcoPaymentMethod $method
+     * @param PaymentMethodInterface $method
      * @return PaymentMethod
      * @throws JsonException
      * @throws ValidatorException
@@ -195,7 +195,7 @@ class Ecom extends AbstractHelper
     ): PaymentMethod {
         $result = $this->methodFactory->create();
         $result->setCode(
-            code: $this->paymentMethods->getEcomCode(id: $method->methodId)
+            code: $this->paymentMethods->getEcomCode(id: $method->getId())
         );
         $result->setActive(state: true);
         $result->setSortOrder(order: $method->sortOrder);
@@ -204,8 +204,8 @@ class Ecom extends AbstractHelper
         $result->setMaxOrderTotal(total: $method->getMaxLimit());
         $result->setOrderStatus(status: MagentoOrder::STATE_PENDING_PAYMENT);
         $result->setRaw(value: json_encode(value: [
-            'type' => $this->getType(type: $method->type),
-            'specificType' => $this->getSpecificType(type: $method->type),
+            'type' => $this->getType(method: $method),
+            'specificType' => $this->getSpecificType(method: $method),
             'customerType' => $this->getCustomerTypes(method: $method)
         ], flags: JSON_THROW_ON_ERROR));
 
@@ -258,13 +258,14 @@ class Ecom extends AbstractHelper
      * "RESURS_" if it exists, this will match the "specificType" property from
      * the deprecated APIs.
      *
-     * @param Type $type
+     * @param PaymentMethodInterface $method
      * @return string
      */
-    private function getSpecificType(Type $type): string
+    private function getSpecificType(PaymentMethodInterface $method): string
     {
-        return (str_starts_with(haystack: $type->value, needle: 'RESURS_')) ?
-            substr(string: $type->value, offset: 7) : $type->value;
+        return $method->isInternal() ?
+            substr(string: $method->getTypeValue(), offset: 7) :
+            $method->getTypeValue();
     }
 
     /**
@@ -273,13 +274,12 @@ class Ecom extends AbstractHelper
      * This method exists to mimic some behavior established by the deprecated
      * API integrations.
      *
-     * @param Type $type
+     * @param PaymentMethodInterface $method
      * @return string
      */
-    private function getType(Type $type): string
+    private function getType(PaymentMethodInterface $method): string
     {
-        return str_starts_with(haystack: $type->value, needle: 'RESURS_') ?
-            'INTERNAL' : 'PAYMENT_PROVIDER';
+        return $method->isInternal() ? 'INTERNAL' : 'PAYMENT_PROVIDER';
     }
 
     /**
@@ -441,7 +441,7 @@ class Ecom extends AbstractHelper
      * @param string $id
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return PaymentMethodInterface
+     * @return null|PaymentMethodInterface
      * @throws ApiException
      * @throws AuthException
      * @throws CacheException
@@ -461,7 +461,7 @@ class Ecom extends AbstractHelper
         string $id,
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORES
-    ): PaymentMethodInterface {
+    ): ?PaymentMethodInterface {
         return Repository::getById(
             storeId: $storeId,
             paymentMethodId: $id
