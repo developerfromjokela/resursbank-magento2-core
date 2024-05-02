@@ -51,9 +51,9 @@ class Ecom extends AbstractHelper
      * on each page request to obtain the same resources (significant
      * performance improvement when cache is disabled).
      *
-     * @var array
+     * @var null|array
      */
-    private array $methods = [];
+    private ?array $methods = null;
 
     /**
      * @param Context $context
@@ -89,7 +89,7 @@ class Ecom extends AbstractHelper
     ): array {
         // During a single checkout request this method will execute multiple
         // times. Storing collection locally improves performance.
-        if (!empty($this->methods)) {
+        if ($this->methods !== null) {
             return $this->methods;
         }
 
@@ -136,30 +136,16 @@ class Ecom extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): ?PaymentMethod {
-        try {
-            $storeId = $this->config->getStore(
-                scopeCode: $scopeCode,
-                scopeType: $scopeType
-            );
+        $storeId = $this->config->getStore(
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
 
-            /* Attempt to use local storage first since this data is accessed
-               multiple times on each page request in checkout. */
-            $methods = $this->getMethods($scopeCode, $scopeType);
+        /* Attempt to use local storage first since this data is accessed
+           multiple times on each page request in checkout. */
+        $methods = $this->getMethods($scopeCode, $scopeType);
 
-            if (isset($methods["$storeId-$id"])) {
-                return $methods["$storeId-$id"];
-            }
-
-            $method = $this->getMethod(storeId: $storeId, id: $id);
-
-            if ($method !== null) {
-                $result = $this->convertMethod(method: $method);
-            }
-        } catch (Throwable $error) {
-            $this->log->exception(error: $error);
-        }
-
-        return $result ?? null;
+        return $methods["$storeId-$id"] ?? null;
     }
 
     /**
@@ -442,18 +428,6 @@ class Ecom extends AbstractHelper
      * @param string|null $scopeCode
      * @param string $scopeType
      * @return null|PaymentMethodInterface
-     * @throws ApiException
-     * @throws AuthException
-     * @throws CacheException
-     * @throws ConfigException
-     * @throws CurlException
-     * @throws EmptyValueException
-     * @throws IllegalTypeException
-     * @throws IllegalValueException
-     * @throws JsonException
-     * @throws ReflectionException
-     * @throws Throwable
-     * @throws ValidationException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMethod(
@@ -462,9 +436,15 @@ class Ecom extends AbstractHelper
         ?string $scopeCode = null,
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): ?PaymentMethodInterface {
-        return Repository::getById(
-            storeId: $storeId,
-            paymentMethodId: $id
-        );
+        try {
+            return Repository::getById(
+                storeId: $storeId,
+                paymentMethodId: $id
+            );
+        } catch (Throwable $e) {
+            $this->log->exception(error: $e);
+        }
+
+        return null;
     }
 }

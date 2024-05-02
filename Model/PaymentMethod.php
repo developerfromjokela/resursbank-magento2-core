@@ -285,6 +285,10 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setRaw(string $value): PaymentMethodInterface
     {
+        if ($value === '') {
+            return $this;
+        }
+
         // We want to store the encoded value but this lets us confirm its JSON.
         json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
@@ -301,6 +305,12 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function getType(): ?string
     {
+        $raw = $this->getRaw();
+
+        if ($raw === '') {
+            return null;
+        }
+
         $raw = json_decode(
             (string) $this->getRaw(),
             true,
