@@ -34,7 +34,7 @@ use Throwable;
 class Stores extends GetStoresController implements HttpPostActionInterface
 {
     /**
-     * @param AbstractLog $log
+     * @param Log $log
      * @param JsonFactory $jsonFactory
      * @param Config $config
      * @param ScopeHelper $scope
@@ -64,7 +64,12 @@ class Stores extends GetStoresController implements HttpPostActionInterface
                 jwtAuth: new Jwt(
                     clientId: $requestData->clientId,
                     clientSecret: $requestData->clientSecret,
-                    scope: Scope::CHECKOUT_PLUS_API,
+                    scope: $this->ecom->getScope(
+                        environment: $this->config->getApiEnvironment(
+                            scopeCode: $this->scope->getId(),
+                            scopeType: $this->scope->getType()
+                        )
+                    ),
                     grantType: GrantType::CREDENTIALS
                 ),
                 env: $requestData->environment
