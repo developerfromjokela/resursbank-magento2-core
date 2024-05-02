@@ -12,10 +12,10 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Resursbank\Core\Helper\Ecom;
+use Resursbank\Core\Helper\PaymentMethods\Ecom as PaymentMethodsHelper;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Ecom\Config as EcomConfig;
 use Resursbank\Ecom\Module\PaymentMethod\Widget\PaymentMethods as Widget;
-use Resursbank\Ecom\Module\Rco\Repository\PaymentMethods as Repository;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Throwable;
@@ -30,12 +30,16 @@ class PaymentMethods extends Field
      * @param Log $log
      * @param Scope $scope
      * @param Config $config
+     * @param Ecom $ecom
+     * @param PaymentMethodsHelper $paymentMethodsHelper
      */
     public function __construct(
         Context $context,
         private readonly Log $log,
         private readonly Scope $scope,
-        private readonly Config $config
+        private readonly Config $config,
+        private readonly Ecom $ecom,
+        private readonly PaymentMethodsHelper $paymentMethodsHelper
     ) {
         $this->setTemplate(
             template: 'Resursbank_Core::system/config/payment-methods.phtml'
@@ -53,21 +57,30 @@ class PaymentMethods extends Field
     {
         $result = '';
 
-        // Must have configured a store.
-        $StoreId = $this->config->getStore(
-            $this->scope->getId(),
-            $this->scope->getType()
-        );
-
-        if ($StoreId === '') {
-            return '';
-        }
-
         try {
+            // Must have configured a store.
+            $storeId = $this->config->getStore(
+                $this->scope->getId(),
+                $this->scope->getType()
+            );
+
+            if ($storeId === '' ||
+                !$this->ecom->canConnect(
+                    scopeCode: $this->scope->getId(),
+                    scopeType: $this->scope->getType()
+                )
+            ) {
+                return '';
+            }
+
             EcomConfig::validateInstance();
 
             $widget = new Widget(
-                paymentMethods: Repository::getPaymentMethods(storeId: $StoreId)
+                paymentMethods: $this->paymentMethodsHelper->getPaymentMethodsCollection(
+                    storeId: $storeId,
+                    scopeCode: $this->scope->getId(),
+                    scopeType: $this->scope->getType()
+                )
             );
 
             $result = $widget->content;

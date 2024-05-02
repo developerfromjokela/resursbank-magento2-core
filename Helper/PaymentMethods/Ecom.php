@@ -383,9 +383,6 @@ class Ecom extends AbstractHelper
      * allow for different API flows to be implemented through plugins in other
      * modules.
      *
-     * This method is not intended to be used outside this class, please use
-     * getMethods() instead.
-     *
      *  NOTE: scopeCode and scopeType are not used in this method, but are
      *  included in order for plugin methods to assert they should execute
      *  based on whether their API flow is enabled or not.
@@ -415,9 +412,6 @@ class Ecom extends AbstractHelper
      * Resolve payment method using UUID through Ecom. This method acts an
      * anchor to allow for different API flows to be implemented through plugins
      * in other modules.
-     *
-     * This method is not intended to be used outside this class, please use
-     * getMethodById() instead.
      *
      * NOTE: scopeCode and scopeType are not used in this method, but are
      * included in order for plugin methods to assert they should execute
