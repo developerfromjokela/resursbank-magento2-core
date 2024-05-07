@@ -12,7 +12,9 @@ namespace Resursbank\Core\Gateway\Command;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Resursbank\Core\Helper\Log;
 use Throwable;
@@ -33,8 +35,8 @@ class Authorize implements CommandInterface
     /**
      * Execute
      *
-     * Note: Extended by other API implementations, only transaction id handling is
-     * centralized.
+     * Note: Extended by other API implementations, only transaction id handling
+     * is centralized.
      *
      * @param array $commandSubject
      * @return ResultInterface|null
@@ -43,9 +45,43 @@ class Authorize implements CommandInterface
     public function execute(
         array $commandSubject
     ): ?ResultInterface {
+        // Resolve outside try-catch to propagate PaymentException.
+        $payment = $this->getPayment(commandSubject: $commandSubject);
+        $order = $this->getOrder(commandSubject: $commandSubject);
+
+        try {
+            $payment->setTransactionId(
+                transactionId: $order->getOrderIncrementId()
+            )->setIsTransactionClosed(isClosed: false);
+        } catch (Throwable $error) {
+            $this->log->exception(error: $error);
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve Payment from subject data.
+     *
+     * @param array $commandSubject
+     * @return Payment
+     * @throws PaymentException
+     */
+    public function getPayment(
+        array $commandSubject
+    ): Payment {
         try {
             $data = SubjectReader::readPayment(subject: $commandSubject);
             $payment = $data->getPayment();
+
+            if (!$payment instanceof Payment) {
+                throw new PaymentException(phrase: __(
+                    'Payment object is not an instance of %1',
+                    Payment::class
+                ));
+            }
+
+            return $payment;
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
 
@@ -55,19 +91,38 @@ class Authorize implements CommandInterface
                 'could also try refreshing the page.'
             ));
         }
+    }
 
+    /**
+     * Resolve Order from subject data.
+     *
+     * @param array $commandSubject
+     * @return OrderAdapterInterface
+     * @throws PaymentException
+     */
+    public function getOrder(
+        array $commandSubject
+    ): OrderAdapterInterface {
         try {
-            if ($payment instanceof Payment) {
-                $payment->setTransactionId(
-                    transactionId: $data->getOrder()
-                        ->getOrderIncrementId()
-                )
-                    ->setIsTransactionClosed(isClosed: false);
+            $data = SubjectReader::readPayment(subject: $commandSubject);
+            $order = $data->getOrder();
+
+            if (!$order instanceof OrderAdapterInterface) {
+                throw new PaymentException(phrase: __(
+                    'Order object is not an instance of %1',
+                    OrderAdapterInterface::class
+                ));
             }
+
+            return $order;
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
-        }
 
-        return null;
+            throw new PaymentException(phrase: __(
+                'Something went wrong when trying to place the order. ' .
+                'Please try again, or select another payment method. You ' .
+                'could also try refreshing the page.'
+            ));
+        }
     }
 }

@@ -305,14 +305,14 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function getType(): ?string
     {
-        $raw = $this->getRaw();
+        $raw = (string) $this->getRaw();
 
         if ($raw === '') {
             return null;
         }
 
         $raw = json_decode(
-            (string) $this->getRaw(),
+            $raw,
             true,
             512,
             JSON_THROW_ON_ERROR
