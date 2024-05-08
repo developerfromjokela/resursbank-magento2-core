@@ -26,6 +26,7 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Ecom\Module\Payment\Enum\ActionType;
 use function is_string;
+use Throwable;
 
 /**
  * This class implements ArgumentInterface (that's normally reserved for
