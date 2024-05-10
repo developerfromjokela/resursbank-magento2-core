@@ -138,8 +138,8 @@ class Url extends AbstractHelper
             scopeCode: $store->getCode()
         )) {
             $url .= '&XDEBUG_SESSION=' . $this->config->getXdebugSessionValue(
-                    scopeCode: $store->getCode()
-                );
+                scopeCode: $store->getCode()
+            );
         }
 
         return $url;
