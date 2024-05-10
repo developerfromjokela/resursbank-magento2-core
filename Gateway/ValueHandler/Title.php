@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Resursbank\Core\Gateway\ValueHandler;
 
 use Exception;
-use Resursbank\Core\Helper\ValueHandlerSubjectReader;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Resursbank\Core\Api\ValueHandlerInterface;
 use Resursbank\Core\Helper\Log;
 
@@ -30,25 +30,11 @@ class Title implements ValueHandlerInterface
     public const DEFAULT_TITLE = 'Resurs Bank';
 
     /**
-     * @var ValueHandlerSubjectReader
-     */
-    private ValueHandlerSubjectReader $reader;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @param ValueHandlerSubjectReader $reader
      * @param Log $log
      */
     public function __construct(
-        ValueHandlerSubjectReader $reader,
-        Log $log
+        private readonly Log $log
     ) {
-        $this->reader = $reader;
-        $this->log = $log;
     }
 
     /**
@@ -66,14 +52,15 @@ class Title implements ValueHandlerInterface
         $result = self::DEFAULT_TITLE;
 
         try {
-            $method = $this->reader->getResursModel($subject);
+            if (isset($subject['payment']) &&
+                $subject['payment'] instanceof PaymentDataObject
+            ) {
+                $title = (string) $subject['payment']->getPayment()
+                    ->getAdditionalInformation('method_title');
 
-            if ($method !== null) {
-                $result = sprintf(
-                    '%s (%s)',
-                    self::DEFAULT_TITLE,
-                    $method->getTitle()
-                );
+                if ($title !== '') {
+                    $result = $title;
+                }
             }
         } catch (Exception $e) {
             $this->log->exception($e);

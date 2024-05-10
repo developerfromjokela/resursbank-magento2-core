@@ -197,6 +197,24 @@
                         <config_path>resursbank/advanced/clean_orders_minimum_age</config_path>
                         <source_model>Resursbank\Core\Model\Config\Source\CleanOrders\MinimumAge</source_model>
                     </field>
+                    <field id="enable_developer_mode" translate="label, comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-enable-developer-mode</label>
+                        <comment>rb-enable-developer-mode-comment</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>resursbank/advanced/enable_developer_mode</config_path>
+                        <depends>
+                            <field id="*/resursbank_section/api/flow" separator=",">rcoplus,mapi</field>
+                        </depends>
+                    </field>
+                    <field id="xdebug_session_value" translate="label, comment" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>rb-xdebug-session-value</label>
+                        <comment>rb-xdebug-session-value-comment</comment>
+                        <config_path>resursbank/advanced/xdebug_session_value</config_path>
+                        <depends>
+                            <field id="enable_developer_mode">1</field>
+                            <field id="*/resursbank_section/api/flow" separator=",">rcoplus,mapi</field>
+                        </depends>
+                    </field>
                 </group>
             </group>
         </section>
