@@ -10,6 +10,7 @@ namespace Resursbank\Core\Helper;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -23,7 +24,9 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
+use Resursbank\Ecom\Module\Payment\Enum\ActionType;
 use function is_string;
+use Throwable;
 
 /**
  * This class implements ArgumentInterface (that's normally reserved for
@@ -355,5 +358,31 @@ class Order extends AbstractHelper implements ArgumentInterface
         OrderInterface $order
     ): bool {
         return (string) $order->getData(key: 'resursbank_flow') === '';
+    }
+
+    /**
+     * Throw translated PaymentException including Exception|Error message.
+     *
+     * @param ActionType $type
+     * @param Throwable $error
+     * @return void
+     * @throws PaymentException
+     */
+    public function throwGatewayException(
+        ActionType $type,
+        Throwable $error
+    ): void {
+        $typeValue = strtolower(string: $type->value);
+
+        $msg = str_replace(
+            search: '%s',
+            replace: '%1',
+            subject: __("rb-$typeValue-action-failed")->render()
+        );
+
+        throw new PaymentException(phrase: __(
+            $msg,
+            $error->getMessage()
+        ));
     }
 }
