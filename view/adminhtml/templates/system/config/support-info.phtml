@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Resurs Bank AB. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Resursbank\Core\Block\Adminhtml\System\Config\SupportInfo;
+
+/** @var SupportInfo $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+
+$content = $block->getHtml();
+$css = $block->getCss();
+?>
+
+<?php if ($css !== ''): ?>
+    <?= /* @noEscape */
+    $secureRenderer->renderTag(
+        content: $css,
+        tagName: 'style',
+        textContent: true,
+        attributes: []
+    ) ?>
+<?php endif; ?>
+
+<?php if ($content !== ''): ?>
+    <?= /* @noEscape */
+    $escaper->escapeHtml(
+        data: $content,
+        allowedTags: ['div', 'table', 'tbody', 'tr', 'td', 'br']
+    ) ?>
+<?php endif; ?>
