@@ -9,9 +9,13 @@ declare(strict_types=1);
 namespace Resursbank\Core\Gateway\ValueHandler;
 
 use Exception;
-use Resursbank\Core\Helper\ValueHandlerSubjectReader;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Gateway\Data\PaymentDataObject;
+use Magento\Payment\Model\MethodInterface;
+use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Api\ValueHandlerInterface;
 use Resursbank\Core\Helper\Log;
+use Resursbank\Core\Model\Payment\Resursbank;
 
 /**
  * Magento's core adapter will resolve the title from the database, regardless
@@ -30,25 +34,11 @@ class Title implements ValueHandlerInterface
     public const DEFAULT_TITLE = 'Resurs Bank';
 
     /**
-     * @var ValueHandlerSubjectReader
-     */
-    private ValueHandlerSubjectReader $reader;
-
-    /**
-     * @var Log
-     */
-    private Log $log;
-
-    /**
-     * @param ValueHandlerSubjectReader $reader
      * @param Log $log
      */
     public function __construct(
-        ValueHandlerSubjectReader $reader,
-        Log $log
+        private readonly Log $log
     ) {
-        $this->reader = $reader;
-        $this->log = $log;
     }
 
     /**
@@ -66,19 +56,68 @@ class Title implements ValueHandlerInterface
         $result = self::DEFAULT_TITLE;
 
         try {
-            $method = $this->reader->getResursModel($subject);
+            $title = '';
 
-            if ($method !== null) {
-                $result = sprintf(
-                    '%s (%s)',
-                    self::DEFAULT_TITLE,
-                    $method->getTitle()
-                );
+            if (isset($subject['payment']) &&
+                $subject['payment'] instanceof PaymentDataObject
+            ) {
+                $title = (string) $subject['payment']->getPayment()
+                    ->getAdditionalInformation('method_title');
+            }
+
+            if ($title === '') {
+                $method = $this->getResursModel($subject);
+
+                if ($method !== null) {
+                    $result = sprintf(
+                        '%s (%s)',
+                        self::DEFAULT_TITLE,
+                        $method->getTitle()
+                    );
+                }
+            }
+
+            if ($title !== '') {
+                $result = $title;
             }
         } catch (Exception $e) {
             $this->log->exception($e);
         }
 
         return $result;
+    }
+
+    /**
+     * Get payment method instance.
+     *
+     * @param array<mixed> $subject
+     * @return MethodInterface|null
+     * @throws LocalizedException
+     */
+    public function getMethodInstance(
+        array $subject
+    ): ?MethodInterface {
+        return (
+            isset($subject['payment']) &&
+            $subject['payment'] instanceof PaymentDataObject &&
+            $subject['payment']->getPayment() &&
+            $subject['payment']->getPayment()->getMethod() &&
+            $subject['payment']->getPayment()->getMethodInstance() instanceof MethodInterface
+        ) ? $subject['payment']->getPayment()->getMethodInstance() : null;
+    }
+
+    /**
+     * Get Resurs Bank payment method model.
+     *
+     * @param array<mixed> $subject
+     * @return PaymentMethodInterface|null
+     * @throws LocalizedException
+     */
+    public function getResursModel(
+        array $subject
+    ): ?PaymentMethodInterface {
+        $method = $this->getMethodInstance($subject);
+
+        return $method instanceof Resursbank ? $method->getResursModel() : null;
     }
 }

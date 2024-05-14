@@ -11,33 +11,26 @@ namespace Resursbank\Core\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Backend\Model\UrlInterface as AdminUrlInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 
 class Url extends AbstractHelper
 {
     /**
-     * @var AdminUrlInterface
-     */
-    private AdminUrlInterface $adminUrl;
-
-    /**
-     * @var UrlInterface
-     */
-    private UrlInterface $url;
-
-    /**
      * @param Context $context
      * @param AdminUrlInterface $adminUrl
      * @param UrlInterface $url
+     * @param Config $config
+     * @param Scope $scope
      */
     public function __construct(
         Context $context,
-        AdminUrlInterface $adminUrl,
-        UrlInterface $url
+        private readonly AdminUrlInterface $adminUrl,
+        private readonly UrlInterface $url,
+        private readonly Config $config,
+        private readonly Scope $scope
     ) {
-        $this->adminUrl = $adminUrl;
-        $this->url = $url;
-
         parent::__construct($context);
     }
 
@@ -116,5 +109,39 @@ class Url extends AbstractHelper
     public function getCheckoutRebuildRedirectUrl(?string $override): string
     {
         return $this->url->getUrl($override ?? 'checkout');
+    }
+
+    /**
+     * Construct a URL for external services to communicate with this website.
+     *
+     * @param string $route
+     * @return string
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getExternalUrl(
+        string $route
+    ): string {
+        $store = $this->scope->getStoreManager()->getStore(
+            storeId: $this->scope->getId()
+        );
+
+        $params = [
+            '_secure' => true,
+            '_scope' => $store,
+            '_scope_to_url' => true
+        ];
+
+        $url = $store->getUrl(route: $route, params: $params);
+
+        if ($this->config->isDeveloperModeActive(
+            scopeCode: $store->getCode()
+        )) {
+            $url .= '&XDEBUG_SESSION=' . $this->config->getXdebugSessionValue(
+                scopeCode: $store->getCode()
+            );
+        }
+
+        return $url;
     }
 }

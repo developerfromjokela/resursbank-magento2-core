@@ -398,4 +398,42 @@ class Config extends AbstractConfig
 
         return (string) $result;
     }
+
+    /**
+     * Checks if developer mode is enabled.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return bool
+     */
+    public function isDeveloperModeActive(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): bool {
+        return $this->isEnabled(
+            group: self::ADVANCED_GROUP,
+            key: 'enable_developer_mode',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
+
+    /**
+     * Fetch configured XDEBUG_SESSION value.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return string
+     */
+    public function getXdebugSessionValue(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): string {
+        return (string)$this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'xdebug_session_value',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
 }

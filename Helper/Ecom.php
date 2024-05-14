@@ -126,7 +126,11 @@ class Ecom extends AbstractHelper
                 $jwtAuth = new Jwt(
                     clientId: $clientId,
                     clientSecret: $clientSecret,
-                    scope: $scope ?? $this->getScope(environment: $env),
+                    scope: $scope ?? $this->getScope(
+                        environment: $env,
+                        scopeCode: $scopeCode,
+                        scopeType: $scopeType
+                    ),
                     grantType: GrantType::CREDENTIALS,
                 );
             }
@@ -184,10 +188,16 @@ class Ecom extends AbstractHelper
      * Fetch scope for specified environment.
      *
      * @param Environment $environment
+     * @param string|null $scopeCode
+     * @param string $scopeType
      * @return EcomScope
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getScope(Environment $environment): EcomScope
-    {
+    public function getScope(
+        Environment $environment,
+        ?string $scopeCode = null,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): EcomScope {
         return $environment === Environment::PROD ?
             EcomScope::MERCHANT_API :
             EcomScope::MOCK_MERCHANT_API;
