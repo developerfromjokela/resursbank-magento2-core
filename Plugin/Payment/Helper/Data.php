@@ -12,6 +12,7 @@ namespace Resursbank\Core\Plugin\Payment\Helper;
 use Exception;
 use InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
@@ -192,6 +193,19 @@ class Data
     }
 
     /**
+     * Check if Swish max order limit is applicable.
+     *
+     * This method's output defaults to false as it is intended to be
+     * intercepted by plugins in other modules.
+     *
+     * @return bool
+     */
+    public function swishMaxOrderLimitApplicable(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get instance of payment method with specified code.
      *
      * Generate instance of our payment method model and apply the code of the
@@ -262,13 +276,14 @@ class Data
      * @param PaymentMethodInterface|null $method
      * @return PaymentMethodInterface|null
      * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function setSwishMaxOrderTotal(
         ?PaymentMethodInterface $method
     ): ?PaymentMethodInterface {
         if ($method !== null &&
-            $method->getSpecificType() === 'SWISH') {
+            $method->getSpecificType() === 'SWISH' &&
+            $this->swishMaxOrderLimitApplicable()) {
             $maxOrderTotal = $this->config->getSwishMaxOrderTotal(
                 scopeCode: $this->scope->getId()
             );
