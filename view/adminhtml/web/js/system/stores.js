@@ -17,6 +17,7 @@ require([
         getClientIdInputElement: function() {
             return document.getElementById(
                 'payment_other_resursbank_section_api_client_id_' +
+                fetcher.getSelectFlowElement().value + '_' +
                 fetcher.getSelectEnvironmentElement().value
             );
         },
@@ -24,6 +25,7 @@ require([
         getClientSecretInputElement: function() {
             return document.getElementById(
                 'payment_other_resursbank_section_api_client_secret_' +
+                fetcher.getSelectFlowElement().value + '_' +
                 fetcher.getSelectEnvironmentElement().value
             );
         },
