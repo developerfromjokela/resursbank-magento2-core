@@ -75,6 +75,14 @@
                             <field id="flow" separator=",">simplified,rco</field>
                         </depends>
                     </field>
+                    <field id="swish_max_order_total" type="text" sortOrder="10" translate="label, comment" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Swish maximum order total</label>
+                        <config_path>resursbank/advanced/swish_max_order_total</config_path>
+                        <comment>Maximum cart value allowed for Swish transactions. An empty value, or 0, will result in the utilisation of the value provided by the API.</comment>
+                        <depends>
+                            <field id="flow" separator=",">simplified,mapi</field>
+                        </depends>
+                    </field>
                     <!-- Increase sort order to make room for settings from submodules. -->
                     <field id="sync" type="button" sortOrder="50" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sync data</label>
