@@ -400,6 +400,25 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Manually defined maximum transaction amount for Swish.
+     *
+     * @param string|null $scopeCode
+     * @param string $scopeType
+     * @return float
+     */
+    public function getSwishMaxOrderTotal(
+        ?string $scopeCode,
+        string $scopeType = ScopeInterface::SCOPE_STORES
+    ): float {
+        return (float) $this->get(
+            group: self::ADVANCED_GROUP,
+            key: 'swish_max_order_total',
+            scopeCode: $scopeCode,
+            scopeType: $scopeType
+        );
+    }
+
+    /**
      * Checks if developer mode is enabled.
      *
      * @param string|null $scopeCode

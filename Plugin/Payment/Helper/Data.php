@@ -12,6 +12,7 @@ namespace Resursbank\Core\Plugin\Payment\Helper;
 use Exception;
 use InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Helper\Data as Subject;
 use Magento\Payment\Model\Method\Factory as MethodFactory;
 use Magento\Payment\Model\MethodInterface;
@@ -22,6 +23,7 @@ use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
 use Resursbank\Core\Helper\PaymentMethods\Ecom as EcomPaymentMethods;
 use Resursbank\Core\Helper\Scope;
+use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Model\Payment\Resursbank as Method;
 use Resursbank\Core\Model\PaymentMethodRepository as Repository;
 use Throwable;
@@ -44,6 +46,7 @@ class Data
      * @param Scope $scope
      * @param Ecom $ecom
      * @param EcomPaymentMethods $ecomPaymentMethods
+     * @param Config $config
      */
     public function __construct(
         private readonly PaymentMethods $paymentMethods,
@@ -52,7 +55,8 @@ class Data
         private readonly Repository $repository,
         private readonly Scope $scope,
         private readonly Ecom $ecom,
-        private readonly EcomPaymentMethods $ecomPaymentMethods
+        private readonly EcomPaymentMethods $ecomPaymentMethods,
+        private readonly Config $config
     ) {
     }
 
@@ -189,6 +193,19 @@ class Data
     }
 
     /**
+     * Check if Swish max order limit is applicable.
+     *
+     * This method's output defaults to false as it is intended to be
+     * intercepted by plugins in other modules.
+     *
+     * @return bool
+     */
+    public function swishMaxOrderLimitApplicable(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get instance of payment method with specified code.
      *
      * Generate instance of our payment method model and apply the code of the
@@ -235,7 +252,7 @@ class Data
                 scopeType: $this->scope->getType()
             );
 
-            return $useEcom ?
+            $method = $useEcom ?
                 $this->ecomPaymentMethods->getMethodById(
                     id: $this->ecomPaymentMethods->getUuidFromCode(
                         code: $code
@@ -244,11 +261,39 @@ class Data
                     scopeType: $this->scope->getType()
                 ) :
                 $this->repository->getByCode($code);
+
+            return $this->setSwishMaxOrderTotal(method: $method);
         } catch (Throwable $e) {
-            $this->log->exception($e);
+            $this->log->exception(error: $e);
         }
 
         return null;
+    }
+
+    /**
+     * Set max order total for Swish method(s).
+     *
+     * @param PaymentMethodInterface|null $method
+     * @return PaymentMethodInterface|null
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function setSwishMaxOrderTotal(
+        ?PaymentMethodInterface $method
+    ): ?PaymentMethodInterface {
+        if ($method !== null &&
+            $method->getSpecificType() === 'SWISH' &&
+            $this->swishMaxOrderLimitApplicable()) {
+            $maxOrderTotal = $this->config->getSwishMaxOrderTotal(
+                scopeCode: $this->scope->getId()
+            );
+
+            if ($maxOrderTotal > 0) {
+                $method->setMaxOrderTotal(total: $maxOrderTotal);
+            }
+        }
+
+        return $method;
     }
 
     /**
