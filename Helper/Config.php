@@ -44,7 +44,7 @@ class Config extends AbstractConfig
     /**
      * @var EncryptorInterface
      */
-    private EncryptorInterface $encryptor;
+    protected EncryptorInterface $encryptor;
 
     /**
      * @param EncryptorInterface $encryptor
