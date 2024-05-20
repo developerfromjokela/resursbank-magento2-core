@@ -311,12 +311,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             return null;
         }
 
-        $raw = json_decode(
-            $raw,
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
+        $raw = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
 
         return $raw['type'] ?? null;
     }
@@ -329,12 +324,13 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function getSpecificType(): ?string
     {
-        $raw = json_decode(
-            (string) $this->getRaw(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
+        $raw = (string) $this->getRaw();
+
+        if ($raw === '') {
+            return null;
+        }
+
+        $raw = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
 
         return $raw['specificType'] ?? null;
     }
