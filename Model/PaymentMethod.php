@@ -56,7 +56,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             ));
         }
 
-        $this->setData(self::METHOD_ID, $methodId);
+        $this->setData(key: self::METHOD_ID, value: $methodId);
 
         return $this;
     }
@@ -84,7 +84,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             );
         }
 
-        $this->setData(self::IDENTIFIER, $identifier);
+        $this->setData(key: self::IDENTIFIER, value: $identifier);
 
         return $this;
     }
@@ -112,7 +112,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             );
         }
 
-        $this->setData(self::CODE, $code);
+        $this->setData(key: self::CODE, value: $code);
 
         return $this;
     }
@@ -134,7 +134,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setActive(bool $state): PaymentMethodInterface
     {
-        $this->setData(self::ACTIVE, $state);
+        $this->setData(key: self::ACTIVE, value: $state);
 
         return $this;
     }
@@ -154,7 +154,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setTitle(string $title): PaymentMethodInterface
     {
-        $this->setData(self::TITLE, $title);
+        $this->setData(key: self::TITLE, value: $title);
 
         return $this;
     }
@@ -182,7 +182,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             );
         }
 
-        $this->setData(self::SORT_ORDER, $order);
+        $this->setData(key: self::SORT_ORDER, value: $order);
 
         return $this;
     }
@@ -212,7 +212,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             );
         }
 
-        $this->setData(self::MIN_ORDER_TOTAL, $total);
+        $this->setData(key: self::MIN_ORDER_TOTAL, value: $total);
 
         return $this;
     }
@@ -242,7 +242,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
             );
         }
 
-        $this->setData(self::MAX_ORDER_TOTAL, $total);
+        $this->setData(key: self::MAX_ORDER_TOTAL, value: $total);
 
         return $this;
     }
@@ -262,7 +262,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setOrderStatus(string $status): PaymentMethodInterface
     {
-        $this->setData(self::ORDER_STATUS, $status);
+        $this->setData(key: self::ORDER_STATUS, value: $status);
 
         return $this;
     }
@@ -290,9 +290,14 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
         }
 
         // We want to store the encoded value but this lets us confirm its JSON.
-        json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+        json_decode(
+            json: $value,
+            associative: true,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR
+        );
 
-        $this->setData(self::RAW, $value);
+        $this->setData(key: self::RAW, value: $value);
 
         return $this;
     }
@@ -312,10 +317,10 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
         }
 
         $raw = json_decode(
-            $raw,
-            true,
-            512,
-            JSON_THROW_ON_ERROR
+            json: $raw,
+            associative: true,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR
         );
 
         return $raw['type'] ?? null;
@@ -329,11 +334,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function getSpecificType(): ?string
     {
+        $raw = (string) $this->getRaw();
+
+        if ($raw === '') {
+            return null;
+        }
+
         $raw = json_decode(
-            (string) $this->getRaw(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
+            json: $raw,
+            associative: true,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR
         );
 
         return $raw['specificType'] ?? null;
@@ -357,14 +368,17 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     public function setSpecificCountry(
         string $countryIso
     ): PaymentMethodInterface {
-        if (!preg_match('/\A[a-z]{2}\z/i', $countryIso)) {
+        if (!preg_match(pattern: '/\A[a-z]{2}\z/i', subject: $countryIso)) {
             throw new ValidatorException(__(
                 'Country ISO must be 2 characters long in the following ' .
                 'format: [a-zA-Z]. Lowercase chars will be cast to uppercase.'
             ));
         }
 
-        $this->setData(self::SPECIFIC_COUNTRY, strtoupper($countryIso));
+        $this->setData(
+            key: self::SPECIFIC_COUNTRY,
+            value: strtoupper($countryIso)
+        );
 
         return $this;
     }
@@ -384,7 +398,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setCreatedAt(int $timestamp): PaymentMethodInterface
     {
-        $this->setData(self::CREATED_AT, $timestamp);
+        $this->setData(key: self::CREATED_AT, value: $timestamp);
 
         return $this;
     }
@@ -404,7 +418,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
      */
     public function setUpdatedAt(int $timestamp): PaymentMethodInterface
     {
-        $this->setData(self::UPDATED_AT, $timestamp);
+        $this->setData(key: self::UPDATED_AT, value: $timestamp);
 
         return $this;
     }
