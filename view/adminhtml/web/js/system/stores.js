@@ -14,22 +14,6 @@ require([
     }
 
     const fetcher = new Resursbank_FetchStores({
-        getClientIdInputElement: function() {
-            return document.getElementById(
-                'payment_other_resursbank_section_api_client_id_' +
-                fetcher.getSelectFlowElement().value + '_' +
-                fetcher.getSelectEnvironmentElement().value
-            );
-        },
-
-        getClientSecretInputElement: function() {
-            return document.getElementById(
-                'payment_other_resursbank_section_api_client_secret_' +
-                fetcher.getSelectFlowElement().value + '_' +
-                fetcher.getSelectEnvironmentElement().value
-            );
-        },
-
         errorHandler: function(message) {
             alert({
                 title: 'Resurs Bank',

@@ -39,6 +39,32 @@ if ($widget !== '') {
         return urls[selectedApi] ?? '';
     }
 
+    function getResursBankClientId() {
+        let clientId;
+
+        let flow = document.getElementById('payment_other_resursbank_section_api_flow').value;
+        let environment = document.getElementById('payment_other_resursbank_section_api_environment').value;
+        let elementId = 'payment_other_resursbank_section_api_client_id_' +
+            flow + '_' + environment;
+
+        clientId = document.getElementById(elementId).value;
+
+        return clientId;
+    }
+
+    function getResursBankClientSecret() {
+        let clientSecret;
+
+        let flow = document.getElementById('payment_other_resursbank_section_api_flow').value;
+        let environment = document.getElementById('payment_other_resursbank_section_api_environment').value;
+        let elementId = 'payment_other_resursbank_section_api_client_secret_' +
+            flow + '_' + environment;
+
+        clientSecret = document.getElementById(elementId).value;
+
+        return clientSecret;
+    }
+
     /* This is to translate our message in view/adminhtml/web/js/system/stores.js
        since ECom translations are not available to the frontend i18n package. */
     const resursbankPleaseSelectStoreMsg = '<?= $escaper->escapeHtml(data: __('rb-please-select-store')) ?>';

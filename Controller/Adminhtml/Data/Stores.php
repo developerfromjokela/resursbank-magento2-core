@@ -11,11 +11,14 @@ namespace Resursbank\Core\Controller\Adminhtml\Data;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Scope as ScopeHelper;
 use Resursbank\Ecom\Exception\AuthException;
 use Resursbank\Ecom\Exception\HttpException;
+use Resursbank\Ecom\Lib\Api\Environment;
 use Resursbank\Ecom\Lib\Api\Environment as EnvironmentEnum;
 use Resursbank\Ecom\Lib\Api\GrantType;
 use Resursbank\Ecom\Lib\Api\Scope;
@@ -64,15 +67,11 @@ class Stores extends GetStoresController implements HttpPostActionInterface
                 jwtAuth: new Jwt(
                     clientId: $requestData->clientId,
                     clientSecret: $requestData->clientSecret,
-                    scope: $this->ecom->getScope(
-                        environment: $this->config->getApiEnvironment(
-                            scopeCode: $this->scope->getId(),
-                            scopeType: $this->scope->getType()
-                        )
-                    ),
+                    scope: $this->getScope(),
                     grantType: GrantType::CREDENTIALS
                 ),
-                env: $requestData->environment
+                env: $requestData->environment,
+                scope: $this->getScope()
             );
 
             $data = $this->getData();
@@ -88,6 +87,26 @@ class Stores extends GetStoresController implements HttpPostActionInterface
         $result->setData(data: $data);
 
         return $result;
+    }
+
+    /**
+     * Get Ecom scope for API connection.
+     *
+     * This is a separate method so that it can be overridden by individual
+     * API modules as needed to set the correct scope when connecting.
+     *
+     * @return Scope
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getScope(): Scope
+    {
+        return $this->ecom->getScope(
+            environment: $this->config->getApiEnvironment(
+                scopeCode: $this->scope->getId(),
+                scopeType: $this->scope->getType()
+            )
+        );
     }
 
     /**
