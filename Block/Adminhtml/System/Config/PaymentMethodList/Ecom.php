@@ -42,7 +42,7 @@ class Ecom extends Field
         private readonly PaymentMethodsHelper $paymentMethodsHelper
     ) {
         $this->setTemplate(
-            template: 'Resursbank_Core::system/config/payment-methods.phtml'
+            template: 'Resursbank_Core::system/config/payment-method-list/ecom.phtml'
         );
 
         parent::__construct($context);

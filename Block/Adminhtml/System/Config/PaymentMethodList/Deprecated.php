@@ -48,7 +48,9 @@ class Deprecated extends Field
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
-        $this->setTemplate(template: 'system/config/methods/listing.phtml');
+        $this->setTemplate(
+            template: 'system/config/payment-method-list/deprecated.phtml'
+        );
 
         parent::__construct(
             context: $context,
