@@ -51,6 +51,8 @@ class GetStores extends Template
 
             $widget = new GetStoresWidget(
                 fetchUrlCallback: 'getResursBankFetchStoresUrl',
+                clientIdCallback: 'getResursBankClientId',
+                clientSecretCallback: 'getResursBankClientSecret',
                 automatic: false,
                 storeSelectId: 'payment_other_resursbank_section_api_store',
                 environmentSelectId: 'payment_other_resursbank_section_api_environment'

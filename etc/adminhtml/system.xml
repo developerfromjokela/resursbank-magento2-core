@@ -26,40 +26,6 @@
                         <source_model>Resursbank\Core\Model\Config\Source\Environment</source_model>
                         <config_path>resursbank/api/environment</config_path>
                     </field>
-                    <field id="client_id_1" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-id</label>
-                        <config_path>resursbank/api/client_id_1</config_path>
-                        <depends>
-                            <field id="environment">1</field>
-                            <field id="flow" separator=",">rcoplus,mapi</field>
-                        </depends>
-                    </field>
-                    <field id="client_secret_1" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-secret</label>
-                        <config_path>resursbank/api/client_secret_1</config_path>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <depends>
-                            <field id="environment">1</field>
-                            <field id="flow" separator=",">rcoplus,mapi</field>
-                        </depends>
-                    </field>
-                    <field id="client_id_0" type="text" sortOrder="2" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-id</label>
-                        <config_path>resursbank/api/client_id_0</config_path>
-                        <depends>
-                            <field id="environment">0</field>
-                            <field id="flow" separator=",">rcoplus,mapi</field>
-                        </depends>
-                    </field>
-                    <field id="client_secret_0" type="obscure" sortOrder="3" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>rb-client-secret</label>
-                        <config_path>resursbank/api/client_secret_0</config_path>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                        <depends>
-                            <field id="environment">0</field>
-                            <field id="flow" separator=",">rcoplus,mapi</field>
-                        </depends>
-                    </field>
                     <field id="fetch_stores" type="button" sortOrder="4" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>rb-fetch-stores</label>
                         <frontend_model>Resursbank\Core\Block\Adminhtml\System\Config\GetStores\Button</frontend_model>
