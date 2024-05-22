@@ -7,9 +7,9 @@
 declare(strict_types=1);
 
 use Magento\Framework\Escaper;
-use Resursbank\Core\Block\Adminhtml\System\Config\Methods\Listing;
+use Resursbank\Core\Block\Adminhtml\System\Config\PaymentMethodList\Deprecated;
 
-/** @var Listing $block */
+/** @var Deprecated $block */
 /** @var Escaper $escaper */
 
 if (isset($block)) {
@@ -21,23 +21,23 @@ if (isset($block)) {
     <?php if (!empty($methods)): ?>
         <table id="rb-methods">
             <thead>
-                <tr>
-                    <th>
-                        <?= $escaper->escapeHtml(__('Name')) ?>
-                    </th>
-                    <th>
-                        <?= $escaper->escapeHtml(__('Min total')) ?>
-                    </th>
-                    <th>
-                        <?= $escaper->escapeHtml(__('Max total')) ?>
-                    </th>
-                    <th>
-                        <?= $escaper->escapeHtml(__('Sort order')) ?>
-                    </th>
-                </tr>
+            <tr>
+                <th>
+                    <?= $escaper->escapeHtml(__('Name')) ?>
+                </th>
+                <th>
+                    <?= $escaper->escapeHtml(__('Min total')) ?>
+                </th>
+                <th>
+                    <?= $escaper->escapeHtml(__('Max total')) ?>
+                </th>
+                <th>
+                    <?= $escaper->escapeHtml(__('Sort order')) ?>
+                </th>
+            </tr>
             </thead>
             <tbody>
-                <?php foreach ($methods as $method): ?>
+            <?php foreach ($methods as $method): ?>
                 <tr>
                     <td>
                         <?= $escaper->escapeHtml($method->getTitle()) ?>
@@ -52,7 +52,7 @@ if (isset($block)) {
                         <?= $escaper->escapeHtml($method->getSortOrder()) ?>
                     </td>
                 </tr>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
