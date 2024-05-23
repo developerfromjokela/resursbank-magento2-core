@@ -6,12 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Block\Adminhtml\System\Config;
+namespace Resursbank\Core\Block\Adminhtml\System\Config\PaymentMethodList;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Resursbank\Core\Helper\Ecom;
+use Resursbank\Core\Helper\Ecom as EcomHelper;
 use Resursbank\Core\Helper\PaymentMethods\Ecom as PaymentMethodsHelper;
 use Resursbank\Core\Helper\Scope;
 use Resursbank\Ecom\Config as EcomConfig;
@@ -23,14 +23,14 @@ use Throwable;
 /**
  * Render widget utilised to reflect available payment methods.
  */
-class PaymentMethods extends Field
+class Ecom extends Field
 {
     /**
      * @param Context $context
      * @param Log $log
      * @param Scope $scope
      * @param Config $config
-     * @param Ecom $ecom
+     * @param EcomHelper $ecom
      * @param PaymentMethodsHelper $paymentMethodsHelper
      */
     public function __construct(
@@ -38,11 +38,11 @@ class PaymentMethods extends Field
         private readonly Log $log,
         private readonly Scope $scope,
         private readonly Config $config,
-        private readonly Ecom $ecom,
+        private readonly EcomHelper $ecom,
         private readonly PaymentMethodsHelper $paymentMethodsHelper
     ) {
         $this->setTemplate(
-            template: 'Resursbank_Core::system/config/payment-methods.phtml'
+            template: 'Resursbank_Core::system/config/payment-method-list/ecom.phtml'
         );
 
         parent::__construct($context);

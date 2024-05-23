@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Resursbank\Core\Block\Adminhtml\System\Config\Methods;
+namespace Resursbank\Core\Block\Adminhtml\System\Config\PaymentMethodList;
 
 use Exception;
 use Magento\Backend\Block\Template\Context;
@@ -26,7 +26,7 @@ use function in_array;
 /**
  * List payment methods and relevant metadata on config page.
  */
-class Listing extends Field
+class Deprecated extends Field
 {
     /**
      * @param Context $context
@@ -48,7 +48,9 @@ class Listing extends Field
         array $data = [],
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
-        $this->setTemplate(template: 'system/config/methods/listing.phtml');
+        $this->setTemplate(
+            template: 'system/config/payment-method-list/deprecated.phtml'
+        );
 
         parent::__construct(
             context: $context,
