@@ -16,6 +16,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\AddressRepository;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Api;
+use Resursbank\Core\Helper\Ecom;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Order;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -39,6 +40,7 @@ class UpdateBillingAddress
      * @param Api $api
      * @param PaymentMethods $paymentMethods
      * @param Checkout $checkout
+     * @param Ecom $ecom
      */
     public function __construct(
         private readonly Log $log,
@@ -46,7 +48,8 @@ class UpdateBillingAddress
         private readonly Order $order,
         private readonly Api $api,
         private readonly PaymentMethods $paymentMethods,
-        private readonly Checkout $checkout
+        private readonly Checkout $checkout,
+        private readonly Ecom $ecom
     ) {
     }
 
@@ -62,7 +65,8 @@ class UpdateBillingAddress
     {
         return (
             $this->paymentMethods->isResursBankOrder(order: $order) &&
-            $this->order->getResursbankResult(order: $order) === null
+            $this->order->getResursbankResult(order: $order) === null &&
+            !$this->ecom->canConnect(scopeCode: $order->getStoreId())
         );
     }
 
