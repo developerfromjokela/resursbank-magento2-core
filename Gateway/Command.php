@@ -12,13 +12,16 @@ use Exception;
 use JsonException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderRepository;
 use ReflectionException;
+use Resursbank\Core\Api\LogInterface;
 use Resursbank\Core\Exception\PaymentDataException;
+use Resursbank\Core\Helper\AbstractLog;
 use Resursbank\Core\Model\Api\Payment\Converter\Item\ItemInterface;
 use Resursbank\Core\Model\Api\Payment\Item;
 use Resursbank\Ecom\Exception\AttributeCombinationException;
@@ -28,6 +31,7 @@ use Resursbank\Ecom\Lib\Model\Payment\Order\ActionLog\OrderLine;
 use Resursbank\Ecom\Lib\Model\Payment\Order\ActionLog\OrderLineCollection;
 use Resursbank\Ecom\Lib\Order\OrderLineType;
 use Resursbank\RBEcomPHP\ResursBank;
+use Throwable;
 use function get_class;
 
 /**
@@ -63,26 +67,38 @@ class Command
     }
 
     /**
-     * Get the payment.
+     * Resolve Payment from subject data.
      *
-     * @param PaymentDataObjectInterface $data
+     * @param array $commandSubject
+     * @param LogInterface $log
      * @return Payment
-     * @throws PaymentDataException
+     * @throws PaymentException
      */
     public function getPayment(
-        PaymentDataObjectInterface $data
+        array $commandSubject,
+        LogInterface $log
     ): Payment {
-        $payment = $data->getPayment();
+        try {
+            $data = SubjectReader::readPayment(subject: $commandSubject);
+            $payment = $data->getPayment();
 
-        if (!$payment instanceof Payment) {
-            throw new PaymentDataException(phrase: __(
-                'Unexpected payment entity. Expected %1 but got %2.',
-                Payment::class,
-                get_class(object: $data->getPayment())
+            if (!$payment instanceof Payment) {
+                throw new PaymentException(phrase: __(
+                    'Payment object is not an instance of %1',
+                    Payment::class
+                ));
+            }
+
+            return $payment;
+        } catch (Throwable $error) {
+            $log->exception(error: $error);
+
+            throw new PaymentException(phrase: __(
+                'Something went wrong when trying to place the order. ' .
+                'Please try again, or select another payment method. You ' .
+                'could also try refreshing the page.'
             ));
         }
-
-        return $payment;
     }
 
     /**
