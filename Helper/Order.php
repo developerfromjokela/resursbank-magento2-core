@@ -24,6 +24,8 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
+use Resursbank\Ecom\Exception\Validation\IllegalValueException;
+use Resursbank\Ecom\Lib\Validation\StringValidation;
 use Resursbank\Ecom\Module\Payment\Enum\ActionType;
 use function is_string;
 use Throwable;
@@ -64,6 +66,7 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param TransactionRepositoryInterface $transactionRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param StringValidation $stringValidation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -76,7 +79,8 @@ class Order extends AbstractHelper implements ArgumentInterface
         private readonly Repository $transaction,
         private readonly TransactionRepositoryInterface $transactionRepository,
         private readonly FilterBuilder $filterBuilder,
-        private readonly SearchCriteriaBuilder $searchCriteriaBuilder
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly StringValidation $stringValidation
     ) {
         parent::__construct(context: $context);
     }
@@ -384,5 +388,23 @@ class Order extends AbstractHelper implements ArgumentInterface
             $msg,
             $error->getMessage()
         ));
+    }
+
+    /**
+     * Check if order is legacy and processable by newer APIs.
+     *
+     * @param OrderInterface $order
+     * @return bool
+     * @throws InputException
+     */
+    public function isProcessableLegacy(OrderInterface $order): bool
+    {
+        try {
+            return $this->stringValidation->isUuid(
+                value: $this->getPaymentId(order: $order)
+            ) && $this->isLegacyFlow(order: $order);
+        } catch (IllegalValueException) {
+            return false;
+        }
     }
 }
