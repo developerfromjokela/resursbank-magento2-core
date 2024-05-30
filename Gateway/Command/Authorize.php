@@ -55,12 +55,12 @@ class Authorize extends Command implements CommandInterface
         $payment = $this->getPaymentFromCommandSubject(commandSubject: $commandSubject);
         $order = $this->getOrder(
             commandSubject: $commandSubject,
-            orderRepo: $this->orderRepository
+            log: $this->log
         );
 
         try {
             $payment->setTransactionId(
-                transactionId: $order->getIncrementId()
+                transactionId: $order->getOrderIncrementId()
             )->setIsTransactionClosed(isClosed: false);
         } catch (Throwable $error) {
             $this->log->exception(error: $error);

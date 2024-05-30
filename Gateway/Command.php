@@ -13,6 +13,7 @@ use JsonException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\PaymentException;
+use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -102,20 +103,37 @@ class Command
     }
 
     /**
-     * Get the order.
+     * Resolve Order from subject data.
      *
      * @param array $commandSubject
-     * @param OrderRepository $orderRepo
-     * @return OrderInterface
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @param LogInterface $log
+     * @return OrderAdapter
+     * @throws PaymentException
      */
     public function getOrder(
         array $commandSubject,
-        OrderRepository $orderRepo
-    ): OrderInterface {
-        $data = SubjectReader::readPayment(subject: $commandSubject);
-        return $orderRepo->get(id: $data->getOrder()->getId());
+        LogInterface $log
+    ): OrderAdapter {
+        try {
+            $data = SubjectReader::readPayment(subject: $commandSubject);
+            $order = $data->getOrder();
+
+            if (!$order instanceof OrderAdapter) {
+                throw new PaymentException(phrase: __(
+                    'Order object is not an instance of %1',
+                    OrderAdapterInterface::class
+                ));
+            }
+
+            return $order;
+        } catch (Throwable $error) {
+            $log->exception(error: $error);
+                throw new PaymentException(phrase: __(
+                    'Something went wrong when trying to place the order. ' .
+                    'Please try again, or select another payment method. You ' .
+                    'could also try refreshing the page.'
+                ));
+            }
     }
 
     /**
