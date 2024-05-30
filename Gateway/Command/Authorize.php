@@ -16,6 +16,7 @@ use Magento\Payment\Gateway\Command\ResultInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\OrderRepository;
 use Resursbank\Core\Gateway\Command;
 use Resursbank\Core\Helper\Log;
 use Throwable;
@@ -27,9 +28,11 @@ class Authorize extends Command implements CommandInterface
 {
     /**
      * @param Log $log
+     * @param OrderRepository $orderRepository
      */
     public function __construct(
-        private readonly Log $log
+        private readonly Log $log,
+        private readonly OrderRepository $orderRepository
     ) {
     }
 
@@ -50,7 +53,10 @@ class Authorize extends Command implements CommandInterface
     ): ?ResultInterface {
         // Resolve outside try-catch to propagate PaymentException.
         $payment = $this->getPaymentFromCommandSubject(commandSubject: $commandSubject);
-        $order = $this->getOrder(commandSubject: $commandSubject);
+        $order = $this->getOrder(
+            commandSubject: $commandSubject,
+            orderRepo: $this->orderRepository
+        );
 
         try {
             $payment->setTransactionId(
