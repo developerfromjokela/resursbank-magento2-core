@@ -133,7 +133,7 @@ class Command
                     'Please try again, or select another payment method. You ' .
                     'could also try refreshing the page.'
                 ));
-            }
+        }
     }
 
     /**
