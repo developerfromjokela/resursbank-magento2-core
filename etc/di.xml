@@ -118,6 +118,16 @@
         for="Resursbank\Core\Api\LogInterface"
         type="Resursbank\Core\Helper\Log" />
 
+    <!--
+    This is unfortunately required due to the PayPal_Braintree module
+    otherwise hijacking things and trying to make all OrderAdapter objects
+    into instances of its own OrderAdapter type which breaks things.
+    -->
+    <preference
+        for="Magento\Payment\Gateway\Data\Order\OrderAdapter"
+        type="Resursbank\Core\Gateway\Data\Order\OrderAdapter"
+    />
+
     <!-- Append our payment methods in frontend checkout process. -->
     <type name="Magento\Payment\Helper\Data">
         <plugin
