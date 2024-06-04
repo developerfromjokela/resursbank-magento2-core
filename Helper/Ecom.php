@@ -24,6 +24,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
+use Resursbank\Core\Gateway\Data\Order\OrderAdapter;
 use Resursbank\Core\Model\Cache\Ecom as Cache;
 use Resursbank\Core\Model\Cache\Type\Resursbank as ResursbankCacheType;
 use Resursbank\Ecom\Config as EcomConfig;
@@ -293,7 +294,7 @@ class Ecom extends AbstractHelper
      * @return void
      */
     public function connectAftershop(
-        OrderInterface|Invoice|Creditmemo $entity
+        OrderInterface|OrderAdapter|Invoice|Creditmemo $entity
     ): void {
         $this->connect(
             scopeCode: $entity->getStore()->getCode(),
