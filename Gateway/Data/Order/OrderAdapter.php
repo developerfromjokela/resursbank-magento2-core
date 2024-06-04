@@ -27,8 +27,8 @@ class OrderAdapter extends \Magento\Payment\Gateway\Data\Order\OrderAdapter
      */
     public function __construct(
         Order $order,
-        AddressAdapterFactory $addressAdapterFactory)
-    {
+        AddressAdapterFactory $addressAdapterFactory
+    ) {
         $this->_order = $order;
         parent::__construct($order, $addressAdapterFactory);
     }
