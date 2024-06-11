@@ -8,14 +8,17 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Cron;
 
+use JsonException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
+use ReflectionException;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\Helper\Config;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\Api as ApiHelper;
 use Resursbank\Core\Helper\Order as OrderHelper;
 use Resursbank\Core\Helper\PaymentMethods as PaymentHelper;
+use Resursbank\Ecom\Exception\AttributeCombinationException;
 use Resursbank\Ecom\Lib\Model\PaymentHistory\Entry;
 use Resursbank\Ecom\Lib\Model\PaymentHistory\Event;
 use Resursbank\Ecom\Lib\Model\PaymentHistory\User;
@@ -114,15 +117,7 @@ class CleanOrders
                         ) {
                             $this->orderHelper->cancelOrder(order: $order);
                             PaymentHistoryRepository::write(
-                                entry: new Entry(
-                                    paymentId: $this->orderHelper->getPaymentId(
-                                        order: $order
-                                    ),
-                                    event: Event::ORDER_CANCELED_CRON,
-                                    user: User::CRON,
-                                    extra:
-                                        'Job code: resursbank_core_clean_orders'
-                                )
+                                entry: $this->getEntry(order: $order)
                             );
                             $this->log->info(
                                 text: 'Successfully canceled stale pending order ' .
@@ -141,6 +136,28 @@ class CleanOrders
         }
 
         $this->log->info(text: 'Clean orders cron job run finished.');
+    }
+
+    /**
+     * Generate Entry object for payment history.
+     *
+     * This is a separate method so that it can be intercepted.
+     *
+     * @param Order $order
+     * @return Entry
+     * @throws ReflectionException
+     * @throws AttributeCombinationException
+     * @throws JsonException
+     */
+    public function getEntry(
+        Order $order
+    ): Entry {
+        return new Entry(
+            paymentId: $order->getIncrementId(),
+            event: Event::ORDER_CANCELED_CRON,
+            user: User::CRON,
+            extra: 'Job code: resursbank_core_clean_orders'
+        );
     }
 
     /**
