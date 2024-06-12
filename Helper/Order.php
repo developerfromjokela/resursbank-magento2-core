@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -20,13 +19,14 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order as OrderModel;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\OrderFactory;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Ecom\Exception\Validation\IllegalValueException;
 use Resursbank\Ecom\Lib\Validation\StringValidation;
 use Resursbank\Ecom\Module\Payment\Enum\ActionType;
+
 use function is_string;
 use Throwable;
 
@@ -62,11 +62,11 @@ class Order extends AbstractHelper implements ArgumentInterface
      * @param RequestInterface $request
      * @param OrderManagementInterface $orderManagement
      * @param Log $log
-     * @param Repository $transaction
      * @param TransactionRepositoryInterface $transactionRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StringValidation $stringValidation
+     * @param OrderFactory $orderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -76,11 +76,11 @@ class Order extends AbstractHelper implements ArgumentInterface
         private readonly RequestInterface $request,
         private readonly OrderManagementInterface $orderManagement,
         private readonly Log $log,
-        private readonly Repository $transaction,
         private readonly TransactionRepositoryInterface $transactionRepository,
         private readonly FilterBuilder $filterBuilder,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
-        private readonly StringValidation $stringValidation
+        private readonly StringValidation $stringValidation,
+        private readonly OrderFactory $orderFactory
     ) {
         parent::__construct(context: $context);
     }
@@ -288,24 +288,14 @@ class Order extends AbstractHelper implements ArgumentInterface
      *
      * @param OrderInterface $order
      * @return string
-     * @throws InputException
      */
     public function getPaymentId(OrderInterface $order): string
     {
-        if ($order->getPayment() === null) {
-            return '';
-        }
-
-        $transaction = $this->transaction->getByTransactionType(
-            transactionType: TransactionInterface::TYPE_AUTH,
-            paymentId: $order->getPayment()->getEntityId()
-        );
-
-        return $transaction instanceof TransactionInterface ? $transaction->getTxnId() : '';
+        return $order->getIncrementId();
     }
 
     /**
-     * Resolve order from transaction using Resurs Bank payment ID.
+     * Get order using Resurs Bank payment ID.
      *
      * @param string $paymentId
      * @return OrderInterface|null
@@ -313,11 +303,9 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function getOrderFromPaymentId(
         string $paymentId
     ): ?OrderInterface {
-        $entity = $this->getTransactionFromPaymentId(paymentId: $paymentId);
-
-        return !$entity instanceof TransactionInterface
-            ? null
-            : $this->orderRepo->get(id: $entity->getOrderId());
+        return $this->orderFactory->create()->loadByIncrementId(
+            incrementId: $paymentId
+        );
     }
 
     /**
@@ -395,7 +383,6 @@ class Order extends AbstractHelper implements ArgumentInterface
      *
      * @param OrderInterface $order
      * @return bool
-     * @throws InputException
      */
     public function isProcessableLegacy(OrderInterface $order): bool
     {
