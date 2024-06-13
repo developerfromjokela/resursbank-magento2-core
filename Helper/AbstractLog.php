@@ -172,13 +172,13 @@ abstract class AbstractLog extends AbstractHelper implements LogInterface
     {
         if (!is_string($this->loggerName) || $this->loggerName === '') {
             throw new ValidatorException(__(
-                'Cannot proceed without logger name.'
+                'rb-cannot-proceed-without-logger-name'
             ));
         }
 
         if (!is_string($this->file) || $this->file === '') {
             throw new ValidatorException(__(
-                'Cannot proceed without logfile.'
+                'rb-cannot-proceed-without-logfile'
             ));
         }
 

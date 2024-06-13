@@ -105,7 +105,7 @@ class PaymentMethodRepository implements PaymentMethodRepositoryInterface
 
         if (!$result->getId()) {
             throw new NoSuchEntityException(
-                __('Unable to find payment method with ID %1', $methodId)
+                __('rb-unable-to-find-payment-method', $methodId)
             );
         }
 

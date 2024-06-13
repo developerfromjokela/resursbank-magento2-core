@@ -76,7 +76,7 @@ class Converter extends AbstractHelper
         if (!$this->validate($data)) {
             throw new ValidatorException(
                 __(
-                    'Data conversion failed. Provided data is invalid. %1',
+                    'rb-data-conversion-failed-provided-data-is-invalid',
                     json_encode($data, JSON_THROW_ON_ERROR)
                 )
             );

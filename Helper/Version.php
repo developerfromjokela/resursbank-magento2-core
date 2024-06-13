@@ -73,7 +73,7 @@ class Version extends AbstractHelper
 
             if ($path === null) {
                 throw new InvalidDataException(
-                    __('Failed to resolve module path.')
+                    __('rb-failed-to-resolve-module-path')
                 );
             }
 

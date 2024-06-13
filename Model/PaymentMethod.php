@@ -51,8 +51,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if (is_int($methodId) && $methodId < 0) {
             throw new ValidatorException(__(
-                'Method ID must be be an integer that\'s more or equal ' .
-                'to 0, or null. Use null to create a new database entry.'
+                'method-id-must-be-integer-or-null'
             ));
         }
 
@@ -80,7 +79,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($identifier === '') {
             throw new ValidatorException(
-                __('Identifier cannot be an empty string.')
+                __('rb-identifier-cannot-be-empty-string')
             );
         }
 
@@ -108,7 +107,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($code === '') {
             throw new ValidatorException(
-                __('Code cannot be an empty string.')
+                __('rb-code-cannot-be-empty-string')
             );
         }
 
@@ -178,7 +177,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($order < 0) {
             throw new ValidatorException(
-                __('Sort order cannot be lower than 0.')
+                __('rb-sort-order-cannot-be-lower-than-0')
             );
         }
 
@@ -208,7 +207,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($total < 0.0) {
             throw new ValidatorException(
-                __('Minimum order total cannot be lower than 0.')
+                __('rb-minimum-order-total-cannot-be-lower-than-0')
             );
         }
 
@@ -238,7 +237,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if ($total < 0.0) {
             throw new ValidatorException(
-                __('Maximum order total cannot be lower than 0.')
+                __('rb-maximum-order-total-cannot-be-lower-than-0')
             );
         }
 
@@ -370,8 +369,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     ): PaymentMethodInterface {
         if (!preg_match(pattern: '/\A[a-z]{2}\z/i', subject: $countryIso)) {
             throw new ValidatorException(__(
-                'Country ISO must be 2 characters long in the following ' .
-                'format: [a-zA-Z]. Lowercase chars will be cast to uppercase.'
+                'rb-country-iso-must-be-2-characters'
             ));
         }
 

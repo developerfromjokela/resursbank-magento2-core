@@ -76,13 +76,13 @@ class Credentials extends AbstractHelper
     ): string {
         if ($model->getUsername() === null) {
             throw new ValidatorException(
-                __('Unable to generate hash. Missing username.')
+                __('rb-unable-to-generate-hash-missing-username')
             );
         }
 
         if ($model->getEnvironment() === null) {
             throw new ValidatorException(
-                __('Unable to generate hash. Missing environment.')
+                __('rb-unable-to-generate-hash-missing-environment')
             );
         }
 
@@ -104,13 +104,13 @@ class Credentials extends AbstractHelper
     ): string {
         if ($model->getUsername() === null) {
             throw new ValidatorException(
-                __('Failed to resolve method suffix. Missing username.')
+                __('rb-failed-to-resolve-method-suffix-missing-username')
             );
         }
 
         if ($model->getEnvironment() === null) {
             throw new ValidatorException(
-                __('Failed to resolve method suffix. Missing environment.')
+                __('rb-failed-to-resolve-method-suffix-missing-environment')
             );
         }
 
@@ -152,7 +152,7 @@ class Credentials extends AbstractHelper
 
         if ($country === '') {
             throw new ValidatorException(
-                __('Failed to apply country to Credentials instance.')
+                __('rb-failed-to-apply-country-to-credentials-instance')
             );
         }
 

@@ -96,10 +96,12 @@ class UpdateBillingAddress
                 $paymentData = $this->api->getPayment(order: $order);
 
                 if ($paymentData === null) {
-                    throw new InvalidDataException(phrase: __(
-                        'Payment data does not exist for ' .
-                        $this->order->getIncrementId(order: $order)
-                    ));
+                    throw new InvalidDataException(
+                        phrase: __(
+                            'rb-payment-data-does-not-exist-for-order',
+                            $this->order->getIncrementId(order: $order)
+                        )
+                    );
                 }
 
                 $payment = $this->api->toPayment(payment: $paymentData);
