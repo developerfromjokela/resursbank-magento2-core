@@ -181,6 +181,8 @@ class Order extends AbstractHelper implements ArgumentInterface
     public function setCreditDeniedStatus(
         OrderInterface $order
     ): void {
+        $this->cancelOrder(order: $order);
+
         $this->orderRepo->save(
             $order->setStatus(self::CREDIT_DENIED_CODE)
         );
