@@ -137,9 +137,10 @@ class Url extends AbstractHelper
         if ($this->config->isDeveloperModeActive(
             scopeCode: $store->getCode()
         )) {
-            $url .= '&XDEBUG_SESSION=' . $this->config->getXdebugSessionValue(
-                scopeCode: $store->getCode()
-            );
+            $url .= (str_contains(haystack: $url, needle: '?') ? '&' : '?') .
+                'XDEBUG_SESSION=' . $this->config->getXdebugSessionValue(
+                    scopeCode: $store->getCode()
+                );
         }
 
         return $url;
