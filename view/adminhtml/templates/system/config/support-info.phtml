@@ -14,8 +14,8 @@ use Resursbank\Core\Block\Adminhtml\System\Config\SupportInfo;
 /** @var SecureHtmlRenderer $secureRenderer */
 /** @var Escaper $escaper */
 
-$content = $block->getHtml();
-$css = $block->getCss();
+$content = (string) $block->widget?->html;
+$css = (string) $block->widget?->css;
 ?>
 
 <?php if ($css !== ''): ?>

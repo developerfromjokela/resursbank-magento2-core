@@ -21,11 +21,8 @@ use Throwable;
  */
 class SupportInfo extends Field
 {
-    /** @var string */
-    private readonly string $content;
-
-    /** @var string */
-    private readonly string $css;
+    /** @var null|Widget $widget */
+    public readonly ?Widget $widget;
 
     /**
      * @param Context $context
@@ -55,9 +52,7 @@ class SupportInfo extends Field
     {
         try {
             $version = $this->getVersion();
-            $widget = new Widget(pluginVersion: $version);
-            $this->content = $widget->getHtml();
-            $this->css = $widget->getCss();
+            $this->widget = new Widget(pluginVersion: $version);
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
         }
@@ -71,32 +66,14 @@ class SupportInfo extends Field
     public function getVersion(): string
     {
         try {
-            return 'Resursbank_Core: ' . $this->packageInfo->getVersion(moduleName: 'Resursbank_Core');
+            return 'Resursbank_Core: ' . $this->packageInfo->getVersion(
+                moduleName: 'Resursbank_Core'
+            );
         } catch (Throwable $error) {
             $this->log->exception(error: $error);
         }
 
         return '';
-    }
-
-    /**
-     * Get widget HTML.
-     *
-     * @return string
-     */
-    public function getHtml(): string
-    {
-        return $this->content;
-    }
-
-    /**
-     * Get widget CSS.
-     *
-     * @return string
-     */
-    public function getCss(): string
-    {
-        return $this->css;
     }
 
     /**
