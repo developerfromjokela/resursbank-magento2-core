@@ -71,7 +71,7 @@ class CreditDeniedOrderStatusState implements DataPatchInterface
             table: $table,
             data: [
                 'status' => Order::CREDIT_DENIED_CODE,
-                'state' => 'canceled',
+                'state' => 'pending_payment',
                 'is_default' => 0,
                 'visible_on_front' => 1
             ]
