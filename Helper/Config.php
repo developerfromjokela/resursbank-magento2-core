@@ -265,12 +265,12 @@ class Config extends AbstractConfig
      *
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return string
+     * @return ?string
      */
     public function getCleanOrdersFrequency(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
-    ): string {
+    ): ?string {
         return $this->get(
             group: self::ADVANCED_GROUP,
             key: 'clean_orders_frequency',
@@ -284,12 +284,12 @@ class Config extends AbstractConfig
      *
      * @param string|null $scopeCode
      * @param string $scopeType
-     * @return array
+     * @return ?array
      */
     public function getCleanOrdersTime(
         ?string $scopeCode,
         string $scopeType = ScopeInterface::SCOPE_STORES
-    ): array {
+    ): ?array {
         $frequency = $this->get(
             group: self::ADVANCED_GROUP,
             key: 'clean_orders_time',
