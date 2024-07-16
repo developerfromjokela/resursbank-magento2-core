@@ -1,7 +1,7 @@
 {
     "name": "resursbank/magento-core",
     "type": "magento2-module",
-    "version": "1.7.6",
+    "version": "1.7.7",
     "description": "Resurs Bank - Core Module",
     "keywords": ["magento", "checkout", "resursbank"],
     "license": ["Apache-2.0"],

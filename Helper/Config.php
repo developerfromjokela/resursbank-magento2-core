@@ -300,6 +300,6 @@ class Config extends AbstractConfig
         return $frequency !== null ? explode(
             separator: ',',
             string: $frequency
-        ) : '';
+        ) : [];
     }
 }
