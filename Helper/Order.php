@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Resursbank\Core\Helper;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -19,6 +20,7 @@ use Magento\Sales\Model\Order as OrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Resursbank\Core\Exception\InvalidDataException;
 use Resursbank\Core\ViewModel\Session\Checkout as CheckoutSession;
+use Throwable;
 use function is_string;
 
 /**
@@ -203,13 +205,27 @@ class Order extends AbstractHelper implements ArgumentInterface
      * Cancels both the order and all of its items to support item reservation.
      *
      * @param OrderInterface $order
+     * @param bool $allowOffline Set to true to allow offline capture if online fails.
      * @return OrderInterface
+     * @throws LocalizedException
      */
     public function cancelOrder(
-        OrderInterface $order
+        OrderInterface $order,
+        bool $allowOffline = false
     ): OrderInterface {
-        $this->orderManagement->cancel($order->getEntityId());
-        $this->log->info('Canceled order #' . $order->getIncrementId());
+        try {
+            $this->orderManagement->cancel($order->getEntityId());
+            $this->log->info(text: 'Canceled order #' .
+                $order->getIncrementId());
+        } catch (Throwable $error) {
+            if ($allowOffline) {
+                $this->log->info(text: 'Attempting to cancel order offline...');
+                $order->registerCancellation();
+            }
+        } catch (LocalizedException $error) {
+            $this->log->error(text: 'Offline cancel failed: ' .
+                $error->getMessage());
+        }
 
         return $order;
     }
