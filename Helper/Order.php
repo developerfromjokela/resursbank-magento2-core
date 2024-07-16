@@ -221,6 +221,7 @@ class Order extends AbstractHelper implements ArgumentInterface
             if ($allowOffline) {
                 $this->log->info(text: 'Attempting to cancel order offline...');
                 $order->registerCancellation();
+                $this->orderRepo->save(entity: $order);
             }
         } catch (LocalizedException $error) {
             $this->log->error(text: 'Offline cancel failed: ' .
