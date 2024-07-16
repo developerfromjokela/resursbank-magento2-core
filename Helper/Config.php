@@ -297,9 +297,9 @@ class Config extends AbstractConfig
             scopeType: $scopeType
         );
 
-        return explode(
+        return $frequency !== null ? explode(
             separator: ',',
             string: $frequency
-        );
+        ) : '';
     }
 }
