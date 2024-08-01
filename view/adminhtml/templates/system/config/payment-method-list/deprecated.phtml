@@ -23,16 +23,16 @@ if (isset($block)) {
             <thead>
             <tr>
                 <th>
-                    <?= $escaper->escapeHtml(__('Name')) ?>
+                    <?= $escaper->escapeHtml(__('rb-name')) ?>
                 </th>
                 <th>
-                    <?= $escaper->escapeHtml(__('Min total')) ?>
+                    <?= $escaper->escapeHtml(__('rb-table-header-min-total')) ?>
                 </th>
                 <th>
-                    <?= $escaper->escapeHtml(__('Max total')) ?>
+                    <?= $escaper->escapeHtml(__('rb-table-header-max-total')) ?>
                 </th>
                 <th>
-                    <?= $escaper->escapeHtml(__('Sort order')) ?>
+                    <?= $escaper->escapeHtml(__('rb-sort-order')) ?>
                 </th>
             </tr>
             </thead>
@@ -56,6 +56,6 @@ if (isset($block)) {
             </tbody>
         </table>
     <?php else: ?>
-        <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
+        <?= $escaper->escapeHtml(__('rb-payment-methods-will-be-displayed-when-synced')) ?>
     <?php endif; ?>
 <?php endif; ?>

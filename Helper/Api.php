@@ -148,7 +148,7 @@ class Api extends AbstractHelper
 
             if (!($payment instanceof stdClass)) {
                 throw new ValidatorException(
-                    __('Unexpected response from ECom.')
+                    __('rb-unexpected-response-from-ecom')
                 );
             }
         } catch (Exception $e) {
@@ -213,7 +213,9 @@ class Api extends AbstractHelper
         );
 
         if (!($order instanceof OrderModel)) {
-            throw new LocalizedException(__('Unexptected Order instance.'));
+            throw new LocalizedException(
+                __('rb-unexpected-order-instance')
+            );
         }
 
         $env = (bool) $order->getData('resursbank_is_test');

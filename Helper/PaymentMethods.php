@@ -177,7 +177,7 @@ class PaymentMethods extends AbstractHelper
 
         if (!is_array($methods)) {
             throw new IntegrationException(
-                __('Failed to fetch payment methods from API. Expected Array.')
+                __('rb-failed-to-fetch-payment-methods-expected-array')
             );
         }
 
@@ -232,7 +232,7 @@ class PaymentMethods extends AbstractHelper
     ): string {
         if ($identifier === '') {
             throw new ValidatorException(
-                __('Cannot generate payment method code without identifier.')
+                __('rb-cannot-generate-payment-method-code-without-identifier')
             );
         }
 
@@ -274,7 +274,7 @@ class PaymentMethods extends AbstractHelper
 
         if (!is_array($result)) {
             throw new IntegrationException(
-                __('Unexpected payment method data returned from ECom.')
+                __('rb-unexpected-payment-method-data-returned-from-ecom')
             );
         }
 
@@ -292,31 +292,31 @@ class PaymentMethods extends AbstractHelper
     ): void {
         if (!isset($data[PaymentMethodInterface::IDENTIFIER])) {
             throw new ValidatorException(
-                __('Missing identifier index.')
+                __('rb-missing-identifier-index')
             );
         }
 
         if (!isset($data[PaymentMethodInterface::MIN_ORDER_TOTAL])) {
             throw new ValidatorException(
-                __('Missing min_order_total index.')
+                __('rb-missing-min-order-total-index')
             );
         }
 
         if (!isset($data[PaymentMethodInterface::MAX_ORDER_TOTAL])) {
             throw new ValidatorException(
-                __('Missing max_order_total index.')
+                __('rb-missing-max-order-total-index')
             );
         }
 
         if (!isset($data[PaymentMethodInterface::TITLE])) {
             throw new ValidatorException(
-                __('Missing title index.')
+                __('rb-missing-title-index')
             );
         }
 
         if (!isset($data[PaymentMethodInterface::RAW])) {
             throw new ValidatorException(
-                __('Missing raw index.')
+                __('rb-missing-raw-index')
             );
         }
     }
@@ -342,7 +342,7 @@ class PaymentMethods extends AbstractHelper
 
         if ($country === null) {
             throw new ValidatorException(
-                __('Credentials has no country code assigned.')
+                __('rb-credentials-has-no-country-code-assigned')
             );
         }
 

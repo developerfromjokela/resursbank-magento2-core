@@ -100,20 +100,20 @@ class Sync implements HttpGetActionInterface
 
                 $this->message->addSuccessMessage(
                     (string)__(
-                        'Successfully synchronized data from Resurs Bank.'
+                        'rb-successfully-synchronized-data-from-resurs-bank'
                     )
                 );
             } else {
                 $this->message->addNoticeMessage(
                     (string)__(
-                        'There are no credentials to sync data from Resurs Bank.'
+                        'rb-no-credentials-to-sync-data-from-resurs-bank'
                     )
                 );
             }
         } catch (Exception $e) {
             $this->log->exception($e);
             $this->message->addErrorMessage(
-                (string) __('Failed to synchronize payment methods.')
+                (string) __('rb-failed-to-synchronize-payment-methods')
             );
         }
 

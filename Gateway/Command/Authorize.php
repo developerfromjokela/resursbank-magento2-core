@@ -75,10 +75,12 @@ class Authorize implements CommandInterface
             $payment = $data->getPayment();
 
             if (!$payment instanceof Payment) {
-                throw new PaymentException(phrase: __(
-                    'Payment object is not an instance of %1',
-                    Payment::class
-                ));
+                throw new PaymentException(
+                    phrase: __(
+                        'rb-payment-object-not-instance-of',
+                        Payment::class
+                    )
+                );
             }
 
             return $payment;
@@ -86,9 +88,7 @@ class Authorize implements CommandInterface
             $this->log->exception(error: $error);
 
             throw new PaymentException(phrase: __(
-                'Something went wrong when trying to place the order. ' .
-                'Please try again, or select another payment method. You ' .
-                'could also try refreshing the page.'
+                'rb-placeorder-went-wrong-try-again'
             ));
         }
     }
@@ -108,10 +108,12 @@ class Authorize implements CommandInterface
             $order = $data->getOrder();
 
             if (!$order instanceof OrderAdapterInterface) {
-                throw new PaymentException(phrase: __(
-                    'Order object is not an instance of %1',
-                    OrderAdapterInterface::class
-                ));
+                throw new PaymentException(
+                    phrase: __(
+                        'rb-order-object-not-instance-of',
+                        OrderAdapterInterface::class
+                    )
+                );
             }
 
             return $order;
@@ -119,9 +121,7 @@ class Authorize implements CommandInterface
             $this->log->exception(error: $error);
 
             throw new PaymentException(phrase: __(
-                'Something went wrong when trying to place the order. ' .
-                'Please try again, or select another payment method. You ' .
-                'could also try refreshing the page.'
+                'rb-placeorder-went-wrong-try-again'
             ));
         }
     }

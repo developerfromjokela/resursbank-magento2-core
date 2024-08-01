@@ -45,7 +45,7 @@ class Credentials
     ): self {
         if ($username === '') {
             throw new ValidatorException(
-                __('Username cannot be empty.')
+                __('rb-username-cannot-be-empty')
             );
         }
 
@@ -76,7 +76,7 @@ class Credentials
     ): self {
         if ($password === '') {
             throw new ValidatorException(
-                __('Password cannot be empty.')
+                __('rb-password-cannot-be-empty')
             );
         }
 
@@ -110,7 +110,7 @@ class Credentials
         ) {
             throw new ValidatorException(
                 __(
-                    'Invalid environment value %1. 0 = prod, 1 = test.',
+                    'rb-invalid-environment-value',
                     $environment
                 )
             );

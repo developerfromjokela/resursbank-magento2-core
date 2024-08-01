@@ -142,10 +142,7 @@ class RebuildCart
             /** @noinspection PhpUndefinedMethodInspection */
             /** @phpstan-ignore-next-line */
             $this->checkoutSession->setErrorMessage(__(
-                'The payment failed and the cart could not be rebuilt. ' .
-                'Please add the items back to your cart manually and try ' .
-                'a different payment alternative. We sincerely apologize ' .
-                'for this inconvenience.'
+                'rb-payment-failed-cart-could-not-be-rebuilt'
             ));
         }
 

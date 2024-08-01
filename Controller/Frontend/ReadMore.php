@@ -68,8 +68,7 @@ class ReadMore implements HttpGetActionInterface
             $result->setData(data: [
                 'message' => [
                     'error' => __(
-                        'Something went wrong when fetching the content. ' .
-                        'Please try again.'
+                        'rb-something-went-wrong-when-fetching-the-content'
                     )
                 ]
             ]);

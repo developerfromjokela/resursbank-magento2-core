@@ -117,14 +117,14 @@ class Order extends AbstractHelper implements ArgumentInterface
 
         if (!($order instanceof OrderInterface)) {
             throw new InvalidDataException(__(
-                'Order with quote ID: %1 could not be found in the database.',
+                'rb-order-with-quote-id-not-found-in-the-database',
                 $quoteId
             ));
         }
 
         if ((int) $order->getEntityId() === 0) {
             throw new InvalidDataException(__(
-                'The order does not have a valid entity ID.'
+                'rb-order-missing-valid-entity-id'
             ));
         }
 
@@ -145,7 +145,7 @@ class Order extends AbstractHelper implements ArgumentInterface
 
         if (!is_string($result)) {
             throw new InvalidDataException(
-                __('Invalid or missing order increment ID.')
+                __('rb-invalid-or-missing-order-increment-id')
             );
         }
 
@@ -259,7 +259,7 @@ class Order extends AbstractHelper implements ArgumentInterface
             (int) $order->getEntityId() === 0
         ) {
             throw new InvalidDataException(__(
-                'Failed to resolve order from request or session.'
+                'rb-failed-to-resolve-order-from-request-or-session'
             ));
         }
 

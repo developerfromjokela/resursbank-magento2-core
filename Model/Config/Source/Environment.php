@@ -24,8 +24,8 @@ class Environment extends Options
     public function toArray(): array
     {
         return [
-            ResursBank::ENVIRONMENT_TEST => __('Test'),
-            ResursBank::ENVIRONMENT_PRODUCTION => __('Production')
+            ResursBank::ENVIRONMENT_TEST => __('rb-environment-test'),
+            ResursBank::ENVIRONMENT_PRODUCTION => __('rb-environment-production')
         ];
     }
 }
