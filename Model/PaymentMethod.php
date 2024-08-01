@@ -51,7 +51,7 @@ class PaymentMethod extends AbstractModel implements PaymentMethodInterface
     {
         if (is_int($methodId) && $methodId < 0) {
             throw new ValidatorException(__(
-                'method-id-must-be-integer-or-null'
+                'rb-method-id-must-be-integer-or-null'
             ));
         }
 
