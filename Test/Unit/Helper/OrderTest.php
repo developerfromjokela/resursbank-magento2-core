@@ -28,10 +28,10 @@ class OrderTest extends TestCase
         $contextMock = $this->createMock(Context::class);
         $criteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $orderRepositoryMock = $this->createMock(OrderRepository::class);
-        $requestInterfaceMock = $this->createMock(originalClassName: RequestInterface::class);
-        $checkoutSessionMock = $this->createMock(originalClassName: CheckoutSession::class);
-        $orderManagementInterfaceMock = $this->createMock(originalClassName: OrderManagementInterface::class);
-        $logMock = $this->createMock(originalClassName: Log::class);
+        $requestInterfaceMock = $this->createMock(RequestInterface::class);
+        $checkoutSessionMock = $this->createMock(CheckoutSession::class);
+        $orderManagementInterfaceMock = $this->createMock(OrderManagementInterface::class);
+        $logMock = $this->createMock(Log::class);
 
         $this->orderHelper = new Order(
             $contextMock,

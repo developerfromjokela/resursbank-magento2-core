@@ -29,7 +29,7 @@ class CreditDeniedOrderStatusState implements DataPatchInterface
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup,
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
     }
@@ -64,12 +64,12 @@ class CreditDeniedOrderStatusState implements DataPatchInterface
         $this->moduleDataSetup->getConnection()->startSetup();
 
         $table = $this->moduleDataSetup->getTable(
-            tableName: 'sales_order_status_state'
+            'sales_order_status_state'
         );
 
         $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-            table: $table,
-            data: [
+            $table,
+            [
                 'status' => Order::CREDIT_DENIED_CODE,
                 'state' => 'pending_payment',
                 'is_default' => 0,

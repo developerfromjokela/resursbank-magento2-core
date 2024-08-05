@@ -23,16 +23,16 @@ if (isset($block)) {
             <thead>
                 <tr>
                     <th>
-                        <?= $escaper->escapeHtml(__('Name')) ?>
+                        <?= $block->escapeHtml(__('Name')) ?>
                     </th>
                     <th>
-                        <?= $escaper->escapeHtml(__('Min total')) ?>
+                        <?= $block->escapeHtml(__('Min total')) ?>
                     </th>
                     <th>
-                        <?= $escaper->escapeHtml(__('Max total')) ?>
+                        <?= $block->escapeHtml(__('Max total')) ?>
                     </th>
                     <th>
-                        <?= $escaper->escapeHtml(__('Sort order')) ?>
+                        <?= $block->escapeHtml(__('Sort order')) ?>
                     </th>
                 </tr>
             </thead>
@@ -40,22 +40,22 @@ if (isset($block)) {
                 <?php foreach ($methods as $method): ?>
                 <tr>
                     <td>
-                        <?= $escaper->escapeHtml($method->getTitle()) ?>
+                        <?= $block->escapeHtml($method->getTitle()) ?>
                     </td>
                     <td>
-                        <?= $escaper->escapeHtml($block->getOrderMinTotal($method)) ?>
+                        <?= $block->escapeHtml($block->getOrderMinTotal($method)) ?>
                     </td>
                     <td>
-                        <?= $escaper->escapeHtml($block->getOrderMaxTotal($method)) ?>
+                        <?= $block->escapeHtml($block->getOrderMaxTotal($method)) ?>
                     </td>
                     <td>
-                        <?= $escaper->escapeHtml($method->getSortOrder()) ?>
+                        <?= $block->escapeHtml($method->getSortOrder()) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
-        <?= $escaper->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
+        <?= $block->escapeHtml(__('Payment methods will be displayed when synced.')) ?>
     <?php endif; ?>
 <?php endif; ?>

@@ -251,10 +251,10 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): int {
         $time = $this->get(
-            group: self::ADVANCED_GROUP,
-            key: 'clean_orders_minimum_age',
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
+            self::ADVANCED_GROUP,
+            'clean_orders_minimum_age',
+            $scopeCode,
+            $scopeType
         );
 
         return $time * 3600;
@@ -272,10 +272,10 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): ?string {
         return $this->get(
-            group: self::ADVANCED_GROUP,
-            key: 'clean_orders_frequency',
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
+            self::ADVANCED_GROUP,
+            'clean_orders_frequency',
+            $scopeCode,
+            $scopeType
         );
     }
 
@@ -291,15 +291,15 @@ class Config extends AbstractConfig
         string $scopeType = ScopeInterface::SCOPE_STORES
     ): ?array {
         $frequency = $this->get(
-            group: self::ADVANCED_GROUP,
-            key: 'clean_orders_time',
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
+            self::ADVANCED_GROUP,
+            'clean_orders_time',
+            $scopeCode,
+            $scopeType
         );
 
         return $frequency !== null ? explode(
-            separator: ',',
-            string: $frequency
+            ',',
+            $frequency
         ) : [];
     }
 }

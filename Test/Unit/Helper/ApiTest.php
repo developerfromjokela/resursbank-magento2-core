@@ -61,7 +61,7 @@ class ApiTest extends TestCase
             $storeManagerMock
         );
 
-        $productMetadataInterfaceMock = $this->createMock(originalClassName: ProductMetadataInterface::class);
+        $productMetadataInterfaceMock = $this->createMock(ProductMetadataInterface::class);
         $this->api = new Api(
             $contextMock,
             $credentialsHelper,

@@ -31,6 +31,14 @@ use function is_string;
  */
 class CleanOrders
 {
+    private OrderHelper $orderHelper;
+    private PaymentHelper $paymentHelper;
+    private ApiHelper $apiHelper;
+    private CollectionFactory $orderCollectionFactory;
+    private StoreManagerInterface $storeManager;
+    private Config $config;
+    private Log $log;
+
     /**
      * @param Log $log
      * @param Config $config
@@ -41,14 +49,21 @@ class CleanOrders
      * @param ApiHelper $apiHelper
      */
     public function __construct(
-        private readonly Log $log,
-        private readonly Config $config,
-        private readonly StoreManagerInterface $storeManager,
-        private readonly CollectionFactory $orderCollectionFactory,
-        private readonly OrderHelper $orderHelper,
-        private readonly PaymentHelper $paymentHelper,
-        private readonly ApiHelper $apiHelper
+        Log $log,
+        Config $config,
+        StoreManagerInterface $storeManager,
+        CollectionFactory $orderCollectionFactory,
+        OrderHelper $orderHelper,
+        PaymentHelper $paymentHelper,
+        ApiHelper $apiHelper
     ) {
+        $this->log = $log;
+        $this->config = $config;
+        $this->storeManager = $storeManager;
+        $this->orderCollectionFactory = $orderCollectionFactory;
+        $this->apiHelper = $apiHelper;
+        $this->paymentHelper = $paymentHelper;
+        $this->orderHelper = $orderHelper;
     }
 
     /**
@@ -58,36 +73,36 @@ class CleanOrders
      */
     public function execute(): void
     {
-        $this->log->info(text: 'Clean orders cron job running!');
+        $this->log->info('Clean orders cron job running!');
 
         $stores = $this->storeManager->getStores();
 
         foreach ($stores as $store) {
-            if ($this->config->isCleanOrdersEnabled(scopeCode: $store->getCode())) {
+            if ($this->config->isCleanOrdersEnabled($store->getCode())) {
                 $this->log->info(
-                    text: 'Looking for stale pending orders on store ' .
+                    'Looking for stale pending orders on store ' .
                     $store->getName()
                 );
 
                 $minimumAge = $this->config->getCleanOrdersMinimumAge(
-                    scopeCode: $store->getCode()
+                    $store->getCode()
                 );
 
                 $orders = $this->orderCollectionFactory->create()
-                    ->addFieldToSelect(field: '*')
+                    ->addFieldToSelect('*')
                     ->addFieldToFilter(
-                        field: 'status',
-                        condition: Order::STATE_PENDING_PAYMENT
+                        'status',
+                        Order::STATE_PENDING_PAYMENT
                     )
                     ->addFieldToFilter(
-                        field: 'store_id',
-                        condition: ['eq' => $store->getId()]
+                        'store_id',
+                        ['eq' => $store->getId()]
                     )
                     ->addFieldToFilter(
-                        field: 'updated_at',
-                        condition: ['to' => date(
-                            format: 'Y-m-d H:i:s',
-                            timestamp: time()-$minimumAge
+                        'updated_at',
+                        ['to' => date(
+                            'Y-m-d H:i:s',
+                            time()-$minimumAge
                         )]
                     )
                     ->load();
@@ -96,35 +111,35 @@ class CleanOrders
                     continue;
                 }
 
-                $this->log->info(text: 'Found ' . count($orders) .
+                $this->log->info('Found ' . count($orders) .
                     ' stale pending orders. Attempting to cancel...');
 
                 /** @var Order $order */
                 foreach ($orders as $order) {
                     try {
                         if ($this->paymentHelper->isResursBankOrder(
-                            order: $order
+                            $order
                         ) &&
-                            $this->isInactive(order: $order)
+                            $this->isInactive($order)
                         ) {
-                            $this->orderHelper->cancelOrder(order: $order);
+                            $this->orderHelper->cancelOrder($order);
                             $this->log->info(
-                                text: 'Successfully canceled stale pending order ' .
+                                'Successfully canceled stale pending order ' .
                                 $order->getIncrementId() . '.'
                             );
                         }
                     } catch (Throwable $error) {
                         $this->log->error(
-                            text: 'Automated cancel of stale pending order ' .
+                            'Automated cancel of stale pending order ' .
                             $order->getIncrementId() . ' failed.'
                         );
-                        $this->log->exception(error: $error);
+                        $this->log->exception($error);
                     }
                 }
             }
         }
 
-        $this->log->info(text: 'Clean orders cron job run finished.');
+        $this->log->info('Clean orders cron job run finished.');
     }
 
     /**
@@ -140,6 +155,6 @@ class CleanOrders
      */
     public function isInactive(Order $order): bool
     {
-        return $this->apiHelper->getPayment(order: $order) === null;
+        return $this->apiHelper->getPayment($order) === null;
     }
 }

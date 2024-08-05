@@ -14,7 +14,6 @@ use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Resursbank\Core\Api\Data\PaymentMethodInterface;
 use Resursbank\Core\Helper\Log;
 use Resursbank\Core\Helper\PaymentMethods;
@@ -58,7 +57,6 @@ class Listing extends Field
      * @param RequestInterface $request
      * @param Scope $scope
      * @param array<mixed> $data
-     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Context $context,
@@ -67,8 +65,7 @@ class Listing extends Field
         PriceCurrencyInterface $priceCurrency,
         RequestInterface $request,
         Scope $scope,
-        array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null
+        array $data = []
     ) {
         $this->paymentMethods = $paymentMethods;
         $this->log = $log;
@@ -78,7 +75,7 @@ class Listing extends Field
 
         $this->setTemplate('system/config/methods/listing.phtml');
 
-        parent::__construct($context, $data, $secureRenderer);
+        parent::__construct($context, $data);
     }
 
     /**

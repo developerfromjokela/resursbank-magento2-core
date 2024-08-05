@@ -20,15 +20,19 @@ class Config
 {
     /** @var string */
     private const CRON_STRING_PATH = 'crontab/default/jobs/resursbank_core_clean_orders/schedule/cron_expr';
+    private ConfigResourceModel $configResourceModel;
+    private ConfigHelper $configHelper;
 
     /**
      * @param ConfigResourceModel $configResourceModel
      * @param ConfigHelper $configHelper
      */
     public function __construct(
-        private readonly ConfigResourceModel $configResourceModel,
-        private readonly ConfigHelper $configHelper
+        ConfigResourceModel $configResourceModel,
+        ConfigHelper $configHelper
     ) {
+        $this->configHelper = $configHelper;
+        $this->configResourceModel = $configResourceModel;
     }
 
     /**
@@ -44,18 +48,18 @@ class Config
         $scopeId = $subject->getScopeId();
 
         $frequency = $this->configHelper->getCleanOrdersFrequency(
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
+            $scopeCode,
+            $scopeType
         );
         $time = $this->configHelper->getCleanOrdersTime(
-            scopeCode: $scopeCode,
-            scopeType: $scopeType
+            $scopeCode,
+            $scopeType
         );
 
         if (!empty($time) &&
             !empty($frequency)) {
             // phpcs:ignore
-            $cronExpression = implode(separator: ' ', array: [
+            $cronExpression = implode(' ', [
                 (int)$time[1],
                 (int)$time[0],
                 $frequency === CronFrequency::CRON_MONTHLY ? '1' : '*',
@@ -64,10 +68,10 @@ class Config
             ]);
 
             $this->configResourceModel->saveConfig(
-                path: self::CRON_STRING_PATH,
-                value: $cronExpression,
-                scope: $scopeType,
-                scopeId: $scopeId
+                self::CRON_STRING_PATH,
+                $cronExpression,
+                $scopeType,
+                $scopeId
             );
         }
 
