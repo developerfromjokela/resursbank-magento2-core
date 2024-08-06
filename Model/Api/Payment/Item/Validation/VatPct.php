@@ -20,14 +20,14 @@ class VatPct extends AbstractValidation implements ValidationInterface
      * @var string[]
      */
     public const ALLOWED_VALUES = [
-        0, 6, 12, 25, 8, 15, 10, 14, 24
+        0, 6, 12, 25, 8, 15, 10, 14, 24, 25.5
     ];
 
     /**
      * @inheritDoc
      */
     public function validate(
-        int $value = 0
+        float $value = 0
     ): void {
         $this->isOneOf($value, self::ALLOWED_VALUES);
 
