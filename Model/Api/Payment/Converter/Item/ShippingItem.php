@@ -37,7 +37,7 @@ class ShippingItem extends AbstractItem
     /**
      * @var int
      */
-    private int $vatPct;
+    private float $vatPct;
 
     /**
      * @param Config $config
@@ -46,7 +46,7 @@ class ShippingItem extends AbstractItem
      * @param string $method Shipping method code.
      * @param string $description Shipping method title.
      * @param float $amount Amount incl. tax.
-     * @param int $vatPct Tax percentage.
+     * @param float $vatPct Tax percentage.
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -56,7 +56,7 @@ class ShippingItem extends AbstractItem
         string $method,
         string $description,
         float $amount,
-        int $vatPct,
+        float $vatPct,
         StoreManagerInterface $storeManager
     ) {
         $this->method = $method;
@@ -109,7 +109,7 @@ class ShippingItem extends AbstractItem
     /**
      * @inheritDoc
      */
-    public function getVatPct(): int
+    public function getVatPct(): float
     {
         return $this->vatPct;
     }
