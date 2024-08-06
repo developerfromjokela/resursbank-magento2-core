@@ -52,5 +52,5 @@ Core part of Magento 2 module. This module supports older Magento 2.3 framework,
 
 * Backport for older Magento 2.3 and added real support for PHP 7.4 :D
 
-#### 1.7.9
+#### 1.7.11
 * Added VAT support for 25.5% in Finland
