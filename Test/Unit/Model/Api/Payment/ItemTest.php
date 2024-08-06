@@ -546,6 +546,19 @@ class ItemTest extends TestCase
     }
 
     /**
+     * Assert that the setVatPct method will assign a value to the vatPct prop.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testSetVatDecimalPct(): void
+    {
+        $this->item->setVatPct(25.5);
+
+        self::assertSame(25.5, $this->item->getVatPct());
+    }
+
+    /**
      * Assert that the setVatPct method accepts all the values specified by the
      * validator.
      *

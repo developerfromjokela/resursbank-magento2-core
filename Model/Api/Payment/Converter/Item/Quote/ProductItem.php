@@ -136,7 +136,7 @@ class ProductItem extends AbstractItem
             0.0 :
             (float) $this->product->getTaxPercent();
 
-        return (int)round($result);
+        return round($result, 1);
     }
 
     /**
