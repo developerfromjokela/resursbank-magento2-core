@@ -28,7 +28,7 @@ class DiscountItem extends AbstractItem
     /**
      * @var int
      */
-    private int $taxPercent;
+    private float $taxPercent;
 
     /**
      * @param Config $config
@@ -43,7 +43,7 @@ class DiscountItem extends AbstractItem
         ItemFactory $itemFactory,
         Log $log,
         float $amount,
-        int $taxPercent,
+        float $taxPercent,
         StoreManagerInterface $storeManager
     ) {
         $this->amount = $amount;
@@ -107,7 +107,7 @@ class DiscountItem extends AbstractItem
      * @inheritDoc
      * @throws Exception
      */
-    public function getVatPct(): int
+    public function getVatPct(): float
     {
         return $this->taxPercent;
     }

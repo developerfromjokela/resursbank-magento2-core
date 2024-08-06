@@ -58,7 +58,7 @@ interface ItemInterface
     /**
      * @return int
      */
-    public function getVatPct(): int;
+    public function getVatPct(): float;
 
     /**
      * @return string

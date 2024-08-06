@@ -41,7 +41,7 @@ class ItemTest extends TestCase
         Item::KEY_QUANTITY => 91854.88,
         Item::KEY_UNIT_MEASURE => 'tub',
         Item::KEY_UNIT_AMOUNT_WITHOUT_VAT => 5.67,
-        Item::KEY_VAT_PCT => 25,
+        Item::KEY_VAT_PCT => 25.5,
         Item::KEY_TYPE => Item::TYPE_DISCOUNT
     ];
 

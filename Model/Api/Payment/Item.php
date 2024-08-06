@@ -137,9 +137,9 @@ class Item
     /**
      * Tax percentage.
      *
-     * @var int
+     * @var float
      */
-    private int $vatPct = 0;
+    private float $vatPct = 0;
 
     /**
      * Item type specification.
@@ -193,7 +193,7 @@ class Item
      * @param float $quantity
      * @param string $unitMeasure
      * @param float $unitAmountWithoutVat
-     * @param int $vatPct
+     * @param float $vatPct
      * @param string $type
      * @param ArtNo $artNoValidator
      * @param Description $descriptionValidator
@@ -212,7 +212,7 @@ class Item
         float $quantity,
         string $unitMeasure,
         float $unitAmountWithoutVat,
-        int $vatPct,
+        float $vatPct,
         string $type,
         ArtNo $artNoValidator,
         Description $descriptionValidator,
@@ -355,12 +355,12 @@ class Item
     }
 
     /**
-     * @param int $value
+     * @param float $value
      * @return Item
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function setVatPct(int $value): Item
+    public function setVatPct(float $value): Item
     {
         $this->vatPctValidator->validate($value);
 
@@ -372,7 +372,7 @@ class Item
     /**
      * @return int
      */
-    public function getVatPct(): int
+    public function getVatPct(): float
     {
         return $this->vatPct;
     }
