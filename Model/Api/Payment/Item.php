@@ -370,7 +370,7 @@ class Item
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getVatPct(): float
     {

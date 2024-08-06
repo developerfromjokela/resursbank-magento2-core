@@ -130,7 +130,7 @@ class ProductItem extends AbstractItem
      *
      * @inheritDoc
      */
-    public function getVatPct(): int
+    public function getVatPct(): float
     {
         $result = $this->isBundle() && !$this->hasFixedPrice() ?
             0.0 :
